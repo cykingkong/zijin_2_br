@@ -2,6 +2,7 @@
 import router from '@/router'
 import { useUserStore } from '@/stores'
 import defaultAvatar from '@/assets/images/default-avatar.svg'
+import UserInfo from './components/user-info.vue'
 
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
@@ -17,23 +18,21 @@ function login() {
 
 <template>
   <div>
-    <VanCellGroup :inset="true">
-      <van-cell center :is-link="!isLogin" @click="login">
-        <template #title>
-          <van-image :src="userInfo.avatar || defaultAvatar" round class="h-56 w-56" />
-        </template>
+    <VanNavBar
 
-        <template #value>
-          <span v-if="isLogin">{{ userInfo.name }}</span>
-          <span v-else>{{ $t('profile.login') }}</span>
-        </template>
-      </van-cell>
-    </VanCellGroup>
+    :title="''"
+    :fixed="true"
+    clickable placeholder
+    :left-arrow="false"
 
-    <VanCellGroup :inset="true" class="!mt-16">
-      <van-cell :title="$t('profile.settings')" icon="setting-o" is-link to="/settings" />
-      <van-cell :title="$t('profile.docs')" icon="flower-o" is-link url="https://easy-temps.github.io/easy-docs/vue3-vant-mobile/" />
-    </VanCellGroup>
+  >
+  <template #right>
+    <van-icon name="service-o" class="icon"/>
+  </template>
+  </VanNavBar>  
+  <section>
+      <UserInfo></UserInfo>
+  </section>
   </div>
 </template>
 
@@ -46,3 +45,8 @@ function login() {
   },
 }
 </route>
+<style lang="less" scoped>
+.icon{
+  color:var(--van-text)
+}
+</style>

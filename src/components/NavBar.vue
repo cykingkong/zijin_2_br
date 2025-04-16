@@ -25,6 +25,7 @@ const showLeftArrow = computed(() => route.name && routeWhiteList.includes(route
 
 <template>
   <VanNavBar
+    v-show="false"
     :title="title"
     :fixed="true"
     clickable placeholder

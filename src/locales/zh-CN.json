@@ -2,6 +2,7 @@
   "menus": {
     "home": "主页",
     "profile": "个人中心",
+    "quotes": "行情",
     "darkMode": "🌗 暗黑模式",
     "mockGuide": "💿 Mock 指南",
     "language": "📚 语言",
@@ -34,6 +35,7 @@
   },
   "layouts": {
     "home": "首页",
+    "quotes": "行情",
     "profile": "我的"
   },
   "profile": {
