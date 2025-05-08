@@ -1,77 +1,110 @@
 <script setup>
-
+import echarts from '@/components/echarts.vue'
+import Kline from '@/components/Kline.vue'
+const tabList = [
+  {
+    price: [2.99, 32.99, 33, 32.95, 32.9],
+    increase: -2,
+  },
+  {
+    price: [32.99, 32.99, 33, 32.95, 32.9],
+    increase: 1,
+  },
+  {
+    price: [132.99, 532.99, 233, 832.95, 1132.9],
+    increase: -2,
+  },
+]
 </script>
-
+<route lang="json5">
+  {
+    name: 'accountChange',
+    path: '/quotes/accountChange/:accountChange', // 添加静态路径段明确层级
+    meta: {
+      title: 'accountChange',
+      i18n: 'menus.accountChange'
+    }
+  }
+</route>
 <template>
   <div class="tab-item">
     <div class="indicator-content flex">
-      <div v-for="i in 3" :key="i" class="indicator-item" :class="i % 2 === 1 ? 'up-bg' : 'down-bg'" >
-        <div class="title">title</div>
-        <div class="num">num</div>
-        <div class="value">value</div>
-        <div class="chart"></div>
+      <div v-for="(i, k) in tabList" :key="i" class="indicator-item" :class="k % 2 === 1 ? 'up-bg' : 'down-bg'">
+        <div class="title">
+          title
+        </div>
+        <div class="num">
+          num
+        </div>
+        <div class="value">
+          value
+        </div>
+        <div class="chart">
+          <Kline :nameId="'myChart10' + k" :areaStyle="true" :increase="i.increase" :data="i.price" height="50px"
+            width="100%"></Kline>
+        </div>
       </div>
     </div>
-    <slot />
   </div>
 </template>
 
-<style lang="less">
+<style lang="less" scoped>
 .tab-item {
   width: 100%;
-  height: 100vh;
-  padding: 12px 0;
   display: flex;
   flex-direction: column;
   gap: 6px;
+
   .indicator-content {
     width: 100%;
     gap: 6px;
     padding: 0 12px;
+
     .indicator-item {
-      flex: 1;
+      width: 33%;
       height: auto;
       border-radius: 8px;
-      padding:12px ;
+      padding: 12px;
 
-      .title{
+      .title {
         font-size: 12px;
-        color:var(--van-text);
+        color: var(--van-text);
         line-height: 16px;
       }
-      .num{
+
+      .num {
         font-size: 16px;
         line-height: 24px;
-
       }
-      .value{
+
+      .value {
         font-size: 12px;
         line-height: 24px;
-
       }
-      
     }
+
     .up-bg {
       background-image: var(--up-bg);
-      .num{
-        color:#06cda5!important
+
+      .num {
+        color: #06cda5 !important;
       }
-      .chart{
-        background: #06cda5!important;
+
+      .chart {
+        // background: #06cda5 !important;
         width: 100%;
         height: 55px;
       }
     }
+
     .down-bg {
       background-image: var(--down-bg);
-      .num{
-        color:#f43368!important
+
+      .num {
+        color: #f43368 !important;
       }
-      .chart{
-        background: #f43368!important;
-        width: 100%;
-        height: 55px;
-      }
+
+
     }
   }
 }

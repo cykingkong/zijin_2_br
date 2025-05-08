@@ -38,7 +38,7 @@ async function reset() {
   try {
     loading.value = true
 
-    const res = await userStore.reset()
+    // const res = await userStore.reset()
 
     if (res.code === 0) {
       showNotify({ type: 'success', message: t('forgot-password.passwordResetSuccess') })
@@ -75,21 +75,13 @@ async function getCode() {
   <div class="m-x-a w-7xl text-center">
     <van-form :model="postData" :rules="rules" validate-trigger="onSubmit" @submit="reset">
       <div class="overflow-hidden rounded-3xl">
-        <van-field
-          v-model.trim="postData.email"
-          :rules="rules.email"
-          name="email"
-          :placeholder="t('forgot-password.email')"
-        />
+        <van-field v-model.trim="postData.email" :rules="rules.email" name="email"
+          :placeholder="t('forgot-password.email')" />
       </div>
 
       <div class="mt-16 overflow-hidden rounded-3xl">
-        <van-field
-          v-model.trim="postData.code"
-          :rules="rules.code"
-          name="code"
-          :placeholder="t('forgot-password.code')"
-        >
+        <van-field v-model.trim="postData.code" :rules="rules.code" name="code"
+          :placeholder="t('forgot-password.code')">
           <template #button>
             <van-button size="small" type="primary" plain @click="getCode">
               {{ buttonText }}
@@ -99,32 +91,17 @@ async function getCode() {
       </div>
 
       <div class="mt-16 overflow-hidden rounded-3xl">
-        <van-field
-          v-model.trim="postData.password"
-          type="password"
-          :rules="rules.password"
-          name="password"
-          :placeholder="t('forgot-password.password')"
-        />
+        <van-field v-model.trim="postData.password" type="password" :rules="rules.password" name="password"
+          :placeholder="t('forgot-password.password')" />
       </div>
 
       <div class="mt-16 overflow-hidden rounded-3xl">
-        <van-field
-          v-model.trim="postData.confirmPassword"
-          type="password"
-          :rules="rules.confirmPassword"
-          name="confirmPassword"
-          :placeholder="t('forgot-password.comfirmPassword')"
-        />
+        <van-field v-model.trim="postData.confirmPassword" type="password" :rules="rules.confirmPassword"
+          name="confirmPassword" :placeholder="t('forgot-password.comfirmPassword')" />
       </div>
 
       <div class="mt-16">
-        <van-button
-          :loading="loading"
-          type="primary"
-          native-type="submit"
-          round block
-        >
+        <van-button :loading="loading" type="primary" native-type="submit" round block>
           {{ $t('forgot-password.confirm') }}
         </van-button>
       </div>

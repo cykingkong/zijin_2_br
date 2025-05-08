@@ -39,21 +39,11 @@ function toggle(val: boolean) {
   <van-cell-group :title="t('menus.basicSettings')" :border="false" :inset="true">
     <van-cell center :title="t('menus.darkMode')">
       <template #right-icon>
-        <van-switch
-          v-model="checked"
-          size="20px"
-          aria-label="on/off Dark Mode"
-          @change="toggle"
-        />
+        <van-switch v-model="checked" size="20px" aria-label="on/off Dark Mode" @change="toggle" />
       </template>
     </van-cell>
 
-    <van-cell
-      is-link
-      :title="t('menus.language')"
-      :value="language"
-      @click="showLanguagePicker = true"
-    />
+    <van-cell is-link :title="t('menus.language')" :value="language" @click="showLanguagePicker = true" />
   </van-cell-group>
 
   <van-cell-group :title="t('menus.exampleComponents')" :border="false" :inset="true">
@@ -63,12 +53,8 @@ function toggle(val: boolean) {
   </van-cell-group>
 
   <van-popup v-model:show="showLanguagePicker" position="bottom">
-    <van-picker
-      v-model="languageValues"
-      :columns="languageColumns"
-      @confirm="onLanguageConfirm"
-      @cancel="showLanguagePicker = false"
-    />
+    <van-picker v-model="languageValues" :columns="languageColumns" @confirm="onLanguageConfirm"
+      @cancel="showLanguagePicker = false" />
   </van-popup>
 </template>
 

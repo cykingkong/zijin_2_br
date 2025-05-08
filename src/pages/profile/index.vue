@@ -1,38 +1,136 @@
 <script setup lang="ts">
+import type { PickerColumn } from 'vant'
 import router from '@/router'
+import { languageColumns, locale } from '@/utils/i18n'
 import { useUserStore } from '@/stores'
 import defaultAvatar from '@/assets/images/default-avatar.svg'
-import UserInfo from './components/user-info.vue'
+import { clearToken, isLogin } from '@/utils/auth'
+
+import UserInfo from '../../components/user-info.vue'
+import grid1 from '@/assets/grid/grid1.png';
+import grid2 from '@/assets/grid/grid1.png';
+import grid3 from '@/assets/grid/grid1.png';
+import grid4 from '@/assets/grid/grid1.png';
+import grid5 from '@/assets/grid/grid1.png';
+import icon1 from '@/assets/image/icon/icon1.png';
+import icon2 from '@/assets/image/icon/icon2.png';
+import icon3 from '@/assets/image/icon/icon3.png';
+import icon4 from '@/assets/image/icon/icon4.png';
+import icon5 from '@/assets/image/icon/icon5.png';
 
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
-const isLogin = computed(() => !!userInfo.value.uid)
-
-function login() {
-  if (isLogin.value)
-    return
-
-  router.push({ name: 'login', query: { redirect: 'profile' } })
+const userIsLogin = computed(() => { return isLogin() })
+const { t } = useI18n()
+const showLanguagePicker = ref(false)
+const languageValues = ref<Array<string>>([locale.value])
+const language = computed(() => languageColumns.find(l => l.value === locale.value).text)
+const gridList = [
+  {
+    icon: grid1,
+    text: '安全'
+  },
+  {
+    icon: grid2,
+    text: '修改密码'
+  },
+  {
+    icon: grid3,
+    text: '账变记录'
+  },
+  {
+    icon: grid4,
+    text: '邀请推广'
+  },
+  {
+    icon: grid5,
+    text: '身份验证'
+  },
+]
+const cellList = [
+  {
+    icon: icon1,
+    text: '语言'
+  },
+  {
+    icon: icon2,
+    text: '身份认证'
+  },
+  {
+    icon: icon3,
+    text: '高级认证'
+  },
+  {
+    icon: icon4,
+    text: '计价方式'
+  },
+  {
+    icon: icon5,
+    text: '添加收款方式'
+  }
+]
+function onLanguageConfirm(event: { selectedOptions: PickerColumn }) {
+  locale.value = event.selectedOptions[0].value as string
+  showLanguagePicker.value = false
 }
 </script>
 
 <template>
-  <div>
-    <VanNavBar
+  <div class="myself-index">
+    <VanNavBar title="" :fixed="true" clickable placeholder :left-arrow="false">
+      <template #right>
+        <van-icon name="service-o" class="icon" />
+      </template>
+    </VanNavBar>
 
-    :title="''"
-    :fixed="true"
-    clickable placeholder
-    :left-arrow="false"
+    <section class="myself flex flex-col" v-if="userIsLogin">
+      <UserInfo :userInfo="userInfo" />
+      <van-cell-group title="快捷入口" />
+      <van-grid :border="false" :column-num="6">
+        <van-grid-item v-for="(i, k) in gridList" :key="k" text="文字">
+          <div class="flex flex-col items-center">
+            <img :src="i.icon" class="w-48 h-48" />
+            <span class="text-12 mt-8">{{ i.text }}</span>
 
-  >
-  <template #right>
-    <van-icon name="service-o" class="icon"/>
-  </template>
-  </VanNavBar>  
-  <section>
-      <UserInfo></UserInfo>
-  </section>
+          </div>
+        </van-grid-item>
+      </van-grid>
+
+      <van-cell-group title="通用">
+        <van-cell is-link :title="item.text" @click="showLanguagePicker = true" v-for="(item, k) in cellList" :key="k">
+          <template #icon>
+            <img :src="item.icon" class="w20 h20 mr-8 mt-2" />
+          </template>
+        </van-cell>
+
+      </van-cell-group>
+      <van-cell-group title="更多">
+        <van-cell is-link :title="t('menus.aboutUs')" value="">
+          <template #icon>
+            <img src="@/assets/image/icon/icon6.png" class="w20 h20 mr-8 mt-2" />
+          </template>
+        </van-cell>
+      </van-cell-group>
+      <div class="btn-box mt-24 w-full">
+        <van-button square type="primary" class="mt-12 w-full">
+          退出登录
+        </van-button>
+      </div>
+    </section>
+    <section class="unLogin px-12" v-else>
+      <div class="flex flex-col items-center">
+        <span class="text-12 mt-8">您还未登录</span>
+      </div>
+      <div class="btn-box mt-24 w-full">
+        <van-button square type="primary" class="mt-12 w-full" @click="router.push('/login')">
+          去登录
+        </van-button>
+      </div>
+    </section>
+    <van-popup v-model:show="showLanguagePicker" position="bottom">
+      <van-picker v-model="languageValues" :columns="languageColumns" @confirm="onLanguageConfirm"
+        @cancel="showLanguagePicker = false" />
+    </van-popup>
   </div>
 </template>
 
@@ -45,8 +143,27 @@ function login() {
   },
 }
 </route>
+
 <style lang="less" scoped>
-.icon{
-  color:var(--van-text)
+.icon {
+  color: var(--van-text);
+}
+
+.myself-index {
+  padding-bottom: calc(80px + env(safe-area-inset-bottom));
+}
+
+.content {
+  width: 100%;
+
+  .title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--van-gary-1);
+  }
+}
+
+:deep(.van-grid-item) {
+  flex-basis: 20% !important;
 }
 </style>

@@ -2,6 +2,10 @@
   "menus": {
     "home": "主页",
     "profile": "个人中心",
+    "deal": "交易",
+    "news": "新闻",
+    "optional": "可选",
+    "aboutUs": "关于我们",
     "quotes": "行情",
     "darkMode": "🌗 暗黑模式",
     "mockGuide": "💿 Mock 指南",
@@ -12,7 +16,7 @@
     "unocssExample": "🎨 Unocss 示例",
     "keepAlive": "🧡 KeepAlive 演示",
     "scrollCache": "📜 滚动缓存 演示",
-    "login": "🔒 用户登录",
+    "login": " 用户登录",
     "register": "用户注册",
     "settings": "设置",
     "basicSettings": "基本设置",
@@ -36,7 +40,10 @@
   "layouts": {
     "home": "首页",
     "quotes": "行情",
-    "profile": "我的"
+    "news": "资讯",
+    "profile": "我的",
+    "optional": "可选",
+    "deal": "交易"
   },
   "profile": {
     "login": "登录",

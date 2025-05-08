@@ -7,7 +7,7 @@ import 'virtual:uno.css'
 import '@/styles/app.less'
 import '@/styles/var.less'
 import { i18n } from '@/utils/i18n'
-
+import inputCom from './components/inputCom.vue'
 // Vant 桌面端适配
 import '@vant/touch-emulator'
 
@@ -21,7 +21,6 @@ import 'vant/es/toast/style'
 import 'vant/es/dialog/style'
 import 'vant/es/notify/style'
 import 'vant/es/image-preview/style'
-
 const app = createApp(App)
 const head = createHead()
 
@@ -29,5 +28,6 @@ app.use(head)
 app.use(router)
 app.use(pinia)
 app.use(i18n)
+app.component('inputCom', inputCom)
 
 app.mount('#app')

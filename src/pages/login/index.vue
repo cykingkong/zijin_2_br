@@ -2,7 +2,7 @@
 import { useRouter } from 'vue-router'
 import type { RouteMap } from 'vue-router'
 import { useUserStore } from '@/stores'
-
+import inputCom from '@/components/inputCom.vue'
 import logo from '~/images/logo.svg'
 import logoDark from '~/images/logo-dark.svg'
 import vw from '@/utils/inline-px-to-vw'
@@ -11,7 +11,13 @@ const { t } = useI18n()
 const router = useRouter()
 const userStore = useUserStore()
 const loading = ref(false)
-
+const typeArr = [{
+  label: '手机号登录',
+  value: 'phone'
+}, {
+  label: '邮箱登录',
+  value: 'email'
+}]
 const dark = ref<boolean>(isDark.value)
 
 watch(
@@ -22,8 +28,10 @@ watch(
 )
 
 const postData = reactive({
-  email: '',
+  account: '',
   password: '',
+  type: 'phone',
+  code: ''
 })
 
 const rules = reactive({
@@ -39,9 +47,10 @@ async function login(values: any) {
   try {
     loading.value = true
     await userStore.login({ ...postData, ...values })
+    await userStore.info()
     const { redirect, ...othersQuery } = router.currentRoute.value.query
     router.push({
-      name: (redirect as keyof RouteMap) || 'home',
+      name: (redirect as keyof RouteMap) || 'profile',
       query: {
         ...othersQuery,
       },
@@ -54,42 +63,20 @@ async function login(values: any) {
 </script>
 
 <template>
-  <div class="m-x-a w-7xl text-center">
-    <div class="mb-32 mt-20">
-      <van-image :src="dark ? logoDark : logo" class="h-120 w-120" alt="brand logo" />
+  <div class="m-x-a w-7xl ">
+
+    <div class="title font-size-24 font-bold mt-26 mb-33 flex gap-24 items-center">
+      <div class="flex flex-1 justify-center" :class="{ 'active': postData.type == item.value }"
+        v-for="(item, index) in typeArr" :key="index" @click="postData.type = item.value">
+        {{ item.label }} </div>
     </div>
+    <inputCom :label="postData.type == 'phone' ? '手机号' : '邮箱'"
+      :placeholder="postData.type == 'phone' ? '请输入手机号' : '请输入邮箱'" v-model:value="postData.account" :tips="''">
+    </inputCom>
+    <inputCom :label="'密码'" :placeholder="'请输入密码'" v-model:value="postData.password" :tips="''" :inputType="'password'">
+    </inputCom>
+    <van-button type="primary" class="login-btn" block @click="login({})">登陆</van-button>
 
-    <van-form :model="postData" :rules="rules" validate-trigger="onSubmit" @submit="login">
-      <div class="overflow-hidden rounded-3xl">
-        <van-field
-          v-model="postData.email"
-          :rules="rules.email"
-          name="email"
-          :placeholder="t('login.email')"
-        />
-      </div>
-
-      <div class="mt-16 overflow-hidden rounded-3xl">
-        <van-field
-          v-model="postData.password"
-          type="password"
-          :rules="rules.password"
-          name="password"
-          :placeholder="t('login.password')"
-        />
-      </div>
-
-      <div class="mt-16">
-        <van-button
-          :loading="loading"
-          type="primary"
-          native-type="submit"
-          round block
-        >
-          {{ $t('login.login') }}
-        </van-button>
-      </div>
-    </van-form>
 
     <GhostButton block to="register" :style="{ 'margin-top': vw(18) }">
       {{ $t('login.sign-up') }}
@@ -109,3 +96,23 @@ async function login(values: any) {
   },
 }
 </route>
+<style lang="less" scoped>
+.login-btn {
+  margin-top: 24px;
+}
+
+.active {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 4px;
+    background: #06CDA5;
+  }
+}
+</style>

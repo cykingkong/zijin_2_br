@@ -23,7 +23,7 @@ if (import.meta.hot)
   handleHotUpdate(router)
 
 router.beforeEach(async (to: EnhancedRouteLocation) => {
-  NProgress.start()
+  // NProgress.start()
 
   const routeCacheStore = useRouteCacheStore()
   const userStore = useUserStore()
@@ -33,13 +33,13 @@ router.beforeEach(async (to: EnhancedRouteLocation) => {
 
   // Set page title
   setPageTitle(to.meta.title)
-
+  console.log(isLogin(), 'isLogin()', !userStore.userInfo?.uid)
   if (isLogin() && !userStore.userInfo?.uid)
     await userStore.info()
 })
 
 router.afterEach(() => {
-  NProgress.done()
+  // NProgress.done()
 })
 
 export default router

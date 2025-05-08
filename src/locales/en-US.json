@@ -2,6 +2,10 @@
   "menus": {
     "home": "Home",
     "profile": "My Center",
+    "deal": "交易",
+    "aboutUs": "AboutUs",
+    "optional": "Optional",
+    "news": "News",
     "quotes": "quotes",
     "darkMode": "🌗 Dark Mode",
     "mockGuide": "💿 Mock Guide",
@@ -12,7 +16,7 @@
     "unocssExample": "🎨 Unocss example",
     "keepAlive": "🧡 KeepAlive Demo",
     "scrollCache": "📜 Scroll Cache Demo",
-    "login": "🔒 Login",
+    "login": " Login",
     "register": "Register",
     "settings": "Settings",
     "basicSettings": "Basic Settings",
@@ -34,9 +38,12 @@
     "June": "Jun"
   },
   "layouts": {
-    "quotes": "行情",
+    "quotes": "quotes",
     "home": "HOME",
-    "profile": "PROFILE"
+    "profile": "PROFILE",
+    "news": "news",
+    "optional": "optional",
+    "deal": "deal"
   },
   "profile": {
     "login": "Login",

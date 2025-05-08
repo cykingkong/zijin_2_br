@@ -5,7 +5,9 @@ import { clearToken, setToken } from '@/utils/auth'
 import {
   getEmailCode,
   getUserInfo,
-  resetPassword,
+  getBalancePair,
+  getBalance,
+  // resetPassword,
   login as userLogin,
   logout as userLogout,
   register as userRegister,
@@ -22,12 +24,24 @@ export const useUserStore = defineStore('user', () => {
 
   // Set user's information
   const setInfo = (partial: Partial<UserState>) => {
-    userInfo.value = { ...partial }
+    userInfo.value = { ...userInfo.value, ...partial }
   }
 
   const login = async (loginForm: LoginData) => {
     try {
       const { data } = await userLogin(loginForm)
+      console.log(data)
+      setToken(data.token)
+
+    }
+    catch (error) {
+      clearToken()
+      throw error
+    }
+  }
+  const register = async (form: any) => {
+    try {
+      const { data } = await userRegister(form)
       setToken(data.token)
     }
     catch (error) {
@@ -35,11 +49,12 @@ export const useUserStore = defineStore('user', () => {
       throw error
     }
   }
-
   const info = async () => {
     try {
       const { data } = await getUserInfo()
+      const { data: ff2 } = await getBalance()
       setInfo(data)
+      setInfo(ff2)
     }
     catch (error) {
       clearToken()
@@ -62,24 +77,18 @@ export const useUserStore = defineStore('user', () => {
       const data = await getEmailCode()
       return data
     }
-    catch {}
+    catch { }
   }
 
-  const reset = async () => {
-    try {
-      const data = await resetPassword()
-      return data
-    }
-    catch {}
-  }
+  // const reset = async () => {
+  //   try {
+  //     const data = await resetPassword()
+  //     return data
+  //   }
+  //   catch { }
+  // }
 
-  const register = async () => {
-    try {
-      const data = await userRegister()
-      return data
-    }
-    catch {}
-  }
+
 
   return {
     userInfo,
@@ -87,7 +96,6 @@ export const useUserStore = defineStore('user', () => {
     login,
     logout,
     getCode,
-    reset,
     register,
   }
 }, {

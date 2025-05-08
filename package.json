@@ -25,6 +25,8 @@
     "@vueuse/core": "^13.1.0",
     "axios": "^1.8.4",
     "echarts": "^5.6.0",
+    "klinecharts": "^9.8.10",
+    "lightweight-charts": "^5.0.5",
     "lodash-es": "^4.17.21",
     "nprogress": "^0.2.0",
     "pinia": "^3.0.2",
