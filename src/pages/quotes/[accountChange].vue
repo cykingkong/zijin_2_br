@@ -25,7 +25,7 @@ const accountChangeList = ref([
     { type: 2 },
 ])
 const page = reactive({
-    page: 1,
+    pageIndex: 1,
     pageSize: 10,
 })
 const getAccountChangeList = async () => {

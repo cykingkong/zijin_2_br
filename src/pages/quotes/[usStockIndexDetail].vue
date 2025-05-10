@@ -5,7 +5,7 @@
     <!-- <echarts></echarts> -->
 
     <!-- TradingView图表容器 -->
-    <div id="tradingview-chart" style="width: 100%; height: 400px"></div>
+    <!-- <div id="tradingview-chart" style="width: 100%; height: 400px"></div> -->
 
   </div>
 </template>
@@ -31,7 +31,6 @@ const time = ref([
   '4h',
   '1d',
   '1w',
-
 ])
 
 // 新增TradingView相关声明

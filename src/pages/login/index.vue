@@ -3,7 +3,7 @@ import { useRouter } from 'vue-router'
 import type { RouteMap } from 'vue-router'
 import { useUserStore } from '@/stores'
 import inputCom from '@/components/inputCom.vue'
-import logo from '~/images/logo.svg'
+import loginTab from '@/components/tab.vue'
 import logoDark from '~/images/logo-dark.svg'
 import vw from '@/utils/inline-px-to-vw'
 
@@ -33,7 +33,9 @@ const postData = reactive({
   type: 'phone',
   code: ''
 })
-
+const changeIndex = (val: any) => {
+  postData.type = typeArr[val].value
+}
 const rules = reactive({
   email: [
     { required: true, message: t('login.pleaseEnterEmail') },
@@ -64,12 +66,12 @@ async function login(values: any) {
 
 <template>
   <div class="m-x-a w-7xl ">
-
-    <div class="title font-size-24 font-bold mt-26 mb-33 flex gap-24 items-center">
-      <div class="flex flex-1 justify-center" :class="{ 'active': postData.type == item.value }"
+    <loginTab :list="typeArr" @change="changeIndex"></loginTab>
+    <!-- <div class="title font-size-14 font-bold mt-24 mb-12 flex gap-12 items-center">
+      <div class="flex justify-center tab-item rounded-10px p-12" :class="{ 'active': postData.type == item.value }"
         v-for="(item, index) in typeArr" :key="index" @click="postData.type = item.value">
         {{ item.label }} </div>
-    </div>
+    </div> -->
     <inputCom :label="postData.type == 'phone' ? '手机号' : '邮箱'"
       :placeholder="postData.type == 'phone' ? '请输入手机号' : '请输入邮箱'" v-model:value="postData.account" :tips="''">
     </inputCom>
@@ -99,20 +101,5 @@ async function login(values: any) {
 <style lang="less" scoped>
 .login-btn {
   margin-top: 24px;
-}
-
-.active {
-  position: relative;
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 24px;
-    height: 4px;
-    background: #06CDA5;
-  }
 }
 </style>

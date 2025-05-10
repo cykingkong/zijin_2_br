@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- 面积图容器 -->
-        <svg ref="areaChart" width="100" height="30"></svg>
+        <svg ref="areaChart" :style="{ width: width, height: height }"></svg>
     </div>
 </template>
 
@@ -18,7 +18,15 @@ const props = defineProps({
     increase: {
         type: Number,
         default: 0
-    }
+    },
+    width: {
+        type: String,
+        default: 100
+    },
+    height: {
+        type: String,
+        default: '73px'
+    },
 })
 watch(() => props.data, () => {
     drawAreaChart()
@@ -51,10 +59,10 @@ const drawAreaChart = () => {
 
     // 生成折线图的点
     const points = props.data
-    .map((value, index) => ({
-        x: xScale(index),
-        y: yScale(value),
-      }));
+        .map((value, index) => ({
+            x: xScale(index),
+            y: yScale(value),
+        }));
 
     // 生成平滑路径的 `d` 属性（用于线条）
     const smoothPathD = generateSmoothPath(points);

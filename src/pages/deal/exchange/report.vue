@@ -10,7 +10,7 @@
 import { ref, reactive } from "vue"
 import { rechargeOrderGrid } from '@/api/recharge'
 const page = ref({
-    page: 1,
+    pageIndex: 1,
     pageSize: 10,
     total: 0
 })

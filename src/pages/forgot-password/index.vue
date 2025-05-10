@@ -1,123 +1,93 @@
-<script setup lang="ts">
-import { useRouter } from 'vue-router'
-import type { FieldRule } from 'vant'
-import { useUserStore } from '@/stores'
-import vw from '@/utils/inline-px-to-vw'
-
-const { t } = useI18n()
-const router = useRouter()
-const userStore = useUserStore()
-const loading = ref(false)
-
-const postData = reactive({
-  email: '',
-  code: '',
-  password: '',
-  confirmPassword: '',
-})
-
-const validatorPassword = (val: string) => val === postData.password
-
-const rules = reactive({
-  email: [
-    { required: true, message: t('forgot-password.pleaseEnterEmail') },
-  ],
-  code: [
-    { required: true, message: t('forgot-password.pleaseEnterCode') },
-  ],
-  password: [
-    { required: true, message: t('forgot-password.pleaseEnterPassword') },
-  ],
-  confirmPassword: [
-    { required: true, message: t('forgot-password.pleaseEnterConfirmPassword') },
-    { required: true, validator: validatorPassword, message: t('forgot-password.passwordsDoNotMatch') },
-  ] as FieldRule[],
-})
-
-async function reset() {
-  try {
-    loading.value = true
-
-    // const res = await userStore.reset()
-
-    if (res.code === 0) {
-      showNotify({ type: 'success', message: t('forgot-password.passwordResetSuccess') })
-      router.push({ name: 'login' })
-    }
-  }
-  finally {
-    loading.value = false
-  }
-}
-
-const isGettingCode = ref(false)
-
-const buttonText = computed(() => {
-  return isGettingCode.value ? t('forgot-password.gettingCode') : t('forgot-password.getCode')
-})
-
-async function getCode() {
-  if (!postData.email) {
-    showNotify({ type: 'warning', message: t('forgot-password.pleaseEnterEmail') })
-    return
-  }
-
-  isGettingCode.value = true
-  const res = await userStore.getCode()
-  if (res.code === 0)
-    showNotify({ type: 'success', message: `${t('forgot-password.sendCodeSuccess')}: ${res.result}` })
-
-  isGettingCode.value = false
-}
-</script>
-
 <template>
-  <div class="m-x-a w-7xl text-center">
-    <van-form :model="postData" :rules="rules" validate-trigger="onSubmit" @submit="reset">
-      <div class="overflow-hidden rounded-3xl">
-        <van-field v-model.trim="postData.email" :rules="rules.email" name="email"
-          :placeholder="t('forgot-password.email')" />
-      </div>
+  <div class="changePassword-content flex flex-col gap-24 p-12">
+    <loginTab :list="typeArr" @change="changeActive" class="mb-0"></loginTab>
+    <inputCom :label="form.type == 'phone' ? '手机号' : '邮箱'" v-model:value="form.username" :placeholder="'请输入手机号'">
+    </inputCom>
+    <inputCom :label="'新密码'" v-model:value="form.password" :placeholder="'请输入新密码'" :tips="'請輸入6-12個字符，包括數字或字母'">
+    </inputCom>
+    <inputCom :label="'确认新密码'" v-model:value="form.passwordConfirmation" :placeholder="'请确认新密码'"
+      :tips="'請輸入6-12個字符，包括數字或字母'"></inputCom>
+    <inputCom :label="'验证码'" :placeholder="'请输入验证码'" v-model:value="form.code" :tips="''">
+      <template #sendCode>
+        <div class="absolute right-0 font-size-12 sendCode" :class="countdown > 0 ? 'text-gray-400' : 'text-blue-500'"
+          @click="getCode">
+          {{ countdown > 0 ? `${countdown}秒后重发` : '发送验证码' }}
+        </div>
+      </template>
+    </inputCom>
+    <van-button type="primary" block @click="onSubmit">确定</van-button>
 
-      <div class="mt-16 overflow-hidden rounded-3xl">
-        <van-field v-model.trim="postData.code" :rules="rules.code" name="code"
-          :placeholder="t('forgot-password.code')">
-          <template #button>
-            <van-button size="small" type="primary" plain @click="getCode">
-              {{ buttonText }}
-            </van-button>
-          </template>
-        </van-field>
-      </div>
-
-      <div class="mt-16 overflow-hidden rounded-3xl">
-        <van-field v-model.trim="postData.password" type="password" :rules="rules.password" name="password"
-          :placeholder="t('forgot-password.password')" />
-      </div>
-
-      <div class="mt-16 overflow-hidden rounded-3xl">
-        <van-field v-model.trim="postData.confirmPassword" type="password" :rules="rules.confirmPassword"
-          name="confirmPassword" :placeholder="t('forgot-password.comfirmPassword')" />
-      </div>
-
-      <div class="mt-16">
-        <van-button :loading="loading" type="primary" native-type="submit" round block>
-          {{ $t('forgot-password.confirm') }}
-        </van-button>
-      </div>
-    </van-form>
-
-    <GhostButton to="login" block :style="{ 'margin-top': vw(8) }">
-      {{ $t('forgot-password.backToLogin') }}
-    </GhostButton>
   </div>
 </template>
+<script setup lang="ts">
+import { ref, reactive } from "vue"
+import inputCom from "@/components/inputCom.vue";
+import { useUserStore } from '@/stores'
+import { forgetPassword, sendCode } from "@/api/user"
+import loginTab from "@/components/tab.vue";
+const form = reactive({
+  passwordType: 3,
+  password: '',
+  passwordConfirmation: '',
+  type: 'phone',
+  username: "",
+  code: "",
 
-<route lang="json5">
-{
-  name: 'forgot-password',
-  meta: {
-    i18n: 'menus.forgot-password'
-  },
+})
+const typeArr = [{
+  label: '手机号',
+  value: 'phone'
+}, {
+  label: '邮箱',
+  value: 'email'
+}]
+const active = ref(0)
+const router = useRouter()
+const userStore = useUserStore()
+const userInfo = computed(() => userStore.userInfo)
+const countdown = ref(0)
+const getCode = async () => {
+  if (countdown.value > 0) return
+  console.log(userInfo)
+  try {
+
+    await sendCode(form)
+    startCountdown()
+  } catch (e) {
+    // 处理错误
+    console.log(e)
+  }
 }
-</route>
+const changeActive = (val: any) => {
+  active.value = val
+  form.type = val ? 'email' : 'phone'
+}
+const startCountdown = () => {
+  countdown.value = 60
+  timer.value = setInterval(() => {
+    countdown.value--
+    if (countdown.value <= 0) {
+      clearInterval(timer.value)
+      timer.value = undefined
+    }
+  }, 1000)
+}
+
+const onSubmit = async () => {
+  const { password, passwordConfirmation } = form
+  if (password !== passwordConfirmation) {
+    return showToast.error('两次密码不一致')
+  }
+  let params = {
+    ...form,
+
+  }
+  params.code = params.code.trim()
+  const res = await forgetPassword(params)
+  if (res.code === 200) {
+    showToast('修改成功')
+    router.push('/login')
+  }
+}
+</script>
+<style lang="less" scoped></style>

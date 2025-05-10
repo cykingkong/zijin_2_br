@@ -14,7 +14,7 @@
         <inputCom :label="'提现数量'" :placeholder="'请输入提现数量'" v-model:value="form.num" :tips="''">
         </inputCom>
         <div class="font-size-12">{{ tips }}</div>
-        <div class="font-size-12">{{ tips2 }}</div>
+        <div class="font-size-12 mb-12 mt-4">{{ tips2 }}</div>
 
         <van-button type="primary" block @click="handleClickSubmit">提交</van-button>
         <van-popup v-model:show="showPicker" destroy-on-close position="bottom">
@@ -34,7 +34,7 @@ const columns = ref([])
 const showPicker = ref(false)
 
 const page = reactive({
-    page: 1,
+    pageIndex: 1,
     pageSize: 10
 })
 const form = reactive({

@@ -25,7 +25,7 @@ const router = useRouter()
 const store = useStore()
 const list = ref([])
 const page = ref({
-    page: 1,
+    pageIndex: 1,
     pageSize: 10
 })
 

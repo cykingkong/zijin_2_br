@@ -17,7 +17,8 @@ export const useStore = defineStore('main', {
     klineList: [],
     token: local.getlocal('token') || '',
     service: '',
-    userCardList:[]
+    userCardList:[],
+    marketList: []
   }),
   actions: {
     setLoginShow(showState) {
@@ -41,6 +42,9 @@ export const useStore = defineStore('main', {
     async incrementAsync() {
       await new Promise(resolve => setTimeout(resolve, 1000))
     },
+    setMarketList(data) {
+      this.marketList = data
+    }
   },
   getters: {
     doubleCount: state => state.count * 2,
@@ -48,6 +52,7 @@ export const useStore = defineStore('main', {
     getklineList: state => state.klineList,
     getService: state => state.service,
     getUserCardList: state => state.userCardList,
-    getToken: state => state.token
+    getToken: state => state.token,
+    getMarketList: state => state.marketList
   },
 })

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import router from '@/router'
 import { useUserStore } from '@/stores'
+import { useStore } from '@/stores/modules/index';
+
 import defaultAvatar from '@/assets/images/default-avatar.svg'
 import tabItem from './component/tab-item.vue'
 import Banner from './component/banner.vue'
@@ -14,6 +16,8 @@ import { indexInfo, depth, market } from '@/api/market'
 import Indicator from './component/indicator.vue'
 const { t } = useI18n()
 const activeName = ref()
+const store = useStore();
+
 const marketData = ref<any>([])
 const indexInfoData = ref({})
 const i = {
@@ -40,14 +44,15 @@ const init = () => {
     console.log(res)
     indexInfoData.value = res.data
   })
-  market({ page: 1, pageSize: 20 }).then(res => {
+  market({ pageIndex: 1, pageSize: 20 }).then(res => {
     console.log(res)
     marketData.value = res.data || []
+    store.setMarketList(res.data.list || [])
     activeName.value = res.data.category[0].category_id
   })
 }
 const handleClickTabs = (val: any) => {
-  market({ categoryId: val, page: 1, pageSize: 20 }).then(res => {
+  market({ categoryId: val, pageIndex: 1, pageSize: 20 }).then(res => {
     console.log(res)
     marketData.value = res.data || []
   })

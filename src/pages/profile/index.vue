@@ -73,6 +73,11 @@ function onLanguageConfirm(event: { selectedOptions: PickerColumn }) {
   locale.value = event.selectedOptions[0].value as string
   showLanguagePicker.value = false
 }
+const handleLogout = () => {
+  // clearToken()
+  userStore.logout()
+  router.push('/login')
+}
 </script>
 
 <template>
@@ -112,7 +117,7 @@ function onLanguageConfirm(event: { selectedOptions: PickerColumn }) {
         </van-cell>
       </van-cell-group>
       <div class="btn-box mt-24 w-full">
-        <van-button square type="primary" class="mt-12 w-full">
+        <van-button square type="primary" class="mt-12 w-full" @click="handleLogout">
           退出登录
         </van-button>
       </div>

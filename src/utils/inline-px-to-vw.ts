@@ -17,9 +17,9 @@ const maxWidth = 600
  * 限制大小的 vw 转换
  * @param {number} n
  */
-export default function vw(n: number) {
+export default function vw(n: number): string {
   if (n === 0)
-    return n
+    return n + ''
 
   const vwN = round(n * 100 / idealWidth, 3)
   const maxN = round(n * maxWidth / idealWidth, 3)

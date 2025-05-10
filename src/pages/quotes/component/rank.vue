@@ -1,6 +1,6 @@
 <template>
     <div class="rank-content">
-        <div v-for="(i, k) in rankList" :key="k" class="rank-item">
+        <div v-for="(i, k) in rankList" :key="k" class="rank-item" @click="handleClickLi(i)">
             <div class="rank-title flex">
                 <div class="flex-l">{{ i.tradingInfo.baseAssetInfo.symbol }}</div>
                 <div class="flex-r">
@@ -24,6 +24,7 @@
 <script setup>
 import more from '@/assets/image/icon-right.png';
 // import Kline from '@/components/Kline.vue';
+import local from '@/utils/local'
 
 const props = defineProps({
     rankList: {
@@ -31,6 +32,12 @@ const props = defineProps({
         default: () => [],
     }
 })
+const router = useRouter()
+
+const handleClickLi = (i) => {
+    local.setlocal('rankInfo', i)
+    router.push('/quotes/detail?id=' + i.tradingPairsId)
+}
 </script>
 <style scoped lang="less">
 .rank-content {

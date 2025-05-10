@@ -25,7 +25,7 @@ export type RequestError = AxiosError<{
 // 异常拦截处理器
 function errorHandler(error: RequestError): Promise<any> {
   if (error.response) {
-    const { data = {}, status, statusText } = error.response
+    const { data = {}, status, statusText, message } = error.response
     // 403 无权限
     if (status === 403) {
       showNotify({
@@ -42,6 +42,7 @@ function errorHandler(error: RequestError): Promise<any> {
       // 如果你需要直接跳转登录页面
       // location.replace(loginRoutePath)
     }
+
   }
   return Promise.reject(error)
 }
@@ -62,6 +63,10 @@ request.interceptors.request.use(requestHandler, errorHandler)
 
 // 响应拦截器
 function responseHandler(response: { data: any }) {
+  const { code, message } = response.data
+  if (code !== 200) {
+    showToast(message)
+  }
   return response.data
 }
 
