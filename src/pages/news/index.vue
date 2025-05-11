@@ -2,7 +2,6 @@
 import router from '@/router'
 import { languageColumns, locale } from '@/utils/i18n'
 import { useUserStore } from '@/stores'
-import Echarts from '@/components/Eharts/charts.vue'
 
 const { t } = useI18n()
 </script>
@@ -50,14 +49,17 @@ const { t } = useI18n()
 .news-index {
   padding-bottom: calc(80px + env(safe-area-inset-bottom));
 }
+
 .time {
   color: #747a8f;
 }
+
 p {
   color: var(--van-text-color);
 
   margin: 0;
 }
+
 .content {
   width: 100%;
 

@@ -84,7 +84,6 @@ const listtext = computed(() => {
     }
 })
 const columns = computed(() => {
-    console.log(store.setMarketList, '123123')
     let arr = store.getMarketList.map((e) => {
         return {
             ...e,
@@ -141,8 +140,6 @@ const getKline = async () => {
     console.log(res)
 }
 onMounted(async () => {
-    console.log(route)
-
     if (route.query.id) {
         tradingPairsId.value = route.query.id
         await getDepth()

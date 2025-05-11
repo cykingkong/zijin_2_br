@@ -8,15 +8,21 @@ import inputCom from '@/components/inputCom.vue'
 import slidePop from '@/components/slidePop.vue'
 import areaPop from '@/components/areaPop.vue'
 import icon1 from '@/assets/image/icon/icon1.png'
+import nationalityList from './components/nationalityList.vue'
 import { uploadFile } from '@/api/tool'
 const countdown = ref(0)
 const router = useRouter()
-const step = ref(2)
+const step = ref(1)
 
 const agree = ref(false)
 const timer = ref<NodeJS.Timeout>()
 const userStore = useUserStore()
-const areaInfo = ref()
+const areaInfo = ref({
+  code: "br",
+  dialCode: 55,
+  key: "br",
+  name: ""
+})
 const inviteCodeOnlyRead = ref(false)
 const typeArr = [
   {
@@ -58,7 +64,7 @@ const handleClickRegister = async () => {
 
   }
   try {
-    let area = areaInfo.value?.area_code.replace(/\+/g, "");
+    let area = areaInfo.value?.dialCode
 
     let params = {
       phone: area + form.phone,
@@ -81,7 +87,7 @@ const handleClickRegister = async () => {
 const handleClickSubmit = async () => {
   try {
     let params = {
-      name: areaInfo.value.country_id,
+      name: areaInfo.value.dialCode,
       nationality: kycForm.nationality,
       idCard: kycForm.idCard,
       idCardFront: kycForm.idCardFront,
@@ -108,7 +114,7 @@ const getCode = async () => {
     return
   }
   try {
-    let area = areaInfo.value?.area_code.replace(/\+/g, "");
+    let area = areaInfo.value?.dialCode
     let params = {
       phone: area + form.phone,
       email: form.email,
@@ -131,7 +137,10 @@ const startCountdown = () => {
     }
   }, 1000)
 }
-
+const getName = (val: any) => {
+  console.log(val, 'vvvv')
+  areaInfo.value = val
+}
 
 // 上传
 const onOversize = (file) => {
@@ -179,16 +188,20 @@ onMounted(() => {
 onUnmounted(() => {
   if (timer.value) clearInterval(timer.value)
 })
+const controlChildRef = ref()
 const hanleClickAreaPick = () => {
-  areaPopRef.value.popShow()
+  controlChildRef.value.open();
+
+  // areaPopRef.value.popShow()
 }
-const popOnOk = (val: any) => {
-  areaInfo.value = val
-}
+// const popOnOk = (val: any) => {
+//   areaInfo.value = val
+// }
 </script>
 
 <template>
   <div class="m-x-a px-12 pb-24">
+    <nationalityList ref="controlChildRef" :title="'选择'" @getName="getName"></nationalityList>
     <div class="steps flex items-center mt-35">
       <div class="steps-item w-40 h-40 rounded-full line-height-40 font-size-14 text-align-center"
         :class="{ 'green': step >= 1 }">1</div>
@@ -215,7 +228,7 @@ const popOnOk = (val: any) => {
         <template #picker>
           <div class="picker-box pr-8 mr-6  h-full flex items-center gap-8" @click="hanleClickAreaPick">
             <img :src="icon1" alt="" class="w16 h16">
-            <div class="num">{{ areaInfo?.area_code }}</div>
+            <div class="num">{{ areaInfo?.dialCode }}</div>
           </div>
         </template>
       </inputCom>
@@ -258,7 +271,7 @@ const popOnOk = (val: any) => {
         <inputCom :label="'国籍'" :placeholder="'请选择国籍'" v-model:value="kycForm.nationality" :type="'picker'">
           <div class="picker pr-8 mr-6  h-full flex items-center gap-8" @click="hanleClickAreaPick">
             <img :src="icon1" alt="" class="w16 h16">
-            <div class="num">{{ areaInfo?.name_cn }}</div>
+            <div class="num">{{ areaInfo?.name }}</div>
           </div>
         </inputCom>
         <inputCom :label="'真实姓名'" :placeholder="'请输入真实姓名'" v-model:value="kycForm.name" :type="'text'"></inputCom>
@@ -288,7 +301,7 @@ const popOnOk = (val: any) => {
       </div>
     </block>
     <slidePop ref="slidePopRef" />
-    <areaPop ref="areaPopRef" :country_id="25" @popOnOk="popOnOk" />
+    <!-- <areaPop ref="areaPopRef" :country_id="25" @popOnOk="popOnOk" /> -->
   </div>
 </template>
 

@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import router from '@/router'
-import { useUserStore } from '@/stores'
 import { useStore } from '@/stores/modules/index';
 
-import defaultAvatar from '@/assets/images/default-avatar.svg'
 import tabItem from './component/tab-item.vue'
 import Banner from './component/banner.vue'
 import Notice from './component/notice.vue'
@@ -17,7 +15,7 @@ import Indicator from './component/indicator.vue'
 const { t } = useI18n()
 const activeName = ref()
 const store = useStore();
-
+const requestCount = ref(0)
 const marketData = ref<any>([])
 const indexInfoData = ref({})
 const i = {
@@ -31,12 +29,9 @@ const handleClickGrid = (val: any) => {
   }
   if (val == 1) {
     router.push('/quotes/accountChange')
-
   }
   if (val == 5) {
-
     router.push('/quotes/commodities')
-
   }
 }
 const init = () => {
@@ -44,17 +39,62 @@ const init = () => {
     console.log(res)
     indexInfoData.value = res.data
   })
-  market({ pageIndex: 1, pageSize: 20 }).then(res => {
-    console.log(res)
-    marketData.value = res.data || []
-    store.setMarketList(res.data.list || [])
-    activeName.value = res.data.category[0].category_id
+  getMarketInfo({})
+}
+const page = reactive({
+  pageIndex: 1, pageSize: 20
+})
+const rankListStatus = ref(1)// 1-加载中 2-成功 3-失败 4-已无更多
+const getMarketInfo = (params) => {
+  let p = {
+    ...page,
+  }
+  p.pageIndex = params.pageIndex || 1;
+  rankListStatus.value = 1
+  requestCount.value++
+  market({ ...p, ...params }).then(res => {
+    const { data, code } = res
+    if (code == 200) {
+      if (!data.list) {
+        rankListStatus.value = 4;
+        return
+      }
+      rankListStatus.value = 2
+      let result = []
+      if (p.pageIndex == 1) {
+        result = data.list || []
+      } else {
+        result = marketData.value.list.concat(data.list || [])
+      }
+      if (requestCount.value == 1) {
+        activeName.value = data.category[0].category_id
+      }
+      marketData.value = {
+        ...res.data,
+        list: result
+      }
+      store.setMarketList(res.data.list || [])
+    } else {
+      rankListStatus.value = 3
+    }
+
   })
 }
 const handleClickTabs = (val: any) => {
-  market({ categoryId: val, pageIndex: 1, pageSize: 20 }).then(res => {
-    console.log(res)
-    marketData.value = res.data || []
+  console.log(val)
+  rankListStatus.value = 1;
+  getMarketInfo({
+    categoryId: val
+  })
+  activeName.value = val
+}
+const loadMore = () => {
+  if (rankListStatus.value == 4) {
+    return
+  }
+  let index = page.pageIndex += 1
+  getMarketInfo({
+    pageIndex: index
   })
 }
 onMounted(() => {
@@ -85,7 +125,8 @@ onMounted(() => {
         <!-- 公告 -->
         <Notice />
         <!-- 排行 -->
-        <Rank :rankList="marketData.list" />
+        <Rank :rankList="marketData.list" :categoryId="item.category_id" @loadMore="loadMore"
+          :rankListStatus="rankListStatus" />
       </van-tab>
       <van-tab title="美股" name="b" v-if="false">
         <div class="flex-col flex gap-12">

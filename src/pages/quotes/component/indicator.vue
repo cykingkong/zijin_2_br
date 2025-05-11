@@ -4,7 +4,7 @@
             :key="index">
             <div class=" title-box flex items-center font-size-12 gap-4px">
                 <div class="dot w-6px h-6px rounded-full bg-[#0091FF]"></div>
-                {{ item.tradingInfo.baseAssetInfo.symbol || '-' }}
+                <!-- {{ item.tradingInfo.baseAssetInfo ? item.tradingInfo.baseAssetInfo.symbol : '-' }} -->
             </div>
             <div class="num font-size-14 font-500">100</div>
             <div class="precent font-size-10 " :class="{ 'down': item.dayIncrease > 0, 'up': item.dayIncrease <= 0 }">

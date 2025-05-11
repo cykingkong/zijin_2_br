@@ -26,6 +26,7 @@ export type RequestError = AxiosError<{
 function errorHandler(error: RequestError): Promise<any> {
   if (error.response) {
     const { data = {}, status, statusText, message } = error.response
+    console.log(error.response, 'err')
     // 403 无权限
     if (status === 403) {
       showNotify({
@@ -34,13 +35,13 @@ function errorHandler(error: RequestError): Promise<any> {
       })
     }
     // 401 未登录/未授权
-    if (status === 401 && data.result && data.result.isLogin) {
+    if (status === 401) {
       showNotify({
         type: 'danger',
-        message: 'Authorization verification failed',
+        message: '请重新登录',
       })
       // 如果你需要直接跳转登录页面
-      // location.replace(loginRoutePath)
+      location.replace('/login')
     }
 
   }

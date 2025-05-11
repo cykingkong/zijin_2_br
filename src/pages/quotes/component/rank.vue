@@ -4,9 +4,9 @@
             <div class="rank-title flex">
                 <div class="flex-l">{{ i.tradingInfo.baseAssetInfo.symbol }}</div>
                 <div class="flex-r">
-                    <div class="flex-r-item flex items-center up">{{ i.dayIncrease }}%
-                        <!-- <Kline :nameId="'myChart10' + k + 1" :areaStyle="true" :increase="i.increase" :data="i.price"
-                            height="20px" width="50px"></Kline> -->
+                    <div class="flex-r-item flex items-center up">
+                        <Kline :nameId="'myChart10' + k + categoryId" :areaStyle="true" :increase="i.dayIncrease"
+                            :data="i.price" height="20px" width="50px" v-if="i.price && i.price.length > 0"></Kline>
                     </div>
                     <div class="flex-r-item up">{{ i.increase }}%</div>
                     <div class="flex-r-item last-item">
@@ -16,20 +16,32 @@
             </div>
             <div class="rank-text"></div>
         </div>
-        <div class="more">
-            更多 <img :src="more" alt="" class="icon">
+        <div class="more" @click="loadMore">
+            {{ rankListStatus == 1 ? '加载中..' : rankListStatus == 4 ? '已无更多' : '加载更多' }} <img :src="more" alt=""
+                class="icon">
         </div>
     </div>
 </template>
 <script setup>
 import more from '@/assets/image/icon-right.png';
 // import Kline from '@/components/Kline.vue';
-import local from '@/utils/local'
+import KlineSvg from '@/components/KlineSvg.vue';
 
+import local from '@/utils/local'
+const emits = defineEmits(['loadMore'])
+const loadMore = () => {
+    emits('loadMore')
+}
 const props = defineProps({
     rankList: {
         type: Array,
         default: () => [],
+    },
+    categoryId: {
+        type: Number,
+    },
+    rankListStatus: {
+        type: Number
     }
 })
 const router = useRouter()
@@ -42,7 +54,8 @@ const handleClickLi = (i) => {
 <style scoped lang="less">
 .rank-content {
     width: 100%;
-    padding-bottom: 70px;
+
+    padding-bottom: 20px;
     background: var(--rank-bg);
 
     .rank-item {
