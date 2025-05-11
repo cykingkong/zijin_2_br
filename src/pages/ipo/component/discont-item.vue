@@ -21,7 +21,7 @@
     </div>
     <div class="order-item-content w-full px-12 py-24  font-size-12 flex flex-col gap-10px"
         v-if="props.itemType == 'order'">
-        <ipoItemTop :item="_item"></ipoItemTop>
+        <ipoItemTop :item="_item" :item-type="'order'"></ipoItemTop>
         <ipoOrderItemInfo :item="_item"></ipoOrderItemInfo>
         <div class="flex gap-12">
             <div class="flex-1">

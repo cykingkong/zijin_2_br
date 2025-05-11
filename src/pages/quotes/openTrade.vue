@@ -16,8 +16,9 @@
       </van-tab>
       <van-tab title="卖出" :name="1">
         <tab1Page ref="tab1PageSellRef" :tradingPairsId="tradingPairsId" :direction="2"
-          :userBalanceInfo="userBalanceInfo" :depthData="depthData" @handleClickSubmit="handleClickSubmit"
-          @handleClickIndicatorTab="handleClickIndicatorTab" :orderList="orderList" />
+          :userBalanceInfo="userBalanceInfo" :orderStatus="orderStatus" :depthData="depthData"
+          @handleClickSubmit="handleClickSubmit" @handleClickIndicatorTab="handleClickIndicatorTab"
+          :orderList="orderList" />
       </van-tab>
       <van-tab title="撤单" :name="2">
         <TabTablePage :table-th="['委托时间', '委託/成交價', '委托数量', '状态']" :table-data="[]"></TabTablePage>
@@ -104,7 +105,7 @@ const getDepth = async () => {
   }
 }
 const changeTab = (val) => {
-
+  console.log(val, orderStatus.value, 'oawijd')
   if (val == 0 || val == 1) {
     let params = {
       status: orderStatus.value == 0 ? 1 : 2,

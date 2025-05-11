@@ -3,7 +3,7 @@
         <div class="logo w-50 h-50 rounded-full overflow-hidden bg-white">
             <img :src="item.assetInfo.logo" alt="" v-if="item.assetInfo" class="w-full h-full">
         </div>
-        <div class="name font-size-22">{{ item.name }}</div>
+        <div class="name font-size-22">{{ itemType == 'ipo' ? item.name : item.ipoInfo.name }}</div>
     </div>
 </template>
 <script setup lang="ts">
@@ -13,6 +13,10 @@ const props = defineProps({
     item: {
         type: Object as () => any,
     },
+    itemType: {
+        type: String,
+        default: 'ipo'
+    }
 })
 
 

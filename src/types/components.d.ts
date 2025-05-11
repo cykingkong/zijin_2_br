@@ -20,6 +20,7 @@ declare module 'vue' {
     Kline: typeof import('./../components/Kline.vue')['default']
     KlineChat: typeof import('./../components/klineChat.vue')['default']
     KlineSvg: typeof import('./../components/klineSvg.vue')['default']
+    LoadMore: typeof import('./../components/LoadMore.vue')['default']
     NavBar: typeof import('./../components/NavBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

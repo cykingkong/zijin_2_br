@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import useRouteCache from '@/stores/modules/routeCache'
+import { Overlay, Loading } from 'vant'
+import { useLoadingStore } from '@/stores/modules/loading'
+
+const loadingStore = useLoadingStore()
 
 useHead({
   title: 'Vue3 Vant Mobile',
@@ -43,7 +47,19 @@ const mode = computed(() => {
     </router-view>
     <tab-bar />
   </van-config-provider>
+
+  <Overlay :show="loadingStore.showGlobalLoading" class="overlay">
+    <!-- <Loading type="spinner" size="24px" vertical></Loading> -->
+  </Overlay>
 </template>
+
+<style scoped>
+.overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>
 
 <style scoped>
 .app-wrapper {

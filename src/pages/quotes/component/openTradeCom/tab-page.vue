@@ -94,6 +94,7 @@
                 </div>
 
             </div>
+            {{ orderStatus }}
             <!-- indicator-index-container -->
             <div class="indicator-index-container p-12">
                 <div class="indicator-index-tab flex flex-justify-between flex-items-center">
@@ -111,6 +112,7 @@
                     <EntrustItem v-for="item in orderList" :key="item.order_no" :entrust="item" state="submitted"
                         @cancelOrder="cancelOrder" />
                     <Empty v-if="orderList.length == 0" />
+
                 </div>
 
                 <div class="tab-content" v-show="orderStatus == 2">
@@ -150,6 +152,8 @@ import { useStore } from '@/stores/modules/index';
 import charts from '@/components/charts/charts.vue'
 import EntrustItem from "./EntrustItem.vue";
 import { addCommasToNumber } from '@/utils/tool'
+// 应用全局防抖后的提交方法
+import { useLoadingStore } from '@/stores/modules/loading'
 const emits = defineEmits(['handleClickSubmit', 'handleClickIndicatorTab', 'cancelOrder'])
 
 const store = useStore();
@@ -212,36 +216,41 @@ const mode = computed(() => {
 })
 const linePercent = ref(80)
 console.log(mode, 'mide')
-const submit = () => {
+const isSubmitting = ref(false);
+const allowSubmit = ref(true);
+
+// 原始提交方法
+const submitOriginal = async () => {
     let params = {
         direction: props.direction == 1 ? 'buy' : 'sell',
         entrustPrice: popActive.value == 0 ? null : form.price,
         amount: form.amount,
-        type: popActive.value == 0 ? 1 : 2  // 1:市价 2:限价
-    }
-    emits('handleClickSubmit', params)
-    console.log(params, 'params')
-}
-const handleClickPopItem = (index) => {
-    popActive.value = index
-    form.price = klineData.value.close
-    popShow.value = false
-    console.log(form)
-}
+        type: popActive.value == 0 ? 1 : 2
+    };
+    await emits('handleClickSubmit', params);
+};
 const handleClickIndicatorTab = (index) => {
-
     emits('handleClickIndicatorTab', index)
-
 }
-const cancelOrder = (val) => {
+
+const cancelOrderOriginal = (val) => {
     emits('cancelOrder', val)
 }
-const getIndicatorActive = () => {
-    return indicatorActive.value
-}
-defineExpose({
-    getIndicatorActive
-})
+
+
+
+const loadingStore = useLoadingStore()
+const { proxy } = getCurrentInstance()!
+const submit = proxy!.$throttle(submitOriginal, 1000, {
+    onStart: () => loadingStore.show(),
+    onEnd: () => loadingStore.hide()
+});
+const cancelOrder = proxy!.$throttle(cancelOrderOriginal, 1000, {
+    onStart: () => loadingStore.show(),
+    onEnd: () => loadingStore.hide()
+});
+
+
 </script>
 <style lang="less" scoped>
 .pop {

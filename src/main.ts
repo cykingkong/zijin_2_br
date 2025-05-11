@@ -7,6 +7,7 @@ import 'virtual:uno.css'
 import '@/styles/app.less'
 import '@/styles/var.less'
 import { i18n } from '@/utils/i18n'
+import { throttleAfterCompletion } from '@/utils/tool'
 import inputCom from './components/inputCom.vue'
 // Vant 桌面端适配
 import '@vant/touch-emulator'
@@ -29,5 +30,8 @@ app.use(router)
 app.use(pinia)
 app.use(i18n)
 app.component('inputCom', inputCom)
+
+// 注册全局防抖方法
+app.config.globalProperties.$throttle = throttleAfterCompletion
 
 app.mount('#app')

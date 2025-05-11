@@ -16,15 +16,11 @@
             </div>
             <div class="rank-text"></div>
         </div>
-        <div class="more" @click="loadMore">
-            {{ rankListStatus == 1 ? '加载中..' : rankListStatus == 4 ? '已无更多' : '加载更多' }} <img :src="more" alt=""
-                class="icon">
-        </div>
+        <LoadMore :status="rankListStatus" @load-more="loadMore" />
     </div>
 </template>
 <script setup>
-import more from '@/assets/image/icon-right.png';
-// import Kline from '@/components/Kline.vue';
+import LoadMore from '@/components/LoadMore.vue';
 import KlineSvg from '@/components/KlineSvg.vue';
 
 import local from '@/utils/local'
