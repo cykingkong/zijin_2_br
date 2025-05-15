@@ -18,7 +18,16 @@ export function ipoProductList(params): Promise<any> {
 export function ipoOrderList(params): Promise<any> {
     return request.get<any>('/app-api/gameplay/ipo/orderList', { params })
 }
+export function ipoProductInfo(params): Promise<any> {
+    return request.get<any>('/app-api/gameplay/ipo/ipoProductInfo', { params })
+}
 // 申请配资
-export function creditApply(params): Promise<any> {
-    return request.get<any>('/app-api/gameplay/ipo/creditApply', { params })
+export function creditApply(data): Promise<any> {
+    return request.post<any>('/app-api/gameplay/ipo/creditApply', data)
+}
+export function creditApplyList(params): Promise<any> {
+    return request.get<any>('/app-api/gameplay/ipo/creditApplyList', { params })
+}
+export function creditApplyInfo(params): Promise<any> {
+    return request.get<any>('/app-api/gameplay/ipo/creditApplyInfo', { params })
 }

@@ -3,14 +3,22 @@
         <van-index-bar>
             <van-index-anchor index="s" />
             <van-cell title="所有银行卡" @click="handleClickHerf(1)" />
-            <van-index-anchor index="x" />
-            <van-cell title="虚拟货币支付" @click="handleClickHerf(1)" />
+            <!-- <van-index-anchor index="x" />
+            <van-cell title="虚拟货币支付" @click="handleClickHerf(1)" /> -->
         </van-index-bar>
 
 
 
     </div>
 </template>
+<route lang="json5">
+    {
+      name: 'selectType',
+      meta: {
+        title: '选择卡类型',
+      },
+    }
+</route>
 <script setup lang="ts">
 import { ref, reactive } from "vue"
 const router = useRouter()

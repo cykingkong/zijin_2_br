@@ -30,59 +30,25 @@ const props = defineProps({
 })
 
 const gridList = computed(() => {
-    if (props.categoryId == 200) {
-        return [
-            {
-                label: '美股交易',
-                icon: grid1,
-            },
-            {
-                label: '永续合约',
-                icon: grid2,
-            },
-            {
-                label: '期货交易',
-                icon: grid3,
-            },
-            {
-                label: '账变记录',
-                icon: grid4,
-            },
-            {
-                label: '新股认购',
-                icon: grid5,
-            },
-            {
-                label: '新股库存',
-                icon: grid6,
-            },
+    return [
+        {
+            label: '股票交易',
+            icon: grid1,
+        },
+        {
+            label: '增发',
+            icon: grid2,
+        },
+        {
+            label: '基金',
+            icon: grid3,
+        },
 
-        ]
-    }
-    else {
-        return [
-            {
-                label: '港股交易',
-                icon: grid7,
-            },
-            {
-                label: '永续合约',
-                icon: grid8,
-            },
-            {
-                label: '交割合约',
-                icon: grid9,
-            },
-            {
-                label: '账变记录',
-                icon: grid10,
-            },
-        ]
-    }
+
+    ]
 })
 const emits = defineEmits(['handleClickGrid'])
 const handleClickItem = (k) => {
-
     emits('handleClickGrid', k)
 }
 </script>
@@ -93,7 +59,7 @@ const handleClickItem = (k) => {
     grid-template-columns: repeat(4, 1fr);
     padding: 12px 0;
     gap: 12px;
-    background: var(--banner-bg);
+    background: #131a2e;
 
     .grid-item {
         flex: 1;

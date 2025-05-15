@@ -1,6 +1,6 @@
 <template>
     <div class="more" @click="handleClick">
-        {{ statusText }} <img :src="more" alt="" class="icon">
+        {{ statusText }} <img :src="more" alt="" class="icon" v-if="status !== 3">
     </div>
 </template>
 
@@ -18,11 +18,11 @@ const props = defineProps({
 
 const statusText = computed(() => {
     return props.status === 1 ? '加载中..' :
-        props.status === 4 ? '已无更多' : '加载更多';
+        props.status === 3 ? '已无更多' : '加载更多';
 });
 
 const handleClick = () => {
-    if (props.status !== 1 && props.status !== 4) {
+    if (props.status !== 1 && props.status !== 3) {
         emit('load-more');
     }
 };

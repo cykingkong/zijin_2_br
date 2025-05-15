@@ -19,7 +19,8 @@
                     class="w-full  text-white font-size-16" @input="$emit('update:value', $event.target.value)"
                     v-if="inputType == 'password'" />
                 <slot name="sendCode">
-                    <van-icon name="clear" class="absolute color-blueGray closeIcon" v-if="!onlyRead && type == 'text'"
+                    <van-icon name="clear" class="absolute color-blueGray closeIcon"
+                        v-if="!onlyRead && (inputType == 'text' || inputType == 'password') && value != ''"
                         @click="$emit('update:value', '')" />
                 </slot>
             </div>

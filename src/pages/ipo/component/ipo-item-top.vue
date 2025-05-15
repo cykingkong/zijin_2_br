@@ -1,7 +1,9 @@
 <template>
     <div class="li flex w-full items-center gap-20">
         <div class="logo w-50 h-50 rounded-full overflow-hidden bg-white">
-            <img :src="item.assetInfo.logo" alt="" v-if="item.assetInfo" class="w-full h-full">
+            <img :src="item.logo" alt="" v-if="item && item.logo" class="w-full h-full">
+            <img :src="item.ipoInfo.logo" alt="" v-if="item.ipoInfo" class="w-full h-full">
+
         </div>
         <div class="name font-size-22">{{ itemType == 'ipo' ? item.name : item.ipoInfo.name }}</div>
     </div>

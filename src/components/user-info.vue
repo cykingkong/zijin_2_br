@@ -7,10 +7,10 @@ const props = defineProps({
 
 })
 import { useUserStore } from '@/stores'
-
+import { addCommasToNumber } from '@/utils/tool'
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
-console.log(userInfo)
+console.log(userInfo.value, 'sddd')
 </script>
 
 <template>
@@ -35,15 +35,17 @@ console.log(userInfo)
             ETF总资产
           </p>
           <p class="content">
-            $ 381,222
+            $ {{ addCommasToNumber(userInfo.assetsBalance.availableBalanceUsd) }}
+
           </p>
         </div>
         <div class="line-item flex-1 text-align-right">
           <p class="title">
             ETF浮动盈亏
           </p>
-          <p class="content up">
-            $ 381,222
+          <p class="content "
+            :class="{ up: userInfo.assetsData.totalProfitRate >= 0, down: userInfo.assetsData.totalProfitRate < 0 }">
+            {{ userInfo.assetsData.totalProfitRate }} %
           </p>
         </div>
       </div>
@@ -52,16 +54,19 @@ console.log(userInfo)
           <p class="title">
             ETF可用余额
           </p>
-          <p class="content ">
-            $ 381,222
+          <p class="content">
+            $ {{ addCommasToNumber(userInfo.assetsBalance.availableBalanceBrl) }}
+
+            <!-- $ {{ userInfo.asset[1].balance || "" }} -->
           </p>
         </div>
         <div class="line-item flex-1 text-align-right">
           <p class="title">
             ETF当日盈亏
           </p>
-          <p class="content up">
-            $ 381,222
+          <p class="content "
+            :class="{ up: userInfo.assetsData.totalProfit >= 0, down: userInfo.assetsData.totalProfit < 0 }">
+            {{ userInfo.assetsData.totalProfit }} %
           </p>
         </div>
       </div>
@@ -72,7 +77,7 @@ console.log(userInfo)
 <style lang="less" scoped>
 .user-info {
   width: 100%;
-  background: var(--bg);
+  background: #131a2e;
   display: flex;
   align-items: center;
   gap: 10px;

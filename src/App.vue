@@ -36,7 +36,7 @@ const mode = computed(() => {
 </script>
 
 <template>
-  <van-config-provider :theme="mode">
+  <van-config-provider :theme="'dark'">
     <nav-bar />
     <router-view v-slot="{ Component }">
       <section class="app-wrapper">
@@ -48,7 +48,7 @@ const mode = computed(() => {
     <tab-bar />
   </van-config-provider>
 
-  <Overlay :show="loadingStore.showGlobalLoading" class="overlay">
+  <Overlay :show="loadingStore.showGlobalLoading" class="overlay" z-index="99">
     <!-- <Loading type="spinner" size="24px" vertical></Loading> -->
   </Overlay>
 </template>

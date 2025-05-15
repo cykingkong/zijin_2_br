@@ -7,58 +7,44 @@
                 <span>{{ item.label }}</span>
             </div>
         </div>
-        <div class="indicator-th flex text-align-center  px-12">
-            <div class="th w-100 flex-shrink-0 text-align-left">{{ tabList[activeIndex].th[0] }}</div>
-            <div class="th-r flex flex-1">
-                <div class="th flex-1">{{ tabList[activeIndex].th[1] }}</div>
-                <div class="th flex-1">{{ tabList[activeIndex].th[2] }}</div>
-                <div class="th flex-1">{{ tabList[activeIndex].th[3] }}</div>
-            </div>
 
+        <div class="indicator-td flex " v-if="activeIndex === 0">
+            <ipo :only-show-order="true"></ipo>
         </div>
-        <div class="indicator-td flex text-align-center font-size-12 px-12 py-14" v-for="i in 4">
-            <div class="td-l w-100 flex-shrink-0 text-align-left">
-                <div class="l-title">BBRI</div>
-                <div class="l-gary-text">5173 USD</div>
-            </div>
-            <div class="td-r flex-1 flex">
-                <div class="td-item flex-1 ">
-                    <div class="item-text up">133</div>
-                    <div class="item-text up">324</div>
-                </div>
-                <div class="td-item flex-1 ">
-                    <div class="item-text up">133</div>
-                    <div class="item-text up">324</div>
-                </div>
-                <div class="td-item flex-1 ">
-                    <div class="item-text up">133</div>
-                    <div class="item-text up">324</div>
-                </div>
-            </div>
+        <div class="indicator-td flex " v-if="activeIndex === 1">
+            <discount :only-show-order="true"></discount>
+        </div>
+        <div class="indicator-td flex " v-if="activeIndex === 2">
+            <fund :only-show-order="true"></fund>
+        </div>
+        <div class="indicator-td flex " v-if="activeIndex === 3">
+            <dividend :only-show-order="true"></dividend>
         </div>
     </div>
 </template>
 <script setup>
-
-
+import ipo from '../../ipo/index.vue'
+import discount from '../../discount/index.vue'
+import fund from '../../fund/index.vue'
+import dividend from '../../dividend/index.vue'
 const tabList = ref([
     {
-        label: '持仓',
+        label: 'IPO',
         value: '1',
         th: ['市值', '盈亏', '持仓/可用', '成本/现价'],
     },
     {
-        label: '委托',
+        label: '折扣股',
         th: ['市值', '盈亏', '持仓/可用', '成本/现价'],
         value: '2'
     },
     {
-        label: '成交',
+        label: '基金',
         th: ['市值', '盈亏', '持仓/可用', '成本/现价'],
         value: '3'
     },
     {
-        label: '自选',
+        label: '股息',
         th: ['市值', '盈亏', '持仓/可用', '成本/现价'],
         value: '4'
     },
@@ -96,7 +82,7 @@ const changeTab = (index) => {
     }
 
     .indicator-td {
-        border-bottom: 1px solid #212C4E
+        // border-bottom: 1px solid #212C4E
     }
 }
 </style>

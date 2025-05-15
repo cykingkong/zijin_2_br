@@ -84,7 +84,7 @@ async function login(values: any) {
       {{ $t('login.sign-up') }}
     </GhostButton>
 
-    <GhostButton block to="forgot-password">
+    <GhostButton block to="forgot-password?forgotType=1">
       {{ $t('login.forgot-password') }}
     </GhostButton>
   </div>

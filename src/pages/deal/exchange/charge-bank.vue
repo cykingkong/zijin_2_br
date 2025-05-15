@@ -32,7 +32,10 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue"
 import { rechargeConfig, coinRechargeConfig, recharge } from '@/api/recharge'
-const priceTabArr = ref(['1999', '4999', '9999', '19999', '49999', '99999'])
+import { useLoadingStore } from '@/stores/modules/loading'
+const loadingStore = useLoadingStore()
+const { proxy } = getCurrentInstance()!
+const priceTabArr = ref([])
 const tips = ref('')
 const columns = ref([])
 const showPicker = ref(false)
@@ -60,9 +63,17 @@ const onConfirm = ({ selectedValues, selectedOptions }) => {
     console.log(form, selectedValues)
     showPicker.value = false
 }
-const handleClickSubmit = async () => {
+const handleClickSubmitOriginal = async () => {
     const { data, code } = await recharge(form)
+    if (code === 200) {
+        showToast('提交充值成功')
+
+    }
 }
+const handleClickSubmit = proxy!.$throttle(handleClickSubmitOriginal, 1000, {
+    onStart: () => loadingStore.show(),
+    onEnd: () => loadingStore.hide()
+});
 onMounted(() => {
     getRechargeConfig()
 })
@@ -74,3 +85,11 @@ onMounted(() => {
 
 }
 </style>
+<route lang="json5">
+    {
+      name: 'add',
+      meta: {
+        title: '充值',
+      },
+    }
+</route>

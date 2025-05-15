@@ -1,13 +1,13 @@
 <template>
-    <van-popup v-model:show="showPicker" destroy-on-close round :position="popType == 'discount' ? 'bottom' : 'bottom'"
-        :safe-area-inset-bottom="true">
+    <van-popup v-model:show="showPicker" destroy-on-close round :position="'bottom'" :safe-area-inset-bottom="true">
         <div class="w-full  p-12 flex flex-col gap-12">
             <div class="l flex flex-[2] flex-shrink-0 items-center gap-6">
                 <div class="logo w-25 h-25 rounded-full overflow-hidden ">
                     <img :src="item.tradingInfo.baseAssetInfo.logo" alt=""
                         v-if="item.tradingInfo && item.tradingInfo.baseAssetInfo" class="w-full h-full">
                 </div>
-                <div class="name font-size-14">{{ item.tradingInfo.baseAssetInfo.symbol }}</div>
+                <div class="name font-size-14">{{ item.tradingInfo.baseAssetInfo ?
+                    item.tradingInfo.baseAssetInfo.symbol : '-' }}</div>
             </div>
             <inputCom :label="popType == 'discount' ? '购入数量' : '卖出数量'"
                 :placeholder="popType == 'discount' ? '请输入购入数量' : '请输入卖出数量'" v-model:value="form.number"
@@ -58,6 +58,10 @@ const show = (val: boolean) => {
 }
 
 const confirm = () => {
+    if (form.number == '') {
+        showToast('请输入数量')
+        return
+    }
     form.id = props.item.id
     let params = {
         ...form,

@@ -40,8 +40,10 @@
         </van-popup>
     </div>
 </template>
+
 <script setup lang="ts">
 import { ref, reactive } from "vue"
+import setPageTitle from "@/utils/set-page-title";
 import inputCom from "@/components/inputCom.vue";
 import { userCardAdd, userCardUpdate, userCardDel } from "@/api/payment";
 import { useStore } from "@/stores/modules/index";
@@ -142,11 +144,17 @@ const handleClickSubmit = () => {
     })
 }
 onMounted(() => {
+    const isEditMode = route.query.edit === '1';
+    const newTitle = isEditMode ? '编辑银行卡' : '添加银行卡';
+    // 更新浏览器标题
+    setPageTitle(newTitle);
+    // 更新路由meta标题（用于导航栏显示）
+    router.currentRoute.value.meta.title = newTitle;
     form.type = route.query.type == '1' ? 'bank_card' : 'crypto'
     form.typeDesc = typeDesc[Number(route.query.type)]
     if (route.query.edit == '1') {
         isEdit.value = true
-        let item = store.getUserCardList[Number(route.query.index)]
+        let item = store.userCardList[Number(route.query.index)]
         console.log(item)
         form.bankName = item.address.bankName
         form.bankType = item.address.bankType

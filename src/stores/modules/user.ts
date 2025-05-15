@@ -6,7 +6,7 @@ import {
   getEmailCode,
   getUserInfo,
   getBalancePair,
-  getBalance,
+  getBalance, dataAssets,
   // resetPassword,
   login as userLogin,
   logout as userLogout,
@@ -53,11 +53,13 @@ export const useUserStore = defineStore('user', () => {
     try {
       const { data } = await getUserInfo()
       const { data: ff2 } = await getBalance()
+      // const { data: ff3 } = await dataAssets()
       setInfo(data)
       setInfo(ff2)
+      // setInfo(ff3)
     }
     catch (error) {
-      clearToken()
+      // clearToken()
       throw error
     }
   }

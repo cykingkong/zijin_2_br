@@ -1,10 +1,22 @@
 <template>
-  <div class="banner" />
+  <div class="banner">
+    <van-swipe :autoplay="3000" indicator-color="var(--theme-color)" class="w-full">
+      <van-swipe-item v-for="(item, index) in banner" :key="index">
+        <img :src="item.url" class="swipe-img" />
+      </van-swipe-item>
+    </van-swipe>
+  </div>
 </template>
 <script lang="ts" setup>
+import type { PropType } from 'vue'
+
+interface BannerItem {
+  url: string
+}
+
 const props = defineProps({
   banner: {
-    type: String,
+    type: Array as PropType<BannerItem[]>,
     default: () => []
   }
 })
@@ -17,5 +29,12 @@ const props = defineProps({
   border-radius: 8px;
   background: var(--banner-bg);
   border: 1px solid var(--van-border-color);
+  overflow: hidden;
+
+  .swipe-img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+  }
 }
 </style>

@@ -1,6 +1,8 @@
 <template>
-    <div class="detail px-12 pb-40">
-        <userBalance :data="userBalanceInfo"></userBalance>
+    <div class="detail px-12 pb-40 pt-12">
+        <VanNavBar :title="listtext" :fixed="true" clickable placeholder :left-arrow="true" @click-left="onBack" />
+
+        <!-- <userBalance :data="userBalanceInfo"></userBalance> -->
         <div class="flex">
             <div class="l flex flex-1 flex-col gap-12">
                 <div class="picker flex items-center" @click="handleClickPop">
@@ -43,13 +45,13 @@
             </div>
             <div class="flex td gap-12 font-size-14">
                 <div class="l flex-1 ">
-                    <div class="w-full flex mb-6" v-for="(item, index) in depthData.asks" :key="index">
+                    <div class="w-full flex mb-6" v-for="(item, index) in asks" :key="index">
                         <div class="l flex-1">{{ item[0] }}</div>
                         <div class="l flex-1 text-right down">{{ item[1] }}</div>
                     </div>
                 </div>
                 <div class="l flex-1">
-                    <div class="w-full flex mb-6" v-for="(item, index) in depthData.bids" :key="index">
+                    <div class="w-full flex mb-6" v-for="(item, index) in bids" :key="index">
                         <div class="l flex-1 up">{{ item[1] }}</div>
                         <div class="l flex-1 text-right ">{{ item[0] }}</div>
                     </div>
@@ -69,15 +71,14 @@ import { ref, reactive } from "vue"
 import { getBalancePair } from '@/api/user'
 import { depth, kline, } from '@/api/market'
 import { useStore } from '@/stores/modules/index';
+import Socket from "@/utils/Socket.js";
 import local from '@/utils/local'
-
-
 import charts from '@/components/charts/charts.vue'
-import userBalance from './component/detailCom/user-balance.vue'
+
 const tradingPairsId = ref()
 const store = useStore();
 const EhartsData = ref(null)
-
+const router = useRouter()
 const listtext = computed(() => {
     if (local.getlocal('rankInfo')) {
         return local.getlocal('rankInfo').tradingInfo.baseAssetInfo.name + '/' + local.getlocal('rankInfo').tradingInfo.quoteAssetInfo.name
@@ -91,20 +92,32 @@ const columns = computed(() => {
             value: e.tradingPairsId
         }
     })
-    return arr
+    return [...arr, ...arr, ...arr]
 
 })
+function onBack() {
+    if (window.history.state.back)
+        history.back()
+    else
+        router.replace('/')
+}
+let ws = reactive(null)
 const showPicker = ref(false)
 const handleClickPop = () => {
     showPicker.value = true
 }
 const onConfirm = ({ selectedOptions }) => {
-    if (selectedOptions.tradingPairsId != tradingPairsId.value) {
-        EhartsData.value.childInte()
-    }
+    closews()
+    // if (selectedOptions.tradingPairsId != tradingPairsId.value) {
+    // EhartsData.value.childInte()
+    // }
+    tradingPairsId.value = 0
+
     tradingPairsId.value = selectedOptions.tradingPairsId
     local.setlocal('rankInfo', selectedOptions[0])
     showPicker.value = false
+    SocketWs()
+
 }
 const klineData = computed(() => store.getlistData)
 const route = useRoute()
@@ -122,6 +135,8 @@ const userBalanceInfo = ref({
     baseAsset: {}
 })
 const depthData = ref([])
+const asks = ref([])
+const bids = ref([])
 const getBalance = async () => {
     const { data, code } = await getBalancePair({ tradingPairsId: tradingPairsId.value })
     if (code == 200) {
@@ -132,18 +147,46 @@ const getBalance = async () => {
 const getDepth = async () => {
     const { data, code } = await depth({ tradingPairsId: tradingPairsId.value })
     if (code == 200) {
-        depthData.value = data
+        asks.value = data.asks
+        bids.value = data.bids
     }
 }
-const getKline = async () => {
-    const res = await kline({ tradingPairsId: tradingPairsId.value, period: '1min' })
-    console.log(res)
+
+const closews = () => {
+    if (ws) {
+        ws.send({
+            action: "UnSubscribe",
+            params: {
+                tradingPairsId: tradingPairsId.value,
+                period: 'depth'
+            }
+        });
+    }
+}
+const SocketWs = () => {
+    ws = new Socket('/wss');
+    ws.on("open", () => {
+        ws.send({
+            action: "Subscribe",
+            params: {
+                tradingPairsId: tradingPairsId.value,
+                period: 'depth'
+            }
+        });
+    });
+    ws.on("message", res => {
+        if (res.code == 200 && JSON.stringify(res.data) != '{}' && res.msgType) {
+            asks.value = res.data.tick.asks
+            bids.value = res.data.tick.bids
+        }
+    });
 }
 onMounted(async () => {
     if (route.query.id) {
         tradingPairsId.value = route.query.id
         await getDepth()
         await getBalance()
+        SocketWs()
     }
 })
 

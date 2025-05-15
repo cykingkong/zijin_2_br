@@ -1,6 +1,7 @@
 <script setup>
 import echarts from '@/components/echarts.vue'
 import Kline from '@/components/Kline.vue'
+import { addCommasToNumber } from '@/utils/tool'
 const tabList = [
   {
     price: [2.99, 32.99, 33, 32.95, 32.9],
@@ -15,6 +16,12 @@ const tabList = [
     increase: -2,
   },
 ]
+const props = defineProps({
+  item: {
+    type: Object,
+    default: () => { }
+  }
+})
 </script>
 <route lang="json5">
   {
@@ -29,15 +36,16 @@ const tabList = [
 <template>
   <div class="tab-item">
     <div class="indicator-content flex">
-      <div v-for="(i, k) in tabList" :key="i" class="indicator-item" :class="k % 2 === 1 ? 'up-bg' : 'down-bg'">
+      <div v-for="(i, k) in item" :key="i" class="indicator-item" :class="i.dayIncrease >= 0 ? 'up-bg' : 'down-bg'">
         <div class="title">
-          title
+          {{ i.tradingInfo.baseAssetInfo.name }}
         </div>
         <div class="num">
-          num
+          {{ addCommasToNumber(i.lastPrice) }}
         </div>
         <div class="value">
-          value
+          {{ i.dayIncrease }} %
+
         </div>
         <div class="chart">
           <Kline :nameId="'myChart10' + k" :areaStyle="true" :increase="i.increase" :data="i.price" height="50px"

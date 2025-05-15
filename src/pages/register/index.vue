@@ -6,7 +6,7 @@ import { useUserStore } from '@/stores'
 import { sendCode, register, kyc } from '@/api/user'
 import inputCom from '@/components/inputCom.vue'
 import slidePop from '@/components/slidePop.vue'
-import areaPop from '@/components/areaPop.vue'
+
 import icon1 from '@/assets/image/icon/icon1.png'
 import nationalityList from './components/nationalityList.vue'
 import { uploadFile } from '@/api/tool'
@@ -48,6 +48,7 @@ const form = reactive({
   account: "",
   phone: "",
   password: "",
+  passwordConfirmation: '',
   code: "", // 二次验证码
   inviteCode: ""  // 邀请码
 })
@@ -87,8 +88,8 @@ const handleClickRegister = async () => {
 const handleClickSubmit = async () => {
   try {
     let params = {
-      name: areaInfo.value.dialCode,
-      nationality: kycForm.nationality,
+      name: kycForm.name,
+      nationality: areaInfo.value.dialCode,
       idCard: kycForm.idCard,
       idCardFront: kycForm.idCardFront,
       idCardBack: kycForm.idCardBack,
@@ -96,7 +97,7 @@ const handleClickSubmit = async () => {
     }
     const { data, code } = await kyc(params)
     if (code == 200) {
-      step.value = 3
+      router.push('/')
       return
     }
   } catch (e) {
@@ -227,8 +228,9 @@ const hanleClickAreaPick = () => {
         v-if="form.type == 'phone'">
         <template #picker>
           <div class="picker-box pr-8 mr-6  h-full flex items-center gap-8" @click="hanleClickAreaPick">
-            <img :src="icon1" alt="" class="w16 h16">
-            <div class="num">{{ areaInfo?.dialCode }}</div>
+            <!-- <img :src="icon1" alt="" class="w16 h16"> -->
+            <div class="iti-flag mr-10" :class="areaInfo?.code" style="transform: scale(1.5)"></div>
+            <div class="num">+{{ areaInfo?.dialCode }}</div>
           </div>
         </template>
       </inputCom>
@@ -236,7 +238,7 @@ const hanleClickAreaPick = () => {
       </inputCom>
       <inputCom :label="'密码'" :placeholder="'请输入密码'" v-model:value="form.password" :tips="''" :inputType="'password'">
       </inputCom>
-      <inputCom :label="'确认密码'" :placeholder="'请再次输入密码'" v-model:value="form.password" :tips="''"
+      <inputCom :label="'确认密码'" :placeholder="'请再次输入密码'" v-model:value="form.passwordConfirmation" :tips="''"
         :inputType="'password'">
       </inputCom>
       <inputCom :label="'验证码'" :placeholder="'请输入验证码'" v-model:value="form.code" :tips="''">
@@ -258,7 +260,7 @@ const hanleClickAreaPick = () => {
       </div>
       <div class="flex-col gap-12 flex">
         <van-button type="primary" block @click="handleClickRegister">注册</van-button>
-        <van-button type="primary" block @click="handleClickRegister">登陆</van-button>
+        <!-- <van-button type="primary" block @click="handleClickRegister">登陆</van-button> -->
       </div>
 
       <!-- <div class="protocol wfull flex  font-size-12  mt-12">
@@ -309,11 +311,14 @@ const hanleClickAreaPick = () => {
 {
   name: '',
   meta: {
-    i18n: ''
+    i18n: '',
+    title:"注册"
   },
 }
 </route>
 <style lang="less" scoped>
+@import "./components/intl.css";
+
 .link {
   color: #1678FF
 }

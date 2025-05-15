@@ -10,8 +10,9 @@
                 </div>
             </div>
             <div class="right flex-1 text-align-right">
-                <div class="font-size-20" :class="item.type == 1 ? 'up' : 'down'">{{ item.beforeBalance -
-                    item.afterBalance || '-' }}</div>
+                <div class="font-size-20" :class="item.type == 1 ? 'up' : 'down'">{{
+                    addCommasToNumber(item.beforeBalance -
+                        item.afterBalance) || '-' }}</div>
                 <div class="time font-size-12 text-gray mt-10">{{ item.createAt }}</div>
             </div>
         </div>
@@ -22,6 +23,7 @@
 </template>
 <script setup lang="ts">
 import { ref, reactive } from "vue"
+import { addCommasToNumber } from '@/utils/tool'
 const props = defineProps({
     item: {
         type: Object,

@@ -1,0 +1,42 @@
+<template>
+    <div class="px-12 pt-12 ipoDetail">
+        <ipo-item-top :item="ipoInfo"></ipo-item-top>
+        <div v-html="ipoInfo.content" class="py-12"></div>
+        <ipoItemInfo :item="ipoInfo"></ipoItemInfo>
+
+    </div>
+</template>
+<script setup lang="ts">
+import { ref, reactive } from "vue"
+const { proxy } = getCurrentInstance()!
+import ipoItemTop from "./component/ipo-item-top.vue";
+import ipoItemInfo from "./component/ipo-item-info.vue";
+import dayjs from "dayjs";
+import { ipoProductInfo } from "@/api/ipo";
+const ipoInfo = ref({})
+const getIpoInfo = async (id) => {
+    const res = await ipoProductInfo({ ipoId: id })
+    ipoInfo.value = res.data
+    // 将文字颜色color: #000000 全部改为 color: #ffffff
+    ipoInfo.value.content = res.data.content.replace(/color: #000000/g, 'color: #ffffff')
+
+    ipoInfo.value.formatSubTimeBegin = dayjs(res.data.subTimeBegin).format('YYYY-MM-DD');
+    ipoInfo.value.formatSubTimeEnd = dayjs(res.data.subTimeEnd).format('YYYY-MM-DD');
+    ipoInfo.value.formatWonTimeBegin = dayjs(res.data.wonTimeBegin).format('YYYY-MM-DD')
+    ipoInfo.value.formatWonTimeEnd = dayjs(res.data.wonTimeEnd).format('YYYY-MM-DD');
+    ipoInfo.value.formatMarketTime = dayjs(res.data.marketTime).format('YYYY-MM-DD');
+    // ipoInfo.value.content = res.data.content.replace(/<img/g, '<img style="max-width:100%"')
+}
+
+const route = useRoute()
+onMounted(() => {
+    if (route.query.id) {
+        getIpoInfo(route.query.id)
+    }
+})
+
+
+
+
+</script>
+<style lang="less" scoped></style>

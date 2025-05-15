@@ -34,6 +34,7 @@ const form = reactive({
   code: "",
 
 })
+const forgotType = ref(0) // 1 忘记登录密码  2 忘记支付密码
 const typeArr = [{
   label: '手机号',
   value: 'phone'
@@ -43,6 +44,7 @@ const typeArr = [{
 }]
 const active = ref(0)
 const router = useRouter()
+const route = useRoute()
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
 const countdown = ref(0)
@@ -89,5 +91,10 @@ const onSubmit = async () => {
     router.push('/login')
   }
 }
+onMounted(() => {
+  if (route.query.forgotType) {
+
+  }
+})
 </script>
 <style lang="less" scoped></style>

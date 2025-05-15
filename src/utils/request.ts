@@ -1,7 +1,8 @@
 import type { AxiosError, InternalAxiosRequestConfig } from 'axios'
 import axios from 'axios'
-import { showNotify } from 'vant'
+import { showNotify, showLoadingToast } from 'vant'
 import { STORAGE_TOKEN_KEY } from '@/stores/mutation-type'
+
 
 // 这里是用于设定请求后端时，所用的 Token KEY
 // 可以根据自己的需要修改，常见的如 Access-Token，Authorization
@@ -24,6 +25,9 @@ export type RequestError = AxiosError<{
 
 // 异常拦截处理器
 function errorHandler(error: RequestError): Promise<any> {
+  // 确保在错误处理时关闭loading
+  error.config?.loadingToast?.close()
+
   if (error.response) {
     const { data = {}, status, statusText, message } = error.response
     console.log(error.response, 'err')
@@ -43,13 +47,26 @@ function errorHandler(error: RequestError): Promise<any> {
       // 如果你需要直接跳转登录页面
       location.replace('/login')
     }
-
   }
   return Promise.reject(error)
 }
 
+// 扩展Axios配置类型
+declare module 'axios' {
+  interface InternalAxiosRequestConfig {
+    loadingToast?: ReturnType<typeof showLoadingToast>
+  }
+}
+
 // 请求拦截器
 function requestHandler(config: InternalAxiosRequestConfig): InternalAxiosRequestConfig | Promise<InternalAxiosRequestConfig> {
+  const toast = showLoadingToast({
+    duration: 0,
+    forbidClick: true,
+
+  })
+  config.loadingToast = toast
+
   const savedToken = localStorage.getItem(STORAGE_TOKEN_KEY)
   // 如果 token 存在
   // 让每个请求携带自定义 token, 请根据实际情况修改
@@ -63,10 +80,15 @@ function requestHandler(config: InternalAxiosRequestConfig): InternalAxiosReques
 request.interceptors.request.use(requestHandler, errorHandler)
 
 // 响应拦截器
-function responseHandler(response: { data: any }) {
+function responseHandler(response: { data: { code: number; message: string } }) {
   const { code, message } = response.data
+  response.config?.loadingToast?.close()
+
   if (code !== 200) {
-    showToast(message)
+    showNotify({
+      type: 'danger',
+      message: message
+    })
   }
   return response.data
 }

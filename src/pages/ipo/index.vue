@@ -1,28 +1,45 @@
 <template>
-    <div class="discont-content px-12">
-        <van-tabs v-model:active="active" @change="changeActive">
-            <!-- 折扣股玩法 -->
-            <van-tab title="折扣股票列表">
-                <div class="discont-list  flex flex-col pb-40">
-                    <discont-item :item="item" v-for="(item, index) in list" :key="index"
-                        @handleClickBtn="handleClickBtn"></discont-item>
-                    <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
-                        v-show="skeleton && list.length == 0" v-for="i in 5"></div>
+    <!-- <VanNavBar :title="'身上'" :fixed="true" clickable placeholder :left-arrow="true" @click-left="onBack" /> -->
+    <div class="discont-content px-12 w-full">
+        <template v-if="!onlyShowOrder">
+            <van-tabs v-model:active="active" @change="changeActive">
+                <van-tab title="折扣股票列表">
+                    <div class="discont-list  flex flex-col">
+                        <discont-item :item="item" v-for="(item, index) in list" :key="index"
+                            @handleClickBtn="handleClickBtn"></discont-item>
+                        <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
+                            v-show="skeleton && list.length == 0" v-for="i in 5"></div>
+                        <empty v-if="list.length == 0 && !skeleton" :noTips="true"></empty>
 
-                </div>
-            </van-tab>
-            <van-tab title="持仓订单">
-                <div class="discont-list flex flex-col pb-40">
-                    <discont-item :item="item" v-for="(item, index) in orderList" :key="index"
-                        @handleClickBtn="handleClickBtn" :item-type="'order'" @reloadList="getOrderList"></discont-item>
-                    <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
-                        v-show="skeleton && orderList.length == 0" v-for="i in 5">
+                        <LoadMore :status="listStatus" @load-more="loadMore" />
                     </div>
+                </van-tab>
+                <van-tab title="持仓订单">
+                    <div class="discont-list flex flex-col pb-40">
+                        <discont-item :item="item" v-for="(item, index) in orderList" :key="index"
+                            @handleClickBtn="handleClickBtn" :item-type="'order'" @reloadList="getOrderList" />
+                        <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
+                            v-show="skeleton && orderList.length == 0" v-for="i in 5">
+                        </div>
+                        <empty v-if="orderList.length == 0 && !skeleton" :noTips="true"></empty>
 
+                        <LoadMore :status="orderLoadStatus" @load-more="loadMore" />
+                    </div>
+                </van-tab>
+            </van-tabs>
+        </template>
+        <template v-else>
+            <div class="discont-list flex flex-col pb-40">
+                <discont-item :item="item" v-for="(item, index) in orderList" :key="index"
+                    @handleClickBtn="handleClickBtn" :item-type="'order'" @reloadList="getOrderList" />
+                <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
+                    v-show="skeleton && orderList.length == 0" v-for="i in 5">
                 </div>
-            </van-tab>
-        </van-tabs>
+                <LoadMore :status="orderLoadStatus" @load-more="loadMore" />
+                <empty v-if="orderList.length == 0 && !skeleton" :noTips="true"></empty>
 
+            </div>
+        </template>
 
         <bottom-pop ref="bottomPopRef" @onConfirm="onConfirm" :item="activeItem" :active="list[active]"
             :popType="popType"></bottom-pop>
@@ -32,59 +49,104 @@
 import { ref, reactive } from "vue";
 import { ipoProductList, ipoOrderList, orderFullSubscribe, orderSubscribe, orderPay, ipoOrderSell } from '@/api/ipo'
 import discontItem from "./component/discont-item.vue"
+import LoadMore from '@/components/LoadMore.vue';
 import bottomPop from "./component/bottom-pop.vue";
+import { useLoadingStore } from '@/stores/modules/loading'
+const loadingStore = useLoadingStore()
+const { proxy } = getCurrentInstance()!
+const props = defineProps({
+    onlyShowOrder: {
+        type: Boolean,
+        default: false
+    }
+})
+
+
 import dayjs from 'dayjs'
-const active = ref('折扣股票列表')
+const active = ref(0)
 const list = ref([])
 const orderList = ref([])
 const popType = ref('buy') // buy:购买  sell:出售
 const skeleton = ref(false)
+const router = useRouter()
+function onBack() {
+    if (window.history.state.back)
+        history.back()
+    else
+        router.replace('/')
+}
 const page = reactive({
     pageIndex: 1,
     pageSize: 10
 })
 const activeItem = ref({})
-const loadStatus = ref(1) // 1:加载中 2:加载完成 3:没有更多数据
+const listStatus = ref(1) // 1:加载中 2:加载完成 3:没有更多数据
 const orderLoadStatus = ref(1) // 1:加载中 2:加载完成 3:没有更多数据
 const resetPage = () => {
     page.pageIndex = 1
 }
 const bottomPopRef = ref()
 const getDisountList = async () => {
-    resetPage()
-    loadStatus.value = 1
+    skeleton.value = true
+    // resetPage()
+    listStatus.value = 1
     ipoProductList({
         ...page
     }).then(res => {
 
         if (!res.data.rows) {
-            loadStatus.value = 3;
+            listStatus.value = 3;
             return
         }
-        list.value = res.data.rows.map((e) => {
-            return {
-                ...e,
-                percentage: (
-                    ((e.totalNum - e.subscribedNum) /
-                        e.totalNum) *
-                    100
-                ).toFixed(2),
-                formatSubTimeBegin: dayjs(e.subTimeBegin).format('YYYY-MM-DD'),
-                formatSubTimeEnd: dayjs(e.subTimeEnd).format('YYYY-MM-DD'),
-                formatWonTimeBegin: dayjs(e.wonTimeBegin).format('YYYY-MM-DD'),
-                formatWonTimeEnd: dayjs(e.wonTimeEnd).format('YYYY-MM-DD'),
-                formatMarketTime: dayjs(e.marketTime).format('YYYY-MM-DD'),
-            }
-        }) || []
+        if (page.pageIndex == 1) {
+            list.value = res.data.rows.map((e) => {
+                return {
+                    ...e,
+                    percentage: (
+                        ((e.totalNum - e.subscribedNum) /
+                            e.totalNum) *
+                        100
+                    ).toFixed(2),
+                    formatSubTimeBegin: dayjs(e.subTimeBegin).format('YYYY-MM-DD'),
+                    formatSubTimeEnd: dayjs(e.subTimeEnd).format('YYYY-MM-DD'),
+                    formatWonTimeBegin: dayjs(e.wonTimeBegin).format('YYYY-MM-DD'),
+                    formatWonTimeEnd: dayjs(e.wonTimeEnd).format('YYYY-MM-DD'),
+                    formatMarketTime: dayjs(e.marketTime).format('YYYY-MM-DD'),
+                }
+            }) || []
+        } else {
+            list.value = [...list.value, ...res.data.rows.map((e) => {
+                return {
+                    ...e,
+                    percentage: (
+                        ((e.totalNum - e.subscribedNum) /
+                            e.totalNum) *
+                        100
+                    ).toFixed(2),
+                    formatSubTimeBegin: dayjs(e.subTimeBegin).format('YYYY-MM-DD'),
+                    formatSubTimeEnd: dayjs(e.subTimeEnd).format('YYYY-MM-DD'),
+                    formatWonTimeBegin: dayjs(e.wonTimeBegin).format('YYYY-MM-DD'),
+                    formatWonTimeEnd: dayjs(e.wonTimeEnd).format('YYYY-MM-DD'),
+                    formatMarketTime: dayjs(e.marketTime).format('YYYY-MM-DD'),
+                }
+            }) || []]
+        }
+
+        if (res.data.total <= list.value.length) {
+            listStatus.value = 3
+            skeleton.value = false;
+            return
+        }
         skeleton.value = false;
-        loadStatus.value = 2
+        listStatus.value = 2
 
 
     })
 }
 const getOrderList = async () => {
+    skeleton.value = true
     orderLoadStatus.value = 1
-    resetPage()
+    // resetPage()
     ipoOrderList({
         ...page
     }).then(res => {
@@ -92,34 +154,63 @@ const getOrderList = async () => {
             orderLoadStatus.value = 3
             return
         }
-        orderList.value = res.data.rows.map((e) => {
-            return {
-                ...e,
-                percentage: (
-                    ((e.totalQuantity - e.availableQuantity) /
-                        e.totalQuantity) *
-                    100
-                ).toFixed(2)
-            }
-        }) || []
+        if (page.pageIndex == 1) {
+            orderList.value = res.data.rows.map((e) => {
+                return {
+                    ...e,
+                    percentage: (
+                        ((e.totalQuantity - e.availableQuantity) /
+                            e.totalQuantity) *
+                        100
+                    ).toFixed(2)
+                }
+            }) || []
+        } else {
+            orderList.value = [...orderList.value, ...res.data.rows.map((e) => {
+                return {
+                    ...e,
+                    percentage: (
+                        ((e.totalQuantity - e.availableQuantity) /
+                            e.totalQuantity) *
+                        100
+                    ).toFixed(2)
+                }
+            }) || []]
+        }
+        if (res.data.total <= orderList.value.length) {
+            orderLoadStatus.value = 3
+            skeleton.value = false;
+            return
+
+        }
         skeleton.value = false;
         orderLoadStatus.value = 2
     })
 }
+const loadMore = () => {
+    page.pageIndex++
+    if (active.value == 0) {
+        getDisountList()
+    } else {
+        getOrderList()
+    }
+}
 const changeActive = (val: any) => {
     skeleton.value = true
+    resetPage()
     if (val) {
         getOrderList()
     } else {
         getDisountList()
     }
 }
+
 const handleClickBtn = (val: any) => {
     activeItem.value = val.item
     popType.value = val.itemType
     bottomPopRef.value.show(true)
 }
-const onConfirm = async (val: any) => {
+const onConfirmOriginal = async (val: any) => {
 
     try {
 
@@ -165,11 +256,28 @@ const onConfirm = async (val: any) => {
 
     }
 }
+const onConfirm = proxy!.$throttle(onConfirmOriginal, 1000, {
+    onStart: () => loadingStore.show(),
+    onEnd: () => loadingStore.hide()
+});
 onMounted(() => {
-    // getDisountList()
+    if (props.onlyShowOrder) {
+        getOrderList()
+    } else {
+        getDisountList()
+    }
 })
 
 </script>
+<route lang="json5">
+    {
+      name: 'IPO',
+      meta: {
+        title: 'IPO',
+        i18n: 'menus.IPO'
+      },
+    }
+    </route>
 <style lang="less" scoped>
 .skeleton-animation {
     animation: pulseskeleton 1s ease-in infinite;
@@ -187,5 +295,9 @@ onMounted(() => {
     100% {
         opacity: 0.7;
     }
+}
+
+.discont-list {
+    padding-bottom: var(--van-tabbar-height)
 }
 </style>

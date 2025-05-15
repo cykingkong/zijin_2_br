@@ -1,5 +1,5 @@
     <template>
-        <div class="openTrade-tab1 ">
+        <div class="openTrade-tab1 pb-60px">
             <div class="flex flex-justify-between px-12 h-44  flex-items-center ">
                 <div
                     class="l flex gap-4 flex-items-center font-size-14 .dark:font-color-#fff .light:font-color-#000 font-extralight">
@@ -42,11 +42,17 @@
                     <div class="line w-full border-color-#F43368  text-align-left font-size-16">
                         <van-stepper v-model="form.amount" step="1" class="price-stepper w-full" />
                     </div>
-                    <div class="buy-number font-size-20px mb-12">
+                    <div class="buy-number font-size-20px mb-12" v-if="direction == 1">
                         可用 {{
                             userBalanceInfo.baseAsset.baseSymbol }} <span class="my-4 color-amber">{{
                             userBalanceInfo.baseAsset ?
                                 addCommasToNumber(userBalanceInfo.baseAsset.baseBalance) : '' }}</span>
+                    </div>
+                    <div class="buy-number font-size-20px mb-12" v-else>
+                        可用 {{
+                            userBalanceInfo.quoteAsset.quoteSymbol }} <span class="my-4 color-amber">{{
+                            userBalanceInfo.quoteAsset ?
+                                addCommasToNumber(userBalanceInfo.quoteAsset.quoteBalance) : '' }}</span>
                     </div>
                     <!-- <div class="flex w-full gap-8">
                         <div class="flex-item flex-1 font-size-12px p-6 text-align-center rounded-4"
@@ -68,7 +74,7 @@
                                 卖出{{ e + 1 }}
                             </div>
                             <div class="r-value w-full flex flex-justify-between">
-                                <div class="p up">{{ item[0] }}</div>
+                                <div class="p up">{{ item[0].toFixed(2) || '0' }}</div>
                                 <div class="n">{{ item[1] }}</div>
                             </div>
                         </div>
@@ -85,7 +91,7 @@
                                 买入{{ e + 1 }}
                             </div>
                             <div class="r-value w-full flex flex-justify-between">
-                                <div class="p down">{{ item[0] }}</div>
+                                <div class="p down">{{ item[0].toFixed(2) || '0' }}</div>
                                 <div class="n">{{ item[1] }}</div>
                             </div>
                         </div>
@@ -94,7 +100,6 @@
                 </div>
 
             </div>
-            {{ orderStatus }}
             <!-- indicator-index-container -->
             <div class="indicator-index-container p-12">
                 <div class="indicator-index-tab flex flex-justify-between flex-items-center">
@@ -112,6 +117,8 @@
                     <EntrustItem v-for="item in orderList" :key="item.order_no" :entrust="item" state="submitted"
                         @cancelOrder="cancelOrder" />
                     <Empty v-if="orderList.length == 0" />
+                    <LoadMore :status="orderLoadStatus" @load-more="loadMore"></LoadMore>
+
 
                 </div>
 
@@ -150,11 +157,12 @@ import Empty from '@/components/empty.vue'
 import local from '@/utils/local'
 import { useStore } from '@/stores/modules/index';
 import charts from '@/components/charts/charts.vue'
+import LoadMore from '@/components/LoadMore.vue';
 import EntrustItem from "./EntrustItem.vue";
 import { addCommasToNumber } from '@/utils/tool'
 // 应用全局防抖后的提交方法
 import { useLoadingStore } from '@/stores/modules/loading'
-const emits = defineEmits(['handleClickSubmit', 'handleClickIndicatorTab', 'cancelOrder'])
+const emits = defineEmits(['handleClickSubmit', 'handleClickIndicatorTab', 'cancelOrder', 'loadMore'])
 
 const store = useStore();
 const klineData = computed(() => store.getlistData)
@@ -181,7 +189,9 @@ const props = defineProps({
     orderStatus: {
         default: 1
     },
-
+    orderLoadStatus: {
+        default: 1
+    }
 })
 const form = reactive({
     tradingPairsId: '',
@@ -249,7 +259,9 @@ const cancelOrder = proxy!.$throttle(cancelOrderOriginal, 1000, {
     onStart: () => loadingStore.show(),
     onEnd: () => loadingStore.hide()
 });
-
+const loadMore = () => {
+    emits('loadMore')
+}
 
 </script>
 <style lang="less" scoped>

@@ -15,12 +15,15 @@
             <div class="r flex flex-1 flex-shrink-0 justify-end">{{ _item.unit }} {{ _item.close || '-' }}</div>
         </div>
         <div class="li flex justify-between items-center ">
-            <div class="li-l font-size-14">折扣率:{{ _item.discountRate }}%</div>
-            <div class="li-r font-size-14">周期:{{ _item.diffDay }}</div>
+            <div class="li-l font-size-16">折扣率:{{ _item.discountRate }}%</div>
+            <div class="li-r font-size-16">周期:{{ _item.diffDay }}day</div>
         </div>
         <div class="li flex justify-between items-center ">
             <div class="li-l font-size-16">折扣:{{ _item.unit }} {{ _item.discountPrice }}</div>
             <div class="li-r font-size-16">售出:{{ _item.percentage }}%</div>
+        </div>
+        <div class="li flex justify-between items-center ">
+            <div class="li-l font-size-16">股息赠送比例:{{ _item.dividendInfo.totalYield }}%</div>
         </div>
         <div class="li">
             <div class="li-l w-70%">
@@ -28,11 +31,11 @@
             </div>
         </div>
         <div class="li flex justify-end">
-            <van-button type="primary" @click="handleClickSubmit" size="small" class="h-30px! w-70px! font-size-16!">{{
+            <van-button type="primary" @click="handleClickSubmit" size="small" class="h-30px! w-90px! font-size-16!">{{
                 statusEnum[_item.status] }}</van-button>
         </div>
     </div>
-    <div class="order-item-content w-full px-12 py-24  font-size-12 flex flex-col gap-10px"
+    <div class="order-item-content w-full px-12 py-24  font-size-16 flex flex-col gap-12px"
         v-if="props.itemType == 'order'">
         <div class="li flex items-center justify-between">
             <div class="li-l">{{ dayjs(_item.createdAt).format('YYYY-MM-DD') }}</div>
@@ -42,16 +45,19 @@
             <div class="logo w-35 h-35 rounded-full overflow-hidden ">
                 <img :src="_item.tradingInfo.logo" alt="" v-if="_item.tradingInfo" class="w-full h-full">
             </div>
-            <div class="name font-size-16">{{ _item.tradingInfo.symbol }}</div>
+            <div class="name font-size-16">{{ _item.tradingInfo.baseAssetInfo.symbol }}</div>
         </div>
         <div class="li ">Market Price:{{ _item.unit }} {{ _item.purchasePrice }}</div>
         <div class="li">Discount:{{ _item.unit }} {{ _item.discountPrice }}</div>
-        <div class="li flex justify-between items-center">Earnings Rate:{{ _item.unit }} {{ _item.discountPrice }}
+        <div class="li ">Earnings Rate:{{ _item.unit }} {{ _item.discountPrice }}
             Earnings:{{ _item.unit }} {{
-                _item.realTimePrice }} <van-button type="primary" :disabled="_item.status == 2" @click="handleClickSubmit"
-                size="small" class="h-20px! font-size-12!">{{
-                    orderStatusEnum[_item.status] }}</van-button></div>
-        <div class="li">Quantity:{{ _item.purchaseQuantity }} </div>
+                _item.realTimePrice }}
+
+        </div>
+        <div class="li flex justify-between items-center">Quantity:{{ _item.purchaseQuantity }} <van-button
+                type="primary" :disabled="_item.status == 2" @click="handleClickSubmit" size="small"
+                class="font-size-16!">{{
+                    orderStatusEnum[_item.status] }}</van-button> </div>
     </div>
 </template>
 <script setup lang="ts">

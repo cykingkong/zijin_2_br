@@ -18,11 +18,18 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       port: 3200,
       proxy: {
         '/api': {
-          target: `http://192.168.31.83:18399`, // 代理接口
+          target: `http://152.53.166.120:18399`, // 代理接口
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, ''),
           ws: false,
         },
+        '/wss': {
+          target: `ws://152.53.166.120:18299/ws`, // 代理接口
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/wss/, ''),
+          ws: true,
+        },
+
       },
     },
 

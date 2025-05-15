@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { routeWhiteList,navWhiteList } from '@/config/routes'
+import { routeWhiteList, navWhiteList } from '@/config/routes'
 
 const route = useRoute()
 const router = useRouter()
@@ -25,12 +25,6 @@ const isShowNavBar = computed(() => route.name && navWhiteList.includes(route.na
 </script>
 
 <template>
-  <VanNavBar
-  v-if="!isShowNavBar"
-    :title="title"
-    :fixed="true"
-    clickable placeholder
-    :left-arrow="!showLeftArrow"
-    @click-left="onBack"
-  />
+  <VanNavBar v-if="!isShowNavBar" :title="title" :fixed="true" clickable placeholder :left-arrow="!showLeftArrow"
+    @click-left="onBack" />
 </template>

@@ -24,10 +24,18 @@ const throttleAfterCompletion = <T extends (...args: any[]) => Promise<any>>(
     }
 }
 
-const addCommasToNumber = (number) => {
+const addCommasToNumber = (number, shouldToFixed = true) => {
     if (number === null || number === undefined || number === 0) return '0';
-    const [integerPart, decimalPart] = number.toFixed(2).split('.');
-    return `${integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}.${decimalPart}`;
+    let integerPart, decimalPart;
+    if (shouldToFixed) {
+        [integerPart, decimalPart] = number.toFixed(2).split('.');
+    } else {
+        const parts = number.toString().split('.');
+        integerPart = parts[0];
+        decimalPart = parts.length > 1 ? parts[1] : '';
+    }
+    const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return decimalPart ? `${formattedInteger}.${decimalPart}` : formattedInteger;
 }
 export {
     addCommasToNumber,

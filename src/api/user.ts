@@ -76,3 +76,6 @@ export function getBalancePair(params): Promise<any> {
 export function walletLogsGrid(params): Promise<any> {
   return request.get('/app-api/user/walletLogsGrid', { params })
 }
+export function dataAssets(): Promise<any> {
+  return request.get('/app-api/user/dataAssets', {})
+}

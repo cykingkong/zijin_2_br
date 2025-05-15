@@ -7,7 +7,7 @@
 
         <div class="font-size-12 mt-12">银行入款</div>
       </div>
-      <div class="channel-item  rounded-10 flex-1 text-align-center py-12">
+      <div class="channel-item  rounded-10 flex-1 text-align-center py-12" @click="toUrl('/deal/exchange/usdt-in')">
         <img src="@/assets/trx_icon.png" alt="" class="block w-55px h-55px  mx-auto">
         <div class="font-size-12 mt-12">USDT充值</div>
       </div>

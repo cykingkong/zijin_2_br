@@ -35,7 +35,7 @@ const props = defineProps({
 })
 const times = ref([
     { text: 'Time', id: 0, key: 'area' },
-    { text: '1M', id: 1, key: 'candle_solid' },
+    // { text: '1M', id: 1, key: 'candle_solid' },
     // { text: '5m', id: 2, key: 'candle_solid' },
     // { text: '15m', id: 3, key: 'candle_solid' },
     // { text: '30m', id: 4, key: 'candle_solid' },
@@ -105,18 +105,23 @@ const SocketWs = () => {
     });
     ws.on("message", res => {
         if (res.code == 200) {
-            if (res.data && res.msgType != 'broadcast.kline') {
+            if (res.data && res.msgType && res.msgType != 'broadcast.kline') {
                 listData = res.data
-                let data = {
-                    timestamp: res.data.tick.id * 1000, // 时间戳不变
-                    open: res.data.tick.open,
-                    high: res.data.tick.high, // 更新最高价
-                    low: res.data.tick.low,
-                    close: res.data.tick.close, // 更新收盘价
-                    volume: res.data.tick.vol // 更新成交量
+                try {
+                    let data = {
+                        timestamp: res.data.tick.id * 1000, // 时间戳不变
+                        open: res.data.tick.open,
+                        high: res.data.tick.high, // 更新最高价
+                        low: res.data.tick.low,
+                        close: res.data.tick.close, // 更新收盘价
+                        volume: res.data.tick.vol // 更新成交量
+                    }
+                    store.setlistData(res.data.tick);
+                    chart.value.updateData(data);
+                } catch (e) {
+                    console.log(e)
                 }
-                store.setlistData(res.data.tick);
-                chart.value.updateData(data);
+
             }
         }
     });

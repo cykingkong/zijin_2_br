@@ -11,8 +11,8 @@
     </div>
 
     <div class="flex-1">
-      <van-button type="primary" block @click="handleClickSubmit" class="h-32!">
-        资产中心</van-button>
+      <!-- <van-button type="primary" block @click="handleClickSubmit" class="h-32!">
+        资产中心</van-button> -->
 
     </div>
 

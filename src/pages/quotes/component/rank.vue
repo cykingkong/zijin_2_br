@@ -10,7 +10,8 @@
                     </div>
                     <div class="flex-r-item up">{{ i.increase }}%</div>
                     <div class="flex-r-item last-item">
-                        0.00M
+                        {{ i.tradingInfo.baseAssetInfo ?
+                            i.tradingInfo.baseAssetInfo.unit : '' }} {{ i.lastPrice }}
                     </div>
                 </div>
             </div>

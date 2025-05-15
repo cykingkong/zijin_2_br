@@ -18,12 +18,12 @@ const route = useRoute()
 
 const show = computed(() => route.name && routeWhiteList.includes(route.name))
 const tabList = [
-  {
-    name: '自选',
-    path: '/optional',
-    onIcon: tab1Active,
-    offIcon: tab1
-  },
+  // {
+  //   name: '自选',
+  //   path: '/optional',
+  //   onIcon: tab1Active,
+  //   offIcon: tab1
+  // },
   {
     name: '行情',
     path: '/quotes',
@@ -39,8 +39,8 @@ const tabList = [
 
   },
   {
-    name: '资讯',
-    path: '/news',
+    name: 'IPO',
+    path: '/ipo',
     onIcon: tab4Active,
     offIcon: tab4
 

@@ -4,7 +4,6 @@
         <div class="user-box px-12 pb-12">
             <div class="user-center-top px-8 w-full flex flex-items-center flex-justify-between">
                 <div class="text-white">个人中心</div>
-                <div class="r">国家</div>
             </div>
             <div class="flex mt-12">
                 <div class="gn p-12  flex flex-items-center gap-4 rounded-40 ">
@@ -14,8 +13,8 @@
                 </div>
             </div>
         </div>
-        <div class="tab-box flex px-12">
-            <div class="tab-item px-18 h-40px rounded-40 flex flex-items-center flex-justify-center gap-4 font-size-14"
+        <div class="tab-box flex px-12 gap-12">
+            <div class="tab-item px-18 h-40px rounded-40 flex flex-items-center flex-justify-center gap-12 font-size-14"
                 v-for="(item, index) in tabList" :key="index"
                 :class="{ 'active': tabAcitve === index, 't1': index == 0 }" @click="changeTab(index)">
                 <img src="@/assets/image/icon-success.png" alt="" class="w-20 h-20">
@@ -24,37 +23,37 @@
         </div>
         <div class="tab-pan  px-20 pt-24 pb-12 flex flex-col gap-12" v-if="tabAcitve == 0">
             <div class="title color-gray-400">要求</div>
-            <div class="line flex gap-4 flex-items-center font-size-12">
+            <div class="line flex gap-4 flex-items-center font-size-14">
                 <van-icon name="user-o" />
                 資訊科技業
             </div>
-            <div class="line flex gap-4 flex-items-center font-size-12">
+            <div class="line flex gap-4 flex-items-center font-size-14">
                 <van-icon name="credit-pay" />
                 身份证
             </div>
             <div class="title color-gray-400">功能与限制</div>
-            <div class="t flex flex-items-center gap-4 font-size-12"><van-icon name="underway-o" />審核時間:3天</div>
-            <van-button type="primary" block>认证详情</van-button>
+            <div class="t flex flex-items-center gap-4 font-size-14"><van-icon name="underway-o" />審核時間:3天</div>
+            <van-button type="primary" block @click="toKyc">认证</van-button>
         </div>
         <div class="tab-pan  px-20 pt-24 pb-12 flex flex-col gap-12" v-if="tabAcitve == 1">
             <div class="title color-gray-400">要求</div>
-            <div class="line flex gap-4 flex-items-center font-size-12">
+            <div class="line flex gap-4 flex-items-center font-size-14">
                 <van-icon name="user-o" />
                 家庭住址
             </div>
-            <div class="line flex gap-4 flex-items-center font-size-12">
+            <div class="line flex gap-4 flex-items-center font-size-14">
                 <van-icon name="credit-pay" />
                 工作地址
             </div>
-            <div class="line flex gap-4 flex-items-center font-size-12">
+            <div class="line flex gap-4 flex-items-center font-size-14">
                 <van-icon name="credit-pay" />
                 亲属联系方式
             </div>
             <div class="title color-gray-400">功能与限制</div>
-            <div class="t flex flex-items-center gap-4 font-size-12"><van-icon name="underway-o" />公證時間為1-30個工作日</div>
-            <van-button type="primary" block>认证详情</van-button>
+            <div class="t flex flex-items-center gap-4 font-size-14"><van-icon name="underway-o" />公證時間為1-30個工作日</div>
+            <van-button type="primary" block @click="toKyc">开始认证</van-button>
         </div>
-        <div class="fixed fixed-status">认证状态</div>
+        <!-- <div class="fixed fixed-status">状态</div> -->
     </div>
 </template>
 <script setup lang="ts">
@@ -64,7 +63,10 @@ const tabAcitve = ref(0)
 const changeTab = (index: number) => {
     tabAcitve.value = index
 }
-
+const router = useRouter()
+const toKyc = () => {
+    router.push('/authentication')
+}
 
 
 
@@ -74,8 +76,7 @@ const changeTab = (index: number) => {
       name: 'certificationCenter',
       path: '/certificationCenter', // 添加静态路径段明确层级
       meta: {
-        title: 'certificationCenter',
-        i18n: 'menus.certificationCenter'
+        title: '认证中心',
       }
     }
   </route>

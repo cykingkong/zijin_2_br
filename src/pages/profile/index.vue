@@ -8,10 +8,10 @@ import { clearToken, isLogin } from '@/utils/auth'
 
 import UserInfo from '../../components/user-info.vue'
 import grid1 from '@/assets/grid/grid1.png';
-import grid2 from '@/assets/grid/grid1.png';
-import grid3 from '@/assets/grid/grid1.png';
-import grid4 from '@/assets/grid/grid1.png';
-import grid5 from '@/assets/grid/grid1.png';
+import grid2 from '@/assets/grid/grid2.png';
+import grid3 from '@/assets/grid/grid3.png';
+import grid4 from '@/assets/grid/grid4.png';
+import grid5 from '@/assets/grid/grid5.png';
 import icon1 from '@/assets/image/icon/icon1.png';
 import icon2 from '@/assets/image/icon/icon2.png';
 import icon3 from '@/assets/image/icon/icon3.png';
@@ -20,7 +20,13 @@ import icon5 from '@/assets/image/icon/icon5.png';
 
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
-const userIsLogin = computed(() => { return isLogin() })
+watch(() => isLogin(), (val) => {
+  if (!val) {
+    router.push('/login')
+  }
+}, {
+  immediate: true
+})
 const { t } = useI18n()
 const showLanguagePicker = ref(false)
 const languageValues = ref<Array<string>>([locale.value])
@@ -69,6 +75,28 @@ const cellList = [
     text: '添加收款方式'
   }
 ]
+const handleClickCell = (index: any) => {
+  console.log(index, 'kajsldkja')
+  switch (index) {
+    case 0:
+      showLanguagePicker.value = true
+      break
+    case 1:
+      router.push('/certificationCenter')
+      break
+    case 2:
+      router.push('/advanced')
+      break
+    case 3:
+      router.push('/valuation')
+      break
+    case 4:
+      router.push('/profile/payMentMethod/list')
+      break
+    default:
+      break
+  }
+}
 function onLanguageConfirm(event: { selectedOptions: PickerColumn }) {
   locale.value = event.selectedOptions[0].value as string
   showLanguagePicker.value = false
@@ -88,7 +116,7 @@ const handleLogout = () => {
       </template>
     </VanNavBar>
 
-    <section class="myself flex flex-col" v-if="userIsLogin">
+    <section class="myself flex flex-col">
       <UserInfo :userInfo="userInfo" />
       <van-cell-group title="快捷入口" />
       <van-grid :border="false" :column-num="6">
@@ -102,7 +130,7 @@ const handleLogout = () => {
       </van-grid>
 
       <van-cell-group title="通用">
-        <van-cell is-link :title="item.text" @click="showLanguagePicker = true" v-for="(item, k) in cellList" :key="k">
+        <van-cell is-link :title="item.text" @click="handleClickCell(k)" v-for="(item, k) in cellList" :key="k">
           <template #icon>
             <img :src="item.icon" class="w20 h20 mr-8 mt-2" />
           </template>
@@ -122,7 +150,7 @@ const handleLogout = () => {
         </van-button>
       </div>
     </section>
-    <section class="unLogin px-12" v-else>
+    <!-- <section class="unLogin px-12" >
       <div class="flex flex-col items-center">
         <span class="text-12 mt-8">您还未登录</span>
       </div>
@@ -131,7 +159,7 @@ const handleLogout = () => {
           去登录
         </van-button>
       </div>
-    </section>
+    </section> -->
     <van-popup v-model:show="showLanguagePicker" position="bottom">
       <van-picker v-model="languageValues" :columns="languageColumns" @confirm="onLanguageConfirm"
         @cancel="showLanguagePicker = false" />

@@ -2,8 +2,8 @@
     <div class="info flex flex-col gap-12">
         <infoIteLi :item="item" :label="'Quantity'" :value="`${item.assetInfo.unit} ${item.num}`" />
         <infoIteLi :item="item" :label="'Secondary issue price'"
-            :value="`${item.assetInfo.unit} ${item.productPrice}`" />
-        <infoIteLi :item="item" :label="'Market Price'" :value="`${item.close}`"
+            :value="`${item.assetInfo.unit} ${item.ipoInfo.productPrice}`" />
+        <infoIteLi :item="item" :label="'Market Price'" :value="`${item.assetInfo.unit} ${item.close}`"
             v-if="item.status == 0 || item.status == 1 || item.status == 2 || item.status == 4" />
         <infoIteLi :item="item" :label="'Income'" :value="`${item.assetInfo.unit} ${item.earnings}`"
             v-if="item.status == 1 || item.status == 2" />

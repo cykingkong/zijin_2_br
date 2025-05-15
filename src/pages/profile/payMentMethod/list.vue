@@ -16,6 +16,14 @@
         <empty v-if="list.length == 0" />
     </div>
 </template>
+<route lang="json5">
+    {
+      name: 'payMentMethodList',
+      meta: {
+        title: '收款方式',
+      },
+    }
+</route>
 <script setup lang="ts">
 import { ref, reactive } from "vue"
 import { userCardGrid, userCardAdd, userCardDel } from "@/api/payment";

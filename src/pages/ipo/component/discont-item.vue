@@ -10,7 +10,10 @@
         </div>
         <div class="flex gap-12">
             <div class="flex-1">
-                <van-button type="default" plain block @click="handleClickSubmit">详情</van-button>
+                <van-button type="default" plain block @click="handleClickDetail">详情</van-button>
+            </div>
+            <div class="flex-1">
+                <van-button type="primary" color="#3f72af" block @click="handleClickCreditPage">配资</van-button>
             </div>
             <div class="flex-1">
                 <van-button type="primary" block @click="handleClickSubmit"
@@ -58,6 +61,7 @@ const props = defineProps({
         default: 'ipo'
     }
 })
+const router = useRouter()
 const orderBtnText = computed(() => {
     let text = ''
     switch (props.item.status) {
@@ -87,6 +91,18 @@ const _index = computed(() => {
     return 1
 
 })
+const handleClickCreditPage = () => {
+
+
+    router.push(`/ipo/creditPage?assetId=${_item.value.assetId}&ipoId=${_item.value.ipoId}`)
+
+}
+const handleClickDetail = () => {
+
+
+    router.push(`/ipo/ipoDetail?id=${_item.value.ipoId}`)
+
+}
 const handleClickSubmit = () => {
     if (props.itemType == 'ipo' && props.item.status != 1) { return }
     if (props.itemType == 'order' && props.item.status == 1) {
