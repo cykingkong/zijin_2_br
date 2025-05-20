@@ -74,11 +74,21 @@ class Socket {
      * @param {array|object} datas 订阅参数集合
      */
     send(datas) {
+        if (this.socket.readyState !== WebSocket.OPEN) {
+            console.warn('WebSocket连接未就绪，当前状态：', this.socket.readyState);
+            return;
+        }
+        
         if (datas.constructor != Array) {
             datas = [datas];
         }
-        for (let item of datas) {
-            this.socket.send(JSON.stringify(item));
+        try {
+            for (let item of datas) {
+                this.socket.send(JSON.stringify(item));
+            }
+        } catch (err) {
+            console.error('WebSocket发送错误：', err);
+            this.onError(err);
         }
     }
 
@@ -139,6 +149,10 @@ class Socket {
     }
 
     onClose(evt) {
+        if (this.heartBeatTimer) {
+            clearInterval(this.heartBeatTimer);
+            this.heartBeatTimer = null;
+        }
         this.Notify({ Event: 'close', Data: evt });
     }
 

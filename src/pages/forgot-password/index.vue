@@ -1,7 +1,17 @@
 <template>
   <div class="changePassword-content flex flex-col gap-24 p-12">
     <loginTab :list="typeArr" @change="changeActive" class="mb-0"></loginTab>
-    <inputCom :label="form.type == 'phone' ? '手机号' : '邮箱'" v-model:value="form.username" :placeholder="'请输入手机号'">
+    <inputCom :label="'邮箱'" v-model:value="form.username" :placeholder="'请输入'" v-if="form.type == 'email'">
+    </inputCom>
+
+    <inputCom :label="'手机号'" :placeholder="'请输入'" v-model:value="form.username" :tips="''" v-if="form.type == 'phone'">
+      <template #picker>
+        <div class="picker-box pr-8 mr-6  h-full flex items-center gap-8" @click="hanleClickAreaPick">
+          <!-- <img :src="icon1" alt="" class="w16 h16"> -->
+          <div class="iti-flag mr-10" :class="areaInfo?.code" style="transform: scale(1.5)"></div>
+          <div class="num">+{{ areaInfo?.dialCode }}</div>
+        </div>
+      </template>
     </inputCom>
     <inputCom :label="'新密码'" v-model:value="form.password" :placeholder="'请输入新密码'" :tips="'請輸入6-12個字符，包括數字或字母'">
     </inputCom>
@@ -16,12 +26,15 @@
       </template>
     </inputCom>
     <van-button type="primary" block @click="onSubmit">确定</van-button>
+    <nationalityList ref="controlChildRef" :title="'选择'" @getName="getName"></nationalityList>
 
   </div>
 </template>
 <script setup lang="ts">
 import { ref, reactive } from "vue"
 import inputCom from "@/components/inputCom.vue";
+import nationalityList from '@/components/nationality-list/nationalityList.vue'
+
 import { useUserStore } from '@/stores'
 import { forgetPassword, sendCode } from "@/api/user"
 import loginTab from "@/components/tab.vue";
@@ -42,6 +55,12 @@ const typeArr = [{
   label: '邮箱',
   value: 'email'
 }]
+const areaInfo = ref({
+  code: "br",
+  dialCode: 55,
+  key: "br",
+  name: ""
+})
 const active = ref(0)
 const router = useRouter()
 const route = useRoute()
@@ -74,7 +93,12 @@ const startCountdown = () => {
     }
   }, 1000)
 }
+const controlChildRef = ref()
+const hanleClickAreaPick = () => {
+  controlChildRef.value.open();
 
+  // areaPopRef.value.popShow()
+}
 const onSubmit = async () => {
   const { password, passwordConfirmation } = form
   if (password !== passwordConfirmation) {
@@ -85,11 +109,20 @@ const onSubmit = async () => {
 
   }
   params.code = params.code.trim()
+  if (params.type == 'phone') {
+    params.username = `${areaInfo.value.dialCode}${params.username}`
+  }
+
   const res = await forgetPassword(params)
   if (res.code === 200) {
     showToast('修改成功')
     router.push('/login')
   }
+}
+
+const getName = (val: any) => {
+  console.log(val, 'vvvv')
+  areaInfo.value = val
 }
 onMounted(() => {
   if (route.query.forgotType) {
@@ -97,4 +130,6 @@ onMounted(() => {
   }
 })
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+@import "@/components/nationality-list/intl.css";
+</style>

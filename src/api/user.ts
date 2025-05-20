@@ -79,3 +79,6 @@ export function walletLogsGrid(params): Promise<any> {
 export function dataAssets(): Promise<any> {
   return request.get('/app-api/user/dataAssets', {})
 }
+export function bindPhone(data): Promise<any> {
+  return request.post('/app-api/user/bindPhone', data)
+}

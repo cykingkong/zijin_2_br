@@ -31,6 +31,10 @@ const props = defineProps({
     trading_pair_id: {
         type: Number,
         default: 1
+    },
+    itemsKey: {
+        type: Number,
+        default: 0
     }
 })
 const times = ref([
@@ -56,7 +60,7 @@ const mainIndicators = ref([
 ])
 const time = ref([
     '1min',
-    '1min',
+    // '1min',
     // '5min',
     // '15min',
     // '30min',
@@ -75,13 +79,17 @@ let valPeriod = '1min'
 let listData = {}
 
 const initChart = () => {
+    console.log(props.itemsKey, 'itemsKey', time.value[props.itemsKey])
+    timesIndex.value = props.itemsKey
+    period = time.value[props.itemsKey]
+
     chart.value = init('k-line-chart')
     chart.value.setPriceVolumePrecision(4);
     marketkline()
     chart.value.setStyles(theme('link'))
     chart.value.setStyles({
         candle: {
-            type: times.value[0].key
+            type: times.value[timesIndex.value].key
         }
     })
     chart.value.createIndicator('MA', true, { id: 'candle_pane' })
@@ -89,8 +97,11 @@ const initChart = () => {
     SocketWs()
 }
 
-watch(() => props.trading_pair_id, (value) => {
+watch(() => [props.trading_pair_id, props.itemsKey], ([newId, newKey]) => {
+    console.log('trading pair id:', newId, 'itemsKey:', newKey)
+    period = time.value[newKey]
     marketkline()
+    childInte()
 })
 const SocketWs = () => {
     ws = new Socket('/wss');
@@ -155,7 +166,7 @@ const setMainIndicator = (item) => {
 }
 
 const setKline = (item, index) => {
-    console.log(item, index, '123', item.key)
+
     chart.value.setStyles({
         candle: {
             type: item.key
@@ -168,6 +179,7 @@ const setKline = (item, index) => {
     childInte()
 }
 const close = () => {
+    console.log(JSON.stringify(listData), 'kjlakjdlaksjdlakjsdlk')
     if (ws && JSON.stringify(listData) != '{}') {
         ws.send({
             action: "UnSubscribe",

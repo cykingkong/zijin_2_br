@@ -8,7 +8,8 @@
                         <Kline :nameId="'myChart10' + k + categoryId" :areaStyle="true" :increase="i.dayIncrease"
                             :data="i.price" height="20px" width="50px" v-if="i.price && i.price.length > 0"></Kline>
                     </div>
-                    <div class="flex-r-item up">{{ i.increase }}%</div>
+                    <div class="flex-r-item" :class="{ up: i.increase >= 0, down: i.increase < 0 }">{{ i.increase }}%
+                    </div>
                     <div class="flex-r-item last-item">
                         {{ i.tradingInfo.baseAssetInfo ?
                             i.tradingInfo.baseAssetInfo.unit : '' }} {{ i.lastPrice }}
@@ -17,6 +18,8 @@
             </div>
             <div class="rank-text"></div>
         </div>
+        <empty v-if="rankList.length == 0" :noTips="true"></empty>
+
         <LoadMore :status="rankListStatus" @load-more="loadMore" />
     </div>
 </template>

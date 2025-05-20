@@ -18,7 +18,8 @@ export const useStore = defineStore('main', {
     token: local.getlocal('token') || '',
     service: '',
     userCardList:[],
-    marketList: []
+    marketList: [],
+    qaList:[]
   }),
   actions: {
     setLoginShow(showState) {
@@ -44,6 +45,9 @@ export const useStore = defineStore('main', {
     },
     setMarketList(data) {
       this.marketList = data
+    },
+    setQaList(data) {
+      this.qaList = data
     }
   },
   getters: {
@@ -53,6 +57,7 @@ export const useStore = defineStore('main', {
     getService: state => state.service,
     getUserCardList: state => state.userCardList,
     getToken: state => state.token,
-    getMarketList: state => state.marketList
+    getMarketList: state => state.marketList,
+    getQaList: state => state.qaList
   },
 })

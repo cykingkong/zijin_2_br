@@ -1,6 +1,8 @@
 <script setup>
 import echarts from '@/components/echarts.vue'
 import Kline from '@/components/Kline.vue'
+import vw from '@/utils/inline-px-to-vw'
+
 import { addCommasToNumber } from '@/utils/tool'
 const tabList = [
   {
@@ -35,12 +37,13 @@ const props = defineProps({
 </route>
 <template>
   <div class="tab-item">
-    <div class="indicator-content flex">
-      <div v-for="(i, k) in item" :key="i" class="indicator-item" :class="i.dayIncrease >= 0 ? 'up-bg' : 'down-bg'">
+    <div class="indicator-content flex  overflow-y-auto">
+      <div v-for="(i, k) in item" :key="i" class="indicator-item flex-shrink-0"
+        :class="i.dayIncrease >= 0 ? 'up-bg' : 'down-bg'">
         <div class="title">
           {{ i.tradingInfo.baseAssetInfo.name }}
         </div>
-        <div class="num">
+        <div class="num" :class="i.dayIncrease >= 0 ? 'up' : 'down'">
           {{ addCommasToNumber(i.lastPrice) }}
         </div>
         <div class="value">
@@ -49,7 +52,7 @@ const props = defineProps({
         </div>
         <div class="chart">
           <Kline :nameId="'myChart10' + k" :areaStyle="true" :increase="i.increase" :data="i.price" height="50px"
-            width="100%"></Kline>
+            :width="vw(80)"></Kline>
         </div>
       </div>
     </div>
@@ -69,7 +72,7 @@ const props = defineProps({
     padding: 0 12px;
 
     .indicator-item {
-      width: 33%;
+      width: 28%;
       height: auto;
       border-radius: 8px;
       padding: 12px;

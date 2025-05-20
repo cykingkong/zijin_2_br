@@ -66,7 +66,7 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue"
 import inputCom from '@/components/inputCom.vue'
-import nationalityList from '../register/components/nationalityList.vue'
+import nationalityList from '@/components/nationality-list/nationalityList.vue'
 import { uploadFile } from '@/api/tool'
 
 import { sendCode, register, kyc } from '@/api/user'
@@ -167,7 +167,7 @@ const handleClickSubmit = async () => {
     }
 </route>
 <style lang="less" scoped>
-@import "../register/components/intl.css";
+@import "@/components/nationality-list/intl.css";
 
 .border-b-color {
     border-bottom: 1px solid var(--border_color);

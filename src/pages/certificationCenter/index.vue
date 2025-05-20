@@ -3,7 +3,7 @@
         <!-- 认证中心 -->
         <div class="user-box px-12 pb-12">
             <div class="user-center-top px-8 w-full flex flex-items-center flex-justify-between">
-                <div class="text-white">个人中心</div>
+                <div class="text-white font-size-18">个人中心</div>
             </div>
             <div class="flex mt-12">
                 <div class="gn p-12  flex flex-items-center gap-4 rounded-40 ">
@@ -21,23 +21,23 @@
                 {{ item }}
             </div>
         </div>
-        <div class="tab-pan  px-20 pt-24 pb-12 flex flex-col gap-12" v-if="tabAcitve == 0">
-            <div class="title color-gray-400">要求</div>
-            <div class="line flex gap-4 flex-items-center font-size-14">
+        <div class="tab-pan  px-20 pt-24 pb-12 flex flex-col gap-12 line-height-28" v-if="tabAcitve == 0">
+            <div class="title color-gray-400 font-size-18">要求</div>
+            <div class="line flex gap-4 flex-items-center font-size-16">
                 <van-icon name="user-o" />
                 資訊科技業
             </div>
-            <div class="line flex gap-4 flex-items-center font-size-14">
+            <div class="line flex gap-4 flex-items-center font-size-16">
                 <van-icon name="credit-pay" />
                 身份证
             </div>
             <div class="title color-gray-400">功能与限制</div>
-            <div class="t flex flex-items-center gap-4 font-size-14"><van-icon name="underway-o" />審核時間:3天</div>
-            <van-button type="primary" block @click="toKyc">认证</van-button>
+            <div class="t flex flex-items-center gap-4 font-size-16"><van-icon name="underway-o" />審核時間:3天</div>
+            <van-button type="primary" block @click="toKyc" v-if="userInfo.kycStatus == 0">认证</van-button>
         </div>
-        <div class="tab-pan  px-20 pt-24 pb-12 flex flex-col gap-12" v-if="tabAcitve == 1">
-            <div class="title color-gray-400">要求</div>
-            <div class="line flex gap-4 flex-items-center font-size-14">
+        <div class="tab-pan  px-20 pt-24 pb-12 flex flex-col gap-12 " v-if="tabAcitve == 1">
+            <div class="title color-gray-400 ">要求</div>
+            <div class="line flex gap-4 flex-items-center font-size-14 ">
                 <van-icon name="user-o" />
                 家庭住址
             </div>
@@ -51,21 +51,32 @@
             </div>
             <div class="title color-gray-400">功能与限制</div>
             <div class="t flex flex-items-center gap-4 font-size-14"><van-icon name="underway-o" />公證時間為1-30個工作日</div>
-            <van-button type="primary" block @click="toKyc">开始认证</van-button>
+            <van-button type="primary" block @click="toKyc" v-if="userInfo.kycStatus == 0">开始认证</van-button>
         </div>
-        <!-- <div class="fixed fixed-status">状态</div> -->
+        <div class="fixed fixed-status"
+            :class="{ 'status0': userInfo.kycStatus == 0, 'status1': userInfo.kycStatus == 1, 'status2': userInfo.kycStatus == 2 }">
+            {{ kycEnum[userInfo.kycStatus] }}</div>
     </div>
 </template>
 <script setup lang="ts">
 import { ref, reactive } from "vue"
-const tabList = ['普通认证', '高级认证']
+import { useUserStore } from '@/stores'
+const userStore = useUserStore()
+const userInfo = computed(() => userStore.userInfo)
+const kycEnum = {
+    '0': '未验证',
+    '1': '验证中',
+    '2': '已验证',
+
+}
+const tabList = ['普通认证']
 const tabAcitve = ref(0)
 const changeTab = (index: number) => {
     tabAcitve.value = index
 }
 const router = useRouter()
 const toKyc = () => {
-    router.push('/authentication')
+    router.push('/profile/authentication')
 }
 
 
@@ -101,6 +112,17 @@ const toKyc = () => {
     font-size: 14px;
     padding-left: 6px;
     line-height: 40px;
-    background: red;
+}
+
+.status0 {
+    background: #FF4E4E;
+}
+
+.status1 {
+    background: #FFA800;
+}
+
+.status2 {
+    background: #00C98C;
 }
 </style>

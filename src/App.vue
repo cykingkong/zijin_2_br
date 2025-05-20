@@ -2,9 +2,12 @@
 import useRouteCache from '@/stores/modules/routeCache'
 import { Overlay, Loading } from 'vant'
 import { useLoadingStore } from '@/stores/modules/loading'
+import { useStore } from '@/stores/modules/index';
 
+import Socket from './utils/Socket'
 const loadingStore = useLoadingStore()
-
+const store = useStore()
+let ws = null
 useHead({
   title: 'Vue3 Vant Mobile',
   meta: [
@@ -32,6 +35,28 @@ const keepAliveRouteNames = computed(() => {
 
 const mode = computed(() => {
   return isDark.value ? 'dark' : 'light'
+})
+const SocketWs = () => {
+  ws = new Socket('/wss');
+  ws.on("open", () => {
+    ws.send({
+      action: "Subscribe",
+      params: {
+        tradingPairsId: 0,
+        period: ''
+      }
+    });
+  });
+  ws.on("message", res => {
+    if (res.code == 200 && JSON.stringify(res.data) != '{}') {
+      store.setklineList(res.data);
+    }
+  });
+  // tradingPairsId.value = props.trading_pair_id
+}
+onMounted(() => {
+  console.log(123,)
+  SocketWs()
 })
 </script>
 

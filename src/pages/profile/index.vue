@@ -17,6 +17,8 @@ import icon2 from '@/assets/image/icon/icon2.png';
 import icon3 from '@/assets/image/icon/icon3.png';
 import icon4 from '@/assets/image/icon/icon4.png';
 import icon5 from '@/assets/image/icon/icon5.png';
+import icon6 from '@/assets/image/icon/icon6.png';
+import icon7 from '@/assets/image/icon/icon7.png';
 
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
@@ -34,23 +36,28 @@ const language = computed(() => languageColumns.find(l => l.value === locale.val
 const gridList = [
   {
     icon: grid1,
-    text: '安全'
+    text: '安全',
+    url: '/profile/safetyPage/safety'
   },
   {
     icon: grid2,
-    text: '修改密码'
+    text: '修改密码',
+    url: '/profile/changePassword/changePassword'
+
   },
   {
     icon: grid3,
-    text: '账变记录'
+    text: '账变记录',
+    url: '/profile/accountChange'
   },
-  {
-    icon: grid4,
-    text: '邀请推广'
-  },
+  // {
+  //   icon: grid4,
+  //   text: '邀请推广'
+  // },
   {
     icon: grid5,
-    text: '身份验证'
+    text: '身份验证',
+    url: '/certificationCenter'
   },
 ]
 const cellList = [
@@ -62,17 +69,22 @@ const cellList = [
     icon: icon2,
     text: '身份认证'
   },
-  {
-    icon: icon3,
-    text: '高级认证'
-  },
+
   {
     icon: icon4,
-    text: '计价方式'
+    text: '划转'
   },
   {
     icon: icon5,
     text: '添加收款方式'
+  },
+  {
+    icon: icon6,
+    text: '关于我们'
+  },
+  {
+    icon: icon7,
+    text: '帮助中心'
   }
 ]
 const handleClickCell = (index: any) => {
@@ -85,17 +97,25 @@ const handleClickCell = (index: any) => {
       router.push('/certificationCenter')
       break
     case 2:
-      router.push('/advanced')
+      router.push('/conversion')  // 划转
       break
     case 3:
-      router.push('/valuation')
+      router.push('/profile/payMentMethod/list')
+
       break
     case 4:
-      router.push('/profile/payMentMethod/list')
+      router.push('/aboutUs')
+
       break
-    default:
+    case 5:
+      router.push('/helpCenter')
+
+
       break
   }
+}
+const handleClickGrid = (index: any) => {
+  router.push(gridList[index].url)
 }
 function onLanguageConfirm(event: { selectedOptions: PickerColumn }) {
   locale.value = event.selectedOptions[0].value as string
@@ -119,12 +139,11 @@ const handleLogout = () => {
     <section class="myself flex flex-col">
       <UserInfo :userInfo="userInfo" />
       <van-cell-group title="快捷入口" />
-      <van-grid :border="false" :column-num="6">
-        <van-grid-item v-for="(i, k) in gridList" :key="k" text="文字">
-          <div class="flex flex-col items-center">
+      <van-grid :border="false">
+        <van-grid-item v-for="(i, k) in gridList" :key="k" @click="handleClickGrid(k)">
+          <div class="flex flex-col items-center flex-1">
             <img :src="i.icon" class="w-48 h-48" />
             <span class="text-12 mt-8">{{ i.text }}</span>
-
           </div>
         </van-grid-item>
       </van-grid>
@@ -137,13 +156,7 @@ const handleLogout = () => {
         </van-cell>
 
       </van-cell-group>
-      <van-cell-group title="更多">
-        <van-cell is-link :title="t('menus.aboutUs')" value="">
-          <template #icon>
-            <img src="@/assets/image/icon/icon6.png" class="w20 h20 mr-8 mt-2" />
-          </template>
-        </van-cell>
-      </van-cell-group>
+
       <div class="btn-box mt-24 w-full">
         <van-button square type="primary" class="mt-12 w-full" @click="handleLogout">
           退出登录
@@ -194,9 +207,5 @@ const handleLogout = () => {
     font-weight: 600;
     color: var(--van-gary-1);
   }
-}
-
-:deep(.van-grid-item) {
-  flex-basis: 20% !important;
 }
 </style>

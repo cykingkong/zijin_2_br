@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import { useLoadingStore } from '@/stores/modules/loading'
 const loadingStore = useLoadingStore()
-const { proxy } = getCurrentInstance()!
+const { proxy } = getCurrentInstance()
 const router = useRouter()
 
 const handleClickTab = (type: number) => {

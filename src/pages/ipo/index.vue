@@ -53,7 +53,7 @@ import LoadMore from '@/components/LoadMore.vue';
 import bottomPop from "./component/bottom-pop.vue";
 import { useLoadingStore } from '@/stores/modules/loading'
 const loadingStore = useLoadingStore()
-const { proxy } = getCurrentInstance()!
+const { proxy } = getCurrentInstance()
 const props = defineProps({
     onlyShowOrder: {
         type: Boolean,

@@ -8,7 +8,7 @@ import inputCom from '@/components/inputCom.vue'
 import slidePop from '@/components/slidePop.vue'
 
 import icon1 from '@/assets/image/icon/icon1.png'
-import nationalityList from './components/nationalityList.vue'
+import nationalityList from '@/components/nationality-list/nationalityList.vue'
 import { uploadFile } from '@/api/tool'
 const countdown = ref(0)
 const router = useRouter()
@@ -62,7 +62,6 @@ const handleClickRegister = async () => {
   if (agree.value == false) {
     showToast("请先同意用户协议")
     return
-
   }
   try {
     let area = areaInfo.value?.dialCode
@@ -224,8 +223,7 @@ const hanleClickAreaPick = () => {
           v-for="(item, index) in typeArr" :key="index" @click="form.type = item.value">
           {{ item.label }} </div>
       </div>
-      <inputCom :label="'手机号'" :placeholder="'请输入手机号'" v-model:value="form.phone" :tips="''"
-        v-if="form.type == 'phone'">
+      <inputCom :label="'手机号'" :placeholder="'请输入手机号'" v-model:value="form.phone" :tips="''">
         <template #picker>
           <div class="picker-box pr-8 mr-6  h-full flex items-center gap-8" @click="hanleClickAreaPick">
             <!-- <img :src="icon1" alt="" class="w16 h16"> -->
@@ -317,7 +315,8 @@ const hanleClickAreaPick = () => {
 }
 </route>
 <style lang="less" scoped>
-@import "./components/intl.css";
+@import "@/components/nationality-list/intl.css";
+
 
 .link {
   color: #1678FF

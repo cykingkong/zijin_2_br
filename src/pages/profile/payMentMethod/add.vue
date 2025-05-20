@@ -1,5 +1,6 @@
 <template>
     <div class="add-content p-12 flex flex-col gap-24">
+        <nationalityList ref="controlChildRef" :title="'选择'" @getName="getName"></nationalityList>
 
         <inputCom :label="'订单'" :placeholder="''" v-model:value="t" :type="'picker'" require>
             <div class="w-full flex justify-between">
@@ -17,7 +18,15 @@
         </inputCom>
         <inputCom :label="'持有人帐号'" :placeholder="'请输入持有人帐号'" v-model:value="form.receiveAccount" :tips="''" require>
         </inputCom>
+
         <inputCom :label="'手机号'" :placeholder="'请输入手机号'" v-model:value="form.receivePhone" :tips="''" require>
+            <template #picker>
+                <div class="picker-box pr-8 mr-6  h-full flex items-center gap-8" @click="hanleClickAreaPick">
+                    <!-- <img :src="icon1" alt="" class="w16 h16"> -->
+                    <div class="iti-flag mr-10" :class="areaInfo?.code" style="transform: scale(1.5)"></div>
+                    <div class="num">+{{ areaInfo?.dialCode }}</div>
+                </div>
+            </template>
         </inputCom>
         <inputCom :label="'税号'" :placeholder="'请输入税号'" v-model:value="form.receiveCpf" :tips="''" require></inputCom>
         <inputCom :label="'其他(PIX密钥/CNPJ税号)'" :placeholder="''" v-model:value="form.other" :tips="''"
@@ -48,6 +57,7 @@ import inputCom from "@/components/inputCom.vue";
 import { userCardAdd, userCardUpdate, userCardDel } from "@/api/payment";
 import { useStore } from "@/stores/modules/index";
 import { showToast } from "vant";
+import nationalityList from '@/components/nationality-list/nationalityList.vue'
 
 const t = ref('notk')
 const typeDesc = ['所有银行卡', '虚拟货币支付']
@@ -81,9 +91,25 @@ const router = useRouter();
 const onConfirm = ({ selectedValues, selectedOptions }) => {
     result.value = selectedOptions[0]?.text;
     pickerValue.value = selectedValues;
+    form.bankType = selectedOptions[0]?.text;
     showPicker.value = false;
 
 };
+const areaInfo = ref({
+    code: "br",
+    dialCode: 55,
+    key: "br",
+    name: ""
+})
+const getName = (val: any) => {
+    areaInfo.value = val
+}
+const controlChildRef = ref()
+const hanleClickAreaPick = () => {
+    controlChildRef.value.open();
+
+    // areaPopRef.value.popShow()
+}
 const handleClickDel = () => {
     userCardDel({ id: form.id }).then(res => {
         if (res.code == 200) {
@@ -111,12 +137,14 @@ const handleClickSubmit = () => {
     if (!form.receiveCpf) {
         return
     }
-    if (['PIX', 'CPF'].includes(result.value) && !form.other) {
+    if (['PIX', 'CNPJ'].includes(result.value) && !form.other) {
         return
     }
+    let area = areaInfo.value?.dialCode
     let params = {
-        ...form
+        ...form,
     }
+    params.receivePhone = area + form.receivePhone
     if (route.query.edit == '1') {
         userCardUpdate(params).then(res => {
             if (res.code == 200) {
@@ -168,4 +196,6 @@ onMounted(() => {
     }
 })
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+@import "@/components/nationality-list/intl.css";
+</style>

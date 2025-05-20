@@ -62,7 +62,7 @@ import { ref, reactive } from "vue";
 import inputCom from "@/components/inputCom.vue"
 import { creditApply, creditApplyInfo } from "@/api/ipo"
 import { useLoadingStore } from '@/stores/modules/loading'
-const { proxy } = getCurrentInstance()!
+const { proxy } = getCurrentInstance()
 const loadingStore = useLoadingStore()
 const isEdit = ref(false)
 import dayjs from 'dayjs'

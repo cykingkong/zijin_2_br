@@ -1,6 +1,6 @@
 <template>
   <div class="openTrade-content">
-    <VanNavBar title="123" :fixed="true" clickable placeholder :left-arrow="true" @click-left="onBack">
+    <VanNavBar title="" :fixed="true" clickable placeholder :left-arrow="true" @click-left="onBack">
 
       <template #title>
         <div class="flex flex-items-center gap-6"><van-icon name="exchange" @click="handleClickExchange" />{{
@@ -22,16 +22,15 @@
           @handleClickIndicatorTab="handleClickIndicatorTab" :orderList="orderList" />
       </van-tab>
       <van-tab title="撤单" :name="2">
-        <TabTablePage :table-th="['委托时间', '委託/成交價', '委托数量', '状态']" :table-data="orderListStatus0"
-          :order-load-status0="orderLoadStatus0" @load-more="loadMoreOrderListStatus0"></TabTablePage>
+        <TabTablePage :table-th="['委托时间', '委託/成交價', '委托数量', '操作']" :table-data="orderListStatus0"
+          :order-load-status0="orderLoadStatus0" @load-more="loadMoreOrderListStatus0" @cancelOrder="cancelOrder">
+        </TabTablePage>
       </van-tab>
       <van-tab title="持仓" :name="3">
 
         <holdPage :userPositionData="userPositionData"></holdPage>
       </van-tab>
-      <van-tab title="查询" :name="4">
-        <SearchPage></SearchPage>
-      </van-tab>
+
     </van-tabs>
 
     <div
@@ -47,21 +46,23 @@
           <div class="th-item">名称</div>
           <div class="th-item text-align-right">最新价格/24H涨跌</div>
         </div>
-        <div class="td flex-justify-between flex font-size-12  py-12 px-12" v-for="i in marketList">
+        <div class="td flex-justify-between flex font-size-12  py-12 px-12" v-for="i in marketList" @click="">
           <div class="th-item">{{ i.tradingInfo.baseAssetInfo.symbol }}</div>
           <div class="th-item text-align-right">
             <div class="t"> {{ i.tradingInfo.baseAssetInfo ?
               i.tradingInfo.baseAssetInfo.unit : '' }} {{ i.lastPrice }}</div>
-            <div :class="i.dayIncrease > 0 ? 'up' : 'down'">{{ i.dayIncrease > 0 ? '+' : '-' }}{{ i.dayIncrease }}%
+            <div :class="i.dayIncrease >= 0 ? 'up' : 'down'">{{ i.dayIncrease }}%
             </div>
           </div>
         </div>
+        <LoadMore :status="marketListLoadStatus" @load-more="loadMore"></LoadMore>
+
       </div>
     </van-popup>
     <van-popup v-model:show="showBottom" position="bottom">
       <div class="title px-12 py-12 font-size-14">K线图表</div>
       <div class="h-500 px-12">
-        <charts v-if="tradingPairsId" ref="EhartsData" :trading_pair_id="tradingPairsId"></charts>
+        <charts v-if="tradingPairsId" ref="EhartsData" :trading_pair_id="tradingPairsId" :itemsKey="1"></charts>
       </div>
     </van-popup>
   </div>
@@ -81,9 +82,12 @@ import tab1Page from './component/openTradeCom/tab-page.vue';
 import TabTablePage from './component/openTradeCom/tab-table-page.vue';
 import SearchPage from './component/openTradeCom/search-page.vue';
 import holdPage from './component/openTradeCom/hold-page.vue';
+import LoadMore from '@/components/LoadMore.vue';
 import { depth, kline, } from '@/api/market'
 import { getBalancePair } from '@/api/user';
 import { swapOrderAdd, swapOrderCancel, orderList as swapOrderList, getPosition } from '@/api/swap'
+import { market } from '@/api/market'
+
 import { useStore } from '@/stores/modules/index';
 import Socket from '@/utils/Socket';
 const activeName = ref('0')
@@ -93,7 +97,42 @@ const showBottom = ref(false)
 const handleClickExchange = () => {
   showLeft.value = !showLeft.value
 }
-const marketList = computed(() => store.getMarketList)
+const marketList = ref([])
+const marketListLoadStatus = ref(0)
+const categoryId = ref()
+const marketPage = reactive({
+  pageIndex: 1,
+  pageSize: 2
+})
+const loadMore = () => {
+  marketPage.pageIndex++
+  getMarketList()
+
+}
+const getMarketList = async () => {
+  marketListLoadStatus.value = 1
+  const { data, code } = await market({
+    ...marketPage,
+    categoryId: categoryId.value
+  })
+  if (code == 200) {
+    marketListLoadStatus.value = 2;
+
+    if (!data.list) {
+      marketListLoadStatus.value = 3;
+      return
+    }
+    if (marketPage.pageIndex == 1) {
+      marketList.value = data.list || []
+    } else {
+      marketList.value = marketList.value.concat(data.list || [])
+    }
+    if (data.total <= marketList.value.length) {
+      marketListLoadStatus.value = 3
+      return
+    }
+  }
+}
 
 const tab1PageBuyRef = ref()
 const tab1PageSellRef = ref()
@@ -112,7 +151,7 @@ const userBalanceInfo = ref({
   baseAsset: {}
 })
 const router = useRouter()
-const userPositionData = ({})
+const userPositionData = ref()
 const depthData = ref([])
 const orderListStatus0 = ref([])
 const getBalance = async () => {
@@ -136,19 +175,27 @@ const getDepth = async () => {
 }
 const changeTab = (val) => {
   page.pageIndex = 1
-  console.log(val)
+  if (tradingPairsId.value) {
+    getBalance()
+  }
   if (val == 0 || val == 1) {
     let params = {
       status: orderStatus.value == 0 ? 1 : 2,
       direction: val == 0 ? 'buy' : 'sell'
     }
     getOrderList(params)
+
   } else if (val == 2) {
     getOrderListStatus0()
+
   } else if (val == 3) {
+    // if (!userPositionData.value) {
     getPositionData()
+
+    // }
   }
 }
+
 const addOrder = async (params) => {
   const { data, code } = await swapOrderAdd({
     tradingPairsId: tradingPairsId.value, ...params
@@ -163,7 +210,7 @@ const addOrder = async (params) => {
   }
 }
 const cancelOrder = (val) => {
-  console.log(val)
+
   let params = {
     id: val.id
   }
@@ -173,6 +220,11 @@ const cancelOrder = (val) => {
       let params = {
         status: orderStatus.value == 0 ? 1 : 2,
         direction: activeName.value == 0 ? 'buy' : 'sell'
+      }
+      if (val.type == 'status1') {
+        getOrderListStatus0(params)
+      } else {
+        getOrderList
       }
       getOrderList(params)
     }
@@ -193,17 +245,21 @@ const getPositionData = async () => {
     tradingPairsId: tradingPairsId.value
   })
   if (code == 200) {
+    // 判断data返回的数据是否为{}
+    // if (!Object.keys(data).length) {
     userPositionData.value = data
 
+    // }
+    console.log(userPositionData.value)
   }
-  console.log(data)
+
 }
 const getOrderListStatus0 = async (params = {}) => {
   orderLoadStatus.value = 1
   const { data, code } = await swapOrderList({
     ...page,
     ...params,
-    status: 0
+    status: 1
   })
   if (code == 200) {
     // showToast('购入成功')
@@ -213,7 +269,6 @@ const getOrderListStatus0 = async (params = {}) => {
     }
     if (page.pageIndex == 1) {
       orderListStatus0.value = data.rows || []
-
     } else {
       orderListStatus0.value = [...orderListStatus0.value, ...(data.rows || [])]
     }
@@ -319,6 +374,10 @@ onUnmounted(() => {
   closews()
 })
 onMounted(async () => {
+  if (route.query.categoryId) {
+    categoryId.value = route.query.categoryId;
+    await getMarketList()
+  }
   if (route.query.id) {
     tradingPairsId.value = route.query.id
     await init()

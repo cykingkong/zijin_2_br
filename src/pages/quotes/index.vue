@@ -27,14 +27,13 @@ const handleClickGrid = (val: any) => {
 
   if (val == 0) {
     local.setlocal('rankInfo', marketData.value.list[0])
-
-    router.push('/quotes/openTrade?id=' + marketData.value.list[0].tradingPairsId)
+    router.push('/quotes/openTrade?id=' + marketData.value.list[0].tradingPairsId + '&categoryId=' + categoryId.value)
   }
   if (val == 1) {
-    router.push('/quotes/accountChange')
+    router.push('/discount')
   }
-  if (val == 5) {
-    router.push('/quotes/commodities')
+  if (val == 2) {
+    router.push('/fund')
   }
 }
 
@@ -89,6 +88,7 @@ const getMarketInfo = (params) => {
       }
       if (requestCount.value == 1) {
         activeName.value = data.category[0].category_id
+        categoryId.value = data.category[0].category_id
       }
 
       marketData.value = {
@@ -106,9 +106,12 @@ const getMarketInfo = (params) => {
 
   })
 }
+const categoryId = ref()
 const handleClickTabs = (val: any) => {
   console.log(val)
   rankListStatus.value = 1;
+  categoryId.value = val
+  marketData.value.list = []
   getMarketInfo({
     categoryId: val
   })
@@ -119,6 +122,10 @@ const handleClickTabs = (val: any) => {
   } else if (val == 201) {
     getMarketIndex({
       categoryId: 501
+    })
+  } else if (val == 202) {
+    getMarketIndex({
+      categoryId: 502
     })
   }
 

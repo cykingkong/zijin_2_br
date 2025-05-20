@@ -8,7 +8,7 @@
 </template>
 <script setup lang="ts">
 import { ref, reactive } from "vue"
-const { proxy } = getCurrentInstance()!
+const { proxy } = getCurrentInstance()
 import ipoItemTop from "./component/ipo-item-top.vue";
 import ipoItemInfo from "./component/ipo-item-info.vue";
 import dayjs from "dayjs";

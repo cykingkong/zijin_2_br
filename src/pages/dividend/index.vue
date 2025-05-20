@@ -53,7 +53,7 @@ import bottomPop from "./component/bottom-pop.vue";
 import LoadMore from "@/components/LoadMore.vue";
 import { useLoadingStore } from '@/stores/modules/loading'
 const loadingStore = useLoadingStore()
-const { proxy } = getCurrentInstance()!
+const { proxy } = getCurrentInstance()
 const props = defineProps({
     onlyShowOrder: {
         type: Boolean,
@@ -270,11 +270,6 @@ onMounted(() => {
       name: 'discount',
       meta: {
         title: '折扣股',
-        // 添加动态更新标题的方法
-        updateTitle(newTitle: string) {
-          this.title = newTitle
-          document.title = newTitle
-        }
       },
     }
 </route>

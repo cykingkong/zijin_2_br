@@ -14,7 +14,7 @@
             <div class="w-full flex justify-between">
                 <div class="l flex-1 font-size-14" @click="showPicker = true">{{ form.methodId ? form.methodIdText :
                     '请选择充值方式'
-                    }}</div>
+                }}</div>
                 <div class="r flex-shrink-0">
                     <van-icon name="arrow" class="rotate-90" />
                 </div>
@@ -34,7 +34,7 @@ import { ref, reactive } from "vue"
 import { rechargeConfig, coinRechargeConfig, recharge } from '@/api/recharge'
 import { useLoadingStore } from '@/stores/modules/loading'
 const loadingStore = useLoadingStore()
-const { proxy } = getCurrentInstance()!
+const { proxy } = getCurrentInstance()
 const priceTabArr = ref([])
 const tips = ref('')
 const columns = ref([])

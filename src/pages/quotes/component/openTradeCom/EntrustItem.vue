@@ -1,8 +1,14 @@
 <template>
   <div class="entrust-item pt-12 flex-col gap-12 flex">
-    <div style="min-width: 70px;" class="text-18" :class="entrust.offset == 'open' ? 'down' : 'up'">
-      {{ entrust.order_type }}/{{ entrust.direction }}
+    <div class="flex w-full justify-between items-center">
+      <div style="min-width: 70px;" class="text-18 " :class="entrust.offset == 'open' ? 'down' : 'up'">
+        {{ entrust.order_type }}/{{ entrust.direction }}
+      </div>
+      <div class="status">
+        {{ entrust.statusDesc }}
+      </div>
     </div>
+
     <div class="flex justify-between ">
       <div class="flex flex-col">
         <div class="flex items-center">
@@ -33,7 +39,6 @@
         </div>
       </div>
       <div class="btn-wrap mt-64">
-
         <van-button v-if="entrust.status == '1'" type="primary"
           class="ml-19 order-btn border-none h-54 lh-54 cancel-btn" @click.stop="cancelSingle(entrust)">
           {{ $t('撤单') }}</van-button>

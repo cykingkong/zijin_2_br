@@ -79,11 +79,8 @@ const tradingPairsId = ref()
 const store = useStore();
 const EhartsData = ref(null)
 const router = useRouter()
-const listtext = computed(() => {
-    if (local.getlocal('rankInfo')) {
-        return local.getlocal('rankInfo').tradingInfo.baseAssetInfo.name + '/' + local.getlocal('rankInfo').tradingInfo.quoteAssetInfo.name
-    }
-})
+const listtext = ref('')
+const routeItem = ref('')
 const columns = computed(() => {
     let arr = store.getMarketList.map((e) => {
         return {
@@ -92,7 +89,7 @@ const columns = computed(() => {
             value: e.tradingPairsId
         }
     })
-    return [...arr, ...arr, ...arr]
+    return arr
 
 })
 function onBack() {
@@ -106,14 +103,14 @@ const showPicker = ref(false)
 const handleClickPop = () => {
     showPicker.value = true
 }
-const onConfirm = ({ selectedOptions }) => {
-    closews()
-    // if (selectedOptions.tradingPairsId != tradingPairsId.value) {
-    // EhartsData.value.childInte()
-    // }
-    tradingPairsId.value = 0
-
-    tradingPairsId.value = selectedOptions.tradingPairsId
+const onConfirm = async ({ selectedOptions }) => {
+    await closews()
+    if (selectedOptions[0].tradingPairsId != tradingPairsId.value) {
+        EhartsData.value.childInte()
+    }
+    const item = selectedOptions[0]
+    listtext.value = item.tradingInfo.baseAssetInfo.name + '/' + item.tradingInfo.quoteAssetInfo.name
+    tradingPairsId.value = item.tradingPairsId
     local.setlocal('rankInfo', selectedOptions[0])
     showPicker.value = false
     SocketWs()
@@ -184,6 +181,8 @@ const SocketWs = () => {
 onMounted(async () => {
     if (route.query.id) {
         tradingPairsId.value = route.query.id
+        routeItem.value = local.getlocal('rankInfo')
+        listtext.value = routeItem.value.tradingInfo.baseAssetInfo.name + '/' + routeItem.value.tradingInfo.quoteAssetInfo.name
         await getDepth()
         await getBalance()
         SocketWs()

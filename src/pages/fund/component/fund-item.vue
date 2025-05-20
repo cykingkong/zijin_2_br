@@ -14,15 +14,15 @@
         </div>
         <div class="li flex justify-between items-center ">
             <div class="li-l font-size-14">日收益率:{{ _item.dailyYield }}%</div>
+            <div class="li-r font-size-14">预计收益:{{ _item.expectedYield }}%</div>
+
+        </div>
+        <div class="li flex justify-between items-center ">
+            <div class="li-l font-size-14">周期:{{ _item.cycle }}天 </div>
             <div class="li-r font-size-14"><van-button type="primary" :disabled="_item.status == 2"
                     @click="handleClickSubmit" size="small" class="h-35px! w-80px! font-size-12!">{{
                         statusEnum[_item.status] }}</van-button></div>
         </div>
-        <div class="li flex justify-between items-center ">
-            <div class="li-l font-size-14">预计收益:{{ _item.expectedYield }}%</div>
-            <div class="li-r font-size-14">周期:{{ _item.cycle }}天</div>
-        </div>
-
     </div>
     <div class="order-item-content w-full px-12 py-24  font-size-12 flex flex-col gap-10px"
         v-if="props.itemType == 'order'">

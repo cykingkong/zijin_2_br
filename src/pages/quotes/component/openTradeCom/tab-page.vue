@@ -108,9 +108,9 @@
                             v-for="(item, k) in indicatorTab" :key="k" @click="handleClickIndicatorTab(k)">{{ item }}
                         </div>
                     </div>
-                    <div class="r flex-shrink-0">
+                    <!-- <div class="r flex-shrink-0">
                         <img src="@/assets/image/deliveryContract/Group1663.png" alt="" class="w-24 h-18 pr-6">
-                    </div>
+                    </div> -->
                 </div>
                 <div class="tab-content" v-show="orderStatus == 0 || orderStatus == 1">
 
@@ -250,7 +250,7 @@ const cancelOrderOriginal = (val) => {
 
 
 const loadingStore = useLoadingStore()
-const { proxy } = getCurrentInstance()!
+const { proxy } = getCurrentInstance()
 const submit = proxy!.$throttle(submitOriginal, 1000, {
     onStart: () => loadingStore.show(),
     onEnd: () => loadingStore.hide()

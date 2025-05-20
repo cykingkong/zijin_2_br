@@ -1,14 +1,14 @@
 <template>
     <div class="tab-table-table-page px-12 py-12 pb-60px">
-        <div class="th font-size-12px flex flex-items-center text-align-center font-extralight">
+        <div class="th font-size-14px flex flex-items-center text-align-center  font-500">
             <div class="th-item " :class="index == 0 ? 'w-100 flex-shrink-0 text-align-left' : 'flex-1'"
                 v-for="(item, index) in props.tableTh" :key="index">{{ item }}</div>
         </div>
         <block v-if="props.tdType === 1">
-            <div class="td font-size-12px flex flex-items-center text-align-center font-extralight py-12"
+            <div class="td font-size-14px flex flex-items-center text-align-center font-extralight py-12"
                 v-for="(e, index) in props.tableData" :key="index">
                 <div class="td-item w-100 flex-shrink-0 text-align-left">
-                    <div class="title">{{ e.symbol_name }}</div>
+                    <div class="title mb-12">{{ e.symbol_name }}</div>
                     <div class="title font-size-11 text-coolGray">{{ dayjs(e.createdAt).format('YYYY-MM-DD') }}</div>
                 </div>
                 <div class="td-item flex-1 ">
@@ -18,36 +18,16 @@
                     <div>{{ e.amount }}</div>
                 </div>
                 <div class="td-item flex-1">
-                    {{ e.statusDesc }}
+                    <van-button type="primary" class=" order-btn border-none h-54 lh-54 cancel-btn"
+                        @click.stop="cancelSingle(e)">
+                        {{ $t('撤单') }}</van-button>
                 </div>
-            </div>
-            <LoadMore :status="orderLoadStatus0" @load-more="loadMore"></LoadMore>
 
-        </block>
-        <block v-if="props.tdType === 2">
-            <div class="td font-size-12px flex flex-items-center text-align-center font-extralight py-12">
-                <div class="td-item w-100 flex-shrink-0 text-align-left" v-for="(e, index) in props.tableData"
-                    :key="index">
-                    <div class="title">{{ e.symbol_name }}</div>
-                    <div class="title font-size-11 text-coolGray">2312312USD</div>
-                </div>
-                <div class="td-item flex-1 ">
-                    <div class="up">2</div>
-                    <div class="up">1</div>
-                </div>
-                <div class="td-item flex-1">
-                    <div class="up">2</div>
-                    <div class="up">2</div>
-                </div>
-                <div class="td-item flex-1">
-                    <div class="down">2</div>
-                    <div class="down">2</div>
-                </div>
-                <div class="td-item flex-1">
-                    正常
-                </div>
             </div>
+            <Empty v-if="props.tableData.length === 0" :no-tips="true"></Empty>
+            <LoadMore :status="orderLoadStatus0" @load-more="loadMore"></LoadMore>
         </block>
+
 
 
     </div>
@@ -57,7 +37,7 @@ import { ref, reactive } from "vue";
 import LoadMore from "@/components/LoadMore.vue";
 import dayjs from "dayjs";
 const emits = defineEmits([
-    'loadMore'
+    'loadMore', 'cancelOrder'
 ])
 const loadMore = () => {
     emits('loadMore')
@@ -82,7 +62,13 @@ const props = defineProps({
     }
 })
 
-
+const cancelSingle = (orderItem) => { // 撤单
+    let params = {
+        ...orderItem,
+        type: 'status1'
+    }
+    emits('cancelOrder', params)
+}
 
 </script>
 <style lang="less" scoped>

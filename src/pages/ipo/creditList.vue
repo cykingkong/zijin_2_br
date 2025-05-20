@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue"
 import { creditApplyList } from '@/api/ipo'
-const { proxy } = getCurrentInstance()!
+const { proxy } = getCurrentInstance()
 let labelEnum = {
     'number': '姓名',
     'gender': '性别',

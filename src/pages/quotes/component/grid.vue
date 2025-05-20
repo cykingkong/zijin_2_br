@@ -30,13 +30,21 @@ const props = defineProps({
 })
 
 const gridList = computed(() => {
+    if (props.categoryId == 202) {
+        return [
+            {
+                label: '股票交易',
+                icon: grid1,
+            },
+        ]
+    }
     return [
         {
             label: '股票交易',
             icon: grid1,
         },
         {
-            label: '增发',
+            label: '折扣股',
             icon: grid2,
         },
         {

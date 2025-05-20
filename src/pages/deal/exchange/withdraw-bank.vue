@@ -5,7 +5,7 @@
             <div class="w-full flex justify-between">
                 <div class="l flex-1 font-size-14" @click="showPicker = true">{{ form.methodId ? form.methodIdText :
                     '请选择银行卡'
-                    }}</div>
+                }}</div>
                 <div class="r flex-shrink-0">
                     <van-icon name="arrow" class="rotate-90" />
                 </div>
@@ -31,7 +31,7 @@ import { addCommasToNumber } from '@/utils/tool'
 import { userCardGrid } from '@/api/payment'
 import { useLoadingStore } from '@/stores/modules/loading'
 const loadingStore = useLoadingStore()
-const { proxy } = getCurrentInstance()!
+const { proxy } = getCurrentInstance()
 const priceTabArr = ref(['1999', '4999', '9999', '19999', '49999', '99999'])
 const tips = ref('')
 const tips2 = ref('')
