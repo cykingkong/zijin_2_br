@@ -1,9 +1,17 @@
 <script setup lang="ts">
 import { routeWhiteList, navWhiteList } from '@/config/routes'
+import { navTitleStore } from '@/stores/index'
+const navStore = navTitleStore()
 
 const route = useRoute()
 const router = useRouter()
-
+const navTitle = computed(() => {
+  if (navStore.navTitle) {
+    return navStore.navTitle
+  } else {
+    return route.meta.i18n ? t(route.meta.i18n) : (route.meta.title || '')
+  }
+})
 function onBack() {
   if (window.history.state.back)
     history.back()

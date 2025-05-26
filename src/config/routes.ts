@@ -19,6 +19,7 @@ export const navWhiteList: readonly string[] = [
   'optional',
   '/ipo/creditPage',
   '/quotes/detail',
+  '/quotes/accountChange',
   'ipo'
 
 ]

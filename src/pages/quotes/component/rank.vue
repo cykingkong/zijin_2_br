@@ -12,7 +12,7 @@
                     </div>
                     <div class="flex-r-item last-item">
                         {{ i.tradingInfo.baseAssetInfo ?
-                            i.tradingInfo.baseAssetInfo.unit : '' }} {{ i.lastPrice }}
+                            i.tradingInfo.baseAssetInfo.unit : '' }} {{ addCommasToNumber(i.lastPrice) }}
                     </div>
                 </div>
             </div>
@@ -26,7 +26,7 @@
 <script setup>
 import LoadMore from '@/components/LoadMore.vue';
 import KlineSvg from '@/components/KlineSvg.vue';
-
+import { addCommasToNumber } from '@/utils/tool'
 import local from '@/utils/local'
 const emits = defineEmits(['loadMore'])
 const loadMore = () => {
@@ -48,7 +48,7 @@ const router = useRouter()
 
 const handleClickLi = (i) => {
     local.setlocal('rankInfo', i)
-    router.push('/quotes/detail?id=' + i.tradingPairsId)
+    router.push('/quotes/detail?id=' + i.tradingPairsId + '&categoryId=' + props.categoryId)
 }
 </script>
 <style scoped lang="less">

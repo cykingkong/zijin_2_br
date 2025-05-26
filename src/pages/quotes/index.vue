@@ -7,6 +7,8 @@ import Banner from './component/banner.vue'
 import Notice from './component/notice.vue'
 import Grid from './component/grid.vue'
 import Rank from './component/rank.vue'
+import TopStories from './component/topStories.vue';
+import StockMarketWidget from './component/stockMarketWidget.vue'
 import ChatItem from './component/chat-item.vue'
 import Kline from '@/components/Kline.vue'
 import klineChat from '@/components/klineChat.vue'
@@ -19,10 +21,7 @@ const store = useStore();
 const requestCount = ref(0)
 const marketData = ref<any>([])
 const indexInfoData = ref({})
-const i = {
-  price: [2.99, 32.99, 33, 32.95, 32.9, 33, 132.95, 322.9, 333, 322.95, 325.9, 363, 832.95, 326.9, 343, 362.95, 352.9],
-  increase: -2,
-}
+
 const handleClickGrid = (val: any) => {
 
   if (val == 0) {
@@ -34,6 +33,9 @@ const handleClickGrid = (val: any) => {
   }
   if (val == 2) {
     router.push('/fund')
+  }
+  if (val == 3) {
+    router.push('/quotes/accountChange?type=3' + '&categoryId=' + categoryId.value)
   }
 }
 
@@ -132,6 +134,10 @@ const handleClickTabs = (val: any) => {
   activeName.value = val
 }
 const showDatePicker = ref(false)
+const handleClickIndicator = (val) => {
+  local.setlocal('rankInfo', val)
+  router.push('/quotes/detail?id=' + val.tradingPairsId + '&categoryId=' + categoryId.value)
+}
 const clickNotice = () => {
   showDatePicker.value = true
 }
@@ -143,6 +149,11 @@ const loadMore = () => {
   getMarketInfo({
     pageIndex: index
   })
+}
+const toDetail = () => {
+  let id = marketData.value.list[0].tradingPairsId || 1
+  let categoryId = marketData.value.category[0].category_id || 200
+  router.push(`/quotes/detail?id=${id}&categoryId=${categoryId}`)
 }
 onMounted(() => {
   init()
@@ -166,7 +177,13 @@ onMounted(() => {
         <Banner :banner="indexInfoData.banners" />
         <tabItem v-if="item.category_id == 201" :item="indexData">
         </tabItem>
-        <Indicator :list="marketData.list" v-if="item.category_id == 200" />
+        <div class="top relative">
+          <div class="z-index-999 absolute top-0 left-0 w-full h-full " @click="toDetail"></div>
+          <TopStories v-if="item.category_id == 200" />
+
+        </div>
+
+        <!-- <Indicator :list="marketData.list" v-if="item.category_id == 200" @handle-click="handleClickIndicator" /> -->
         <!-- 金刚区 -->
         <Grid @handleClickGrid="handleClickGrid" :categoryId="item.category_id" />
         <!-- 公告 -->
@@ -174,29 +191,11 @@ onMounted(() => {
         <!-- 排行 -->
         <Rank :rankList="marketData.list" :categoryId="item.category_id" @loadMore="loadMore"
           :rankListStatus="rankListStatus" />
+
+
+        <StockMarketWidget v-if="item.category_id == 200" />
       </van-tab>
-      <van-tab title="美股" name="b" v-if="false">
-        <div class="flex-col flex gap-12">
-          <Banner />
-          <!-- 公告 -->
-          <Notice />
-          <ChatItem>
-            <Kline class="m-auto" :nameId="'myChart20' + 1" :areaStyle="true" :increase="i.increase" :data="i.price"
-              height="160px">
-            </Kline>
-          </ChatItem>
-          <ChatItem :title="'资金净流入'">
-            <Kline class="m-auto" :nameId="'myChart30' + 1" :areaStyle="false" :increase="i.increase" :data="i.price"
-              height="160px">
-            </Kline>
-          </ChatItem>
-          <ChatItem :title="'知名美股'">
-          </ChatItem>
-          <ChatItem :title="'知名美股'">
-            <klineChat />
-          </ChatItem>
-        </div>
-      </van-tab>
+
     </van-tabs>
     <van-popup v-model:show="showDatePicker" position="bottom">
       <div class="h-auto max-h-500 overflow-y-auto p-12">

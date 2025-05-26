@@ -1,25 +1,27 @@
 <template>
   <div class="openTrade-content">
-    <VanNavBar title="" :fixed="true" clickable placeholder :left-arrow="true" @click-left="onBack">
+    <VanNavBar title="" :fixed="true" clickable placeholder :left-arrow="true" @click-left="onBack" z-index="999">
 
       <template #title>
-        <div class="flex flex-items-center gap-6"><van-icon name="exchange" @click="handleClickExchange" />{{
-          userBalanceInfo.baseAsset.baseSymbolName }}</div>
-
+        <div class="flex flex-items-center gap-6">
+          <van-icon name="exchange" @click="handleClickExchange" :size="20"
+            class=".dark:text-white .light:text-black" />
+          {{ listtext }}
+        </div>
       </template>
     </VanNavBar>
     <van-tabs v-model:active="activeName" @change="changeTab">
       <van-tab title="买入" :name="0">
-        <tab1Page ref="tab1PageBuyRef" :tradingPairsId="tradingPairsId" :depthData="depthData"
+        <tab1Page ref="tab1PageBuyRef" :tradingPairsId="tradingPairsId" :depthData="depthData" :listtext="listtext"
           :userBalanceInfo="userBalanceInfo" :orderStatus="orderStatus" :orderLoadStatus="orderLoadStatus"
           :orderList="orderList" @handleClickSubmit="handleClickSubmit" @load-more="loadMoreOrderList"
-          @handleClickIndicatorTab="handleClickIndicatorTab" @cancelOrder="cancelOrder" />
+          @handleClickIndicatorTab="handleClickIndicatorTab" @cancelOrder="cancelOrder" v-if="activeName == 0" />
       </van-tab>
       <van-tab title="卖出" :name="1">
-        <tab1Page ref="tab1PageSellRef" :tradingPairsId="tradingPairsId" :direction="2"
+        <tab1Page ref="tab1PageSellRef" :tradingPairsId="tradingPairsId" :direction="2" :listtext="listtext"
           :userBalanceInfo="userBalanceInfo" :orderStatus="orderStatus" :orderLoadStatus="orderLoadStatus"
-          :depthData="depthData" @handleClickSubmit="handleClickSubmit"
-          @handleClickIndicatorTab="handleClickIndicatorTab" :orderList="orderList" />
+          :depthData="depthData" @handleClickSubmit="handleClickSubmit" @load-more="loadMoreOrderList"
+          @handleClickIndicatorTab="handleClickIndicatorTab" :orderList="orderList" v-if="activeName == 1" />
       </van-tab>
       <van-tab title="撤单" :name="2">
         <TabTablePage :table-th="['委托时间', '委託/成交價', '委托数量', '操作']" :table-data="orderListStatus0"
@@ -46,17 +48,17 @@
           <div class="th-item">名称</div>
           <div class="th-item text-align-right">最新价格/24H涨跌</div>
         </div>
-        <div class="td flex-justify-between flex font-size-12  py-12 px-12" v-for="i in marketList" @click="">
+        <div class="td flex-justify-between flex font-size-14  py-12 px-12" v-for="(i, k) in marketList" :key="k"
+          @click="changeTradingPairsId(i)">
           <div class="th-item">{{ i.tradingInfo.baseAssetInfo.symbol }}</div>
           <div class="th-item text-align-right">
             <div class="t"> {{ i.tradingInfo.baseAssetInfo ?
-              i.tradingInfo.baseAssetInfo.unit : '' }} {{ i.lastPrice }}</div>
+              i.tradingInfo.baseAssetInfo.unit : '' }} {{ addCommasToNumber(i.lastPrice) }}</div>
             <div :class="i.dayIncrease >= 0 ? 'up' : 'down'">{{ i.dayIncrease }}%
             </div>
           </div>
         </div>
         <LoadMore :status="marketListLoadStatus" @load-more="loadMore"></LoadMore>
-
       </div>
     </van-popup>
     <van-popup v-model:show="showBottom" position="bottom">
@@ -83,26 +85,38 @@ import TabTablePage from './component/openTradeCom/tab-table-page.vue';
 import SearchPage from './component/openTradeCom/search-page.vue';
 import holdPage from './component/openTradeCom/hold-page.vue';
 import LoadMore from '@/components/LoadMore.vue';
+import { showToast, showSuccessToast, allowMultipleToast } from 'vant';
 import { depth, kline, } from '@/api/market'
 import { getBalancePair } from '@/api/user';
-import { swapOrderAdd, swapOrderCancel, orderList as swapOrderList, getPosition } from '@/api/swap'
+import { swapOrderAdd, swapOrderCancel, orderList as swapOrderList, getPosition, assetsLogsGrid } from '@/api/swap'
 import { market } from '@/api/market'
-
 import { useStore } from '@/stores/modules/index';
 import Socket from '@/utils/Socket';
-const activeName = ref('0')
+import local from '@/utils/local'
+import { addCommasToNumber } from '@/utils/tool'
+allowMultipleToast()
+const activeName = ref(0)
 let ws = null
 const showLeft = ref(false)
 const showBottom = ref(false)
 const handleClickExchange = () => {
   showLeft.value = !showLeft.value
 }
+const listtext = ref('')
+const routeItem = ref('')
+
+const page = reactive({
+  pageIndex: 1,
+  pageSize: 10
+})
+const EhartsData = ref(null)
+
 const marketList = ref([])
 const marketListLoadStatus = ref(0)
 const categoryId = ref()
 const marketPage = reactive({
   pageIndex: 1,
-  pageSize: 2
+  pageSize: 20
 })
 const loadMore = () => {
   marketPage.pageIndex++
@@ -143,18 +157,16 @@ const orderLoadStatus0 = ref(0)
 const route = useRoute()
 const tradingPairsId = ref()
 const store = useStore();
-const page = reactive({
-  pageIndex: 1,
-  pageSize: 20
-})
+
 const userBalanceInfo = ref({
-  baseAsset: {}
+  baseAsset: {},
+  quoteAsset: {}
 })
 const router = useRouter()
 const userPositionData = ref()
 const depthData = ref([])
 const orderListStatus0 = ref([])
-const getBalance = async () => {
+const getBalancePairInfo = async () => {
   const { data, code } = await getBalancePair({ tradingPairsId: tradingPairsId.value })
   if (code == 200) {
     console.log(data)
@@ -174,17 +186,18 @@ const getDepth = async () => {
   }
 }
 const changeTab = (val) => {
-  page.pageIndex = 1
+  console.log(val, 'val')
+  page.pageIndex = 1;
+  orderList.value = []
   if (tradingPairsId.value) {
-    getBalance()
+    getBalancePairInfo()
   }
   if (val == 0 || val == 1) {
     let params = {
       status: orderStatus.value == 0 ? 1 : 2,
-      direction: val == 0 ? 'buy' : 'sell'
+      direction: val == 0 ? 'buy' : 'sell',
     }
     getOrderList(params)
-
   } else if (val == 2) {
     getOrderListStatus0()
 
@@ -197,34 +210,38 @@ const changeTab = (val) => {
 }
 
 const addOrder = async (params) => {
-  const { data, code } = await swapOrderAdd({
+
+  swapOrderAdd({
     tradingPairsId: tradingPairsId.value, ...params
-  })
-  if (code == 200) {
-    showToast('购入成功')
-    let params = {
-      status: orderStatus.value == 0 ? 1 : 2,
-      direction: activeName.value == 0 ? 'buy' : 'sell'
+  }).then(({ data, code }) => {
+    if (code == 200) {
+      let p = {
+        status: orderStatus.value == 0 ? 1 : 2,
+        direction: activeName.value == 0 ? 'buy' : 'sell'
+      }
+      let toastText = p.direction == 'buy' ? '成功买入' : '成功卖出'
+      showToast(toastText)
+      getBalancePairInfo()
+      getOrderList(p)
+
     }
-    getOrderList(params)
-  }
+  })
+
 }
 const cancelOrder = (val) => {
-
   let params = {
     id: val.id
   }
   swapOrderCancel(params).then(res => {
     if (res.code == 200) {
       showToast('撤单成功')
+      orderList.value = []
       let params = {
         status: orderStatus.value == 0 ? 1 : 2,
-        direction: activeName.value == 0 ? 'buy' : 'sell'
       }
       if (val.type == 'status1') {
         getOrderListStatus0(params)
-      } else {
-        getOrderList
+        return
       }
       getOrderList(params)
     }
@@ -237,7 +254,6 @@ const loadMoreOrderList = () => {
 const loadMoreOrderListStatus0 = () => {
   page.pageIndex++
   getOrderListStatus0()
-
 }
 const getPositionData = async () => {
 
@@ -259,7 +275,10 @@ const getOrderListStatus0 = async (params = {}) => {
   const { data, code } = await swapOrderList({
     ...page,
     ...params,
-    status: 1
+    status: 1,
+    tradingPairsId: tradingPairsId.value,
+
+
   })
   if (code == 200) {
     // showToast('购入成功')
@@ -285,6 +304,7 @@ const getOrderList = async (params = {}) => {
   const { data, code } = await swapOrderList({
     ...page,
     ...params,
+    tradingPairsId: tradingPairsId.value,
   })
   if (code == 200) {
     // showToast('购入成功')
@@ -307,15 +327,37 @@ const getOrderList = async (params = {}) => {
   }
 
 }
+const changeTradingPairsId = async (item) => {
+
+  await closews()
+  if (item.tradingPairsId != tradingPairsId.value) {
+    console.log(EhartsData.value, 'EhartsData.value')
+    if (EhartsData.value) {
+      EhartsData.value.childInte()
+    }
+  }
+  listtext.value = item.tradingInfo.baseAssetInfo.name + '/' + item.tradingInfo.quoteAssetInfo.name
+  tradingPairsId.value = item.tradingPairsId
+  orderList.value = []
+  local.setlocal('rankInfo', item);
+  // 更新浏览器URL
+  const currentCategoryId = route.query.categoryId || categoryId.value; // 保留现有的categoryId
+  const newUrl = `${window.location.pathname}?id=${item.tradingPairsId}${currentCategoryId ? '&categoryId=' + currentCategoryId : ''}`;
+  window.history.replaceState(null, '', newUrl);
+  getPositionData()
+
+  await init()
+  showLeft.value = false
+  SocketWs()
+
+}
 const handleClickSubmit = (params) => {
   addOrder(params)
 }
 const handleClickIndicatorTab = (val) => {
-  console.log(val)
   orderList.value = []
   orderLoadStatus.value = 1
   page.pageIndex = 1
-
   orderStatus.value = val;
   if (val < 2) {
     let params = {
@@ -324,7 +366,7 @@ const handleClickIndicatorTab = (val) => {
     }
     getOrderList(params)
   } else if (val == 2) {
-    getBalance()
+    getBalancePairInfo()
   }
 
 }
@@ -366,9 +408,18 @@ const getKline = async () => {
 const init = async () => {
   await getKline()
   await getDepth()
-  await getBalance()
+  await getBalancePairInfo()
   SocketWs()
-  // await getOrderList()
+  let params = {
+    status: orderStatus.value == 0 ? 1 : 2,
+    direction: 'buy',
+  }
+  if (tab1PageBuyRef.value) {
+    params.direction = 'buy'
+  } else if (tab1PageSellRef.value) {
+    params.direction = 'sell'
+  }
+  await getOrderList(params)
 }
 onUnmounted(() => {
   closews()
@@ -378,11 +429,15 @@ onMounted(async () => {
     categoryId.value = route.query.categoryId;
     await getMarketList()
   }
+  if (route.query.type) {
+    activeName.value = Number(route.query.type)
+  }
   if (route.query.id) {
     tradingPairsId.value = route.query.id
+    routeItem.value = local.getlocal('rankInfo')
+    listtext.value = routeItem.value.tradingInfo.baseAssetInfo.name + '/' + routeItem.value.tradingInfo.quoteAssetInfo.name
     await init()
     // showBottom.value = true
-
   }
 })
 </script>

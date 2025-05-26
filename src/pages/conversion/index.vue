@@ -32,11 +32,11 @@
         <inputCom :label="'金额'" class="mb-12" :placeholder="'请输入金额'" v-model:value="form.amount" :tips="tips">
             <template #sendCode>
                 <div class="absolute right-0 font-size-12 sendCode ">
-                    {{ form.baseAssetIdDesc }} <span class="text-blue-500"
-                        @click="form.amount = userBalance + ''">最大</span>
+                    {{ form.baseAssetIdDesc }} <span class="text-blue-500" @click="maxAmount">最大</span>
                 </div>
             </template>
         </inputCom>
+
         <van-button type="primary" block @click="handleClickSubmit">提交</van-button>
 
         <van-popup v-model:show="showPicker" destroy-on-close position="bottom">
@@ -54,6 +54,8 @@ import {
 } from '@/api/market'
 import { getBalance } from '@/api/user'
 import { conversionInfo, conversion } from '@/api/conversion'
+import { showToast, showSuccessToast, allowMultipleToast } from 'vant';
+import { addCommasToNumber } from '@/utils/tool'
 const columns = ref([])
 const showPicker = ref(false)
 const form = reactive({
@@ -63,13 +65,19 @@ const form = reactive({
     baseAssetIdDesc: '',
     amount: ''
 })
-const price = ref(0)
-
+const price = ref(``)
+const quotesPrice = ref(``)
+const assetsListIds = ref({
+    quoteAssetId: 0,
+    baseAssetId: 0
+})
 const getDescById = (id: number) => {
     const item = columns.value.find(item => item.value == id)
     return item?.text || ''
 }
+const conversionInfoData = ref()
 const userBalance = ref(0)
+const balanceType = ref(0) // 0 的时候是base 1 quote
 const tips = ref('可用余额：0')
 const popType = ref(0) // 0 base 1 quote
 const handleClickPicker = (type: number) => {
@@ -77,17 +85,35 @@ const handleClickPicker = (type: number) => {
     showPicker.value = true
     console.log(type)
 }
+watch(() => balanceType.value, (val) => {
+    console.log(val, 'val')
+    if (val == 0) {
+        console.log('base', conversionInfoData.value.baseAssetSymbolName, addCommasToNumber(Number(price.value)))
+        tips.value = `可用余额：${conversionInfoData.value.baseAssetSymbolName} ${addCommasToNumber(Number(price.value))}`
+    } else {
+        tips.value = `可用余额：${conversionInfoData.value.quoteAssetSymbolName} ${addCommasToNumber(Number(quotesPrice.value))} `
+    }
+
+})
 const change = () => {
+    form.amount = ''
+
+    balanceType.value = balanceType.value == 0 ? 1 : 0
     const temp = form.baseAssetId
     form.baseAssetId = form.quoteAssetId
     form.quoteAssetId = temp
     const tempDesc = form.baseAssetIdDesc
     form.baseAssetIdDesc = form.quoteAssetIdDesc
     form.quoteAssetIdDesc = tempDesc
-    tips.value = `可用余额：${price.value} ${form.baseAssetIdDesc}`
-
+    // const tempPrice = price.value
+    // price.value = quotesPrice.value
+    // quotesPrice.value = tempPrice
+    // const tempSymbol = getDescById(form.baseAssetId)
+    // tips.value = `可用余额：${tempSymbol} ${addCommasToNumber(Number(price.value))}`
 }
 const onConfirm = (value: any) => {
+    change()
+    showPicker.value = false
 }
 const getBalanceColumns = async () => {
     const { data, code } = await assetsList({
@@ -102,44 +128,74 @@ const getBalanceColumns = async () => {
             }
         })
             : [];
-
+        assetsListIds.value = {
+            quoteAssetId: data.rows[0].assetId,
+            baseAssetId: data.rows[1].assetId
+        }
         form.quoteAssetId = columns.value[0].value
         form.baseAssetId = columns.value[1].value
         form.quoteAssetIdDesc = columns.value[0].text
         form.baseAssetIdDesc = columns.value[1].text
-        tips.value = `可用余额：${price.value} ${columns.value[0].text}`
+        balanceType.value = 0
+        // tips.value = `可用余额：${addCommasToNumber(Number(price.value))}`
     }
 
+}
+const maxAmount = () => {
+    if (balanceType.value == 0) {
+        form.amount = addCommasToNumber(conversionInfoData.value.baseAssetBalance)
+    } else {
+        form.amount = addCommasToNumber(conversionInfoData.value.quoteAssetBalance)
+    }
 }
 
 const getInfo = async () => {
     const { data, code } = await conversionInfo({
-        quoteAssetId: form.quoteAssetId,
-        baseAssetId: form.baseAssetId
-
+        quoteAssetId: assetsListIds.value.quoteAssetId,
+        baseAssetId: assetsListIds.value.baseAssetId
     })
     if (code == 200) {
+
+        conversionInfoData.value = data
         price.value = `${data.baseAssetBalance}`
-        console.log(data)
-        tips.value = `可用余额：${price.value} ${form.baseAssetIdDesc}`
+        quotesPrice.value = `${data.quoteAssetBalance}`
+        if (balanceType.value == 0) {
+            tips.value = `可用余额：${conversionInfoData.value.baseAssetSymbolName} ${addCommasToNumber(Number(price.value))} `
+        } else {
+            tips.value = `可用余额：${conversionInfoData.value.quoteAssetSymbolName} ${addCommasToNumber(Number(quotesPrice.value))} `
+        }
 
     }
 }
 const handleClickSubmit = async () => {
+    if (form.amount == '') {
+        showToast({
+            message: '请输入划转金额',
+            zIndex: 99
+        })
+        return
+    }
     const { data, code } = await conversion({
         quoteAssetId: form.quoteAssetId,
         baseAssetId: form.baseAssetId,
-        amount: Number(form.amount)
+        amount: Number(form.amount.replace(/,/g, ''))
     })
     if (code == 200) {
         console.log(data)
+
+        showToast({
+            message: '划转成功',
+            zIndex: 9999
+        })
+        form.amount = ''
+        getInfo()
+
     }
 }
 onMounted(async () => {
     await getBalanceColumns()
     getInfo()
-    getPair()
-
+    allowMultipleToast()
 })
 </script>
 <style lang="less" scoped>

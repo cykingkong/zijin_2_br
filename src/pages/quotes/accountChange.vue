@@ -1,31 +1,124 @@
 <template>
     <div class="account-change-content">
-        <van-tabs v-model:active="active" :sticky="true" @change="tabChange">
-            <van-tab title="全部" class="tabpan">
-                <TabItem v-for="(item, el) in accountChangeList" :key="el" :item="item"></TabItem>
-                <LoadMore :status="listStatus" @load-more="loadMore" />
+        <VanNavBar title="" :fixed="true" clickable placeholder :left-arrow="true" @click-left="onBack">
 
+            <template #title>
+                <div class="flex flex-items-center gap-6">{{
+                    title }}</div>
+            </template>
+        </VanNavBar>
+        <!-- <van-tabs v-model:active="active" :sticky="true" @change="tabChange">
+            <van-tab class="tabpan" v-for="(item, index) in tabList" :key="index" :title="item.name">
             </van-tab>
-            <van-tab title="法币交易" class="tabpan">
-                <TabItem v-for="(item, el) in accountChangeList" :key="el" :item="item"></TabItem>
-            </van-tab>
-            <van-tab title="现金交易" class="tabpan">
-                <TabItem v-for="(item, el) in accountChangeList" :key="el" :item="item"></TabItem>
-            </van-tab>
+        </van-tabs> -->
+        <div class="tab-content w-full flex">
+            <div class="tab-item text-center font-size-16 flex-1 py-12" :class="active == index ? 'active-item' : ''"
+                v-for="(item, index) in tabList" :key="index" @click="tabChange(index)" :title="item.name">
+                {{ item.name }}
+            </div>
 
-        </van-tabs>
+        </div>
+
+        <block v-if="type != '3'">
+            <TabItem v-for="(item, el) in accountChangeList" :key="el" :item="item"></TabItem>
+
+        </block>
+        <block v-if="type == '3'">
+            <div class="px-12">
+                <EntrustItem v-for="item in accountChangeList" :key="item.order_no" :entrust="item" state="submitted"
+                    @cancelOrder="cancelOrder" />
+            </div>
+
+        </block>
+        <empty v-if="!accountChangeList.length" :no-tips="true"></empty>
+        <LoadMore :status="listStatus" @load-more="loadMore" />
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive } from "vue"
 import TabItem from "./component/accountChangeCom/tab-item.vue";
+import EntrustItem from '@/pages/quotes/component/openTradeCom/EntrustItem.vue'
 import LoadMore from '@/components/LoadMore.vue'
 import { walletLogsGrid } from "@/api/user"
-const active = ref('')
+import { orderList as swapOrderList, swapOrderCancel } from "@/api/swap"
+import { assetsLogsGrid, } from "@/api/swap"
+const active = ref(0)
+const router = useRouter()
+const type = ref('')
+const title = computed(() => {
+    if (type.value == '2') {
+        return '资产变动'
+    } else if (type.value == '3') {
+        return '股票交易记录'
+    } else {
+        return '账户变动'
+    }
+})
+function onBack() {
+    if (window.history.state.back)
+        history.back()
+    else
+        router.replace('/')
+}
+const tabList = computed(
+    () => {
+        if (type.value == '2') {
+            return [
+                {
+                    name: '全部',
+                    value: 0
+                },
+                {
+                    name: '收入',
+                    value: 1
+                },
+                {
+                    name: '支出',
+                    value: 2
+                },
+
+            ]
+        } else if (type.value == '3') {
+            return [
+                {
+                    name: '全部',
+                    value: 0
+                },
+                {
+                    name: '买入',
+                    value: 1
+                },
+                {
+                    name: '卖出',
+                    value: 2
+                },
+            ]
+        } else {
+            return [
+                {
+                    name: '全部',
+                    value: 0
+                },
+                {
+                    name: '法币交易',
+                    value: 1
+                },
+                {
+                    name: '现金交易',
+                    value: 2
+                },
+            ]
+        }
+    }
+)
+const orderForm = ref({
+    categoryId: '',
+    direction: '',  //方向 buy sell
+
+})
 const accountChangeList = ref([
-    { type: 1 },
-    { type: 2 },
+
 ])
 const page = reactive({
     pageIndex: 1,
@@ -36,12 +129,34 @@ const resetPage = () => {
 
 }
 const tabChange = (e) => {
+
     resetPage()
-    getAccountChangeList()
+    accountChangeList.value = []
+    active.value = e
+    if (type.value == '2') {
+        if (e == 0) {
+            getAssetsLogsGrid()
+        } else {
+            getAssetsLogsGrid({ type: e })
+        }
+    } else if (type.value == '3') {
+        orderForm.value.direction = e == 0 ? '' : e == 1 ? 'buy' : 'sell'
+        getOrderList()
+    } else {
+        getAccountChangeList()
+    }
+
 }
 const loadMore = () => {
     page.pageIndex++
-    getAccountChangeList()
+    if (type.value == '2') {
+        getAssetsLogsGrid()
+    } else if (type.value == '3') {
+        getOrderList()
+
+    } else {
+        getAccountChangeList()
+    }
 }
 const listStatus = ref(1)
 const getAccountChangeList = async () => {
@@ -68,12 +183,105 @@ const getAccountChangeList = async () => {
 
 
 }
+const getOrderList = async (params = {}) => {
+    listStatus.value = 1
+    const { data, code } = await swapOrderList({
+        ...page,
+        ...params,
+        ...orderForm.value
+    })
+    if (code == 200) {
+        // showToast('购入成功')
+        if (!data.rows) {
+            listStatus.value = 3
+            return
+        }
+        if (page.pageIndex == 1) {
+            accountChangeList.value = data.rows || []
+
+        } else {
+            accountChangeList.value = [...accountChangeList.value, ...(data.rows || [])]
+        }
+        if (data.total <= accountChangeList.value.length) {
+            listStatus.value = 3
+            return
+        }
+        listStatus.value = 2
+
+    }
+
+}
+const getAssetsLogsGrid = async (params = {}) => {
+    const { data, code } = await assetsLogsGrid({ ...page, ...params })
+    if (code == 200) {
+        if (!data.rows) {
+            listStatus.value = 3;
+            return
+        }
+        if (page.pageIndex == 1) {
+            accountChangeList.value = data.rows
+
+        } else {
+            accountChangeList.value = [...accountChangeList.value, ...data.rows]
+        }
+        if (data.total <= accountChangeList.value.length) {
+            listStatus.value = 3;
+            return
+        }
+        listStatus.value = 2;
+    }
+}
+const cancelOrder = (val) => {
+    let params = {
+        id: val.id
+    }
+    swapOrderCancel(params).then(res => {
+        if (res.code == 200) {
+            showToast('撤单成功')
+            page.pageIndex = 1
+            getOrderList()
+        }
+    })
+}
+const route = useRoute()
+
 onMounted(() => {
-    getAccountChangeList()
+    // type == 2  'assets接口'
+    if (route.query.type) {
+        type.value = route.query.type;
+        if (route.query.type == '2') {
+            getAssetsLogsGrid()
+        } else if (route.query.type == '3') {
+            orderForm.value.categoryId = route.query.categoryId || ''
+            route.meta.title = '股票交易记录'  // 设置你需要的标题
+            getOrderList()
+
+        } else {
+            getAccountChangeList()
+        }
+    }
+
 })
 </script>
 <style lang="less" scoped>
 .tabpan {
     padding: 0 12px;
+}
+
+.active-item {
+    color: var(--color_main);
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 20px;
+        height: 4px;
+        background: var(--color_main);
+        border-radius: 2px;
+    }
 }
 </style>

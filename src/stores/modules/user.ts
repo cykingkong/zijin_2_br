@@ -53,17 +53,25 @@ export const useUserStore = defineStore('user', () => {
     try {
       const { data } = await getUserInfo()
       const { data: ff2 } = await getBalance()
-      // const { data: ff3 } = await dataAssets()
+      const { data: ff3 } = await dataAssets()
       setInfo(data)
       setInfo(ff2)
-      // setInfo(ff3)
+      setInfo(ff3)
     }
     catch (error) {
       // clearToken()
       throw error
     }
   }
-
+  const getAssetsData = async () => {
+    try {
+      const { data } = await dataAssets()
+      setInfo(data)
+    } catch (error) {
+      // clearToken()
+      throw error
+    }
+  }
   const logout = async () => {
     try {
       // await userLogout()
@@ -99,6 +107,7 @@ export const useUserStore = defineStore('user', () => {
     logout,
     getCode,
     register,
+    getAssetsData
   }
 }, {
   persist: true,

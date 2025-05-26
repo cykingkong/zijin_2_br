@@ -50,6 +50,8 @@ import discontItem from "./component/discont-item.vue"
 import bottomPop from "./component/bottom-pop.vue";
 import LoadMore from "@/components/LoadMore.vue";
 import { useLoadingStore } from '@/stores/modules/loading'
+import { navTitleStore } from '@/stores/index'
+const navStore = navTitleStore()
 const loadingStore = useLoadingStore()
 
 const { proxy } = getCurrentInstance()
@@ -256,19 +258,14 @@ onMounted(() => {
     } else {
         getDisountList()
     }
-    route.meta.title = '新的标题'  // 设置你需要的标题
+    navStore.setNavTitle('折扣股')
+    route.meta.title = ''  // 设置你需要的标题
 })
-
+onUnmounted(() => {
+    navStore.setNavTitle('')
+})
 </script>
-<route lang="json5">
-    {
-      name: 'discount',
-      meta: {
-        title: '折扣股',
-        
-      },
-    }
-</route>
+
 <style lang="less" scoped>
 .skeleton-animation {
     animation: pulseskeleton 1s ease-in infinite;

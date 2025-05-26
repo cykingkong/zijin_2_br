@@ -30,6 +30,8 @@ import { useStore } from '@/stores/modules/index';
 import { addCommasToNumber } from '@/utils/tool'
 import { userCardGrid } from '@/api/payment'
 import { useLoadingStore } from '@/stores/modules/loading'
+import { method } from "lodash-es";
+const router = useRouter()
 const loadingStore = useLoadingStore()
 const { proxy } = getCurrentInstance()
 const priceTabArr = ref(['1999', '4999', '9999', '19999', '49999', '99999'])
@@ -40,17 +42,19 @@ const showPicker = ref(false)
 const store = useStore()
 const page = reactive({
     pageIndex: 1,
-    pageSize: 10
+    pageSize: 200
 })
 const form = reactive({
     num: '',
-    methodId: ''
+    methodId: '',
+    assetId: '',
 })
 const getRechargeConfig = async () => {
     withdrawConfig({ mode: 'gp' }).then(res => {
-
+        console.log(res.data)
+        form.assetId = res.data.assetId
         tips.value = `手续费${res.data.withdrawFee} 最小提现金额${res.data.minWithdraw} `
-        tips2.value = `余额${addCommasToNumber(res.data.balance, false)} `
+        tips2.value = `余额${addCommasToNumber(res.data.balance)} `
 
     })
 }
@@ -74,17 +78,28 @@ const onConfirm = ({ selectedValues, selectedOptions }) => {
     showPicker.value = false
 }
 const handleClickSubmitOriginal = async () => {
-    const { data, code } = await withdraw({
+    //     console.log(store, 'params')
+    store.setWithdrawParams({
         cardId: form.methodId,
         amount: form.num,
         networkId: 0,
-        assetId: 0
+        type: 1,
+        assetId: form.assetId
     })
-    if (code == 200) {
-        showToast('提交成功')
-        getRechargeConfig();
+    router.push('/deal/exchange/securityVerification?type=1')
+    // const { data, code } = await withdraw({
+    //     cardId: form.methodId,
+    //     amount: form.num,
+    //     networkId: 0,
+    //     type: 1,
+    //     assetId: 0,
 
-    }
+    // })
+    // if (code == 200) {
+    //     showToast('提交成功')
+    //     getRechargeConfig();
+
+    // }
 }
 const handleClickSubmit = proxy!.$throttle(handleClickSubmitOriginal, 1000, {
     onStart: () => loadingStore.show(),

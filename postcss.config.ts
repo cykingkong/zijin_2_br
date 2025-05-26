@@ -11,6 +11,11 @@ const rootContainingBlockSelectorList = [
   // 在这里添加你的选择器
 ]
 
+// 需要排除的选择器列表
+const excludeSelectors = [
+  '.iti-flag',
+  // 可以添加其他需要排除的选择器
+]
 export default {
   plugins: {
     'autoprefixer': {},
@@ -22,6 +27,7 @@ export default {
       maxDisplayWidth: 600,
       border: true,
       rootContainingBlockSelectorList,
+      excludeSelectors,
     },
   },
 }

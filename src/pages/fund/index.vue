@@ -59,6 +59,8 @@ import fundItem from "./component/fund-item.vue"
 import LoadMore from "@/components/LoadMore.vue";
 import bottomPop from "./component/bottom-pop.vue";
 import { useLoadingStore } from '@/stores/modules/loading'
+import { navTitleStore } from '@/stores/index'
+const navStore = navTitleStore()
 const loadingStore = useLoadingStore()
 const { proxy } = getCurrentInstance()
 const props = defineProps({
@@ -235,8 +237,11 @@ onMounted(() => {
     } else {
         getDisountList()
     }
+    navStore.setNavTitle('基金')
 })
-
+onUnmounted(() => {
+    navStore.setNavTitle('')
+})
 </script>
 <style lang="less" scoped>
 .skeleton-animation {

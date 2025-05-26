@@ -13,9 +13,13 @@ import ipoItemTop from "./component/ipo-item-top.vue";
 import ipoItemInfo from "./component/ipo-item-info.vue";
 import dayjs from "dayjs";
 import { ipoProductInfo } from "@/api/ipo";
+import { navTitleStore } from "@/stores";
+const navStore = navTitleStore()
 const ipoInfo = ref({})
 const getIpoInfo = async (id) => {
     const res = await ipoProductInfo({ ipoId: id })
+    navStore.setNavTitle(res.data.name || '')
+
     ipoInfo.value = res.data
     // 将文字颜色color: #000000 全部改为 color: #ffffff
     ipoInfo.value.content = res.data.content.replace(/color: #000000/g, 'color: #ffffff')

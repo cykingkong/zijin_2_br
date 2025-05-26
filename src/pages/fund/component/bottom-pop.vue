@@ -8,10 +8,11 @@
             </div>
             <inputCom :label="popType == 'fund' ? '预约数量' : '卖出数量'"
                 :placeholder="popType == 'fund' ? '请输入预约数量' : '请输入卖出数量'" v-model:value="form.amount"
-                v-if="popType == 'fund'">
+                :tips="`最小数量为${item.minAmount}`" v-if="popType == 'fund'">
 
             </inputCom>
-            <div class="sell-tips font-size-18 font-500" v-if="popType == 'order'">你需要支付{{ item.amount }}</div>
+            <div class="sell-tips font-size-18 font-500" v-if="popType == 'order'">你需要支付{{ item.assetInfo.unit }} {{
+                item.amount }}</div>
             <div class="w-full flex gap-12">
                 <div class="btn-box flex-1">
                     <van-button type="default" class="h-40!" plain block @click="showPicker = false">取消</van-button>
@@ -46,9 +47,7 @@ const props = defineProps({
 const emits = defineEmits(['onConfirm'])
 const btnText = ref('确认')
 watch([() => props.item, () => props.popType], ([item, popType]) => {
-
     btnText.value = '确认'
-
     if (popType == 'order') {
         if (item.status == '1') {
             btnText.value = '立即支付'
@@ -64,6 +63,7 @@ const form = reactive({
 })
 const showPicker = ref(false)
 const show = (val: boolean) => {
+    console.log(props.item)
     if (val) form.amount = ''
     showPicker.value = val
 }

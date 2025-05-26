@@ -5,15 +5,15 @@
                 <img src="@/assets/image/assets-center/in.png" alt="" class="up w-20 h-20" v-show="item.type == 2">
                 <img src="@/assets/image/assets-center/out.png" alt="" class="up w-20 h-20" v-show="item.type == 1">
                 <div class="left-info">
-                    <div class="name text-white mb-">{{ item.logType }}</div>
-                    <div class="desc font-size-12 text-gray mt-10">大宗交易</div>
+                    <div class="name text-white mb-">{{ item.logTypeDesc }}</div>
+                    <div class="desc font-size-14 text-gray mt-10">{{ item.assetTypeDesc }}</div>
                 </div>
             </div>
             <div class="right flex-1 text-align-right">
                 <div class="font-size-20" :class="item.type == 1 ? 'up' : 'down'">{{
                     addCommasToNumber(item.beforeBalance -
                         item.afterBalance) || '-' }}</div>
-                <div class="time font-size-12 text-gray mt-10">{{ item.createAt }}</div>
+                <div class="time font-size-12 text-gray mt-10">{{ item.createdAt }}</div>
             </div>
         </div>
 
@@ -35,4 +35,8 @@ const props = defineProps({
 
 
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.time {
+    white-space: nowrap;
+}
+</style>

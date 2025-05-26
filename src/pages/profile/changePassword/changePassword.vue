@@ -32,6 +32,7 @@ const router = useRouter()
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
 const countdown = ref(0)
+const timer = ref()
 const getCode = async () => {
     if (countdown.value > 0) return
     console.log(userInfo)
@@ -63,11 +64,12 @@ const startCountdown = () => {
 const onSubmit = async () => {
     const { password, passwordConfirmation } = form
     if (password !== passwordConfirmation) {
-        return ElMessage.error('两次密码不一致')
+        return showToast('两次密码不一致')
     }
     let params = {
         ...form,
         type: userInfo.value.email ? 'email' : 'phone',
+        passwordType: passwordType.value
     }
     const res = await updatePassword(params)
     if (res.code === 200) {
@@ -75,5 +77,14 @@ const onSubmit = async () => {
         router.push('/profile')
     }
 }
+const passwordType = ref(1) //  1:登录密码 2:支付密码 3:忘记密码
+const route = useRoute()
+onMounted(() => {
+    if (route.query.type == '1') {
+        passwordType.value = 1
+    } else if (route.query.type == '2') {
+        passwordType.value = 2
+    }
+})
 </script>
 <style lang="less" scoped></style>

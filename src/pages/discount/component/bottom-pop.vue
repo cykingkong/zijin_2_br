@@ -58,7 +58,7 @@ const show = (val: boolean) => {
 }
 
 const confirm = () => {
-    if (form.number == '') {
+    if (form.number == '' && props.popType == 'discount') {
         showToast('请输入数量')
         return
     }

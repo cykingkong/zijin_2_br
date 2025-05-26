@@ -11,3 +11,7 @@ export function swapOrderCancel(data): Promise<any> {
 export function getPosition(params): Promise<any> {
     return request.get('/app-api/gameplay/swap_api/getPosition', { params })
 }
+// 资产流转记录
+export function assetsLogsGrid(params): Promise<any> {
+    return request.get('app-api/user/assetsLogsGrid', { params })
+}

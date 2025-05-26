@@ -3,7 +3,7 @@
     <div class="discont-content px-12 w-full">
         <template v-if="!onlyShowOrder">
             <van-tabs v-model:active="active" @change="changeActive">
-                <van-tab title="折扣股票列表">
+                <van-tab title="IPO列表">
                     <div class="discont-list  flex flex-col">
                         <discont-item :item="item" v-for="(item, index) in list" :key="index"
                             @handleClickBtn="handleClickBtn"></discont-item>
@@ -52,6 +52,8 @@ import discontItem from "./component/discont-item.vue"
 import LoadMore from '@/components/LoadMore.vue';
 import bottomPop from "./component/bottom-pop.vue";
 import { useLoadingStore } from '@/stores/modules/loading'
+import { navTitleStore } from '@/stores/index'
+const navStore = navTitleStore()
 const loadingStore = useLoadingStore()
 const { proxy } = getCurrentInstance()
 const props = defineProps({
@@ -266,8 +268,11 @@ onMounted(() => {
     } else {
         getDisountList()
     }
+    navStore.setNavTitle('IPO')
 })
-
+onUnmounted(() => {
+    navStore.setNavTitle('')
+})
 </script>
 <route lang="json5">
     {

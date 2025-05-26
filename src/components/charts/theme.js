@@ -5,7 +5,7 @@ const crossTextBackgroundColorDark = '#373a40'
 
 const textColorLight = '#76808F'
 const gridColorLight = '#35477c'
-const axisLineColorLight = '#131a2e'
+const axisLineColorLight = '#1f1f1f'
 const crossTextBackgroundColorLight = '#c3c3c3'
 
 export default function(theme) {

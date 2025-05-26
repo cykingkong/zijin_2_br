@@ -39,7 +39,7 @@
         </div>
       </div>
       <div class="btn-wrap mt-64">
-        <van-button v-if="entrust.status == '1'" type="primary"
+        <van-button v-if="entrust.status == '1' && entrust.direction_id == 'buy'" type="primary"
           class="ml-19 order-btn border-none h-54 lh-54 cancel-btn" @click.stop="cancelSingle(entrust)">
           {{ $t('撤单') }}</van-button>
         <button v-if="state == 'created'" class="ml-19 order-btn border-none h-54 lh-54 cancel-btn down">{{
@@ -69,6 +69,9 @@ export default {
     state: {
       type: String,
       default: ''
+    },
+    orderStatus: {
+      type: Number | String,
     }
   },
   data() {
@@ -99,7 +102,19 @@ export default {
       this.$router.push({ path: "/cryptos/symbolOrderDetail", query: { order_no } });
     },
     cancelSingle(order_no) { // 撤单
-      this.$emit('cancelOrder', order_no)
+      showConfirmDialog({
+        title: '提示',
+        message:
+          '确定撤销该订单？',
+      })
+        .then(() => {
+          // on confirm
+          this.$emit('cancelOrder', order_no)
+
+        })
+        .catch(() => {
+          // on cancel
+        });
     }
   }
 }

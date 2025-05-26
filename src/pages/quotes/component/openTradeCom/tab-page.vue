@@ -42,9 +42,8 @@
                     <div class="line w-full border-color-#F43368  text-align-left font-size-16">
                         <van-stepper v-model="form.amount" step="1" class="price-stepper w-full" />
                     </div>
-                    <div class="buy-number font-size-20px mb-12" v-if="direction == 1">
-                        可用 {{
-                            userBalanceInfo.baseAsset.baseSymbol }} <span class="my-4 color-amber">{{
+                    <div class="buy-number font-size-20px mb-12" v-if="direction != 1">
+                        可用 <span class="my-4 color-amber">{{
                             userBalanceInfo.baseAsset ?
                                 addCommasToNumber(userBalanceInfo.baseAsset.baseBalance) : '' }}</span>
                     </div>
@@ -108,32 +107,28 @@
                             v-for="(item, k) in indicatorTab" :key="k" @click="handleClickIndicatorTab(k)">{{ item }}
                         </div>
                     </div>
-                    <!-- <div class="r flex-shrink-0">
+                    <div class="r flex-shrink-0" @click="herfAssetsLog">
                         <img src="@/assets/image/deliveryContract/Group1663.png" alt="" class="w-24 h-18 pr-6">
-                    </div> -->
+                    </div>
                 </div>
                 <div class="tab-content" v-show="orderStatus == 0 || orderStatus == 1">
-
                     <EntrustItem v-for="item in orderList" :key="item.order_no" :entrust="item" state="submitted"
                         @cancelOrder="cancelOrder" />
                     <Empty v-if="orderList.length == 0" />
                     <LoadMore :status="orderLoadStatus" @load-more="loadMore"></LoadMore>
-
-
                 </div>
 
                 <div class="tab-content" v-show="orderStatus == 2">
-                    <Empty v-show="false" />
                     <div class="etf-table pt-12 font-size-12">
-                        <div class="title text-coolGray">当前币对资产</div>
+                        <div class="title text-coolGray px-12">当前币对资产</div>
                         <div class="line flex flex-justify-between p-12 " v-if="userBalanceInfo.baseAsset">
                             <div class="l-title flex items-center gap-6">
                                 <img :src="userBalanceInfo.baseAsset.symbolLogo" alt=""
                                     class="w-24 h-24 rounded-full" />{{
                                         userBalanceInfo.baseAsset.baseSymbolName }}
                             </div>
-                            <div class="l-desc font-extralight text-coolGray">{{
-                                userBalanceInfo.baseAsset.baseSymbol }} {{ userBalanceInfo.baseAsset.baseBalance }}
+                            <div class="l-desc font-extralight text-coolGray"> {{ userBalanceInfo.baseAsset.baseBalance
+                                }}
                             </div>
                         </div>
                         <div class="line flex flex-justify-between p-12 " v-if="userBalanceInfo.quoteAsset">
@@ -143,10 +138,12 @@
                                     userBalanceInfo.quoteAsset.quoteSymbolName }}
                             </div>
                             <div class="l-desc font-extralight text-coolGray">{{
-                                userBalanceInfo.quoteAsset.quoteSymbol }} {{ userBalanceInfo.quoteAsset.quoteBalance }}
+                                userBalanceInfo.quoteAsset.quoteSymbol }} {{
+                                    addCommasToNumber(userBalanceInfo.quoteAsset.quoteBalance) }}
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -156,7 +153,8 @@ import { ref, reactive } from "vue"
 import Empty from '@/components/empty.vue'
 import local from '@/utils/local'
 import { useStore } from '@/stores/modules/index';
-import charts from '@/components/charts/charts.vue'
+import { assetsLogsGrid } from '@/api/swap'
+
 import LoadMore from '@/components/LoadMore.vue';
 import EntrustItem from "./EntrustItem.vue";
 import { addCommasToNumber } from '@/utils/tool'
@@ -186,11 +184,15 @@ const props = defineProps({
     orderList: {
         default: () => { }
     },
+
     orderStatus: {
         default: 1
     },
     orderLoadStatus: {
         default: 1
+    },
+    listtext: {
+
     }
 })
 const form = reactive({
@@ -203,12 +205,6 @@ const form = reactive({
 
 })
 
-const listtext = computed(() => {
-    if (local.getlocal('rankInfo')) {
-        return local.getlocal('rankInfo').tradingInfo.baseAssetInfo.name + '/' + local.getlocal('rankInfo').tradingInfo.quoteAssetInfo.name
-    }
-    return '-'
-})
 
 const activeColor = computed(() => props.direction == 1 ? '#F43368' : '#1678FF')
 const indicatorTab = ref(['当前委托', '历史委托', '资产'])
@@ -224,8 +220,9 @@ const value = ref(1)
 const mode = computed(() => {
     return isDark.value ? 'dark' : 'light'
 })
+
 const linePercent = ref(80)
-console.log(mode, 'mide')
+const router = useRouter()
 const isSubmitting = ref(false);
 const allowSubmit = ref(true);
 
@@ -246,8 +243,14 @@ const handleClickIndicatorTab = (index) => {
 const cancelOrderOriginal = (val) => {
     emits('cancelOrder', val)
 }
-
-
+const herfAssetsLog = () => {
+    router.push('/quotes/accountChange?type=2')
+}
+const handleClickPopItem = (index) => {
+    popActive.value = index;
+    form.price = klineData.value.close;
+    popShow.value = false;
+}
 
 const loadingStore = useLoadingStore()
 const { proxy } = getCurrentInstance()
@@ -259,10 +262,15 @@ const cancelOrder = proxy!.$throttle(cancelOrderOriginal, 1000, {
     onStart: () => loadingStore.show(),
     onEnd: () => loadingStore.hide()
 });
+const getOrderStatus = () => {
+    return orderStatus.value
+}
 const loadMore = () => {
     emits('loadMore')
 }
-
+defineExpose({
+    getOrderStatus
+})
 </script>
 <style lang="less" scoped>
 .pop {

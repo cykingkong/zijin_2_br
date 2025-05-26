@@ -1,16 +1,23 @@
 <script setup>
+import { useUserStore } from '@/stores'
+import { addCommasToNumber } from '@/utils/tool'
 const props = defineProps({
   showAsset: {
     type: Boolean,
     default: false,
   },
-
+  assetTitle: {
+    type: String,
+    default: ''
+  },
+  activeName: {
+    type: String,
+    default: '1' // 1:usd 2:brl
+  }
 })
-import { useUserStore } from '@/stores'
-import { addCommasToNumber } from '@/utils/tool'
+
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
-console.log(userInfo.value, 'sddd')
 </script>
 
 <template>
@@ -32,41 +39,52 @@ console.log(userInfo.value, 'sddd')
       <div class="line flex">
         <div class="line-item flex-1 text-align-left">
           <p class="title">
-            ETF总资产
+            总资产
           </p>
-          <p class="content">
+          <p class="content" v-if="activeName == '1'">
             $ {{ addCommasToNumber(userInfo.assetsBalance.availableBalanceUsd) }}
-
+          </p>
+          <p class="content" v-if="activeName == '2'">
+            $ {{ addCommasToNumber(userInfo.assetsBalance.availableBalanceBrl) }}
           </p>
         </div>
         <div class="line-item flex-1 text-align-right">
           <p class="title">
-            ETF浮动盈亏
+            浮动盈亏
           </p>
-          <p class="content "
-            :class="{ up: userInfo.assetsData.totalProfitRate >= 0, down: userInfo.assetsData.totalProfitRate < 0 }">
-            {{ userInfo.assetsData.totalProfitRate }} %
+          <p class="content " v-if="activeName == '1'"
+            :class="{ up: userInfo.assetsData.totalProfitRateUsd >= 0, down: userInfo.assetsData.totalProfitRateUsd < 0 }">
+            {{ userInfo.assetsData.totalProfitRateUsd }} %
+          </p>
+          <p class="content " v-if="activeName == '2'"
+            :class="{ up: userInfo.assetsData.totalProfitRateBrl >= 0, down: userInfo.assetsData.totalProfitRateBrl < 0 }">
+            {{ userInfo.assetsData.totalProfitRateBrl }} %
           </p>
         </div>
       </div>
       <div class="line flex">
         <div class="line-item flex-1 text-align-left">
           <p class="title">
-            ETF可用余额
+            可用余额
           </p>
           <p class="content">
-            $ {{ addCommasToNumber(userInfo.assetsBalance.availableBalanceBrl) }}
+            $ {{ activeName == '1' ? addCommasToNumber(userInfo.assetsBalance.availableBalanceUsd) :
+              addCommasToNumber(userInfo.assetsBalance.availableBalanceBrl) }}
 
             <!-- $ {{ userInfo.asset[1].balance || "" }} -->
           </p>
         </div>
         <div class="line-item flex-1 text-align-right">
           <p class="title">
-            ETF当日盈亏
+            总投入
           </p>
-          <p class="content "
-            :class="{ up: userInfo.assetsData.totalProfit >= 0, down: userInfo.assetsData.totalProfit < 0 }">
-            {{ userInfo.assetsData.totalProfit }} %
+          <p class="content " v-show="activeName == '1'"
+            :class="{ up: userInfo.assetsData.totalAmountUsd >= 0, down: userInfo.assetsData.totalAmountUsd < 0 }">
+            $ {{ userInfo.assetsData.totalAmountUsd }}
+          </p>
+          <p class="content " v-show="activeName == '2'"
+            :class="{ up: userInfo.assetsData.totalAmountBrl >= 0, down: userInfo.assetsData.totalAmountBrl < 0 }">
+            $ {{ userInfo.assetsData.totalAmountBrl }}
           </p>
         </div>
       </div>
@@ -77,7 +95,7 @@ console.log(userInfo.value, 'sddd')
 <style lang="less" scoped>
 .user-info {
   width: 100%;
-  background: #131a2e;
+  // background: #131a2e;
   display: flex;
   align-items: center;
   gap: 10px;

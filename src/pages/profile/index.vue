@@ -48,7 +48,7 @@ const gridList = [
   {
     icon: grid3,
     text: '账变记录',
-    url: '/profile/accountChange'
+    url: '/quotes/accountChange?type=1'
   },
   // {
   //   icon: grid4,

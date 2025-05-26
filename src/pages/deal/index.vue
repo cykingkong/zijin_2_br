@@ -15,7 +15,7 @@ import grid4 from '@/assets/grid/grid8-quotes.png';
 
 
 
-const activeName = ref('a')
+const activeName = ref('1')
 const router = useRouter()
 const gridList = [
   {
@@ -56,6 +56,11 @@ const handleClickTab = (index: any) => {
       break;
   }
 }
+watch(() => activeName.value, (val) => {
+  console.log(val, 'activeName')
+}, {
+  immediate: true
+})
 </script>
 
 <template>
@@ -64,26 +69,27 @@ const handleClickTab = (index: any) => {
       <template #left>
         {{ t('menus.deal') }}
       </template>
-
     </VanNavBar>
     <section class="deal flex flex-col">
-      <van-tabs v-model:active="activeName" shrink>
-        <van-tab title="印尼股票">
-          <div class="tab-content flex flex-col">
-            <UserInfo :show-asset="true" />
-            <van-grid :border="false" column-num="4">
-              <van-grid-item v-for="(i, k) in gridList" :key="k" @click="handleClickTab(k)">
-                <div class="flex flex-col items-center">
-                  <img :src="i.icon" class="w-48 h-48" />
-                  <span class="text-12 mt-8">{{ i.text }}</span>
-                </div>
-              </van-grid-item>
-            </van-grid>
-            <Quickly />
-            <Indicator />
-          </div>
+      <van-tabs v-model:active="activeName">
+        <van-tab title="美股" :name="'1'">
+        </van-tab>
+        <van-tab title="巴股" :name="'2'">
         </van-tab>
       </van-tabs>
+      <div class="tab-content flex flex-col">
+        <UserInfo :show-asset="true" :assetTitle="'美股'" :activeName="activeName" />
+        <van-grid :border="false" column-num="4">
+          <van-grid-item v-for="(i, k) in gridList" :key="k" @click="handleClickTab(k)">
+            <div class="flex flex-col items-center">
+              <img :src="i.icon" class="w-48 h-48" />
+              <span class="text-12 mt-8">{{ i.text }}</span>
+            </div>
+          </van-grid-item>
+        </van-grid>
+        <Quickly />
+        <Indicator />
+      </div>
     </section>
   </div>
 </template>
@@ -132,6 +138,6 @@ p {
 }
 
 :deep(.van-grid-item__content) {
-  background: #131a2e;
+  // background: #131a2e;
 }
 </style>

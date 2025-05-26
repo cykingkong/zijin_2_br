@@ -20,7 +20,7 @@
                             @click="hanleClickAreaPick">
                             <!-- <img :src="icon1" alt="" class="w16 h16"> -->
                             <div class="iti-flag mr-10" :class="areaInfo?.code" style="transform: scale(1.5)"></div>
-                            <div class="num">+{{ areaInfo?.name }}</div>
+                            <div class="num">{{ areaInfo?.name }}</div>
                         </div>
                     </template>
                     <template #sendCode></template>

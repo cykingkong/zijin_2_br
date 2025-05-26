@@ -79,7 +79,6 @@ let valPeriod = '1min'
 let listData = {}
 
 const initChart = () => {
-    console.log(props.itemsKey, 'itemsKey', time.value[props.itemsKey])
     timesIndex.value = props.itemsKey
     period = time.value[props.itemsKey]
 
@@ -104,6 +103,7 @@ watch(() => [props.trading_pair_id, props.itemsKey], ([newId, newKey]) => {
     childInte()
 })
 const SocketWs = () => {
+
     ws = new Socket('/wss');
     ws.on("open", () => {
         ws.send({
@@ -190,9 +190,9 @@ const close = () => {
         });
     }
 }
-const childInte = () => {
-    close()
-    SocketWs()
+const childInte = async () => {
+    await close()
+    await SocketWs()
 }
 defineExpose({
     childInte,

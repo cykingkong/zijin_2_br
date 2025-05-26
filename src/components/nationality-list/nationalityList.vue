@@ -10,7 +10,7 @@
                 style="height: 50px; box-sizing: border-box;" v-for="(item, key) in countriesFind" :key="key"
                 @click="selectItem(item, key)">
                 <div class="flex items-center">
-                    <div class="iti-flag mr-10" :class="key" style="transform: scale(1.5)"></div>
+                    <div class="iti-flag mr-10" :class="key"></div>
                     <div>{{ item.name }}</div>
                 </div>
                 <span>{{ item.dialCode }}</span>

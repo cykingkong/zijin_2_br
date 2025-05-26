@@ -31,24 +31,24 @@
             </div>-->
         </div>
         <ul>
-            <li class="w-full h50 flex items-center justify-between  pl-16 pr-16 text-12">
+            <li class="w-full h50 flex items-center justify-between  pl-16 pr-16 text-12 " @click="handleClickHerf(1)">
                 <div class="l">修改登陆密码</div>
                 <div class="right icon w14 h14"><img class="w-full h-full"
                         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAbCAYAAABvCO8sAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAD+SURBVHgB7dUxDoIwFAbgUiLqxhG4gayOHdn0BMaT6Q1wkkhM6qKuHoEjuBkYeBaMCxJ5fX2b/gkJKU2+vw0FIf5hjoedmGU68sbjDZTlOklUIYhBgS0WBNrcRuYqoKoUFR0EO9g7ZFQOTfD9IDStws5wW6IpIyyD2tI8P8fgCw2fsPVK0S8NF4oGuVArkAO1Bl1REuiCkkEqOngOvwVGctaDvTKZ9A6TV3jQ1xXU9bbnUQFSqkTNC8EFUjES6IJZg66YFciBoUEuDAXuj5eF9CDlwJoMnsPSL0+m1o0Da4La0lTrcArmrw8idsGaoL40S6XuD69Spt3OBfuNPAEoBciwl2zMXQAAAABJRU5ErkJggg=="
                         alt=""></div>
             </li>
-            <li class="w-full h50 flex items-center justify-between  pl-16 pr-16 text-12">
-                <div class="l">修改登陆密码</div>
+            <li class="w-full h50 flex items-center justify-between  pl-16 pr-16 text-12" @click="handleClickHerf(2)">
+                <div class="l">修改资金密码</div>
                 <div class="right icon w14 h14"><img class="w-full h-full"
                         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAbCAYAAABvCO8sAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAD+SURBVHgB7dUxDoIwFAbgUiLqxhG4gayOHdn0BMaT6Q1wkkhM6qKuHoEjuBkYeBaMCxJ5fX2b/gkJKU2+vw0FIf5hjoedmGU68sbjDZTlOklUIYhBgS0WBNrcRuYqoKoUFR0EO9g7ZFQOTfD9IDStws5wW6IpIyyD2tI8P8fgCw2fsPVK0S8NF4oGuVArkAO1Bl1REuiCkkEqOngOvwVGctaDvTKZ9A6TV3jQ1xXU9bbnUQFSqkTNC8EFUjES6IJZg66YFciBoUEuDAXuj5eF9CDlwJoMnsPSL0+m1o0Da4La0lTrcArmrw8idsGaoL40S6XuD69Spt3OBfuNPAEoBciwl2zMXQAAAABJRU5ErkJggg=="
                         alt=""></div>
             </li>
-            <li class="w-full h50 flex items-center justify-between  pl-16 pr-16 text-12">
+            <!-- <li class="w-full h50 flex items-center justify-between  pl-16 pr-16 text-12">
                 <div class="l">修改登陆密码</div>
                 <div class="right icon w14 h14"><img class="w-full h-full"
                         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAbCAYAAABvCO8sAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAD+SURBVHgB7dUxDoIwFAbgUiLqxhG4gayOHdn0BMaT6Q1wkkhM6qKuHoEjuBkYeBaMCxJ5fX2b/gkJKU2+vw0FIf5hjoedmGU68sbjDZTlOklUIYhBgS0WBNrcRuYqoKoUFR0EO9g7ZFQOTfD9IDStws5wW6IpIyyD2tI8P8fgCw2fsPVK0S8NF4oGuVArkAO1Bl1REuiCkkEqOngOvwVGctaDvTKZ9A6TV3jQ1xXU9bbnUQFSqkTNC8EFUjES6IJZg66YFciBoUEuDAXuj5eF9CDlwJoMnsPSL0+m1o0Da4La0lTrcArmrw8idsGaoL40S6XuD69Spt3OBfuNPAEoBciwl2zMXQAAAABJRU5ErkJggg=="
                         alt=""></div>
-            </li>
+            </li> -->
         </ul>
     </div>
 </template>
@@ -59,7 +59,11 @@ const handleClickItem = () => {
     router.push('/profile/bindVerify/bindVerify')
 
 }
+const handleClickHerf = (type: number) => {
 
+    router.push('/profile/changePassword/changePassword?type=' + type)
+
+}
 
 </script>
 <style lang="less" scoped>

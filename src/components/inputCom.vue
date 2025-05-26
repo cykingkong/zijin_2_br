@@ -18,6 +18,9 @@
                 <input type="password" :placeholder="placeholder" :disabled="onlyRead" :value="value"
                     class="w-full  text-white font-size-16" @input="$emit('update:value', $event.target.value)"
                     v-if="inputType == 'password'" />
+                <input type="number" :placeholder="placeholder" :disabled="onlyRead" :value="value"
+                    class="w-full  text-white font-size-16" @input="$emit('update:value', $event.target.value)"
+                    v-if="inputType == 'number'" />
                 <slot name="sendCode">
                     <van-icon name="clear" class="absolute color-blueGray closeIcon"
                         v-if="!onlyRead && (inputType == 'text' || inputType == 'password') && value != ''"

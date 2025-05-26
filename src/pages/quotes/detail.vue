@@ -1,5 +1,5 @@
 <template>
-    <div class="detail px-12 pb-40 pt-12">
+    <div class="detail px-12 pb-120 pt-12">
         <VanNavBar :title="listtext" :fixed="true" clickable placeholder :left-arrow="true" @click-left="onBack" />
 
         <!-- <userBalance :data="userBalanceInfo"></userBalance> -->
@@ -46,15 +46,24 @@
             <div class="flex td gap-12 font-size-14">
                 <div class="l flex-1 ">
                     <div class="w-full flex mb-6" v-for="(item, index) in asks" :key="index">
-                        <div class="l flex-1">{{ item[0] }}</div>
+                        <div class="l flex-1">{{ addCommasToNumber(item[0]) }}</div>
                         <div class="l flex-1 text-right down">{{ item[1] }}</div>
                     </div>
                 </div>
                 <div class="l flex-1">
                     <div class="w-full flex mb-6" v-for="(item, index) in bids" :key="index">
                         <div class="l flex-1 up">{{ item[1] }}</div>
-                        <div class="l flex-1 text-right ">{{ item[0] }}</div>
+                        <div class="l flex-1 text-right ">{{ addCommasToNumber(item[0]) }}</div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="fixed bottom-0 w-full left-0 flex justify-center bottom-btn-box">
+            <div class="btn-box flex gap-30">
+                <div class="b1 flex-1 w-140"><van-button type="primary" block color="#F43368"
+                        @click="handelClickBtn(0)">买入</van-button>
+                </div>
+                <div class="b1 flex-1 w-140"><van-button type="primary" block @click="handelClickBtn(1)">卖出</van-button>
                 </div>
             </div>
         </div>
@@ -71,11 +80,14 @@ import { ref, reactive } from "vue"
 import { getBalancePair } from '@/api/user'
 import { depth, kline, } from '@/api/market'
 import { useStore } from '@/stores/modules/index';
+import { addCommasToNumber } from '@/utils/tool'
 import Socket from "@/utils/Socket.js";
 import local from '@/utils/local'
 import charts from '@/components/charts/charts.vue'
 
 const tradingPairsId = ref()
+const categoryId = ref()
+
 const store = useStore();
 const EhartsData = ref(null)
 const router = useRouter()
@@ -111,6 +123,12 @@ const onConfirm = async ({ selectedOptions }) => {
     const item = selectedOptions[0]
     listtext.value = item.tradingInfo.baseAssetInfo.name + '/' + item.tradingInfo.quoteAssetInfo.name
     tradingPairsId.value = item.tradingPairsId
+    router.replace({
+        query: {
+            ...route.query,
+            id: item.tradingPairsId
+        }
+    })
     local.setlocal('rankInfo', selectedOptions[0])
     showPicker.value = false
     SocketWs()
@@ -178,7 +196,21 @@ const SocketWs = () => {
         }
     });
 }
+const handelClickBtn = (inputType) => { // 参数名建议修改以避免与 query 中的 'type' 混淆
+    router.push({
+        path: '/quotes/openTrade',
+        query: {
+            type: inputType, // 根据 inputType 决定 query.type 的值
+            id: tradingPairsId.value,
+            categoryId: categoryId.value
+        }
+    });
+}
+
 onMounted(async () => {
+    if (route.query.categoryId) {
+        categoryId.value = route.query.categoryId;
+    }
     if (route.query.id) {
         tradingPairsId.value = route.query.id
         routeItem.value = local.getlocal('rankInfo')
@@ -188,8 +220,17 @@ onMounted(async () => {
         SocketWs()
     }
 })
-
+onBeforeUnmount(() => {
+    EhartsData.value.close()
+    closews()
+})
 
 
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.bottom-btn-box {
+    padding-top: 12px;
+    background: var(--bg);
+    padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
+}
+</style>

@@ -19,9 +19,14 @@
         </div>
         <div class="li flex justify-between items-center ">
             <div class="li-l font-size-14">周期:{{ _item.cycle }}天 </div>
-            <div class="li-r font-size-14"><van-button type="primary" :disabled="_item.status == 2"
-                    @click="handleClickSubmit" size="small" class="h-35px! w-80px! font-size-12!">{{
-                        statusEnum[_item.status] }}</van-button></div>
+            <div class="li-r font-size-14"></div>
+        </div>
+        <div class="li flex justify-end">
+
+            <van-button type="primary" :color="_item.status == 2 ? '#b5b5b5' : '#1989fa'" @click="handleClickSubmit"
+                size="small" class="h-35px! w-80px! font-size-14!">{{
+                    statusEnum[_item.status] }}</van-button>
+
         </div>
     </div>
     <div class="order-item-content w-full px-12 py-24  font-size-12 flex flex-col gap-10px"
@@ -44,7 +49,7 @@
         </div>
         <div class="li flex justify-between items-center ">
             <div class="li-l font-size-14">总收益:{{ _item.assetInfo.unit }} {{ _item.totalProfit }}</div>
-            <div class="li-r font-size-14">金额:{{ _item.assetInfo.unit }} {{ _item.amount }}</div>
+            <div class="li-r font-size-14">金额:{{ _item.assetInfo.unit }} {{ addCommasToNumber(_item.amount) }}</div>
         </div>
         <div class="li flex gap-12px justify-end items-center">
             <van-button v-if="_item.status == 3 && item.getType == 1 && item.surplusProfit > 0" color="#7232dd"
@@ -55,13 +60,14 @@
                 class="h-35px! w-80px! font-size-12!">续期</van-button>
 
             <van-button :color="_item.status == 1 ? '#1989fa' : '#b5b5b5'" @click="handleClickSubmit" size="small"
-                class="h-35px! w-80px! font-size-12!">{{
+                class="h-35px! w-80px! font-size-14!">{{
                     orderStatusEnum[_item.status] }}</van-button>
         </div>
     </div>
 </template>
 <script setup lang="ts">
 import { statusEnum, orderStatusEnum } from '../enum'
+import { addCommasToNumber } from '@/utils/tool'
 import dayjs from 'dayjs'
 const router = useRouter()
 const emits = defineEmits(['handleClickBtn', 'handleClickOrder'])

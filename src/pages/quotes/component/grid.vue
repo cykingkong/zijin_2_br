@@ -51,6 +51,10 @@ const gridList = computed(() => {
             label: '基金',
             icon: grid3,
         },
+        {
+            label: '历史记录',
+            icon: grid4,
+        },
 
 
     ]
@@ -67,7 +71,7 @@ const handleClickItem = (k) => {
     grid-template-columns: repeat(4, 1fr);
     padding: 12px 0;
     gap: 12px;
-    background: #131a2e;
+    // background: #131a2e;
 
     .grid-item {
         flex: 1;

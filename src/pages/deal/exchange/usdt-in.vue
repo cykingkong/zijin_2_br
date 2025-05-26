@@ -2,7 +2,7 @@
   <div class="exchange-in-content p-12">
     <div class="t font-size-16   ">请选择充值币种</div>
     <div class="flex w-full gap-12 my-12 ">
-      <div class="channel-item  rounded-10 flex-1 text-align-center py-12" v-for="(item, index) in tabList"
+      <div class="channel-item  rounded-10 flex-1 text-align-center py-12" v-for="(item, index) in tabList" :key="index"
         :class="{ 'active': index == active }" @click="handleClickTab(index)">
         <img :src="item.icon" alt="" class="block w-55px h-55px mx-auto">
         <div class="font-size-12 mt-12">{{ item.name }}充值</div>
@@ -18,7 +18,7 @@
       </div>
     </div>
     <div v-if="showQrCode" class="qrcode-container mt-20 text-center mx-auto">
-      <QrcodeVue ref="qrCodeRef" :value="qrValue" :size="200" level="H" render-as="canvas" class="mx-auto" />
+      <canvas ref="qrCodeRef" class="mx-auto" width="200" height="200"></canvas>
     </div>
     <div class="w-120 mt-12 mx-auto">
 
@@ -38,7 +38,7 @@
 import { ref, reactive, onMounted } from "vue";
 import { Toast, showToast } from 'vant';
 import { aupay_notify, mgm_notify, qeawapay_notify } from '@/api/payment'
-import QrcodeVue from 'qrcode.vue'
+import QRCode from 'qrcode'
 import btcIcon from '@/assets/btc_icon.png'
 import trxIcon from '@/assets/trx_icon.png'
 import ethIcon from '@/assets/eth_icon.png'
@@ -83,12 +83,47 @@ const handleClickAupay = (index) => {
   showQrCode.value = true
   qrValue.value = btnList.value[activeBtn.value].value
 }
-// 保存二维码图片
-const qrCodeRef = ref<InstanceType<typeof QrcodeVue>>()
-import { nextTick } from 'vue'
+const qrCodeRef = ref<HTMLCanvasElement>()
+const generateQrCode = () => {
+  if (qrCodeRef.value && qrValue.value) {
+    QRCode.toCanvas(qrCodeRef.value, qrValue.value, {
+      width: 200,
+      errorCorrectionLevel: 'H'
+    }, (error) => {
+      if (error) console.error('生成二维码失败:', error)
+    })
+  }
+}
 
+onMounted(() => {
+  generateQrCode()
+})
+
+watch([activeBtn, active], generateQrCode)
+// 保存二维码图片 
 const safeQrcode = async () => {
+  if (!qrCodeRef.value) {
+    showToast('请先生成二维码')
+    return
+  }
 
+  try {
+    // 将canvas转换为数据URL
+    const image = qrCodeRef.value.toDataURL('image/png')
+
+    // 创建临时链接进行下载
+    const link = document.createElement('a')
+    link.download = `qrcode-${Date.now()}.png`
+    link.href = image
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+
+    showToast('二维码已保存')
+  } catch (error) {
+    showToast('保存失败，请重试')
+    console.error('保存二维码失败:', error)
+  }
 }
 
 // 复制二维码文本内容
@@ -113,7 +148,7 @@ const handleClickQeawapay = () => {
 </script>
 <style lang="less" scoped>
 :deep(.van-cell) {
-  --van-cell-background: #131a2e;
+  // --van-cell-background: #131a2e;
 }
 
 .channel-item {

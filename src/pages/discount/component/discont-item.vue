@@ -51,10 +51,15 @@
                 _item.realTimePrice }}
 
         </div>
-        <div class="li flex justify-between items-center">Quantity:{{ _item.purchaseQuantity }} <van-button
-                type="primary" :disabled="_item.status == 2" @click="handleClickSubmit" size="small"
+        <div class="li flex justify-between items-center">Quantity:{{ _item.purchaseQuantity }}
+
+        </div>
+        <div class="li flex justify-end">
+            <van-button type="primary" :disabled="_item.status == 2"
+                :color="_item.saleStatus != 1 ? '#1989fa' : '#b5b5b5'" @click="handleClickSubmit" size="small"
                 class="font-size-16!">{{
-                    orderStatusEnum[_item.status] }}</van-button> </div>
+                    orderStatusEnum[_item.status] }}</van-button>
+        </div>
     </div>
 </template>
 <script setup lang="ts">

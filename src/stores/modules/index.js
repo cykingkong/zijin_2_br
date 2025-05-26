@@ -19,7 +19,8 @@ export const useStore = defineStore('main', {
     service: '',
     userCardList:[],
     marketList: [],
-    qaList:[]
+    qaList:[],
+    withdrawParams:{}
   }),
   actions: {
     setLoginShow(showState) {
@@ -46,9 +47,13 @@ export const useStore = defineStore('main', {
     setMarketList(data) {
       this.marketList = data
     },
+    setWithdrawParams(data) {
+      this.withdrawParams = data
+    },
     setQaList(data) {
       this.qaList = data
-    }
+    },
+    
   },
   getters: {
     doubleCount: state => state.count * 2,
@@ -58,6 +63,7 @@ export const useStore = defineStore('main', {
     getUserCardList: state => state.userCardList,
     getToken: state => state.token,
     getMarketList: state => state.marketList,
-    getQaList: state => state.qaList
+    getQaList: state => state.qaList,
+    getWithdrawParams: state => state.withdrawParams
   },
 })
