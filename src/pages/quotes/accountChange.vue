@@ -48,11 +48,11 @@ const router = useRouter()
 const type = ref('')
 const title = computed(() => {
     if (type.value == '2') {
-        return '资产变动'
+        return '资产流转'
     } else if (type.value == '3') {
         return '股票交易记录'
     } else {
-        return '账户变动'
+        return '余额流转'
     }
 })
 function onBack() {
@@ -98,14 +98,14 @@ const tabList = computed(
             return [
                 {
                     name: '全部',
-                    value: 0
+                    value: null
                 },
                 {
-                    name: '法币交易',
+                    name: '收入',
                     value: 1
                 },
                 {
-                    name: '现金交易',
+                    name: '支出',
                     value: 2
                 },
             ]
@@ -143,7 +143,7 @@ const tabChange = (e) => {
         orderForm.value.direction = e == 0 ? '' : e == 1 ? 'buy' : 'sell'
         getOrderList()
     } else {
-        getAccountChangeList()
+        getAccountChangeList({ type: e })
     }
 
 }
@@ -153,16 +153,17 @@ const loadMore = () => {
         getAssetsLogsGrid()
     } else if (type.value == '3') {
         getOrderList()
-
     } else {
         getAccountChangeList()
     }
 }
 const listStatus = ref(1)
-const getAccountChangeList = async () => {
+// 资金流水
+const getAccountChangeList = async (params = {}) => {
     listStatus.value = 1
     const res = await walletLogsGrid({
         ...page,
+        ...params
     })
     if (!res.data.rows) {
         listStatus.value = 3

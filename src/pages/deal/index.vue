@@ -54,6 +54,9 @@ const handleClickTab = (index: any) => {
     case 2:
       router.push('/ipo')
       break;
+    case 3:
+      router.push('/dividend')
+      break;
   }
 }
 watch(() => activeName.value, (val) => {
@@ -88,7 +91,7 @@ watch(() => activeName.value, (val) => {
           </van-grid-item>
         </van-grid>
         <Quickly />
-        <Indicator />
+        <Indicator :activeName="activeName" />
       </div>
     </section>
   </div>

@@ -42,10 +42,10 @@ const userInfo = computed(() => userStore.userInfo)
             总资产
           </p>
           <p class="content" v-if="activeName == '1'">
-            $ {{ addCommasToNumber(userInfo.assetsBalance.availableBalanceUsd) }}
+            $ {{ addCommasToNumber(userInfo.assetsData.totalAssetsUsd) }}
           </p>
           <p class="content" v-if="activeName == '2'">
-            $ {{ addCommasToNumber(userInfo.assetsBalance.availableBalanceBrl) }}
+            R$ {{ addCommasToNumber(userInfo.assetsData.totalAssetsBrl) }}
           </p>
         </div>
         <div class="line-item flex-1 text-align-right">
@@ -68,7 +68,8 @@ const userInfo = computed(() => userStore.userInfo)
             可用余额
           </p>
           <p class="content">
-            $ {{ activeName == '1' ? addCommasToNumber(userInfo.assetsBalance.availableBalanceUsd) :
+            {{ activeName == '1' ? '$' : 'R$' }} {{ activeName == '1' ?
+              addCommasToNumber(userInfo.assetsBalance.availableBalanceUsd) :
               addCommasToNumber(userInfo.assetsBalance.availableBalanceBrl) }}
 
             <!-- $ {{ userInfo.asset[1].balance || "" }} -->
@@ -84,7 +85,7 @@ const userInfo = computed(() => userStore.userInfo)
           </p>
           <p class="content " v-show="activeName == '2'"
             :class="{ up: userInfo.assetsData.totalAmountBrl >= 0, down: userInfo.assetsData.totalAmountBrl < 0 }">
-            $ {{ userInfo.assetsData.totalAmountBrl }}
+            R$ {{ userInfo.assetsData.totalAmountBrl }}
           </p>
         </div>
       </div>

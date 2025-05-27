@@ -22,19 +22,14 @@ const props = defineProps({
   item: {
     type: Object,
     default: () => { }
+  },
+  categoryId: {
+    type: String,
+    default: ''
   }
 })
 </script>
-<route lang="json5">
-  {
-    name: 'accountChange',
-    path: '/quotes/accountChange/:accountChange', // 添加静态路径段明确层级
-    meta: {
-      title: 'accountChange',
-      i18n: 'menus.accountChange'
-    }
-  }
-</route>
+
 <template>
   <div class="tab-item">
     <div class="indicator-content flex  overflow-y-auto">
@@ -48,11 +43,10 @@ const props = defineProps({
         </div>
         <div class="value">
           {{ i.dayIncrease }} %
-
         </div>
         <div class="chart">
-          <Kline :nameId="'myChart10' + k" :areaStyle="true" :increase="i.increase" :data="i.price" height="50px"
-            :width="vw(80)"></Kline>
+          <Kline :nameId="'myChart10' + k + categoryId" :areaStyle="true" :increase="i.increase" :data="i.price"
+            height="50px" :width="vw(80)"></Kline>
         </div>
       </div>
     </div>

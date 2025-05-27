@@ -16,7 +16,7 @@
         </div>
         <div class="li flex justify-between items-center ">
             <div class="li-l font-size-14">折扣率:{{ _item.discountRate }}%</div>
-            <div class="li-r font-size-14">周期:{{ _item.diffDay }}</div>
+            <div class="li-r font-size-14">周期:{{ _item.diffDay }} 天</div>
         </div>
         <div class="li flex justify-between items-center ">
             <div class="li-l font-size-16">折扣:{{ _item.unit }} {{ _item.discountPrice }}</div>
@@ -36,28 +36,31 @@
         v-if="props.itemType == 'order'">
         <div class="li flex items-center justify-between">
             <div class="li-l">{{ dayjs(_item.createdAt).format('YYYY-MM-DD') }}</div>
+            <div class="li-m">——</div>
             <div class="li-r">{{ dayjs(_item.saleEndTime).format('YYYY-MM-DD') }}</div>
         </div>
         <div class="l flex flex-[2] flex-shrink-0 items-center gap-6">
             <div class="logo w-35 h-35 rounded-full overflow-hidden ">
                 <img :src="_item.tradingInfo.logo" alt="" v-if="_item.tradingInfo" class="w-full h-full">
             </div>
-            <div class="name font-size-16">{{ _item.tradingInfo.baseAssetInfo.symbol }}</div>
+            <div class="name font-size-16">{{ _item.tradingInfo.baseAssetInfo.symbol }} x {{ _item.purchaseQuantity }}
+            </div>
         </div>
-        <div class="li ">Market Price:{{ _item.unit }} {{ _item.purchasePrice }}</div>
-        <div class="li">Discount:{{ _item.unit }} {{ _item.discountPrice }}</div>
-        <div class="li ">Earnings Rate:{{ _item.unit }} {{ _item.discountPrice }}
-            Earnings:{{ _item.unit }} {{
-                _item.realTimePrice }}
-
+        <div class="li flex justify-between ">
+            <div class="li-l font-size-16">
+                市场价:{{ _item.unit }} {{ _item.purchasePrice }}</div>
+            <div class="li-r font-size-16">购买价:{{ _item.unit }} {{ _item.discountPrice }}</div>
         </div>
-        <div class="li flex justify-between items-center">Quantity:{{ _item.purchaseQuantity }}
-
+        <div class="li flex justify-between ">
+            <div class="li-l font-size-16">
+                收益率:{{ _item.unit }} {{ _item.income }}%</div>
+            <div class="li-r font-size-16"> 收益:{{ _item.unit }} {{
+                _item.realTimePrice }}</div>
         </div>
         <div class="li flex justify-end">
             <van-button type="primary" :disabled="_item.status == 2"
                 :color="_item.saleStatus != 1 ? '#1989fa' : '#b5b5b5'" @click="handleClickSubmit" size="small"
-                class="font-size-16!">{{
+                class="font-size-16! w-80px!">{{
                     orderStatusEnum[_item.status] }}</van-button>
         </div>
     </div>

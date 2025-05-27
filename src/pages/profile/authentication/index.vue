@@ -48,10 +48,10 @@
                         </div>
                     </div>
                 </inputCom>
-                <div class="w-full">
+                <!-- <div class="w-full">
                     <div class="t font-size-16 mb-12">拍照示例</div>
                     <img src="../../assets/uploadTips.png" class="w-full block" alt="">
-                </div>
+                </div> -->
                 <van-button type="primary" block @click="handleClickSubmit">提交</van-button>
 
             </div>

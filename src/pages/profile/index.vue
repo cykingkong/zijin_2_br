@@ -142,7 +142,7 @@ const handleLogout = () => {
       <van-grid :border="false">
         <van-grid-item v-for="(i, k) in gridList" :key="k" @click="handleClickGrid(k)">
           <div class="flex flex-col items-center flex-1">
-            <img :src="i.icon" class="w-48 h-48" />
+            <img :src="i.icon" class="w-48 h-48 flex-shrink-0" />
             <span class="text-12 mt-8">{{ i.text }}</span>
           </div>
         </van-grid-item>

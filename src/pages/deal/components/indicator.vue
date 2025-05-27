@@ -8,60 +8,65 @@
             </div>
         </div>
 
-        <div class="asset px-12 font-size-12" v-if="userInfo">
+        <div v-if="userInfo" class="asset px-12 font-size-12">
             <div class="line flex">
                 <div class="line-item flex-1 text-align-left">
                     <p class="title">
-                        {{ tabList[activeIndex].label }} 总资产
+                        总投入
                     </p>
-                    <p class="content">
-                        $ {{ addCommasToNumber(userInfo.assetsBalance.availableBalanceUsd) }}
+                    <p class="content " v-show="activeName == '1'">
+                        {{ activeName == '1' ? '$' : 'R$' }} {{ userInfo[tabList[activeIndex].objKey].totalAmountUsd }}
+                    </p>
+                    <p class="content " v-show="activeName == '2'">
+                        {{ activeName == '1' ? '$' : 'R$' }} {{ userInfo[tabList[activeIndex].objKey].totalAmountBrl }}
+                    </p>
+                </div>
+                <div class="line-item flex-1 text-align-center">
+                    <p class="title">
+                        总收益
+                    </p>
+                    <p class="content " v-show="activeName == '1'"
+                        :class="{ up: userInfo[tabList[activeIndex].objKey].totalProfitUsd >= 0, down: userInfo[tabList[activeIndex].objKey].totalProfitUsd < 0 }">
+                        {{ activeName == '1' ? '$' : 'R$' }} {{ userInfo[tabList[activeIndex].objKey].totalProfitUsd }}
+                    </p>
+                    <p class="content " v-show="activeName == '2'"
+                        :class="{ up: userInfo[tabList[activeIndex].objKey].totalProfitBrl >= 0, down: userInfo[tabList[activeIndex].objKey].totalProfitBrl < 0 }">
+                        {{ activeName == '1' ? '$' : 'R$' }} {{ userInfo[tabList[activeIndex].objKey].totalProfitBrl }}
                     </p>
                 </div>
                 <div class="line-item flex-1 text-align-right">
                     <p class="title">
                         浮动盈亏
                     </p>
-                    <p class="content "
-                        :class="{ up: userInfo.assetsData.totalProfitRate >= 0, down: userInfo.assetsData.totalProfitRate < 0 }">
-                        {{ userInfo.assetsData.totalProfitRate }} %
+                    <p class="content " v-if="activeName == '1'"
+                        :class="{ up: userInfo[tabList[activeIndex].objKey].totalProfitRateUsd >= 0, down: userInfo[tabList[activeIndex].objKey].totalProfitRateUsd < 0 }">
+                        {{ userInfo[tabList[activeIndex].objKey].totalProfitRateUsd }} %
+                    </p>
+                    <p class="content " v-if="activeName == '2'"
+                        :class="{ up: userInfo[tabList[activeIndex].objKey].totalProfitRateBrl >= 0, down: userInfo[tabList[activeIndex].objKey].totalProfitRateBrl < 0 }">
+                        {{ userInfo[tabList[activeIndex].objKey].totalProfitRateBrl }} %
                     </p>
                 </div>
             </div>
             <div class="line flex">
-                <div class="line-item flex-1 text-align-left">
-                    <p class="title">
-                        可用余额
-                    </p>
-                    <p class="content">
-                        $ {{ addCommasToNumber(userInfo.assetsBalance.availableBalanceBrl) }}
 
-                        <!-- $ {{ userInfo.asset[1].balance || "" }} -->
-                    </p>
-                </div>
-                <div class="line-item flex-1 text-align-right">
-                    <p class="title">
-                        总投入
-                    </p>
-                    <p class="content "
-                        :class="{ up: userInfo.assetsData.totalAmount >= 0, down: userInfo.assetsData.totalAmount < 0 }">
-                        {{ userInfo.assetsData.totalAmount }}
-                    </p>
-                </div>
             </div>
         </div>
         <div class="divdiver"></div>
         <div class="indicator-td flex " v-if="activeIndex === 0">
-            <ipo :only-show-order="true"></ipo>
-        </div>
-        <div class="indicator-td flex " v-if="activeIndex === 1">
             <discount :only-show-order="true"></discount>
         </div>
-        <div class="indicator-td flex " v-if="activeIndex === 2">
+        <div class="indicator-td flex " v-if="activeIndex === 1">
             <fund :only-show-order="true"></fund>
+
+        </div>
+        <div class="indicator-td flex " v-if="activeIndex === 2">
+            <dividend :only-show-order="true"></dividend>
+
         </div>
         <div class="indicator-td flex " v-if="activeIndex === 3">
-            <dividend :only-show-order="true"></dividend>
+            <ipo :only-show-order="true"></ipo>
+
         </div>
     </div>
 </template>
@@ -76,7 +81,11 @@ const userStore = useUserStore()
 const assetsData = computed(() => userStore.userInfo.assetsData)
 const activeAssetsData = ref()
 const userInfo = computed(() => userStore.userInfo)
-
+const props = defineProps({
+    activeName: {
+        type: String,
+    }
+})
 const tabList = ref([
     {
         label: '折扣股',
@@ -90,13 +99,15 @@ const tabList = ref([
     },
     {
         label: '股息',
-        objKey: 'dividendAssetsData',
+        // objKey: 'dividendAssetsData',
+        objKey: 'holdingAssetsData',
         value: '4'
     },
     {
         label: 'IPO',
         value: '1',
-        objKey: 'ipoAssetsData',
+        // objKey: 'ipoAssetsData',
+        objKey: 'bondAssetsData',
     },
 ]
 )
@@ -109,13 +120,14 @@ const getUserInfoByObjKey = (value) => {
             return assetsData.value[key]
         }
     }
-
 }
+
 const changeTab = (index) => {
     // userStore.getAssetsData()
-
+    console.log(userInfo?.value[tabList.value[activeIndex.value].objKey])
     activeIndex.value = index
 }
+
 </script>
 <style lang="less" scoped>
 .indicator-content {

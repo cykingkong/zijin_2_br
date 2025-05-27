@@ -261,15 +261,15 @@ onMounted(() => {
     } else {
         getDisountList()
     }
-    route.meta.title = '新的标题'  // 设置你需要的标题
+    route.meta.title = '股息'  // 设置你需要的标题
 })
 
 </script>
 <route lang="json5">
     {
-      name: 'discount',
+      name: 'dividend',
       meta: {
-        title: '折扣股',
+        title: '股息',
       },
     }
 </route>

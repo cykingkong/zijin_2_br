@@ -19,6 +19,7 @@ const ipoInfo = ref({})
 const getIpoInfo = async (id) => {
     const res = await ipoProductInfo({ ipoId: id })
     navStore.setNavTitle(res.data.name || '')
+    route.meta.title = res.data.name // 设置你需要的标题
 
     ipoInfo.value = res.data
     // 将文字颜色color: #000000 全部改为 color: #ffffff
@@ -43,4 +44,16 @@ onMounted(() => {
 
 
 </script>
-<style lang="less" scoped></style>
+<route lang="json5">
+    {
+    name:'ipoDetail',
+      meta: {
+        title: '',
+      },
+    }
+</route>
+<style lang="less" scoped>
+.ipoDetail {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 20px);
+}
+</style>

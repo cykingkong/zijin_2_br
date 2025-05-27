@@ -2,7 +2,7 @@
     <div class="rank-content">
         <div v-for="(i, k) in rankList" :key="k" class="rank-item" @click="handleClickLi(i)">
             <div class="rank-title flex">
-                <div class="flex-l">{{ i.tradingInfo.baseAssetInfo.symbol }}</div>
+                <div class="flex-l font-size-16">{{ i.tradingInfo.baseAssetInfo.symbol }}</div>
                 <div class="flex-r">
                     <div class="flex-r-item flex items-center up">
                         <Kline :nameId="'myChart10' + k + categoryId" :areaStyle="true" :increase="i.dayIncrease"

@@ -2,7 +2,7 @@ import type { AxiosError, InternalAxiosRequestConfig } from 'axios'
 import axios from 'axios'
 import { showNotify, showLoadingToast } from 'vant'
 import { STORAGE_TOKEN_KEY } from '@/stores/mutation-type'
-import local from './local'
+// import local from './local'
 
 
 // 这里是用于设定请求后端时，所用的 Token KEY
@@ -30,7 +30,7 @@ function errorHandler(error: RequestError): Promise<any> {
   error.config?.loadingToast?.close()
 
   if (error.response) {
-    const { data = {}, status, statusText, message } = error.response
+    const { data = {}, status, statusText, } = error.response
     console.log(error.response, 'err')
     // 403 无权限
     if (status === 403) {
@@ -82,7 +82,7 @@ function requestHandler(config: InternalAxiosRequestConfig): InternalAxiosReques
 request.interceptors.request.use(requestHandler, errorHandler)
 
 // 响应拦截器
-function responseHandler(response: { data: { code: number; message: string } }) {
+function responseHandler(response: any) {
   const { code, message } = response.data
   response.config?.loadingToast?.close()
 

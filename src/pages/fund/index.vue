@@ -7,7 +7,7 @@
                         <fund-item :item="item" v-for="(item, index) in list" :key="index"
                             @handleClickBtn="handleClickBtn"></fund-item>
                         <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12px"
-                            v-show="skeleton && list.length == 0" v-for="i in 5"></div>
+                            v-show="skeleton && list.length == 0" v-for="i in 5" :key="i"></div>
                         <LoadMore :status="listStatus" @load-more="loadMore" />
                         <empty v-if="list.length == 0 && !skeleton" :noTips="true"></empty>
 
@@ -19,7 +19,7 @@
                             @handleClickBtn="handleClickBtn" @handleClickOrder="handleClickOrder"
                             :item-type="'order'"></fund-item>
                         <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12px"
-                            v-show="skeleton && orderList.length == 0" v-for="i in 5">
+                            v-show="skeleton && orderList.length == 0" v-for="i in 5" :key="i">
                         </div>
                         <LoadMore :status="orderLoadStatus" @load-more="loadMore" />
                         <empty v-if="orderList.length == 0 && !skeleton" :noTips="true"></empty>
@@ -33,7 +33,7 @@
                 <fund-item v-for="(item, index) in orderList" :key="index" :item="item" @handleClickBtn="handleClickBtn"
                     @handleClickOrder="handleClickOrder" :item-type="'order'" />
                 <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12px"
-                    v-show="skeleton && orderList.length === 0" v-for="i in 5" />
+                    v-show="skeleton && orderList.length === 0" v-for="i in 5" :key="i" />
                 <LoadMore :status="orderLoadStatus" @load-more="loadMore" />
                 <empty v-if="orderList.length == 0 && !skeleton" :noTips="true"></empty>
 
@@ -237,10 +237,10 @@ onMounted(() => {
     } else {
         getDisountList()
     }
-    navStore.setNavTitle('基金')
+    // navStore.setNavTitle('基金')
 })
 onUnmounted(() => {
-    navStore.setNavTitle('')
+    // navStore.setNavTitle('')
 })
 </script>
 <style lang="less" scoped>

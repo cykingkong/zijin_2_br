@@ -1,6 +1,8 @@
 <template>
   <div class="exchange-in-content p-12">
-    <div class="t font-size-12">请选择提现币种</div>
+    <div class="t font-size-12 flex items-center justify-between">请选择提现币种 <img
+        src="@/assets/image/deliveryContract/Group1663.png" alt="" class="w-24 h-18 pr-6"
+        @click="toUrl('/deal/orderList?type=2')"></div>
     <div class="flex w-full gap-12 mt-12">
       <div class="channel-item  rounded-10 flex-1 text-align-center py-12"
         @click="toUrl('/deal/exchange/withdraw-bank')">
@@ -23,7 +25,7 @@
 import { ref, reactive } from "vue";
 const router = useRouter()
 const toUrl = (url) => {
-  router.push({ path: url })
+  router.push(url)
 }
 
 

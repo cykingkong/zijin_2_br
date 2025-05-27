@@ -1,5 +1,11 @@
 <template>
     <div class="discont-item-content w-full  px-12 py-24 flex flex-col gap-20px" v-if="props.itemType == 'discount'">
+        <VanNavBar title="" :fixed="true" clickable :left-arrow="true" @click-left="onBack">
+
+            <template #title>
+                <div class="flex flex-items-center gap-6">股息</div>
+            </template>
+        </VanNavBar>
         <div class="top-li flex  items-center">
             <div class="l flex flex-[2] flex-shrink-0 items-center gap-6">
                 <div class="logo w-25 h-25 rounded-full overflow-hidden ">
@@ -16,7 +22,7 @@
         </div>
         <div class="li flex justify-between items-center ">
             <div class="li-l font-size-16">折扣率:{{ _item.discountRate }}%</div>
-            <div class="li-r font-size-16">周期:{{ _item.diffDay }}day</div>
+            <div class="li-r font-size-16">周期:{{ _item.diffDay }}天</div>
         </div>
         <div class="li flex justify-between items-center ">
             <div class="li-l font-size-16">折扣:{{ _item.unit }} {{ _item.discountPrice }}</div>
@@ -92,7 +98,13 @@ const handleClickSubmit = () => {
     }
     emits('handleClickBtn', data)
 }
-
+const router = useRouter()
+function onBack() {
+    if (window.history.state.back)
+        history.back()
+    else
+        router.replace('/')
+}
 
 </script>
 <style lang="less" scoped>

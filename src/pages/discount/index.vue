@@ -1,5 +1,10 @@
 <template>
     <div class="discont-content px-12 w-full">
+        <VanNavBar title="" :fixed="true" clickable :left-arrow="true" @click-left="onBack">
+            <template #title>
+                <div class="flex flex-items-center gap-6">折扣股</div>
+            </template>
+        </VanNavBar>
         <template v-if="!onlyShowOrder">
             <van-tabs v-model:active="active" @change="changeActive">
                 <!-- 折扣股玩法 -->
@@ -8,7 +13,7 @@
                         <discont-item :item="item" v-for="(item, index) in list" :key="index"
                             @handleClickBtn="handleClickBtn"></discont-item>
                         <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
-                            v-show="skeleton && list.length == 0" v-for="i in 5"></div>
+                            v-show="skeleton && list.length == 0" v-for="i in 5" :key="i"></div>
                         <empty v-if="list.length == 0 && !skeleton" :noTips="true"></empty>
                         <LoadMore :status="listStatus" @load-more="loadMore" />
                     </div>
@@ -18,7 +23,7 @@
                         <discont-item :item="item" v-for="(item, index) in orderList" :key="index"
                             @handleClickBtn="handleClickBtn" :item-type="'order'"></discont-item>
                         <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
-                            v-show="skeleton && orderList.length == 0" v-for="i in 5">
+                            v-show="skeleton && orderList.length == 0" v-for="i in 5" :key="i">
                         </div>
                         <empty v-if="orderList.length == 0 && !skeleton" :noTips="true"></empty>
 
@@ -32,7 +37,7 @@
                 <discont-item :item="item" v-for="(item, index) in orderList" :key="index"
                     @handleClickBtn="handleClickBtn" :item-type="'order'"></discont-item>
                 <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
-                    v-show="skeleton && orderList.length == 0" v-for="i in 5">
+                    v-show="skeleton && orderList.length == 0" v-for="i in 5" :key="i">
                 </div>
                 <empty v-if="orderList.length == 0 && !skeleton" :noTips="true"></empty>
                 <LoadMore :status="orderLoadStatus" @load-more="loadMore" />
@@ -46,11 +51,13 @@
 import { ref, reactive } from "vue";
 import { useRoute } from 'vue-router';
 import { discountList, discountOrderList, discountOrderBuy, discountOrderSell } from '@/api/bond'
+import { showToast, showSuccessToast, allowMultipleToast } from 'vant';
 import discontItem from "./component/discont-item.vue"
 import bottomPop from "./component/bottom-pop.vue";
 import LoadMore from "@/components/LoadMore.vue";
 import { useLoadingStore } from '@/stores/modules/loading'
 import { navTitleStore } from '@/stores/index'
+allowMultipleToast()
 const navStore = navTitleStore()
 const loadingStore = useLoadingStore()
 
@@ -250,6 +257,13 @@ const onConfirm = proxy!.$throttle(onConfirmOriginal, 1000, {
     onStart: () => loadingStore.show(),
     onEnd: () => loadingStore.hide()
 });
+const router = useRouter()
+function onBack() {
+    if (window.history.state.back)
+        history.back()
+    else
+        router.replace('/')
+}
 const route = useRoute()
 
 onMounted(() => {
@@ -258,14 +272,21 @@ onMounted(() => {
     } else {
         getDisountList()
     }
-    navStore.setNavTitle('折扣股')
-    route.meta.title = ''  // 设置你需要的标题
+    // navStore.setNavTitle('折扣股')
+    route.meta.title = '折扣股'  // 设置你需要的标题
 })
 onUnmounted(() => {
-    navStore.setNavTitle('')
+    // navStore.setNavTitle('')
 })
 </script>
-
+<!-- <route lang="json5">
+    {
+      name: 'discount',
+      meta: {
+        title: '折扣股',
+      },
+    }
+</route> -->
 <style lang="less" scoped>
 .skeleton-animation {
     animation: pulseskeleton 1s ease-in infinite;

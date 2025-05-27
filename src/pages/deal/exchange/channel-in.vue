@@ -1,6 +1,8 @@
 <template>
   <div class="exchange-in-content p-12">
-    <div class="t font-size-12">请选择充值币种</div>
+    <div class="flex justify-between items-center font-size-12">请选择充值币种 <img
+        src="@/assets/image/deliveryContract/Group1663.png" alt="" class="w-24 h-18 pr-6"
+        @click="toUrl('/deal/orderList?type=1')"></div>
     <div class="flex w-full gap-12 mt-12">
       <div class="channel-item  rounded-10 flex-1 text-align-center py-12" @click="toUrl('/deal/exchange/charge-bank')">
         <img src="@/assets/bank_icon.png" alt="" class="block w-55px h-55px mx-auto">
@@ -20,8 +22,8 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 const router = useRouter()
-const toUrl = (url) => {
-  router.push({ path: url })
+const toUrl = (url: string) => {
+  router.push(url)
 }
 
 

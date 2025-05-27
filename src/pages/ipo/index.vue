@@ -8,7 +8,7 @@
                         <discont-item :item="item" v-for="(item, index) in list" :key="index"
                             @handleClickBtn="handleClickBtn"></discont-item>
                         <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
-                            v-show="skeleton && list.length == 0" v-for="i in 5"></div>
+                            v-show="skeleton && list.length == 0" v-for="i in 5" :key="i"></div>
                         <empty v-if="list.length == 0 && !skeleton" :noTips="true"></empty>
 
                         <LoadMore :status="listStatus" @load-more="loadMore" />
@@ -19,7 +19,7 @@
                         <discont-item :item="item" v-for="(item, index) in orderList" :key="index"
                             @handleClickBtn="handleClickBtn" :item-type="'order'" @reloadList="getOrderList" />
                         <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
-                            v-show="skeleton && orderList.length == 0" v-for="i in 5">
+                            v-show="skeleton && orderList.length == 0" v-for="i in 5" :key="i">
                         </div>
                         <empty v-if="orderList.length == 0 && !skeleton" :noTips="true"></empty>
 
@@ -33,7 +33,7 @@
                 <discont-item :item="item" v-for="(item, index) in orderList" :key="index"
                     @handleClickBtn="handleClickBtn" :item-type="'order'" @reloadList="getOrderList" />
                 <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
-                    v-show="skeleton && orderList.length == 0" v-for="i in 5">
+                    v-show="skeleton && orderList.length == 0" v-for="i in 5" :key="i">
                 </div>
                 <LoadMore :status="orderLoadStatus" @load-more="loadMore" />
                 <empty v-if="orderList.length == 0 && !skeleton" :noTips="true"></empty>
@@ -53,6 +53,7 @@ import LoadMore from '@/components/LoadMore.vue';
 import bottomPop from "./component/bottom-pop.vue";
 import { useLoadingStore } from '@/stores/modules/loading'
 import { navTitleStore } from '@/stores/index'
+const route = useRoute()
 const navStore = navTitleStore()
 const loadingStore = useLoadingStore()
 const { proxy } = getCurrentInstance()
@@ -262,6 +263,7 @@ const onConfirm = proxy!.$throttle(onConfirmOriginal, 1000, {
     onStart: () => loadingStore.show(),
     onEnd: () => loadingStore.hide()
 });
+
 onMounted(() => {
     if (props.onlyShowOrder) {
         getOrderList()
@@ -269,6 +271,8 @@ onMounted(() => {
         getDisountList()
     }
     navStore.setNavTitle('IPO')
+    route.meta.title = 'IPO'  // 设置你需要的标题
+
 })
 onUnmounted(() => {
     navStore.setNavTitle('')
@@ -279,10 +283,9 @@ onUnmounted(() => {
       name: 'IPO',
       meta: {
         title: 'IPO',
-        i18n: 'menus.IPO'
       },
     }
-    </route>
+</route>
 <style lang="less" scoped>
 .skeleton-animation {
     animation: pulseskeleton 1s ease-in infinite;

@@ -20,7 +20,7 @@ const activeName = ref('')
 const store = useStore();
 const requestCount = ref(0)
 const marketData = ref<any>([])
-const indexInfoData = ref({})
+const indexInfoData = ref<any[]>({})
 
 const handleClickGrid = (val: any) => {
 
@@ -175,7 +175,7 @@ onMounted(() => {
       <van-tab class="flex flex-col gap-12 pt-12" :title="item.name" :name="item.category_id"
         v-for="item in marketData.category" :key="item.category_id">
         <Banner :banner="indexInfoData.banners" />
-        <tabItem v-if="item.category_id == 201" :item="indexData">
+        <tabItem :categoryId="item.category_id" :item="indexData">
         </tabItem>
         <div class="top relative">
           <div class="z-index-999 absolute top-0 left-0 w-full h-full " @click="toDetail"></div>

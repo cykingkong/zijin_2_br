@@ -22,6 +22,7 @@ function onBack() {
 const { t } = useI18n()
 
 const title = computed(() => {
+  console.log(route.meta, '折扣股')
   if (!route.meta)
     return ''
 

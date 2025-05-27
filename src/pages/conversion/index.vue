@@ -36,7 +36,7 @@
                 </div>
             </template>
         </inputCom>
-
+        <div class="canhasAmount mb-12">{{ canhasAmountTips }}</div>
         <van-button type="primary" block @click="handleClickSubmit">提交</van-button>
 
         <van-popup v-model:show="showPicker" destroy-on-close position="bottom">
@@ -75,10 +75,12 @@ const getDescById = (id: number) => {
     const item = columns.value.find(item => item.value == id)
     return item?.text || ''
 }
+const canhasAmount = ref(0)
 const conversionInfoData = ref()
 const userBalance = ref(0)
 const balanceType = ref(0) // 0 的时候是base 1 quote
 const tips = ref('可用余额：0')
+const canhasAmountTips = ref('预计可得：0')
 const popType = ref(0) // 0 base 1 quote
 const handleClickPicker = (type: number) => {
     popType.value = type
@@ -92,6 +94,16 @@ watch(() => balanceType.value, (val) => {
         tips.value = `可用余额：${conversionInfoData.value.baseAssetSymbolName} ${addCommasToNumber(Number(price.value))}`
     } else {
         tips.value = `可用余额：${conversionInfoData.value.quoteAssetSymbolName} ${addCommasToNumber(Number(quotesPrice.value))} `
+    }
+})
+watch(() => form.amount, (val) => {
+    if (balanceType.value == 0) {
+        canhasAmount.value = form.amount ? Number(form.amount) * conversionInfoData.value.quoteAssetAmountRage : 0
+        canhasAmountTips.value = `预计可得：${conversionInfoData.value.baseAssetSymbolName} ${addCommasToNumber(canhasAmount.value)}`
+    } else {
+        canhasAmount.value = form.amount ? Number(form.amount) * conversionInfoData.value.baseAssetAmountRate : 0
+        canhasAmountTips.value = `预计可得：${conversionInfoData.value.quoteAssetSymbolName} ${addCommasToNumber(canhasAmount.value)}`
+
     }
 
 })

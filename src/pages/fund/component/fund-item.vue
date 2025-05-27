@@ -10,7 +10,7 @@
                 <div class="name font-size-16 font-700">{{ item.name }}</div>
             </div>
             <div class="r flex flex-1 flex-shrink-0 justify-end" @click.stop="handleClickDetail">总收益率: {{
-                _item.totalYield || '-' }} % ></div>
+                _item.totalYield || '-' }} % </div>
         </div>
         <div class="li flex justify-between items-center ">
             <div class="li-l font-size-14">日收益率:{{ _item.dailyYield }}%</div>
@@ -21,8 +21,9 @@
             <div class="li-l font-size-14">周期:{{ _item.cycle }}天 </div>
             <div class="li-r font-size-14"></div>
         </div>
-        <div class="li flex justify-end">
-
+        <div class="li flex justify-end gap-12px">
+            <van-button type="default" plain @click="handleClickDetail" size="small"
+                class="h-35px! w-80px! font-size-14!">详情</van-button>
             <van-button type="primary" :color="_item.status == 2 ? '#b5b5b5' : '#1989fa'" @click="handleClickSubmit"
                 size="small" class="h-35px! w-80px! font-size-14!">{{
                     statusEnum[_item.status] }}</van-button>
@@ -39,8 +40,8 @@
             <div class="l flex flex-shrink-0 items-center gap-6 justify-between">
                 <div class="name font-size-16 font-700">{{ item.fundInfo.name }}</div>
             </div>
-            <div class="r flex flex-1 flex-shrink-0 justify-end" @click.stop="handleClickDetail">周期:{{ item.diffDay }}天
-                ></div>
+            <div class="r flex flex-1 flex-shrink-0 justify-end">周期:{{ item.diffDay }}天
+            </div>
         </div>
         <div class="li flex justify-between items-center ">
             <div class="li-l font-size-14">日收益率:{{ _item.dailyYield }}%</div>

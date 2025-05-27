@@ -1,9 +1,8 @@
 <template>
     <div class="info flex flex-col gap-12">
-        <infoIteLi :item="item" :label="'Quantity'" :value="`${item.assetInfo.unit} ${item.num}`" />
-        <infoIteLi :item="item" :label="'Secondary issue price'"
-            :value="`${item.assetInfo.unit} ${item.ipoInfo.productPrice}`" />
-        <infoIteLi :item="item" :label="'Market Price'" :value="`${item.assetInfo.unit} ${item.close}`"
+        <infoIteLi :item="item" :label="'数量'" :value="`${item.num}`" />
+        <infoIteLi :item="item" :label="'二次发行价'" :value="`${item.assetInfo.unit} ${item.ipoInfo.productPrice}`" />
+        <infoIteLi :item="item" :label="'市场价'" :value="`${item.assetInfo.unit} ${item.close}`"
             v-if="item.status == 0 || item.status == 1 || item.status == 2 || item.status == 4" />
         <infoIteLi :item="item" :label="'Income'" :value="`${item.assetInfo.unit} ${item.earnings}`"
             v-if="item.status == 1 || item.status == 2" />
