@@ -26,7 +26,7 @@ const tabList = [
   // },
   {
     name: '行情',
-    path: '/quotes',
+    path: '/',
     onIcon: tab2Active,
     offIcon: tab2
 

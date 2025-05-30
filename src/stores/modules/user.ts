@@ -32,7 +32,6 @@ export const useUserStore = defineStore('user', () => {
       const { data } = await userLogin(loginForm)
       console.log(data)
       setToken(data.token)
-
     }
     catch (error) {
       clearToken()

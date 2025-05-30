@@ -76,7 +76,7 @@ const changeTab = (index: number) => {
 }
 const router = useRouter()
 const toKyc = () => {
-    router.push('/profile/authentication')
+    router.push({ path: '/profile/authentication' })
 }
 
 

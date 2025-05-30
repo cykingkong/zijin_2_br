@@ -1,6 +1,7 @@
 <script setup>
 import { useUserStore } from '@/stores'
 import { addCommasToNumber } from '@/utils/tool'
+import userA from '@/assets/image/userA.png'
 const props = defineProps({
   showAsset: {
     type: Boolean,
@@ -23,7 +24,9 @@ const userInfo = computed(() => userStore.userInfo)
 <template>
   <div class="user-info-content">
     <div class="user-info px-12 py-16">
-      <div class="avatar h-44 w-44 rounded-full" />
+      <div class="avatar h-44 w-44 rounded-full">
+        <img class="h-full w-full rounded-full" :src="userA" alt="avatar">
+      </div>
       <div class="info-box .dark:font-color-#fff .light:font-color-#000">
         <div class="name">
           {{ userInfo.username }}

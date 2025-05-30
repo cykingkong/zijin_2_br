@@ -7,7 +7,6 @@ export const routeWhiteList: readonly string[] = [
   'news',
   'deal',
   'IPO'
-
 ]
 export const navWhiteList: readonly string[] = [
   'home', // 首页

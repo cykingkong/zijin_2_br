@@ -33,9 +33,7 @@ const keepAliveRouteNames = computed(() => {
   return useRouteCache().routeCaches as string[]
 })
 
-// const mode = computed(() => {
-//   return isDark.value ? 'dark' : 'light'
-// })
+
 const SocketWs = () => {
   ws = new Socket('/wss');
   ws.on("open", () => {
@@ -55,13 +53,15 @@ const SocketWs = () => {
   // tradingPairsId.value = props.trading_pair_id
 }
 onMounted(() => {
-  console.log(123,)
+  setTimeout(() => {
+    localStorage.setItem('vueuse-color-scheme', 'dark')
+  }, 80)
   SocketWs()
 })
 </script>
 
 <template>
-  <van-config-provider :theme="'dark'">
+  <van-config-provider theme="dark">
     <nav-bar />
     <router-view v-slot="{ Component }">
       <section class="app-wrapper">
@@ -74,7 +74,7 @@ onMounted(() => {
   </van-config-provider>
 
   <Overlay :show="loadingStore.showGlobalLoading" class="overlay" z-index="99">
-    <!-- <Loading type="spinner" size="24px" vertical></Loading> -->
+
   </Overlay>
 </template>
 

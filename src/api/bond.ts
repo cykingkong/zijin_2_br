@@ -37,6 +37,9 @@ export function sellOrder(data): Promise<any> {
 export function dividendProductList(params): Promise<any> {
     return request.get<any>('/app-api/gameplay/dividend/dividendProductList', { params })
 }
+export function dividendOrderList(params): Promise<any> {
+    return request.get<any>('/app-api/gameplay/dividend/orderList', { params })
+}
 // 预约股息
 export function dividendPlaceOrder(data): Promise<any> {
     return request.post<any>('/app-api/gameplay/dividend/placeOrder', data)

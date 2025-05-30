@@ -12,7 +12,6 @@ export default ({ mode }: ConfigEnv): UserConfig => {
   return {
     base: env.VITE_APP_PUBLIC_PATH,
     plugins: createVitePlugins(mode),
-
     server: {
       host: true,
       port: 3200,
@@ -43,7 +42,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
 
     build: {
       cssCodeSplit: false,
-      chunkSizeWarningLimit: 2048,
+      // chunkSizeWarningLimit: 4048,
       outDir: env.VITE_APP_OUT_DIR || 'dist',
     },
 

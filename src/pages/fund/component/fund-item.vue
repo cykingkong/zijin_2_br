@@ -38,7 +38,7 @@
         </div>
         <div class="top-li flex  items-center">
             <div class="l flex flex-shrink-0 items-center gap-6 justify-between">
-                <div class="name font-size-16 font-700">{{ item.fundInfo.name }}</div>
+                <div class="name font-size-16 font-700">{{ item.fundInfo ? item.fundInfo.name : '-' }}</div>
             </div>
             <div class="r flex flex-1 flex-shrink-0 justify-end">周期:{{ item.diffDay }}天
             </div>

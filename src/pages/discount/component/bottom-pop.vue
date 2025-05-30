@@ -9,7 +9,7 @@
                 <div class="name font-size-14">{{ item.tradingInfo.baseAssetInfo ?
                     item.tradingInfo.baseAssetInfo.symbol : '-' }}</div>
             </div>
-            <inputCom :label="popType == 'discount' ? '购入数量' : '卖出数量'"
+            <inputCom :label="popType == 'discount' ? '购入数量' : '卖出数量'" :tips="tips"
                 :placeholder="popType == 'discount' ? '请输入购入数量' : '请输入卖出数量'" v-model:value="form.number"
                 v-if="popType == 'discount'">
 
@@ -56,7 +56,14 @@ const show = (val: boolean) => {
     if (val) form.number = ''
     showPicker.value = val
 }
-
+const tips = ref('')
+watch(() => props.item, (newVal) => {
+    if (newVal) {
+        tips.value = `最小购买数量：${newVal.min}`
+    }
+}, {
+    immediate: true
+})
 const confirm = () => {
     if (form.number == '' && props.popType == 'discount') {
         showToast('请输入数量')

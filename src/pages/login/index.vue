@@ -51,18 +51,39 @@ const rules = reactive({
     { required: true, message: t('login.pleaseEnterPassword') },
   ],
 })
+
 const controlChildRef = ref()
 const hanleClickAreaPick = () => {
   controlChildRef.value.open();
 
   // areaPopRef.value.popShow()
 }
+const toRegister = () => {
+  try {
 
+    router.push({ path: '/register' })
+  } catch (e) {
+    console.log(e)
+  }
+
+}
+const toForget = () => {
+  try {
+    router.push('/forgot-password?forgotType=1')
+  } catch (e) {
+    console.log(e)
+  }
+}
 const getName = (val: any) => {
   console.log(val, 'vvvv')
   areaInfo.value = val
 }
 async function login(values: any) {
+  if (!postData.password) {
+    showToast('请输入密码')
+    return
+  }
+
   try {
     loading.value = true
     let area = areaInfo.value?.dialCode
@@ -78,7 +99,7 @@ async function login(values: any) {
     await userStore.info()
     const { redirect, ...othersQuery } = router.currentRoute.value.query
     router.push({
-      name: (redirect as keyof RouteMap) || 'profile',
+      name: 'profile',
       query: {
         ...othersQuery,
       },
@@ -117,11 +138,11 @@ async function login(values: any) {
     <van-button type="primary" class="login-btn" block @click="login({})">登陆</van-button>
 
 
-    <GhostButton block to="register" class="mt-18">
+    <GhostButton block class="mt-18" @click="toRegister">
       {{ $t('login.sign-up') }}
     </GhostButton>
 
-    <GhostButton block to="forgot-password?forgotType=1">
+    <GhostButton block @click="toForget">
       {{ $t('login.forgot-password') }}
     </GhostButton>
   </div>

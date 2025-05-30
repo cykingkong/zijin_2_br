@@ -1,3 +1,4 @@
+const envWs = import.meta.env.VITE_WS_API_BASE_URL
 class Socket {
 
     constructor(link, ...args) {
@@ -5,7 +6,8 @@ class Socket {
         if (link.constructor === WebSocket) {
             this.socket = link;
         } else {
-            let ws = process.env.NODE_ENV === 'development' ? '/wss' : "wss://api.bmccoins.com/ws"
+            let ws =  envWs
+
             this.socket = new WebSocket(ws);
         }
 

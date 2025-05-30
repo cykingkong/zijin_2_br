@@ -1,6 +1,7 @@
 <template>
     <div class="discont-content px-12 w-full">
-        <VanNavBar title="" :fixed="true" clickable :left-arrow="true" @click-left="onBack">
+        <VanNavBar title="" :fixed="true" clickable :left-arrow="true" @click-left="onBack" v-if="!onlyShowOrder"
+            z-index="999">
             <template #title>
                 <div class="flex flex-items-center gap-6">折扣股</div>
             </template>
@@ -26,7 +27,6 @@
                             v-show="skeleton && orderList.length == 0" v-for="i in 5" :key="i">
                         </div>
                         <empty v-if="orderList.length == 0 && !skeleton" :noTips="true"></empty>
-
                         <LoadMore :status="orderLoadStatus" @load-more="loadMore" />
                     </div>
                 </van-tab>
@@ -52,6 +52,7 @@ import { ref, reactive } from "vue";
 import { useRoute } from 'vue-router';
 import { discountList, discountOrderList, discountOrderBuy, discountOrderSell } from '@/api/bond'
 import { showToast, showSuccessToast, allowMultipleToast } from 'vant';
+import { useStore } from '@/stores/modules/index';
 import discontItem from "./component/discont-item.vue"
 import bottomPop from "./component/bottom-pop.vue";
 import LoadMore from "@/components/LoadMore.vue";
@@ -66,17 +67,34 @@ const props = defineProps({
     onlyShowOrder: {
         type: Boolean,
         default: false
+    },
+    categoryId: {
+        type: String,
+        default: ''
     }
 })
+const categoryId = ref<any>('')
+const orderList = ref([])
 
+watch(() => props.categoryId, (newV) => {
+
+    if (newV && categoryId.value != newV && categoryId.value != '') {
+        categoryId.value = newV
+        orderList.value = []
+        getOrderList()
+        return
+    }
+    categoryId.value = newV
+}, {
+    immediate: true
+})
 const active = ref(0)
 const list = ref([])
-const orderList = ref([])
 const popType = ref('buy') // buy:购买  sell:出售
 const skeleton = ref(false)
 const page = reactive({
     pageIndex: 1,
-    pageSize: 20
+    pageSize: 4
 })
 const activeItem = ref({})
 const listStatus = ref(1) // 1:加载中 2:加载完成 3:没有更多数据
@@ -89,7 +107,8 @@ const getDisountList = async () => {
     // resetPage()
     listStatus.value = 1
     discountList({
-        ...page
+        ...page,
+        categoryId: categoryId.value
     }).then(res => {
         if (!res.data.rows) {
             listStatus.value = 3;
@@ -147,7 +166,8 @@ const getOrderList = async () => {
     orderLoadStatus.value = 1
     skeleton.value = true
     discountOrderList({
-        ...page
+        ...page,
+        categoryId: categoryId.value
     }).then(res => {
         if (!res.data.rows) {
             orderLoadStatus.value = 3;
@@ -162,7 +182,9 @@ const getOrderList = async () => {
                         ((e.totalQuantity - e.availableQuantity) /
                             e.totalQuantity) *
                         100
-                    ).toFixed(2)
+                    ).toFixed(2),
+                    earnings: ((e.purchasePrice - e.discountPrice) * e.purchaseQuantity).toFixed(2) || 0, // 收益，
+                    earningRate: ((e.purchasePrice - e.discountPrice) / e.purchasePrice * 100).toFixed(2)
                 }
             }) || []
         } else {
@@ -173,7 +195,9 @@ const getOrderList = async () => {
                         ((e.totalQuantity - e.availableQuantity) /
                             e.totalQuantity) *
                         100
-                    ).toFixed(2)
+                    ).toFixed(2),
+                    earnings: ((e.purchasePrice - e.discountPrice) * e.purchaseQuantity).toFixed(2) || 0, // 收益，
+                    earningRate: ((e.purchasePrice - e.discountPrice) / e.purchasePrice * 100).toFixed(2)
                 }
             })
             orderList.value = orderList.value.concat(result)
@@ -187,6 +211,35 @@ const getOrderList = async () => {
         orderLoadStatus.value = 2
     })
 }
+const store = useStore()
+watch(() => store.getklineList, (newV) => {
+    if (newV && list.value.length) {
+        list.value.forEach(el => {
+            let listItem = newV.find((item: any) => {
+                return item.tradingId == el.tradingPairsId
+            })
+            if (listItem) {
+                if (listItem.tradingId == el.tradingPairsId) {
+                    el.close = listItem.tick.close
+                }
+            }
+
+        })
+    }
+    if (newV && orderList.value.length) {
+        orderList.value.forEach(el => {
+            let listItem = newV.find(item => item.tradingId == el.tradingPairsId)
+            if (listItem) {
+                if (listItem.tradingId == el.tradingPairsId) {
+                    el.purchasePrice = listItem.tick.close;
+                    el.earnings = ((el.purchasePrice - el.discountPrice) * el.purchaseQuantity).toFixed(2) || 0 // 收益，
+                    el.earningRate = ((el.purchasePrice - el.discountPrice) / el.purchasePrice * 100).toFixed(2) // 收益率
+                }
+            }
+        })
+
+    }
+})
 const changeActive = (val: any) => {
     resetPage()
     skeleton.value = true
@@ -267,11 +320,15 @@ function onBack() {
 const route = useRoute()
 
 onMounted(() => {
+    if (route.query.categoryId) {
+        categoryId.value = route.query.categoryId
+    }
     if (props.onlyShowOrder) {
         getOrderList()
     } else {
         getDisountList()
     }
+
     // navStore.setNavTitle('折扣股')
     route.meta.title = '折扣股'  // 设置你需要的标题
 })

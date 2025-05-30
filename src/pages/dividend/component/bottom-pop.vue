@@ -10,11 +10,11 @@
                     item.tradingInfo.baseAssetInfo.symbol : '-' }}</div>
             </div>
             <inputCom :label="popType == 'discount' ? '购入数量' : '卖出数量'"
-                :placeholder="popType == 'discount' ? '请输入购入数量' : '请输入卖出数量'" v-model:value="form.number"
+                :placeholder="popType == 'discount' ? '请输入购入数量' : '请输入卖出数量'" v-model:value="form.number" :tips="tips"
                 v-if="popType == 'discount'">
 
             </inputCom>
-            <div class="sell-tips font-size-18 font-500" v-if="popType == 'order'">折扣股票将全部售出，请确认!</div>
+            <div class="sell-tips font-size-18 font-500" v-if="popType == 'order'">股息将全部售出，请确认!</div>
             <div class="w-full flex gap-12">
                 <div class="btn-box flex-1">
                     <van-button type="default" class="h-40!" plain block @click="showPicker = false">取消</van-button>
@@ -51,6 +51,14 @@ const form = reactive({
     id: '',
     number: ''
 })
+const tips = ref('')
+watch(() => props.item, (newVal) => {
+    if (newVal) {
+        tips.value = `最小购买数量：${newVal.min}`
+    }
+}, {
+    immediate: true
+})
 const showPicker = ref(false)
 const show = (val: boolean) => {
     if (val) form.number = ''
@@ -58,7 +66,7 @@ const show = (val: boolean) => {
 }
 
 const confirm = () => {
-    if (form.number == '') {
+    if (form.number == '' && props.popType == 'discount') {
         showToast('请输入数量')
         return
     }

@@ -22,13 +22,13 @@ import icon7 from '@/assets/image/icon/icon7.png';
 
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
-watch(() => isLogin(), (val) => {
-  if (!val) {
-    router.push('/login')
-  }
-}, {
-  immediate: true
-})
+// watch(() => isLogin(), (val) => {
+//   if (!val) {
+//     router.push({ path: '/login' })
+//   }
+// }, {
+//   immediate: true
+// })
 const { t } = useI18n()
 const showLanguagePicker = ref(false)
 const languageValues = ref<Array<string>>([locale.value])
@@ -79,6 +79,14 @@ const cellList = [
     text: '添加收款方式'
   },
   {
+    icon: icon5,
+    text: '充值记录'
+  },
+  {
+    icon: icon5,
+    text: '提现记录'
+  },
+  {
     icon: icon6,
     text: '关于我们'
   },
@@ -88,7 +96,6 @@ const cellList = [
   }
 ]
 const handleClickCell = (index: any) => {
-  console.log(index, 'kajsldkja')
   switch (index) {
     case 0:
       showLanguagePicker.value = true
@@ -101,15 +108,17 @@ const handleClickCell = (index: any) => {
       break
     case 3:
       router.push('/profile/payMentMethod/list')
-
       break
     case 4:
-      router.push('/aboutUs')
-
+      router.push('/deal/orderList?type=1')
       break
     case 5:
+      router.push('/deal/orderList?type=2')
+    case 6:
       router.push('/helpCenter')
-
+      break
+    case 7:
+      router.push('/aboutUs')
 
       break
   }
@@ -124,8 +133,9 @@ function onLanguageConfirm(event: { selectedOptions: PickerColumn }) {
 const handleLogout = () => {
   // clearToken()
   userStore.logout()
-  router.push('/login')
+  router.push({ path: '/login' })
 }
+
 </script>
 
 <template>

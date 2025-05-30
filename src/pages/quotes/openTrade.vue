@@ -38,12 +38,17 @@
     <div
       class="fixed px-12 flex items-center justify-between  bottom-0 w-full bottom-chart-line line-height-24 font-size-16"
       @click="showBottom = !showBottom">
-      K线图表<van-icon name="arrow-up" />
+      简介<van-icon name="arrow-up" />
     </div>
 
     <!-- Popup -->
     <van-popup v-model:show="showLeft" position="left" :style="{ width: '80%', height: '100%' }">
       <div class="pop-content flex-col flex">
+        <van-search v-model="search" show-action placeholder="请输入搜索关键词" @search="onSearch">
+          <template #action>
+            <div @click="onSearch">搜索</div>
+          </template>
+        </van-search>
         <div class="pop-th flex-justify-between flex font-size-14 text-coolGray  my-12 px-12">
           <div class="th-item">名称</div>
           <div class="th-item text-align-right">最新价格/24H涨跌</div>
@@ -62,9 +67,10 @@
       </div>
     </van-popup>
     <van-popup v-model:show="showBottom" position="bottom">
-      <div class="title px-12 py-12 font-size-14">K线图表</div>
+      <div class="title px-12 py-12 font-size-14">简介</div>
       <div class="h-500 px-12">
-        <charts v-if="tradingPairsId" ref="EhartsData" :trading_pair_id="tradingPairsId" :itemsKey="1"></charts>
+        <!-- <charts v-if="tradingPairsId" ref="EhartsData" :trading_pair_id="tradingPairsId" :itemsKey="1"></charts> -->
+        <symbolDetail :symbol="routeItem.tradingInfo.baseAssetInfo.symbol" v-if="tradingPairsId"></symbolDetail>
       </div>
     </van-popup>
   </div>
@@ -82,6 +88,7 @@
 import charts from '@/components/charts/charts.vue'
 import tab1Page from './component/openTradeCom/tab-page.vue';
 import TabTablePage from './component/openTradeCom/tab-table-page.vue';
+import symbolDetail from './component/openTradeCom/symbolDetail.vue';
 import SearchPage from './component/openTradeCom/search-page.vue';
 import holdPage from './component/openTradeCom/hold-page.vue';
 import LoadMore from '@/components/LoadMore.vue';
@@ -102,9 +109,10 @@ const showBottom = ref(false)
 const handleClickExchange = () => {
   showLeft.value = !showLeft.value
 }
+const rankInfo = ref()
 const listtext = ref('')
 const routeItem = ref('')
-
+const search = ref('')
 const page = reactive({
   pageIndex: 1,
   pageSize: 10
@@ -127,7 +135,8 @@ const getMarketList = async () => {
   marketListLoadStatus.value = 1
   const { data, code } = await market({
     ...marketPage,
-    categoryId: categoryId.value
+    categoryId: categoryId.value,
+    symbol: search.value
   })
   if (code == 200) {
     marketListLoadStatus.value = 2;
@@ -147,7 +156,11 @@ const getMarketList = async () => {
     }
   }
 }
-
+const onSearch = () => {
+  marketList.value = []
+  getMarketList({
+  })
+}
 const tab1PageBuyRef = ref()
 const tab1PageSellRef = ref()
 const orderList = ref([])
@@ -336,6 +349,7 @@ const changeTradingPairsId = async (item) => {
       EhartsData.value.childInte()
     }
   }
+  routeItem.value = item
   listtext.value = item.tradingInfo.baseAssetInfo.name + '/' + item.tradingInfo.quoteAssetInfo.name
   tradingPairsId.value = item.tradingPairsId
   orderList.value = []
@@ -435,6 +449,7 @@ onMounted(async () => {
   if (route.query.id) {
     tradingPairsId.value = route.query.id
     routeItem.value = local.getlocal('rankInfo')
+
     listtext.value = routeItem.value.tradingInfo.baseAssetInfo.name + '/' + routeItem.value.tradingInfo.quoteAssetInfo.name
     await init()
     // showBottom.value = true

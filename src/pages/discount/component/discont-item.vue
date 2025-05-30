@@ -20,12 +20,13 @@
         </div>
         <div class="li flex justify-between items-center ">
             <div class="li-l font-size-16">折扣:{{ _item.unit }} {{ _item.discountPrice }}</div>
-            <div class="li-r font-size-16">售出:{{ _item.percentage }}%</div>
         </div>
-        <div class="li">
+        <div class="li flex justify-between items-center ">
             <div class="li-l w-70%">
                 <van-progress :percentage="_item.percentage" stroke-width="8px" :show-pivot="false" />
             </div>
+            <div class="li-r font-size-16">售出:{{ _item.percentage }}%</div>
+
         </div>
         <div class="li flex justify-end">
             <van-button type="primary" @click="handleClickSubmit" size="small" class="h-30px! w-90px! font-size-16!">{{
@@ -53,14 +54,14 @@
         </div>
         <div class="li flex justify-between ">
             <div class="li-l font-size-16">
-                收益率:{{ _item.unit }} {{ _item.income }}%</div>
+                收益率:{{ _item.unit }} {{ _item.earningRate }}%</div>
             <div class="li-r font-size-16"> 收益:{{ _item.unit }} {{
-                _item.realTimePrice }}</div>
+                _item.earnings }}</div>
         </div>
         <div class="li flex justify-end">
             <van-button type="primary" :disabled="_item.status == 2"
                 :color="_item.saleStatus != 1 ? '#1989fa' : '#b5b5b5'" @click="handleClickSubmit" size="small"
-                class="font-size-16! w-80px!">{{
+                class="font-size-16! w-100px!">{{
                     orderStatusEnum[_item.status] }}</van-button>
         </div>
     </div>

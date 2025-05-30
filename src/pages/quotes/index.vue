@@ -9,6 +9,7 @@ import Grid from './component/grid.vue'
 import Rank from './component/rank.vue'
 import TopStories from './component/topStories.vue';
 import StockMarketWidget from './component/stockMarketWidget.vue'
+import hotmap from './component/hotmap.vue';
 import ChatItem from './component/chat-item.vue'
 import Kline from '@/components/Kline.vue'
 import klineChat from '@/components/klineChat.vue'
@@ -20,16 +21,15 @@ const activeName = ref('')
 const store = useStore();
 const requestCount = ref(0)
 const marketData = ref<any>([])
-const indexInfoData = ref<any[]>({})
+const indexInfoData = ref<any>()
 
 const handleClickGrid = (val: any) => {
-
   if (val == 0) {
     local.setlocal('rankInfo', marketData.value.list[0])
     router.push('/quotes/openTrade?id=' + marketData.value.list[0].tradingPairsId + '&categoryId=' + categoryId.value)
   }
   if (val == 1) {
-    router.push('/discount')
+    router.push('/discount?categoryId=' + categoryId.value)
   }
   if (val == 2) {
     router.push('/fund')
@@ -193,7 +193,7 @@ onMounted(() => {
           :rankListStatus="rankListStatus" />
 
 
-        <StockMarketWidget v-if="item.category_id == 200" />
+        <hotmap></hotmap>
       </van-tab>
 
     </van-tabs>
@@ -205,15 +205,7 @@ onMounted(() => {
   </div>
 </template>
 
-<route lang="json5">
-    {
-      name: 'quotes',
-      meta: {
-        title: 'quotes',
-        i18n: 'menus.quotes'
-      },
-    }
-</route>
+
 
 <style lang="less" scoped>
 .quotes {

@@ -61,6 +61,7 @@ const gridList = computed(() => {
 })
 const emits = defineEmits(['handleClickGrid'])
 const handleClickItem = (k) => {
+
     emits('handleClickGrid', k)
 }
 </script>

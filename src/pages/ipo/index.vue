@@ -53,6 +53,8 @@ import LoadMore from '@/components/LoadMore.vue';
 import bottomPop from "./component/bottom-pop.vue";
 import { useLoadingStore } from '@/stores/modules/loading'
 import { navTitleStore } from '@/stores/index'
+import { isLogin } from '@/utils/auth'
+
 const route = useRoute()
 const navStore = navTitleStore()
 const loadingStore = useLoadingStore()
@@ -88,6 +90,13 @@ const orderLoadStatus = ref(1) // 1:加载中 2:加载完成 3:没有更多数�
 const resetPage = () => {
     page.pageIndex = 1
 }
+// watch(() => isLogin(), (val) => {
+//     if (!val) {
+//         router.push('/login')
+//     }
+// }, {
+//     immediate: true
+// })
 const bottomPopRef = ref()
 const getDisountList = async () => {
     skeleton.value = true
@@ -154,7 +163,9 @@ const getOrderList = async () => {
         ...page
     }).then(res => {
         if (!res.data.rows) {
-            orderLoadStatus.value = 3
+            orderLoadStatus.value = 3;
+            skeleton.value = false;
+
             return
         }
         if (page.pageIndex == 1) {

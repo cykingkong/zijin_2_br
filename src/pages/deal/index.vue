@@ -12,9 +12,7 @@ import grid3 from '@/assets/grid/grid4-quotes.png';
 import grid4 from '@/assets/grid/grid8-quotes.png';
 
 
-
-
-
+const userStore = useUserStore()
 const activeName = ref('1')
 const router = useRouter()
 const gridList = [
@@ -35,34 +33,45 @@ const gridList = [
     text: '股息'
   }
 ]
-watch(() => isLogin(), (val) => {
-  if (!val) {
-    router.push('/login')
-  }
-}, {
-  immediate: true
-})
+// watch(() => isLogin(), (val) => {
+//   console.log(val, 'isLogin')
+//   if (!val) {
+//     router.push({ path: '/login' })
+//   }
+// }, {
+//   immediate: true
+// })
 const { t } = useI18n()
 const handleClickTab = (index: any) => {
   switch (index) {
     case 0:
-      router.push('/fund')
+      router.push({ path: '/fund' })
       break;
     case 1:
-      router.push('/discount')
+      router.push({
+        path: '/discount',
+        query: {
+          categoryId: activeName.value == '1' ? '200' : '201'
+        }
+      })
       break;
     case 2:
-      router.push('/ipo')
+      router.push({ path: '/ipo' })
       break;
     case 3:
-      router.push('/dividend')
+      router.push({
+        path: '/dividend',
+        query: {
+          categoryId: activeName.value == '1' ? '200' : '201'
+        }
+      })
       break;
   }
 }
-watch(() => activeName.value, (val) => {
-  console.log(val, 'activeName')
-}, {
-  immediate: true
+
+onMounted(async () => {
+  await userStore.info()
+
 })
 </script>
 

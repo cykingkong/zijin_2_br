@@ -69,7 +69,7 @@ const orderBtnText = computed(() => {
             text = 'Applied'
             break;
         case 1:
-            text = `Pay ${item.totalPrice}`
+            text = `Pay ${props.item.totalPrice}`
             break;
 
         case 2:
@@ -108,13 +108,14 @@ const handleClickSubmit = () => {
     if (props.itemType == 'order' && props.item.status == 1) {
         // 补交
         orderPay({
-            id: props.item.ipoId
+            orderId: props.item.ipoId
         }).then(res => {
             if (res.code == 200) {
                 showToast('补交成功')
                 emits('reloadList')
             }
         })
+        return
     }
     let data = {
         item: props.item,

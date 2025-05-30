@@ -67,7 +67,7 @@
                 <div class="orderboox-right flex-1 flex-shrink-0 pl-12 ">
                     <div class="sell h-212px flex flex-col gap-12">
                         <div class="line py-6 flex flex-justify-between gap-12 flex-items-center w-full font-size-14px font-extralight"
-                            v-for="(item, e) in depthData.asks"
+                            v-for="(item, e) in depthData.asks" :key="e"
                             :style="[{ background: `linear-gradient(to right, rgb(19, 26, 46) 0%, rgb(19, 26, 46) ${linePercent}%, rgba(246, 70, 93, 0.1) ${linePercent}%, rgba(246, 70, 93, 0.1) 100%)` }]">
                             <div class="l-label flex-shrink-0 font-size-12">
                                 卖出{{ e + 1 }}
@@ -84,7 +84,7 @@
                     </div>
                     <div class="buy h-212px flex flex-col gap-12">
                         <div class="line py-6 flex flex-justify-between gap-12 flex-items-center w-full font-size-14px font-extralight"
-                            v-for="(item, e) in depthData.asks"
+                            v-for="(item, e) in depthData.asks" :key="e"
                             :style="[{ background: `linear-gradient(to right, rgb(19, 26, 46) 0%, rgb(19, 26, 46) 10.892%, rgba(94, 186, 137, 0.1) 90.892%, rgba(94, 186, 137, 0.1) 100%)` }]">
                             <div class="l-label flex-shrink-0 font-size-12">
                                 买入{{ e + 1 }}
@@ -128,7 +128,7 @@
                                         userBalanceInfo.baseAsset.baseSymbolName }}
                             </div>
                             <div class="l-desc font-extralight text-coolGray"> {{ userBalanceInfo.baseAsset.baseBalance
-                                }}
+                            }}
                             </div>
                         </div>
                         <div class="line flex flex-justify-between p-12 " v-if="userBalanceInfo.quoteAsset">
