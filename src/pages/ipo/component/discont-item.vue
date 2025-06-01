@@ -69,7 +69,7 @@ const orderBtnText = computed(() => {
             text = 'Applied'
             break;
         case 1:
-            text = `Pay ${props.item.totalPrice}`
+            text = `Pay ${props.item.assetInfo.unit} ${props.item.totalPrice}`
             break;
 
         case 2:

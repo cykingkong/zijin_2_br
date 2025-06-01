@@ -124,12 +124,12 @@ const tabList = ref([
         objKey: 'ipoAssetsData',
 
     },
-    // {
-    //     label: '股票',
-    //     value: '1',
-    //     // objKey: 'ipoAssetsData',
-    //     objKey: 'bondAssetsData',
-    // },
+    {
+        label: '股票',
+        value: '1',
+        // objKey: 'ipoAssetsData',
+        objKey: 'bondAssetsData',
+    },
 ]
 )
 
