@@ -2,7 +2,7 @@
     <div class="nationList ">
         <van-action-sheet v-model:show="isShow" :title="props.title">
             <form>
-                <van-search class="tabBackground vant-search-box" v-model="val" :placeholder="$t('entrynational')"
+                <van-search class="tabBackground vant-search-box" v-model="val" :placeholder="$t('input.PleaseEnter')"
                     @update:model-value="onSearch(val)" @clear="onClear" />
             </form>
 
@@ -27,6 +27,7 @@ import countriesinit from './countryList';
 import { ref, reactive, onMounted } from 'vue';
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n()
+
 const $emit = defineEmits(['getName'])
 const props = defineProps({
     title: {
@@ -166,6 +167,7 @@ let countryEnList = ref(['Afghanistan', 'Albania', 'Algeria', 'American Samoa',
     'Zambia', 'Zimbabwe'])
 onMounted(() => {
     const originalCountries = countries.value[locale.value];
+    console.log(originalCountries, 'originalCountries')
     const brazilKey = Object.keys(originalCountries).find(key =>
         originalCountries[key].name === '巴西' ||
         originalCountries[key].name === 'Brazil'

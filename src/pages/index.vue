@@ -10,7 +10,7 @@ import Rank from './quotes/component/rank.vue'
 import hotmap from './quotes/component/hotmap.vue';
 import TopStories from './quotes/component/topStories.vue';
 import StockMarketWidget from './quotes/component/stockMarketWidget.vue'
-
+import { useI18n } from 'vue-i18n'
 import { indexInfo, depth, market } from '@/api/market'
 import local from '@/utils/local';
 const { t } = useI18n()
@@ -64,10 +64,12 @@ const init = () => {
   indexInfo().then(res => {
     indexInfoData.value = res.data;
     indexInfoData.value.noticeContent = getContent(indexInfoData.value.notice)
-    console.log(indexInfoData.value)
 
   })
   getMarketInfo({})
+  getMarketIndex({
+    categoryId: 500
+  })
 }
 const page = reactive({
   pageIndex: 1, pageSize: 20
@@ -192,7 +194,7 @@ onMounted(() => {
 <template>
   <div class="quotes">
     <header class="flex header">
-      <div class="left">行情</div>
+      <div class="left">{{ t('menus.quotes') }}</div>
     </header>
     <van-tabs v-model:active="activeName" shrink @change="handleClickTabs">
       <van-tab class="flex flex-col gap-12 pt-12" :title="item.name" :name="item.category_id"
@@ -206,7 +208,7 @@ onMounted(() => {
         </div>
         <!-- <Indicator :list="marketData.list" v-if="item.category_id == 200" @handle-click="handleClickIndicator" /> -->
         <!-- 金刚区 -->
-        <Grid @handleClickGrid="handleClickGrid" :categoryId="item.category_id" />
+        <Grid @handleClickGrid="handleClickGrid" :categoryId="Number(item.category_id)" />
         <!-- 公告 -->
         <Notice @clickNotice="clickNotice" :data="indexInfoData" />
         <!-- 排行 -->

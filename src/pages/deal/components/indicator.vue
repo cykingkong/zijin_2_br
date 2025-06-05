@@ -4,15 +4,15 @@
             <div class="tab-item flex-1 rounded-4 line-height-24 h-24 text-align-center"
                 v-for="(item, index) in tabList" :key="index" :class="{ 'active': index === activeIndex }"
                 @click="changeTab(index)">
-                <span>{{ item.label }}</span>
+                <span>{{ t(item.i18n) }}</span>
             </div>
         </div>
 
-        <div v-if="userInfo" class="asset px-12 font-size-12">
+        <div v-if="userInfo && userInfo[tabList[activeIndex].objKey]" class="asset px-12 font-size-12">
             <div class="line flex">
                 <div class="line-item flex-1 text-align-left">
                     <p class="title">
-                        总投入
+                        {{ t('deal.totalAmount') }}
                     </p>
                     <p class="content " v-show="activeName == '1'">
                         {{ activeName == '1' ? '$' : 'R$' }} {{ userInfo[tabList[activeIndex].objKey].totalAmountUsd }}
@@ -23,7 +23,7 @@
                 </div>
                 <div class="line-item flex-1 text-align-center">
                     <p class="title">
-                        总收益
+                        {{ t('deal.totalProfit') }}
                     </p>
                     <p class="content " v-show="activeName == '1'"
                         :class="{ up: userInfo[tabList[activeIndex].objKey].totalProfitUsd >= 0, down: userInfo[tabList[activeIndex].objKey].totalProfitUsd < 0 }">
@@ -35,8 +35,7 @@
                     </p>
                 </div>
                 <div class="line-item flex-1 text-align-right">
-                    <p class="title">
-                        浮动盈亏
+                    <p class="title"> {{ t('deal.totalProfitRate') }}
                     </p>
                     <p class="content " v-if="activeName == '1'"
                         :class="{ up: userInfo[tabList[activeIndex].objKey].totalProfitRateUsd >= 0, down: userInfo[tabList[activeIndex].objKey].totalProfitRateUsd < 0 }">
@@ -85,12 +84,12 @@ import dividend from '../../dividend/index.vue'
 import { addCommasToNumber } from '@/utils/tool'
 import { useUserStore } from '@/stores'
 import { swapOrderAdd, swapOrderCancel, orderList as swapOrderList, getPosition, assetsLogsGrid } from '@/api/swap'
-
+import { useI18n } from 'vue-i18n'
 import EntrustItem from "@/pages/quotes/component/openTradeCom/EntrustItem.vue";
 
 
 
-
+const { t } = useI18n()
 const orderLoadStatus = ref(0)
 const userStore = useUserStore()
 const assetsData = computed(() => userStore.userInfo.assetsData)
@@ -105,31 +104,38 @@ const tabList = ref([
     {
         label: '折扣股',
         objKey: 'discountAssetsData',
+        i18n: 'deal.discount',
         value: '2'
     },
     {
         label: '基金',
         objKey: 'fundAssetsData',
+        i18n: 'deal.fund',
+
         value: '3'
     },
     {
         label: '股息',
         // objKey: 'dividendAssetsData',
         objKey: 'discountFundData',
+        i18n: 'deal.dividend',
+
         value: '4'
     },
     {
         label: 'IPO',
         value: '1',
         objKey: 'ipoAssetsData',
+        i18n: 'deal.IPO',
+
 
     },
-    {
-        label: '股票',
-        value: '1',
-        // objKey: 'ipoAssetsData',
-        objKey: 'bondAssetsData',
-    },
+    // {
+    //     label: '股票',
+    //     value: '1',
+    //     // objKey: 'ipoAssetsData',
+    //     objKey: 'bondAssetsData',
+    // },
 ]
 )
 

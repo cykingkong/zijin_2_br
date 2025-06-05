@@ -40,15 +40,15 @@ function errorHandler(error: RequestError): Promise<any> {
       })
     }
     // 401 未登录/未授权
-    if (status === 401) {
-      showNotify({
-        type: 'danger',
-        message: '请重新登录',
-      })
-      // 如果你需要直接跳转登录页面
-      location.replace('/login')
+    // if (status === 401) {
+    //   showNotify({
+    //     type: 'danger',
+    //     message: '请重新登录',
+    //   })
+    //   // 如果你需要直接跳转登录页面
+    //   location.replace('/login')
 
-    }
+    // }
   }
   return Promise.reject(error)
 }
@@ -65,7 +65,7 @@ function requestHandler(config: InternalAxiosRequestConfig): InternalAxiosReques
   const toast = showLoadingToast({
     duration: 0,
     forbidClick: true,
-    message: '加载中...'
+    message: ''
   })
   config.loadingToast = toast
   let lang = localStorage.getItem('language')

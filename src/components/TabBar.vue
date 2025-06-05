@@ -25,14 +25,14 @@ const tabList = [
   //   offIcon: tab1
   // },
   {
-    name: '行情',
+    name: 'layouts.quotes',
     path: '/',
     onIcon: tab2Active,
     offIcon: tab2
 
   },
   {
-    name: '交易',
+    name: 'layouts.deal',
     path: '/deal',
     onIcon: tab3Active,
     offIcon: tab3
@@ -46,18 +46,19 @@ const tabList = [
 
   },
   {
-    name: '我的',
+    name: 'layouts.profile',
     path: '/profile',
     onIcon: tab5Active,
     offIcon: tab5
   }
 ]
+
 </script>
 
 <template>
   <van-tabbar v-if="show" v-model="active" placeholder route>
     <van-tabbar-item replace :to="item.path" v-for="(item, k) in tabList" :key="k">
-      {{ item.name }}
+      {{ t(item.name) }}
       <template #icon="props">
         <img :src="props.active ? item.onIcon : item.offIcon" />
 

@@ -4,6 +4,7 @@ import { showToast, type FieldRule } from 'vant'
 import { ref, onUnmounted } from 'vue'
 import { useUserStore } from '@/stores'
 import { sendCode, register, kyc } from '@/api/user'
+import { clearToken, setToken } from '@/utils/auth'
 import inputCom from '@/components/inputCom.vue'
 import slidePop from '@/components/slidePop.vue'
 
@@ -63,6 +64,10 @@ const handleClickRegister = async () => {
     showToast("请先同意用户协议")
     return
   }
+  if (form.inviteCode == '') {
+    showToast("请输入邀请码")
+    return
+  }
   try {
     let area = areaInfo.value?.dialCode
 
@@ -72,13 +77,14 @@ const handleClickRegister = async () => {
       type: form.type,
       password: form.password,
       code: form.code,
+      inviteCode: form.inviteCode
     }
     const { data, code } = await register(params)
     if (code == 200) {
       step.value = 2
-      userStore.info()
-
-
+      setToken(data.token)
+      showToast('注册成功')
+      await userStore.info()
     }
   } catch (e) {
 
@@ -92,10 +98,11 @@ const handleClickSubmit = async () => {
       idCard: kycForm.idCard,
       idCardFront: kycForm.idCardFront,
       idCardBack: kycForm.idCardBack,
-      idCardHand: kycForm.idCardHand,
+      // idCardHand: kycForm.idCardHand,
     }
     const { data, code } = await kyc(params)
     if (code == 200) {
+      showToast('实名认证已提交，请耐心等待审核')
       router.push('/')
       return
     }
@@ -120,7 +127,11 @@ const getCode = async () => {
       email: form.email,
       type: form.type
     }
-    await sendCode(params)
+    const { data, code } = await sendCode(params)
+    if (code == 200) {
+      showToast('验证码已发送，请注意查收')
+
+    }
     startCountdown()
   } catch (e) {
     // 处理错误
@@ -179,7 +190,7 @@ const queryUploadFile = async (file: any, type: any) => {
 }
 onMounted(() => {
   console.log(router.currentRoute.value.query)
-  if (router.currentRoute.value.query) {
+  if (router.currentRoute.value.query && router.currentRoute.value.query.inviteCode) {
     // 如果路由带有邀请码则自动填充，并且只读
     form.inviteCode = router.currentRoute.value.query.inviteCode as string
     inviteCodeOnlyRead.value = true
@@ -223,7 +234,8 @@ const hanleClickAreaPick = () => {
           v-for="(item, index) in typeArr" :key="index" @click="form.type = item.value">
           {{ item.label }} </div>
       </div>
-      <inputCom :label="'手机号'" :placeholder="'请输入手机号'" v-model:value="form.phone" :tips="''">
+      <inputCom :label="'手机号'" :placeholder="'请输入手机号'" v-model:value="form.phone" :tips="''"
+        v-if="form.type == 'phone'">
         <template #picker>
           <div class="picker-box pr-8 mr-6  h-full flex items-center gap-8" @click="hanleClickAreaPick">
             <!-- <img :src="icon1" alt="" class="w16 h16"> -->
@@ -250,17 +262,16 @@ const hanleClickAreaPick = () => {
       <inputCom :label="'邀请码'" :placeholder="'请输入邀请码'" :only-read="inviteCodeOnlyRead" v-model:value="form.inviteCode"
         :labelTips="'(选填)'">
       </inputCom>
-      <div class="protocol wfull flex gap-8 font-size-12 mb-12 mt-8" @click="agree = !agree">
-        <van-checkbox :name="false" :icon-size="14" v-model="agree"></van-checkbox>
+      <div class="protocol wfull flex gap-8 font-size-12 mb-12 mt-8">
+        <van-checkbox :icon-size="14" v-model="agree"> 我已阅读并同意<span class="link ">服务条款</span></van-checkbox>
         <div>
-          我已阅读并同意<span class="link ">服务条款</span>
+
         </div>
       </div>
       <div class="flex-col gap-12 flex">
         <van-button type="primary" block @click="handleClickRegister">注册</van-button>
         <!-- <van-button type="primary" block @click="handleClickRegister">登陆</van-button> -->
       </div>
-
       <!-- <div class="protocol wfull flex  font-size-12  mt-12">
         已有帐号？<span class="link ">登陆</span>
       </div> -->
@@ -289,11 +300,11 @@ const hanleClickAreaPick = () => {
                 :after-read="(file) => handleAfterRead(file, 2)" />
               背面
             </div>
-            <div class=" w80 ">
+            <!-- <div class=" w80 ">
               <van-uploader preview-image multiple :max-count="1" v-model="list3"
                 :after-read="(file) => handleAfterRead(file, 3)" />
               手持
-            </div>
+            </div> -->
           </div>
         </inputCom>
         <van-button type="primary" block @click="handleClickSubmit">提交</van-button>

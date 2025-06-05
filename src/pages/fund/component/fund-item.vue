@@ -9,24 +9,25 @@
             <div class="l flex flex-shrink-0 items-center gap-6 justify-between">
                 <div class="name font-size-16 font-700">{{ item.name }}</div>
             </div>
-            <div class="r flex flex-1 flex-shrink-0 justify-end" @click.stop="handleClickDetail">总收益率: {{
-                _item.totalYield || '-' }} % </div>
+            <div class="r flex flex-1 flex-shrink-0 justify-end" @click.stop="handleClickDetail">{{ t('totalYield') }}:
+                {{
+                    _item.totalYield || '-' }} % </div>
         </div>
         <div class="li flex justify-between items-center ">
-            <div class="li-l font-size-14">日收益率:{{ _item.dailyYield }}%</div>
-            <div class="li-r font-size-14">预计收益:{{ _item.expectedYield }}%</div>
+            <div class="li-l font-size-14">{{ t('dailyYield') }}:{{ _item.dailyYield }}%</div>
+            <div class="li-r font-size-14">{{ t('expectedYield') }}:{{ _item.expectedYield }}%</div>
 
         </div>
         <div class="li flex justify-between items-center ">
-            <div class="li-l font-size-14">周期:{{ _item.cycle }}天 </div>
+            <div class="li-l font-size-14">{{ t('cycle') }}:{{ _item.cycle }}{{ t('Day') }}} </div>
             <div class="li-r font-size-14"></div>
         </div>
         <div class="li flex justify-end gap-12px">
             <van-button type="default" plain @click="handleClickDetail" size="small"
-                class="h-35px! w-80px! font-size-14!">详情</van-button>
+                class="h-35px! w-80px! font-size-14!">{{ t('detail') }}</van-button>
             <van-button type="primary" :color="_item.status == 2 ? '#b5b5b5' : '#1989fa'" @click="handleClickSubmit"
-                size="small" class="h-35px! w-80px! font-size-14!">{{
-                    statusEnum[_item.status] }}</van-button>
+                size="small" class=" font-size-14!">{{
+                    t(statusEnum[_item.status]) }}</van-button>
 
         </div>
     </div>
@@ -40,29 +41,33 @@
             <div class="l flex flex-shrink-0 items-center gap-6 justify-between">
                 <div class="name font-size-16 font-700">{{ item.fundInfo ? item.fundInfo.name : '-' }}</div>
             </div>
-            <div class="r flex flex-1 flex-shrink-0 justify-end">周期:{{ item.diffDay }}天
+            <div class="r flex flex-1 flex-shrink-0 justify-end">{{ t('cycle') }}:{{ item.diffDay }}{{ t('Day') }}
             </div>
         </div>
         <div class="li flex justify-between items-center ">
-            <div class="li-l font-size-14">日收益率:{{ _item.dailyYield }}%</div>
-            <div class="li-r font-size-14"> 总收益率: {{
+            <div class="li-l font-size-14">{{ t('dailyYield') }}:{{ _item.dailyYield }}%</div>
+            <div class="li-r font-size-14"> {{ t('totalYield') }}: {{
                 _item.totalYield }} %</div>
         </div>
         <div class="li flex justify-between items-center ">
-            <div class="li-l font-size-14">总收益:{{ _item.assetInfo.unit }} {{ _item.totalProfit }}</div>
-            <div class="li-r font-size-14">金额:{{ _item.assetInfo.unit }} {{ addCommasToNumber(_item.amount) }}</div>
+            <div class="li-l font-size-14">{{ t('totalProfit') }}:{{ _item.assetInfo.unit }} {{ _item.totalProfit }}
+            </div>
+            <div class="li-r font-size-14">{{ t('price') }}:{{ _item.assetInfo.unit }} {{
+                addCommasToNumber(_item.amount)
+            }}</div>
         </div>
         <div class="li flex gap-12px justify-end items-center">
             <van-button v-if="_item.status == 3 && item.getType == 1 && item.surplusProfit > 0" color="#7232dd"
-                @click="handleClickSubmit" size="small" class="h-35px! w-80px! font-size-12!">领取收益</van-button>
+                @click="handleClickSubmit" size="small" class=" font-size-12!">{{ t('ReceiveIncome')
+                }}</van-button>
             <van-button type="primary" v-if="_item.status == 4" @click="handleClickOrder(1)" size="small"
-                class="h-35px! w-80px! font-size-12!">赎回</van-button>
+                class=" font-size-12!">{{ t('Redeem') }}</van-button>
             <van-button type="primary" v-if="_item.status == 4" @click="handleClickOrder(2)" size="small"
-                class="h-35px! w-80px! font-size-12!">续期</van-button>
+                class="font-size-12!">{{ t('Renewal') }}</van-button>
 
             <van-button :color="_item.status == 1 ? '#1989fa' : '#b5b5b5'" @click="handleClickSubmit" size="small"
-                class="h-35px! w-80px! font-size-14!">{{
-                    orderStatusEnum[_item.status] }}</van-button>
+                class="font-size-14!">{{
+                    t(orderStatusEnum[_item.status]) }}</van-button>
         </div>
     </div>
 </template>
@@ -87,6 +92,7 @@ const props = defineProps({
 const _item = computed(() => {
     return props.item
 })
+const { t } = useI18n()
 const _index = computed(() => {
     return 1
 

@@ -8,7 +8,7 @@
       <template #picker>
         <div class="picker-box pr-8 mr-6  h-full flex items-center gap-8" @click="hanleClickAreaPick">
           <!-- <img :src="icon1" alt="" class="w16 h16"> -->
-          <div class="iti-flag mr-10" :class="areaInfo?.code" style="transform: scale(1.5)"></div>
+          <div class="iti-flag mr-10" :class="areaInfo?.code" style="transform: scale(1.2)"></div>
           <div class="num">+{{ areaInfo?.dialCode }}</div>
         </div>
       </template>

@@ -1,12 +1,12 @@
 <template>
     <div class="more" @click="handleClick">
-        {{ statusText }} <img :src="more" alt="" class="icon" v-if="status !== 3">
+        {{ t(statusText) }} <img :src="more" alt="" class="icon" v-if="status !== 3">
     </div>
 </template>
 
 <script setup>
 import more from '@/assets/image/icon-right.png';
-
+const { t } = useI18n();
 const emit = defineEmits(['load-more']);
 
 const props = defineProps({
@@ -17,8 +17,8 @@ const props = defineProps({
 });
 
 const statusText = computed(() => {
-    return props.status === 1 ? '加载中..' :
-        props.status === 3 ? '已无更多' : '加载更多';
+    return props.status === 1 ? 'Loading' :
+        props.status === 3 ? 'No more' : 'Load more';
 });
 
 const handleClick = () => {

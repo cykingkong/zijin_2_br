@@ -59,8 +59,8 @@ const hanleClickAreaPick = () => {
   // areaPopRef.value.popShow()
 }
 const toRegister = () => {
+  console.log('toRegister')
   try {
-
     router.push({ path: '/register' })
   } catch (e) {
     console.log(e)
@@ -83,11 +83,9 @@ async function login(values: any) {
     showToast('请输入密码')
     return
   }
-
   try {
     loading.value = true
     let area = areaInfo.value?.dialCode
-
     let params = {
       ...postData,
     }
@@ -96,10 +94,10 @@ async function login(values: any) {
 
     }
     await userStore.login({ ...params, ...values })
-    await userStore.info()
+    // await userStore.info()
     const { redirect, ...othersQuery } = router.currentRoute.value.query
     router.push({
-      name: 'profile',
+      name: 'home',
       query: {
         ...othersQuery,
       },

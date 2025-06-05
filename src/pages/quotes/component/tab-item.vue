@@ -46,7 +46,7 @@ const props = defineProps({
         </div>
         <div class="chart">
           <Kline :nameId="'myChart10' + k + categoryId" :areaStyle="true" :increase="i.increase" :data="i.price"
-            height="50px" :width="vw(80)"></Kline>
+            v-if="i.price" height="50px" :width="vw(80)"></Kline>
         </div>
       </div>
     </div>

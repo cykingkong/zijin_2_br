@@ -1,5 +1,5 @@
 const countries = {
-  'en': {
+  'en-US': {
     'br': { 'code': 'br', 'name': 'Brazil (Brasil)', 'dialCode': 55, 'phoneFormat': '(11) 96123-4567' },
     'af': { 'code': 'af', 'name': 'Afghanistan (‫افغانستان‬‎)', 'dialCode': 93, 'phoneFormat': '070 123 4567' },
     'al': { 'code': 'al', 'name': 'Albania (Shqipëri)', 'dialCode': 355, 'phoneFormat': '066 123 4567' },

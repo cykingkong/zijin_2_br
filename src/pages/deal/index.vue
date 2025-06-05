@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { languageColumns, locale } from '@/utils/i18n'
+
 import { useUserStore } from '@/stores'
-import { clearToken, isLogin } from '@/utils/auth'
+import { useI18n } from 'vue-i18n';
+
 
 import UserInfo from '@/components/user-info.vue'
 import Quickly from './components/quickly.vue';
@@ -10,7 +11,7 @@ import grid1 from '@/assets/grid/grid5-quotes.png';
 import grid2 from '@/assets/grid/grid6-quotes.png';
 import grid3 from '@/assets/grid/grid4-quotes.png';
 import grid4 from '@/assets/grid/grid8-quotes.png';
-
+const { t } = useI18n()
 
 const userStore = useUserStore()
 const activeName = ref('1')
@@ -18,19 +19,19 @@ const router = useRouter()
 const gridList = [
   {
     icon: grid1,
-    text: '基金'
+    text: t('deal.fund')
   },
   {
     icon: grid2,
-    text: '折扣股'
+    text: t('deal.discount')
   },
   {
     icon: grid3,
-    text: 'IPO'
+    text: t('deal.IPO')
   },
   {
     icon: grid4,
-    text: '股息'
+    text: t('deal.dividend')
   }
 ]
 // watch(() => isLogin(), (val) => {
@@ -41,7 +42,6 @@ const gridList = [
 // }, {
 //   immediate: true
 // })
-const { t } = useI18n()
 const handleClickTab = (index: any) => {
   switch (index) {
     case 0:
@@ -84,18 +84,18 @@ onMounted(async () => {
     </VanNavBar>
     <section class="deal flex flex-col">
       <van-tabs v-model:active="activeName">
-        <van-tab title="美股" :name="'1'">
+        <van-tab :title="t('deal.AmericanStocks')" :name="'1'">
         </van-tab>
-        <van-tab title="巴股" :name="'2'">
+        <van-tab :title="t('deal.BrazilianStocks')" :name="'2'">
         </van-tab>
       </van-tabs>
       <div class="tab-content flex flex-col">
-        <UserInfo :show-asset="true" :assetTitle="'美股'" :activeName="activeName" />
+        <UserInfo :show-asset="true" :activeName="activeName" />
         <van-grid :border="false" column-num="4">
           <van-grid-item v-for="(i, k) in gridList" :key="k" @click="handleClickTab(k)">
             <div class="flex flex-col items-center">
               <img :src="i.icon" class="w-48 h-48" />
-              <span class="text-12 mt-8">{{ i.text }}</span>
+              <span class="text-12 mt-8 text-align-center h-32px">{{ i.text }}</span>
             </div>
           </van-grid-item>
         </van-grid>

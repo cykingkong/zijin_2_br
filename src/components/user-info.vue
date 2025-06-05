@@ -1,16 +1,15 @@
 <script setup>
 import { useUserStore } from '@/stores'
 import { addCommasToNumber } from '@/utils/tool'
+import { useI18n } from 'vue-i18n'
 import userA from '@/assets/image/userA.png'
+const { t } = useI18n()
 const props = defineProps({
   showAsset: {
     type: Boolean,
     default: false,
   },
-  assetTitle: {
-    type: String,
-    default: ''
-  },
+
   activeName: {
     type: String,
     default: '1' // 1:usd 2:brl
@@ -19,6 +18,12 @@ const props = defineProps({
 
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
+// 脱敏 显示前三和后三
+function maskUserId(userId) {
+  if (!userId) return ''
+  const str = userId.toString()
+  return str.slice(0, 3) + '****' + str.slice(-3)
+}
 </script>
 
 <template>
@@ -29,7 +34,7 @@ const userInfo = computed(() => userStore.userInfo)
       </div>
       <div class="info-box .dark:font-color-#fff .light:font-color-#000">
         <div class="name">
-          {{ userInfo.username }}
+          {{ maskUserId(userInfo.username) }}
         </div>
         <div class="id mt-4 flex flex-items-center">
           ID:{{ userInfo.userId }} <img class="h-14 w-14"
@@ -38,11 +43,11 @@ const userInfo = computed(() => userStore.userInfo)
         </div>
       </div>
     </div>
-    <div v-if="props.showAsset" class="asset px-12 font-size-12">
+    <div v-if="props.showAsset && userInfo.assetsData" class="asset px-12 font-size-12">
       <div class="line flex">
         <div class="line-item flex-1 text-align-left">
           <p class="title">
-            总资产
+            {{ t('deal.totalAssets') }}
           </p>
           <p class="content" v-if="activeName == '1'">
             $ {{ addCommasToNumber(userInfo.assetsData.totalAssetsUsd) }}
@@ -53,7 +58,7 @@ const userInfo = computed(() => userStore.userInfo)
         </div>
         <div class="line-item flex-1 text-align-right">
           <p class="title">
-            浮动盈亏
+            {{ t('deal.totalProfitRate') }}
           </p>
           <p class="content " v-if="activeName == '1'"
             :class="{ up: userInfo.assetsData.totalProfitRateUsd >= 0, down: userInfo.assetsData.totalProfitRateUsd < 0 }">
@@ -68,7 +73,8 @@ const userInfo = computed(() => userStore.userInfo)
       <div class="line flex">
         <div class="line-item flex-1 text-align-left">
           <p class="title">
-            可用余额
+            {{ t('deal.availableBalance') }}
+
           </p>
           <p class="content">
             {{ activeName == '1' ? '$' : 'R$' }} {{ activeName == '1' ?
@@ -80,7 +86,8 @@ const userInfo = computed(() => userStore.userInfo)
         </div>
         <div class="line-item flex-1 text-align-right">
           <p class="title">
-            总投入
+            {{ t('deal.totalAmount') }}
+
           </p>
           <p class="content " v-show="activeName == '1'"
             :class="{ up: userInfo.assetsData.totalAmountUsd >= 0, down: userInfo.assetsData.totalAmountUsd < 0 }">

@@ -1,11 +1,11 @@
 <template>
     <div class="color-blueGray-400 charge-bank-page p-12">
-        <div class="color-blueGray-400 t font-size-18">银行卡入款</div>
+        <div class="color-blueGray-400 t font-size-18">银行卡提现</div>
         <inputCom class="mt-12" :label="'银行卡'" :placeholder="''" v-model:value="form.methodId" :type="'picker'">
             <div class="w-full flex justify-between">
                 <div class="l flex-1 font-size-14" @click="showPicker = true">{{ form.methodId ? form.methodIdText :
                     '请选择银行卡'
-                }}</div>
+                    }}</div>
                 <div class="r flex-shrink-0">
                     <van-icon name="arrow" class="rotate-90" />
                 </div>

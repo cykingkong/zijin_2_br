@@ -23,11 +23,11 @@ const props = defineProps({
 // 生成唯一的widget ID
 const widgetId = computed(() => `tradingview_widget_${widgetKey.value}`)
 const widgetIdCompany = computed(() => `tradingview_widget_${widgetKey.value}_company`)
-
+const { t } = useI18n()
 // 创建TradingView图表
 const createWidgetCompany = async () => {
     showLoadingToast({
-        message: '数据加载中...',
+        message: t('Loading'),
         duration: 1500
     })
 

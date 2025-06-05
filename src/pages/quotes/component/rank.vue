@@ -1,12 +1,13 @@
 <template>
     <div class="rank-content">
         <div v-for="(i, k) in rankList" :key="k" class="rank-item" @click="handleClickLi(i)">
-            <div class="rank-title flex">
+            <div class="rank-title flex items-center">
                 <div class="flex-l font-size-16">{{ i.tradingInfo.baseAssetInfo.symbol }}</div>
                 <div class="flex-r">
                     <div class="flex-r-item flex items-center up">
                         <Kline :nameId="'myChart10' + k + categoryId" :areaStyle="true" :increase="i.dayIncrease"
-                            :data="i.price" height="20px" width="50px" v-if="i.price && i.price.length > 0"></Kline>
+                            :data="i.price" :height="vw(50)" :width="vw(80)" v-if="i.price && i.price.length > 0">
+                        </Kline>
                     </div>
                     <div class="flex-r-item" :class="{ up: i.increase >= 0, down: i.increase < 0 }">{{ i.increase }}%
                     </div>
@@ -26,6 +27,8 @@
 <script setup>
 import LoadMore from '@/components/LoadMore.vue';
 import KlineSvg from '@/components/KlineSvg.vue';
+import vw from '@/utils/inline-px-to-vw'
+
 import { addCommasToNumber } from '@/utils/tool'
 import local from '@/utils/local'
 const emits = defineEmits(['loadMore'])

@@ -2,27 +2,27 @@
     <div class="discont-content px-12 w-full">
         <template v-if="!onlyShowOrder">
             <van-tabs v-model:active="active" @change="changeActive">
-                <van-tab title="基金列表">
+                <van-tab :title="t('fund')">
                     <div class="discont-list  flex flex-col pb-40">
                         <fund-item :item="item" v-for="(item, index) in list" :key="index"
                             @handleClickBtn="handleClickBtn"></fund-item>
                         <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12px"
                             v-show="skeleton && list.length == 0" v-for="i in 5" :key="i"></div>
-                        <LoadMore :status="listStatus" @load-more="loadMore" />
                         <empty v-if="list.length == 0 && !skeleton" :noTips="true"></empty>
+                        <LoadMore :status="listStatus" @load-more="loadMore" />
 
                     </div>
                 </van-tab>
-                <van-tab title="我的基金">
+                <van-tab :title="t('Order List')">
                     <div class="discont-list flex flex-col pb-40">
                         <fund-item :item="item" v-for="(item, index) in orderList" :key="index"
                             @handleClickBtn="handleClickBtn" @handleClickOrder="handleClickOrder"
                             :item-type="'order'"></fund-item>
                         <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12px"
                             v-show="skeleton && orderList.length == 0" v-for="i in 5" :key="i">
+                            <LoadMore :status="orderLoadStatus" @load-more="loadMore" />
+                            <empty v-if="orderList.length == 0 && !skeleton" :noTips="true"></empty>
                         </div>
-                        <LoadMore :status="orderLoadStatus" @load-more="loadMore" />
-                        <empty v-if="orderList.length == 0 && !skeleton" :noTips="true"></empty>
 
                     </div>
                 </van-tab>
@@ -34,8 +34,8 @@
                     @handleClickOrder="handleClickOrder" :item-type="'order'" />
                 <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12px"
                     v-show="skeleton && orderList.length === 0" v-for="i in 5" :key="i" />
-                <LoadMore :status="orderLoadStatus" @load-more="loadMore" />
                 <empty v-if="orderList.length == 0 && !skeleton" :noTips="true"></empty>
+                <LoadMore :status="orderLoadStatus" @load-more="loadMore" />
 
             </div>
         </template>
@@ -78,6 +78,7 @@ const page = reactive({
     pageIndex: 1,
     pageSize: 20
 })
+const { t } = useI18n()
 const activeItem = ref({})
 const listStatus = ref(1) // 1:加载中 2:加载完成 3:没有更多数据
 const orderLoadStatus = ref(1) // 1:加载中 2:加载完成 3:没有更多数据
@@ -123,7 +124,6 @@ const getOrderList = async () => {
         if (!res.data.rows) {
             orderLoadStatus.value = 3;
             skeleton.value = false;
-
             return
         }
         if (page.pageIndex == 1) {

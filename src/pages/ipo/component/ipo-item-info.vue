@@ -1,29 +1,56 @@
 <template>
-    <div class="info flex flex-col gap-12">
-        <infoIteLi :item="item" :label="'涨价(份额)'" :value="`${item.assetInfo.unit || ''} ${item.productPrice || ''}`"
-            v-if="item.assetInfo" />
-        <infoIteLi :item="item" :label="'市场价(份额)'"
-            :value="`${item.assetInfo.unit}${item.listPriceBegin || ''} ~ ${item.assetInfo.unit || ''}${item.listPriceEnd || ''}`"
-            v-if="item.assetInfo" />
-        <infoIteLi :item="item" :label="'总销售额(份额)'" :value="`${item.totalNum || ''}`" />
-        <infoIteLi :item="item" :label="'订阅时间'"
-            :value="`${item.formatSubTimeBegin || ''} ~ ${item.formatSubTimeEnd || ''}`" />
-        <infoIteLi :item="item" :label="'发货时间'"
-            :value="`${item.formatWonTimeBegin || ''} ~ ${item.formatWonTimeEnd || ''}`" />
-        <infoIteLi :item="item" :label="'销售时间'" :value="`${item.formatMarketTime || ''}`" />
-    </div>
+  <div class="info flex flex-col gap-12">
+    <infoIteLi
+      :item="item"
+      :label="t('Increase (share)')"
+      :value="`${item.assetInfo.unit || ''} ${item.productPrice || ''}`"
+      v-if="item.assetInfo"
+    />
+    <infoIteLi
+      :item="item"
+      :label="t('Market price (share)')"
+      :value="`${item.assetInfo.unit}${item.listPriceBegin || ''} ~ ${
+        item.assetInfo.unit || ''
+      }${item.listPriceEnd || ''}`"
+      v-if="item.assetInfo"
+    />
+    <infoIteLi
+      :item="item"
+      :label="t('Total Sales (Share)')"
+      :value="`${item.totalNum || ''}`"
+    />
+    <infoIteLi
+      :item="item"
+      :label="t('Subscription time')"
+      :value="`${item.formatSubTimeBegin || ''} ~ ${
+        item.formatSubTimeEnd || ''
+      }`"
+    />
+    <infoIteLi
+      :item="item"
+      :label="t('Delivery time')"
+      :value="`${item.formatWonTimeBegin || ''} ~ ${
+        item.formatWonTimeEnd || ''
+      }`"
+    />
+    <infoIteLi
+      :item="item"
+      :label="t('Sales period')"
+      :value="`${item.formatMarketTime || ''}`"
+    />
+  </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive } from "vue"
-import infoIteLi from './info-item-li.vue'
+import { ref, reactive } from "vue";
+import infoIteLi from "./info-item-li.vue";
+const { t } = useI18n();
 const props = defineProps({
-    item: {
-        type: Object as () => any,
-    },
-})
-
-
+  item: {
+    type: Object as () => any,
+  },
+});
 </script>
 <style lang="less" scoped>
-.li {}
+.li {
+}
 </style>

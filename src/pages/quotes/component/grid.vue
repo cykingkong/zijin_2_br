@@ -1,102 +1,104 @@
 <template>
-    <div class="grid-content">
-        <div v-for="(i, k) in gridList" :key="k" class="grid-item" @click="handleClickItem(k)">
-            <div class="grid-img">
-                <img :src="i.icon" alt="">
-            </div>
-            <div class="grid-text font-size-14 mt-12">
-                {{ i.label }}
-            </div>
-        </div>
+  <div class="grid-content">
+    <div v-for="(i, k) in gridList" :key="k" class="grid-item" @click="handleClickItem(k)">
+      <div class="grid-img">
+        <img :src="i.icon" alt="" />
+      </div>
+      <div class="grid-text font-size-14 mt-12 text-align-center">{{ t(i.i18n) }}</div>
     </div>
+  </div>
 </template>
 <script setup>
-import grid1 from '@/assets/grid/grid1-quotes.png'
-import grid2 from '@/assets/grid/grid2-quotes.png'
-import grid3 from '@/assets/grid/grid3-quotes.png'
-import grid4 from '@/assets/grid/grid4-quotes.png'
-import grid5 from '@/assets/grid/grid5-quotes.png'
-import grid6 from '@/assets/grid/grid6-quotes.png'
-import grid7 from '@/assets/grid/grid7-quotes.png'
-import grid8 from '@/assets/grid/grid8-quotes.png'
-import grid9 from '@/assets/grid/grid9-quotes.png'
-import grid10 from '@/assets/grid/grid10-quotes.png'
+import grid1 from "@/assets/grid/grid1-quotes.png";
+import grid2 from "@/assets/grid/grid2-quotes.png";
+import grid3 from "@/assets/grid/grid3-quotes.png";
+import grid4 from "@/assets/grid/grid4-quotes.png";
+import grid5 from "@/assets/grid/grid5-quotes.png";
+import grid6 from "@/assets/grid/grid6-quotes.png";
+import grid7 from "@/assets/grid/grid7-quotes.png";
+import grid8 from "@/assets/grid/grid8-quotes.png";
+import grid9 from "@/assets/grid/grid9-quotes.png";
+import grid10 from "@/assets/grid/grid10-quotes.png";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 const props = defineProps({
-    categoryId: {
-        type: Number,
-        default: 0
-    },
-
-})
+  categoryId: {
+    type: Number,
+    default: 0,
+  },
+});
 
 const gridList = computed(() => {
-    if (props.categoryId == 202) {
-        return [
-            {
-                label: '股票交易',
-                icon: grid1,
-            },
-        ]
-    }
+  if (props.categoryId == 202) {
     return [
-        {
-            label: '股票交易',
-            icon: grid1,
-        },
-        {
-            label: '折扣股',
-            icon: grid2,
-        },
-        {
-            label: '基金',
-            icon: grid3,
-        },
-        {
-            label: '历史记录',
-            icon: grid4,
-        },
-
-
-    ]
-})
-const emits = defineEmits(['handleClickGrid'])
+      {
+        label: "股票交易",
+        i18n: "index.stockTrading",
+        icon: grid1,
+      },
+    ];
+  }
+  return [
+    {
+      label: "股票交易",
+      i18n: "index.stockTrading",
+      icon: grid1,
+    },
+    {
+      label: "折扣股",
+      i18n: "index.discount",
+      icon: grid2,
+    },
+    {
+      label: "基金",
+      i18n: "index.fund",
+      icon: grid3,
+    },
+    {
+      label: "历史记录",
+      i18n: "index.historyRecord",
+      icon: grid4,
+    },
+  ];
+});
+const emits = defineEmits(["handleClickGrid"]);
 const handleClickItem = (k) => {
-
-    emits('handleClickGrid', k)
-}
+  emits("handleClickGrid", k);
+};
 </script>
 <style lang="less">
 .grid-content {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    padding: 12px 0;
-    gap: 12px;
-    // background: #131a2e;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 12px 0;
+  gap: 12px;
+  // background: #131a2e;
 
-    .grid-item {
-        flex: 1;
-        // height: 75px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        font-size: 16px;
+  .grid-item {
+    flex: 1;
+    // height: 75px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 16px;
 
-        .grid-img {
-            width: 48px;
-            height: 48px;
+    .grid-img {
+      width: 48px;
+      height: 48px;
 
-            img {
-                width: 100%;
-                height: 100%;
-            }
-        }
-
-        .grid-text {
-            color: var(--van-text)
-        }
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
+
+    .grid-text {
+      color: var(--van-text);
+      word-break: break-all
+    }
+  }
 }
 </style>

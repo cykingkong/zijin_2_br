@@ -4,13 +4,13 @@
             v-if="!onlyShowOrder">
 
             <template #title>
-                <div class="flex flex-items-center gap-6">股息</div>
+                <div class="flex flex-items-center gap-6">{{ t('dividend') }}</div>
             </template>
         </VanNavBar>
         <template v-if="!onlyShowOrder">
             <van-tabs v-model:active="active" @change="changeActive">
                 <!-- 折扣股玩法 -->
-                <van-tab title="股息列表">
+                <van-tab :title="t('dividend list')">
                     <div class="discont-list  flex flex-col pb-40">
                         <discont-item :item="item" v-for="(item, index) in list" :key="index"
                             @handleClickBtn="handleClickBtn"></discont-item>
@@ -20,7 +20,7 @@
                         <LoadMore :status="listStatus" @load-more="loadMore" />
                     </div>
                 </van-tab>
-                <van-tab title="持仓订单">
+                <van-tab :title="t('Order List')">
                     <div class="discont-list flex flex-col pb-40">
                         <discont-item :item="item" v-for="(item, index) in orderList" :key="index"
                             @handleClickBtn="handleClickBtn" :item-type="'order'"></discont-item>
@@ -103,7 +103,7 @@ function onBack() {
     else
         router.replace('/')
 }
-
+const { t } = useI18n()
 const bottomPopRef = ref()
 const getDisountList = async () => {
     // resetPage()

@@ -3,13 +3,13 @@
         <VanNavBar title="" :fixed="true" clickable :left-arrow="true" @click-left="onBack" v-if="!onlyShowOrder"
             z-index="999">
             <template #title>
-                <div class="flex flex-items-center gap-6">折扣股</div>
+                <div class="flex flex-items-center gap-6">{{ t('deal.discount') }}</div>
             </template>
         </VanNavBar>
         <template v-if="!onlyShowOrder">
             <van-tabs v-model:active="active" @change="changeActive">
                 <!-- 折扣股玩法 -->
-                <van-tab title="折扣股票列表">
+                <van-tab :title="t('discount list')">
                     <div class="discont-list  flex flex-col pb-40">
                         <discont-item :item="item" v-for="(item, index) in list" :key="index"
                             @handleClickBtn="handleClickBtn"></discont-item>
@@ -19,7 +19,7 @@
                         <LoadMore :status="listStatus" @load-more="loadMore" />
                     </div>
                 </van-tab>
-                <van-tab title="持仓订单">
+                <van-tab :title="t('Order List')">
                     <div class="discont-list flex flex-col pb-40">
                         <discont-item :item="item" v-for="(item, index) in orderList" :key="index"
                             @handleClickBtn="handleClickBtn" :item-type="'order'"></discont-item>
@@ -96,6 +96,7 @@ const page = reactive({
     pageIndex: 1,
     pageSize: 4
 })
+const { t } = useI18n()
 const activeItem = ref({})
 const listStatus = ref(1) // 1:加载中 2:加载完成 3:没有更多数据
 const orderLoadStatus = ref(1) // 1:加载中 2:加载完成 3:没有更多数据

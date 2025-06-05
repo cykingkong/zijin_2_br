@@ -14,9 +14,7 @@ import {
 } from '@/api/user'
 
 const InitUserInfo = {
-  uid: 0,
-  nickname: '',
-  avatar: '',
+
 }
 
 export const useUserStore = defineStore('user', () => {
@@ -30,8 +28,10 @@ export const useUserStore = defineStore('user', () => {
   const login = async (loginForm: LoginData) => {
     try {
       const { data } = await userLogin(loginForm)
-      console.log(data)
       setToken(data.token)
+      const { data: userInfo } = await getUserInfo()
+      setInfo(userInfo)
+
     }
     catch (error) {
       clearToken()

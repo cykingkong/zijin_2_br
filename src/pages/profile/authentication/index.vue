@@ -13,8 +13,8 @@
             <div class="px-12 pt-12 flex-col flex gap-12">
                 <vue-flag code="fr" size="small" />
 
-                <inputCom :label="'国籍'" :placeholder="'请选择'" :inputType="'picker'" v-model:value="kycForm.nationality"
-                    :tips="''">
+                <inputCom :label="t('input.Nationality')" :placeholder="t('input.PleaseSelect')" :inputType="'picker'"
+                    v-model:value="kycForm.nationality" :tips="''">
                     <template #picker>
                         <div class="picker-box w-full pr-8 mr-6  h-full flex items-center gap-8 pl-6"
                             @click="hanleClickAreaPick">
@@ -25,34 +25,32 @@
                     </template>
                     <template #sendCode></template>
                 </inputCom>
-                <inputCom :label="'真实姓名'" :placeholder="'请输入真实姓名'" v-model:value="kycForm.name" :type="'text'">
+                <inputCom :label="t('input.True Name')" :placeholder="t('input.PleaseEnter')"
+                    v-model:value="kycForm.name" :type="'text'">
                 </inputCom>
-                <inputCom :label="'證件/護照號碼'" :placeholder="'请输入證件/護照號碼'" v-model:value="kycForm.idCard" :type="'text'">
+                <inputCom :label="t('input.Document/Passport Number')" :placeholder="t('input.PleaseEnter')"
+                    v-model:value="kycForm.idCard" :type="'text'">
                 </inputCom>
-                <inputCom :label="'證件照/上傳護照'" v-model:value="kycForm.idCard" :type="'imageShow'">
+                <inputCom :label="t('input.Upload')" v-model:value="kycForm.idCard" :type="'imageShow'">
                     <div class="flex  flex-justify-around w-full text-align-center font-size-12">
                         <div class=" w80  ">
                             <van-uploader preview-image multiple :max-count="1" v-model="list1"
                                 :after-read="(file) => handleAfterRead(file, 1)" />
-                            正面
+                            {{ t('input.Front') }}
                         </div>
                         <div class=" w80 ">
                             <van-uploader preview-image multiple :max-count="1" v-model="list2"
                                 :after-read="(file) => handleAfterRead(file, 2)" />
-                            背面
+                            {{ t('input.Back') }}
                         </div>
-                        <div class=" w80 ">
-                            <van-uploader preview-image multiple :max-count="1" v-model="list3"
-                                :after-read="(file) => handleAfterRead(file, 3)" />
-                            手持
-                        </div>
+
                     </div>
                 </inputCom>
                 <!-- <div class="w-full">
                     <div class="t font-size-16 mb-12">拍照示例</div>
                     <img src="../../assets/uploadTips.png" class="w-full block" alt="">
                 </div> -->
-                <van-button type="primary" block @click="handleClickSubmit">提交</van-button>
+                <van-button type="primary" block @click="handleClickSubmit">{{ t('submit') }}</van-button>
 
             </div>
 
@@ -70,6 +68,8 @@ import nationalityList from '@/components/nationality-list/nationalityList.vue'
 import { uploadFile } from '@/api/tool'
 
 import { sendCode, register, kyc } from '@/api/user'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 const parentValue = ref('')
 const list1 = ref([])
 const list2 = ref([])
@@ -160,9 +160,10 @@ const handleClickSubmit = async () => {
 </script>
 <route lang="json5">
     {
-      name: 'add',
+      name: 'Certification',
       meta: {
         title: '认证',
+        i18n:'Certification'
       },
     }
 </route>

@@ -15,22 +15,22 @@
             <div class="r flex flex-1 flex-shrink-0 justify-end">{{ _item.unit }} {{ _item.close || '-' }}</div>
         </div>
         <div class="li flex justify-between items-center ">
-            <div class="li-l font-size-14">折扣率:{{ _item.discountRate }}%</div>
-            <div class="li-r font-size-14">周期:{{ _item.diffDay }} 天</div>
+            <div class="li-l font-size-14">{{ t('Discount rate') }}:{{ _item.discountRate }}%</div>
+            <div class="li-r font-size-14">{{ t('cycle') }}:{{ _item.diffDay }} {{ t('Day') }}</div>
         </div>
         <div class="li flex justify-between items-center ">
-            <div class="li-l font-size-16">折扣:{{ _item.unit }} {{ _item.discountPrice }}</div>
+            <div class="li-l font-size-16">{{ t('Discount') }}:{{ _item.unit }} {{ _item.discountPrice }}</div>
         </div>
-        <div class="li flex justify-between items-center ">
+        <div class="li flex justify-between items-center gap-12px">
             <div class="li-l w-70%">
                 <van-progress :percentage="_item.percentage" stroke-width="8px" :show-pivot="false" />
             </div>
-            <div class="li-r font-size-16">售出:{{ _item.percentage }}%</div>
+            <div class="li-r font-size-16 text-no-wrap text-align-right">{{ t('Sell') }}:{{ _item.percentage }}%</div>
 
         </div>
         <div class="li flex justify-end">
-            <van-button type="primary" @click="handleClickSubmit" size="small" class="h-30px! w-90px! font-size-16!">{{
-                statusEnum[_item.status] }}</van-button>
+            <van-button type="primary" @click="handleClickSubmit" class=" font-size-16!">{{
+                t(statusEnum[_item.status]) }}</van-button>
         </div>
     </div>
     <div class="order-item-content w-full px-12 py-24  font-size-16 flex flex-col gap-12px"
@@ -49,20 +49,20 @@
         </div>
         <div class="li flex justify-between ">
             <div class="li-l font-size-16">
-                市场价:{{ _item.unit }} {{ _item.purchasePrice }}</div>
-            <div class="li-r font-size-16">购买价:{{ _item.unit }} {{ _item.discountPrice }}</div>
+                {{ t('Market price') }}:{{ _item.unit }} {{ _item.purchasePrice }}</div>
+            <div class="li-r font-size-16">{{ t('Purchase price') }}:{{ _item.unit }} {{ _item.discountPrice }}</div>
         </div>
         <div class="li flex justify-between ">
             <div class="li-l font-size-16">
-                收益率:{{ _item.unit }} {{ _item.earningRate }}%</div>
-            <div class="li-r font-size-16"> 收益:{{ _item.unit }} {{
+                {{ t('yield rate') }}:{{ _item.unit }} {{ _item.earningRate }}%</div>
+            <div class="li-r font-size-16">{{ t("yield") }}:{{ _item.unit }} {{
                 _item.earnings }}</div>
         </div>
         <div class="li flex justify-end">
             <van-button type="primary" :disabled="_item.status == 2"
-                :color="_item.saleStatus != 1 ? '#1989fa' : '#b5b5b5'" @click="handleClickSubmit" size="small"
-                class="font-size-16! w-100px!">{{
-                    orderStatusEnum[_item.status] }}</van-button>
+                :color="_item.saleStatus != 1 ? '#1989fa' : '#b5b5b5'" @click="handleClickSubmit"
+                class="font-size-16! ">{{
+                    t(orderStatusEnum[_item.status]) }}</van-button>
         </div>
     </div>
 </template>
@@ -84,6 +84,7 @@ const props = defineProps({
         default: 'discount'
     }
 })
+const { t } = useI18n()
 const _item = computed(() => {
     return props.item
 })

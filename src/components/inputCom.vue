@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="input-box w-full rounded-4px py-12  px-10  flex flex-items-center mt-12">
-            <div class="max-input w-full text-white font-size-16 relative flex" v-if="type == 'text'">
+            <div class="max-input w-full text-white font-size-16 relative flex items-center" v-if="type == 'text'">
                 <slot name="picker"></slot>
 
                 <input type="text" :placeholder="placeholder" :disabled="onlyRead" :value="value"
