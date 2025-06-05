@@ -15,7 +15,7 @@
             <template #sendCode>
                 <div class="absolute right-0 font-size-12 sendCode"
                     :class="countdown > 0 ? 'text-gray-400' : 'text-blue-500'" @click="getCode">
-                    {{ countdown > 0 ? `${countdown}秒后重发` : '发送验证码' }}
+                    {{ countdown > 0 ? `${countdown}s` : t("input.SendCode") }}
                 </div>
             </template>
         </inputCom>

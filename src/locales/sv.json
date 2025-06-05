@@ -252,6 +252,8 @@
     "totalProfit": "Total vinst",
     "totalYield": "Total avkastning",
     "certificationCenter": "verifieringscenter",
+    "InvitationCode": "Inbjudningskod",
+    "I have read and agree to the Terms of Service": "Jag har läst och godkänner användarvillkoren",
     "mock": {
         "fromAsyncData": "Data från asynkrona förfrågningar",
         "noData": "Ingen data",

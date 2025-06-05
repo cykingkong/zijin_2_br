@@ -13,10 +13,10 @@ const router = useRouter()
 const userStore = useUserStore()
 const loading = ref(false)
 const typeArr = [{
-  label: '手机号登录',
+  label: `${t('input.Phone')}${t('login.login')}`,
   value: 'phone'
 }, {
-  label: '邮箱登录',
+  label: `${t('login.email')}${t('login.login')}`,
   value: 'email'
 }]
 const areaInfo = ref({
@@ -67,6 +67,7 @@ const toRegister = () => {
   }
 
 }
+
 const toForget = () => {
   try {
     router.push('/forgot-password?forgotType=1')
@@ -75,12 +76,12 @@ const toForget = () => {
   }
 }
 const getName = (val: any) => {
-  console.log(val, 'vvvv')
+
   areaInfo.value = val
 }
 async function login(values: any) {
   if (!postData.password) {
-    showToast('请输入密码')
+    showToast('input.PleaseEnter')
     return
   }
   try {
@@ -119,8 +120,8 @@ async function login(values: any) {
     </div> -->
     <loginTab :list="typeArr" @change="changeIndex"></loginTab>
 
-    <inputCom :label="'手机号'" :placeholder="'请输入'" v-model:value="postData.account" :tips="''"
-      v-show="postData.type == 'phone'">
+    <inputCom :label="t('input.Phone')" :placeholder="t('input.PleaseEnter')" v-model:value="postData.account"
+      :tips="''" v-show="postData.type == 'phone'">
       <template #picker>
         <div class="picker-box pr-8 mr-6  h-full flex items-center gap-8" @click="hanleClickAreaPick">
           <div class="iti-flag mr-10" :class="areaInfo?.code" style="transform: scale(1.5)"></div>
@@ -128,12 +129,13 @@ async function login(values: any) {
         </div>
       </template>
     </inputCom>
-    <inputCom :label="'邮箱'" :placeholder="'请输入邮箱'" v-model:value="postData.account" :tips="''"
-      v-show="postData.type == 'email'">
+    <inputCom :label="t('input.email')" :placeholder="t('input.PleaseEnter')" v-model:value="postData.account"
+      :tips="''" v-show="postData.type == 'email'">
     </inputCom>
-    <inputCom :label="'密码'" :placeholder="'请输入密码'" v-model:value="postData.password" :tips="''" :inputType="'password'">
+    <inputCom :label="t('login.password')" :placeholder="t('input.PleaseEnter')" v-model:value="postData.password"
+      :tips="''" :inputType="'password'">
     </inputCom>
-    <van-button type="primary" class="login-btn" block @click="login({})">登陆</van-button>
+    <van-button type="primary" class="login-btn" block @click="login({})">{{ t('login.login') }}</van-button>
 
 
     <GhostButton block class="mt-18" @click="toRegister">

@@ -252,6 +252,8 @@
     "totalProfit": "Tổng lợi nhuận",
     "totalYield": "Tổng tỷ suất sinh lời",
     "certificationCenter": "Trung tâm xác thực",
+    "InvitationCode": "Mã mời",
+    "I have read and agree to the Terms of Service": "Tôi đã đọc và đồng ý với Điều khoản dịch vụ",
     "mock": {
         "fromAsyncData": "Dữ liệu từ yêu cầu bất đồng bộ",
         "noData": "Không có dữ liệu",

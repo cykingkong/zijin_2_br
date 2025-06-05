@@ -98,6 +98,8 @@
     "ConfirmPassword": "确认密码",
     "OldPassword": "旧密码",
     "VerificationCode": "验证码",
+    "InvitationCode": "邀请码",
+    "I have read and agree to the Terms of Service": "我已阅读并同意服务条款",
     "SendCode": "发送验证码",
     "other": "其他",
     "Back": "背面"

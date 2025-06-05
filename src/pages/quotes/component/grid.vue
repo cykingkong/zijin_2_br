@@ -97,7 +97,7 @@ const handleClickItem = (k) => {
 
     .grid-text {
       color: var(--van-text);
-      word-break: break-all
+      word-break: break-word
     }
   }
 }

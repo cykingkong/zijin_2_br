@@ -17,13 +17,13 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       port: 3200,
       proxy: {
         '/api': {
-          target: `http://152.53.166.120:18399`, // 代理接口
+          target: `https://api.hcenvio.com`, // 代理接口
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, ''),
           ws: false,
         },
         '/wss': {
-          target: `ws://152.53.166.120:18299/ws`, // 代理接口
+          target: `wss://api.hcenvio.com/ws`, // 代理接口
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/wss/, ''),
           ws: true,
@@ -44,6 +44,13 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       cssCodeSplit: false,
       // chunkSizeWarningLimit: 4048,
       outDir: env.VITE_APP_OUT_DIR || 'dist',
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+        },
+      },
     },
 
     optimizeDeps: { include, exclude },

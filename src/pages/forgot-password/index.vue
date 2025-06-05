@@ -1,10 +1,12 @@
 <template>
   <div class="changePassword-content flex flex-col gap-24 p-12">
     <loginTab :list="typeArr" @change="changeActive" class="mb-0"></loginTab>
-    <inputCom :label="'邮箱'" v-model:value="form.username" :placeholder="'请输入'" v-if="form.type == 'email'">
+    <inputCom :label="t('login.email')" v-model:value="form.username" :placeholder="t('input.PleaseEnter')"
+      v-if="form.type == 'email'">
     </inputCom>
 
-    <inputCom :label="'手机号'" :placeholder="'请输入'" v-model:value="form.username" :tips="''" v-if="form.type == 'phone'">
+    <inputCom :label="t('input.Phone')" :placeholder="t('input.PleaseEnter')" v-model:value="form.username" :tips="''"
+      v-if="form.type == 'phone'">
       <template #picker>
         <div class="picker-box pr-8 mr-6  h-full flex items-center gap-8" @click="hanleClickAreaPick">
           <!-- <img :src="icon1" alt="" class="w16 h16"> -->
@@ -13,20 +15,21 @@
         </div>
       </template>
     </inputCom>
-    <inputCom :label="'新密码'" v-model:value="form.password" :placeholder="'请输入新密码'" :tips="'請輸入6-12個字符，包括數字或字母'">
+    <inputCom :label="t('input.NewPassword')" v-model:value="form.password" :placeholder="t('input.PleaseEnter')">
     </inputCom>
-    <inputCom :label="'确认新密码'" v-model:value="form.passwordConfirmation" :placeholder="'请确认新密码'"
-      :tips="'請輸入6-12個字符，包括數字或字母'"></inputCom>
-    <inputCom :label="'验证码'" :placeholder="'请输入验证码'" v-model:value="form.code" :tips="''">
+    <inputCom :label="t('input.ConfirmPassword')" v-model:value="form.passwordConfirmation"
+      :placeholder="t('input.PleaseEnter')"></inputCom>
+    <inputCom :label="t('input.VerificationCode')" :placeholder="t('input.PleaseEnter')" v-model:value="form.code"
+      :tips="''">
       <template #sendCode>
         <div class="absolute right-0 font-size-12 sendCode" :class="countdown > 0 ? 'text-gray-400' : 'text-blue-500'"
           @click="getCode">
-          {{ countdown > 0 ? `${countdown}秒后重发` : '发送验证码' }}
+          {{ countdown > 0 ? `${countdown}s` : t("input.SendCode") }}
         </div>
       </template>
     </inputCom>
-    <van-button type="primary" block @click="onSubmit">确定</van-button>
-    <nationalityList ref="controlChildRef" :title="'选择'" @getName="getName"></nationalityList>
+    <van-button type="primary" block @click="onSubmit">{{ t('confirm') }}</van-button>
+    <nationalityList ref="controlChildRef" :title="t('pick')" @getName="getName"></nationalityList>
 
   </div>
 </template>
@@ -38,6 +41,7 @@ import nationalityList from '@/components/nationality-list/nationalityList.vue'
 import { useUserStore } from '@/stores'
 import { forgetPassword, sendCode } from "@/api/user"
 import loginTab from "@/components/tab.vue";
+const { t } = useI18n()
 const form = reactive({
   passwordType: 3,
   password: '',
@@ -49,10 +53,12 @@ const form = reactive({
 })
 const forgotType = ref(0) // 1 忘记登录密码  2 忘记支付密码
 const typeArr = [{
-  label: '手机号',
+  label: `${t('input.Phone')}${t('login.login')}`,
+
   value: 'phone'
 }, {
-  label: '邮箱',
+  label: `${t('login.email')}${t('login.login')}`,
+
   value: 'email'
 }]
 const areaInfo = ref({

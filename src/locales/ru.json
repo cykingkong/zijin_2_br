@@ -252,6 +252,8 @@
     "totalProfit": "Общая прибыль",
     "totalYield": "Общая доходность",
     "certificationCenter": "центр сертификации",
+    "InvitationCode": "Код приглашения",
+    "I have read and agree to the Terms of Service": "Я прочитал(а) и согласен(на) с Условиями обслуживания",
     "mock": {
         "fromAsyncData": "Данные из асинхронных запросов",
         "noData": "Нет данных",

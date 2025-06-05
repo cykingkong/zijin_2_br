@@ -168,6 +168,14 @@ let countryEnList = ref(['Afghanistan', 'Albania', 'Algeria', 'American Samoa',
 onMounted(() => {
     const originalCountries = countries.value[locale.value];
     console.log(originalCountries, 'originalCountries')
+    // 添加安全检查
+    if (!originalCountries || typeof originalCountries !== 'object') {
+        console.warn(`No country data found for locale: ${locale.value}`);
+        // 设置默认值或使用英文作为后备
+        countriesFind.value = countries.value['en-US'] || {};
+        getData();
+        return;
+    }
     const brazilKey = Object.keys(originalCountries).find(key =>
         originalCountries[key].name === '巴西' ||
         originalCountries[key].name === 'Brazil'
@@ -185,7 +193,9 @@ const open = () => {
     isShow.value = true;
 }
 const getData = () => {
-    let us = countries.value[locale.value]['br'];
+    console.log(countries.value)
+
+    let us = countries.value[locale.value] ? countries.value[locale.value]['br'] : countries.value['en-US']['br'];
     $emit('getName', us);
 }
 //选择国家
@@ -212,10 +222,12 @@ const onSearch = (val) => {
     countriesFind.value = {}
 
     const filtered = {};
-    Object.keys(countries.value[locale.value]).forEach((key) => {
-        if (countries.value[locale.value][key].name.toLowerCase().includes(val.toLowerCase()) ||
-            countries.value[locale.value][key].dialCode.toString().includes(val)) {
-            filtered[key] = countries.value[locale.value][key];
+    // 如果countries.value[locale.value]为 undefined ，则 locale.value 取'en-US'
+    let countriesData = countries.value[locale.value] || countries.value['en-US'];
+    Object.keys(countriesData).forEach((key) => {
+        if (countriesData[key].name.toLowerCase().includes(val.toLowerCase()) ||
+            countriesData[key].dialCode.toString().includes(val)) {
+            filtered[key] = countriesData[key];
         }
     });
 

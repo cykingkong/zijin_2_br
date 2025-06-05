@@ -252,6 +252,8 @@
     "totalProfit": "Toplam Kâr",
     "totalYield": "Toplam Getiri",
     "certificationCenter": "kimlikDoğrulamaMerkezi",
+    "InvitationCode": "Davet Kodu",
+    "I have read and agree to the Terms of Service": "Hizmet Şartlarını okudum ve kabul ediyorum",
     "mock": {
         "fromAsyncData": "Asenkron isteklerden gelen veri",
         "noData": "Veri yok",

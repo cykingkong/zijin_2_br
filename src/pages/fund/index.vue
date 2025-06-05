@@ -49,6 +49,7 @@
       name: 'fund',
       meta: {
         title: '基金',
+        i18n:'fund'
       },
     }
 </route>

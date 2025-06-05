@@ -252,6 +252,8 @@
     "totalProfit": "Całkowity zysk",
     "totalYield": "Całkowity zwrot",
     "certificationCenter": "Centrum Certyfikacji",
+    "InvitationCode": "Kod zaproszenia",
+    "I have read and agree to the Terms of Service": "Przeczytałem/am i akceptuję Warunki korzystania z usługi",
     "mock": {
         "fromAsyncData": "Dane z żądań asynchronicznych",
         "noData": "Brak danych",
