@@ -32,7 +32,7 @@ router.beforeEach(async (to: EnhancedRouteLocation) => {
   routeCacheStore.addRoute(to)
 
   // Set page title
-  setPageTitle(to.meta.title)
+  // setPageTitle(to.meta.title)
   // Safely check user info
   // console.log(isLogin() && !userStore.userInfo?.uid, 'isLogin() && !userStore.userInfo?.uid', from)
   if (!isLogin() && to.path !== '/login' && to.path !== '/' && to.path != '/register' && to.path != '/forgot-password') {

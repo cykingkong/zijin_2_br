@@ -6,6 +6,7 @@ import { languageColumns, locale } from "@/utils/i18n";
 import { useUserStore } from "@/stores";
 import defaultAvatar from "@/assets/images/default-avatar.svg";
 import { clearToken, isLogin } from "@/utils/auth";
+import { getKfUrl } from "@/api/user";
 
 import UserInfo from "../../components/user-info.vue";
 import grid1 from "@/assets/grid/grid1.png";
@@ -36,6 +37,28 @@ const languageValues = ref<Array<string>>([locale.value]);
 const language = computed(
   () => languageColumns.find((l) => l.value === locale.value).text
 );
+const showKfPage = ref(false);
+
+const languageColumnsForPicker = computed(() => {
+  const mode = import.meta.env.MODE;
+  if (mode === "development") {
+    return languageColumns;
+  } else {
+    return languageColumns.filter((item) => item.value !== "zh-CN");
+  }
+});
+
+const kfUrl = ref("");
+const toKfUrl = async () => {
+  const { data, code } = await getKfUrl({
+    userId: userInfo.value.userId ? userInfo.value.userId : null,
+  });
+  if (code == 200) {
+    kfUrl.value = data.kfUrl || "";
+    showKfPage.value = true;
+    // window.open(data.kfUrl);
+  }
+};
 const gridList = [
   {
     icon: grid1,
@@ -99,6 +122,11 @@ const cellList = [
     i18n: "profile.withdrawRecord",
   },
   {
+    icon: icon5,
+    text: "资产流转",
+    i18n: "profile.assetsLog",
+  },
+  {
     icon: icon6,
     text: "关于我们",
     i18n: "profile.aboutUs",
@@ -131,9 +159,12 @@ const handleClickCell = (index: any) => {
       router.push("/deal/orderList?type=2");
       break;
     case 6:
-      router.push("/helpCenter");
+      router.push("/quotes/accountChange?type=2");
       break;
     case 7:
+      router.push("/helpCenter");
+      break;
+    case 8:
       router.push("/aboutUs");
 
       break;
@@ -155,26 +186,48 @@ const handleLogout = () => {
 
 <template>
   <div class="myself-index">
-    <VanNavBar title="" :fixed="true" clickable placeholder :left-arrow="false">
+    <VanNavBar
+      title=""
+      :fixed="true"
+      clickable
+      placeholder
+      :left-arrow="false"
+      @click-right="toKfUrl"
+    >
       <template #right>
         <van-icon name="service-o" class="icon" />
       </template>
     </VanNavBar>
-
+    <van-popup v-model:show="showKfPage" position="bottom">
+      <iframe :src="kfUrl" class="w-full h-full" frameborder="0"></iframe>
+    </van-popup>
     <section class="myself flex flex-col">
       <UserInfo :userInfo="userInfo" />
       <van-cell-group :title="t('profile.Quick Access')" />
       <van-grid :border="false" center>
-        <van-grid-item v-for="(i, k) in gridList" direction="horizontal" :key="k" @click="handleClickGrid(k)">
-          <div class=" items-center flex-1  ">
+        <van-grid-item
+          v-for="(i, k) in gridList"
+          direction="horizontal"
+          :key="k"
+          @click="handleClickGrid(k)"
+        >
+          <div class="items-center flex-1">
             <img :src="i.icon" class="w-48 h-48 flex-shrink-0 block mx-auto" />
-            <div class="text-12 mt-8 text-align-center max-w-103px c">{{ t(i.i18n) }}</div>
+            <div class="text-12 mt-8 text-align-center max-w-103px c">
+              {{ t(i.i18n) }}
+            </div>
           </div>
         </van-grid-item>
       </van-grid>
 
       <van-cell-group :title="t('profile.common')">
-        <van-cell is-link :title="t(item.i18n)" @click="handleClickCell(k)" v-for="(item, k) in cellList" :key="k">
+        <van-cell
+          is-link
+          :title="t(item.i18n)"
+          @click="handleClickCell(k)"
+          v-for="(item, k) in cellList"
+          :key="k"
+        >
           <template #icon>
             <img :src="item.icon" class="w20 h20 mr-8 mt-2" />
           </template>
@@ -182,7 +235,12 @@ const handleLogout = () => {
       </van-cell-group>
 
       <div class="btn-box mt-24 w-full">
-        <van-button square type="primary" class="mt-12 w-full" @click="handleLogout">
+        <van-button
+          square
+          type="primary"
+          class="mt-12 w-full"
+          @click="handleLogout"
+        >
           {{ t("profile.logout") }}
         </van-button>
       </div>
@@ -198,8 +256,12 @@ const handleLogout = () => {
       </div>
     </section> -->
     <van-popup v-model:show="showLanguagePicker" position="bottom">
-      <van-picker v-model="languageValues" :columns="languageColumns" @confirm="onLanguageConfirm"
-        @cancel="showLanguagePicker = false" />
+      <van-picker
+        v-model="languageValues"
+        :columns="languageColumns"
+        @confirm="onLanguageConfirm"
+        @cancel="showLanguagePicker = false"
+      />
     </van-popup>
   </div>
 </template>
@@ -235,6 +297,6 @@ const handleLogout = () => {
 
 .c {
   white-space: wrap;
-  word-break: break-word
+  word-break: break-word;
 }
 </style>

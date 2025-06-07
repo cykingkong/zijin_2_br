@@ -1,158 +1,206 @@
 <template>
   <div class="exchange-in-content p-12">
-    <div class="t font-size-16   ">请选择充值币种</div>
-    <div class="flex w-full gap-12 my-12 ">
-      <div class="channel-item  rounded-10 flex-1 text-align-center py-12" v-for="(item, index) in tabList" :key="index"
-        :class="{ 'active': index == active }" @click="handleClickTab(index)">
-        <img :src="item.icon" alt="" class="block w-55px h-55px mx-auto">
-        <div class="font-size-12 mt-12">{{ item.name }}充值</div>
+    <div class="t font-size-16">
+      {{ t("Please select the payment currency") }}
+    </div>
+    <div class="flex w-full gap-12 my-12">
+      <div
+        class="channel-item rounded-10 flex-1 text-align-center py-12"
+        v-for="(item, index) in tabList"
+        :key="index"
+        :class="{ active: index == active }"
+        @click="handleClickTab(index)"
+      >
+        <!-- <img :src="item.icon" alt="" class="block w-55px h-55px mx-auto" /> -->
+        <div class="font-size-12">{{ item.method.name }}</div>
       </div>
     </div>
-
-    <inputCom :label="'充值数量'" :placeholder="'请输入'" v-model:value="form.num" :tips="''">
-    </inputCom>
+    <div class="w-full h-1 bg-[#212C4E] mb-12"></div>
+    <!-- <inputCom
+      :label="t('RechargeQuantity')"
+      :placeholder="t('input.PleaseEnter')"
+      v-model:value="form.num"
+      :tips="''"
+    >
+    </inputCom> -->
     <div class="tab-box flex gap-12">
-      <div class="tab-item p-12 font-size-16 rounded-10px " v-for="(item, index) in btnList"
-        @click="handleClickAupay(index)" :class="{ 'active-item': index == activeBtn }" :key="index">
-        {{ item.label }}
+      <div
+        class="tab-item p-12 font-size-16 rounded-10px"
+        v-for="(item, index) in btnList"
+        @click="handleClickAupay(index)"
+        :class="{ 'active-item': index == activeBtn }"
+        :key="index"
+      >
+        {{ item.name }}
       </div>
     </div>
-    <div v-if="showQrCode" class="qrcode-container mt-20 text-center mx-auto">
+    <div
+      v-if="showQrCode && qrValue"
+      class="qrcode-container mt-20 text-center mx-auto"
+    >
       <canvas ref="qrCodeRef" class="mx-auto" width="200" height="200"></canvas>
     </div>
     <div class="w-120 mt-12 mx-auto">
-
-      <van-button type="primary" block @click="safeQrcode">保存二维码</van-button>
-
+      <van-button type="primary" block @click="safeQrcode">{{
+        t("Save QR code")
+      }}</van-button>
     </div>
-    <div class="font-size-14 mt-12 text-#1678FF text-align-center">{{ qrValue }}</div>
+    <div class="font-size-14 mt-12 text-#1678FF text-align-center">
+      {{ qrValue }}
+    </div>
 
     <div class="w-120 mt-12 mx-auto">
-
-      <van-button type="primary" class="h-30!" plain block @click="copyQrValue">复制地址</van-button>
-
+      <van-button
+        type="primary"
+        class="h-30!"
+        plain
+        block
+        @click="copyQrValue"
+        >{{ t("Copy address") }}</van-button
+      >
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import { ref, reactive, onMounted } from "vue";
-import { Toast, showToast } from 'vant';
-import { aupay_notify, mgm_notify, qeawapay_notify } from '@/api/payment'
-import QRCode from 'qrcode'
-import btcIcon from '@/assets/btc_icon.png'
-import trxIcon from '@/assets/trx_icon.png'
-import ethIcon from '@/assets/eth_icon.png'
-const tabList = [
-  { name: 'BTC', icon: btcIcon },
-  { name: 'TRX', icon: trxIcon },
-  { name: 'ETH', icon: ethIcon },
-]
-let form = reactive({ num: '' })
+import { Toast, showToast } from "vant";
+import { aupay_notify, mgm_notify, qeawapay_notify } from "@/api/payment";
+import { coinRechargeConfig } from "@/api/recharge";
+import QRCode from "qrcode";
+import btcIcon from "@/assets/btc_icon.png";
+import trxIcon from "@/assets/trx_icon.png";
+import ethIcon from "@/assets/eth_icon.png";
+const tabList = ref([]);
+const { t } = useI18n();
+let form = reactive({ num: "" });
 const btnList = computed(() => {
-  if (active.value == 0) {
-    return [
-      { label: 'ERC20', value: 'ERC20' }, { label: 'TRC20', value: 'TRC20' },
-    ]
-  } else if (active.value == 1) {
-    return [{ label: 'BTC', value: 'https://penkn.com/syn/ ' }]
-  } else if (active.value == 2) {
-    return [{ label: 'ERC20', value: '0xcccccccccccccccccccccc' }]
+  if (tabList.value.length == 0) {
+    return [];
   }
-})
-const active = ref(0)
-const router = useRouter()
+  return tabList.value[active.value]?.network || [];
+});
+
+const active = ref(0);
+const router = useRouter();
 const toUrl = (url) => {
-  router.push({ path: url })
-}
+  router.push({ path: url });
+};
+const showQrCode = ref(true); // 默认显示二维码
+const qrValue = ref("");
+const activeBtn = ref(0);
+const getTabList = async () => {
+  const { data, code } = await coinRechargeConfig();
+  if (code == 200) {
+    tabList.value = data || [];
+    showQrCode.value = true;
 
-const showQrCode = ref(true) // 默认显示二维码
-const qrValue = ref('')
-const activeBtn = ref(0)
-
+    qrValue.value =
+      tabList.value[active.value]?.network[activeBtn.value].address;
+    setTimeout(() => {
+      generateQrCode();
+    }, 400);
+  }
+};
 // 页面加载时初始化第一个二维码
-onMounted(() => {
-  qrValue.value = btnList.value[0].value
-})
+onMounted(() => {});
 const handleClickTab = (index) => {
-  active.value = index
-  qrValue.value = btnList.value[activeBtn.value].value
-
-}
+  active.value = index;
+  qrValue.value = btnList.value[activeBtn.value].address;
+};
 const handleClickAupay = (index) => {
-  activeBtn.value = index
-  showQrCode.value = true
-  qrValue.value = btnList.value[activeBtn.value].value
-}
-const qrCodeRef = ref<HTMLCanvasElement>()
+  activeBtn.value = index;
+  showQrCode.value = true;
+  qrValue.value = btnList.value[activeBtn.value].address;
+};
+const qrCodeRef = ref<HTMLCanvasElement>();
 const generateQrCode = () => {
   if (qrCodeRef.value && qrValue.value) {
-    QRCode.toCanvas(qrCodeRef.value, qrValue.value, {
-      width: 200,
-      errorCorrectionLevel: 'H'
-    }, (error) => {
-      if (error) console.error('生成二维码失败:', error)
-    })
+    QRCode.toCanvas(
+      qrCodeRef.value,
+      qrValue.value,
+      {
+        width: 200,
+        errorCorrectionLevel: "H",
+      },
+      (error) => {
+        if (error) console.error("生成二维码失败:", error);
+      }
+    );
   }
-}
+};
 
 onMounted(() => {
-  generateQrCode()
-})
+  generateQrCode();
+  getTabList();
+});
 
-watch([activeBtn, active], generateQrCode)
-// 保存二维码图片 
+watch([activeBtn, active], generateQrCode);
+// 保存二维码图片
 const safeQrcode = async () => {
   if (!qrCodeRef.value) {
-    showToast('请先生成二维码')
-    return
+    // showToast("请先生成二维码");
+    return;
   }
 
   try {
     // 将canvas转换为数据URL
-    const image = qrCodeRef.value.toDataURL('image/png')
+    const image = qrCodeRef.value.toDataURL("image/png");
 
     // 创建临时链接进行下载
-    const link = document.createElement('a')
-    link.download = `qrcode-${Date.now()}.png`
-    link.href = image
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+    const link = document.createElement("a");
+    link.download = `qrcode-${Date.now()}.png`;
+    link.href = image;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 
-    showToast('二维码已保存')
+    showToast(t("QR code saved"));
   } catch (error) {
-    showToast('保存失败，请重试')
-    console.error('保存二维码失败:', error)
+    // showToast("保存失败，请重试");
+    console.error("保存二维码失败:", error);
   }
-}
+};
 
 // 复制二维码文本内容
 const copyQrValue = async () => {
   try {
-    await navigator.clipboard.writeText(qrValue.value)
-    showToast('地址已复制到剪贴板')
+    // 将二维码文本内容复制到剪贴板
+    const textArea = document.createElement("textarea");
+    textArea.value = qrValue.value;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textArea);
+    // await navigator.clipboard.writeText();
+    showToast(t("The address has been copied to the clipboard."));
   } catch (err) {
-    showToast('复制失败，请手动选择复制')
-    console.error('复制失败:', err)
+    console.log(err);
+    showToast(t("Copy failed"));
   }
-}
+};
 
 const handleClickQeawapay = () => {
-  qeawapay_notify({}).then(res => {
+  qeawapay_notify({}).then((res) => {
     if (res.code == 200) {
       // toUrl('/deal/exchange/usdt-in-qeawapay')
     }
-  })
-}
-
+  });
+};
 </script>
+<route lang="json5">
+{
+  meta: {
+    i18n: 'USDT Recharge',
+  },
+}
+</route>
 <style lang="less" scoped>
 :deep(.van-cell) {
   // --van-cell-background: #131a2e;
 }
 
 .channel-item {
-  border: 1px solid #1678FF;
+  border: 1px solid #1678ff;
 }
 
 .tab-item {
@@ -165,9 +213,8 @@ const handleClickQeawapay = () => {
 }
 
 .active-item {
-  border-color: #1678FF;
+  border-color: #1678ff;
   background: #116677b0;
-
 }
 
 .qrcode-container {
@@ -176,6 +223,5 @@ const handleClickQeawapay = () => {
   border-radius: 8px;
   display: block;
   width: 224px;
-
 }
 </style>

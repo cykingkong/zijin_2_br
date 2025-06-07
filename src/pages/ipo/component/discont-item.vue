@@ -69,7 +69,7 @@ import ipoItemTop from "./ipo-item-top.vue";
 import ipoItemCenter from "./ipo-item-center.vue";
 import ipoItemInfo from "./ipo-item-info.vue";
 import ipoOrderItemInfo from "./ipo-order-item-info.vue";
-import KlineSvg from "@/components/KlineSvg.vue";
+
 import dayjs from "dayjs";
 import vw from "@/utils/inline-px-to-vw";
 const { t } = useI18n();
@@ -133,7 +133,7 @@ const handleClickSubmit = () => {
       orderId: props.item.ipoId,
     }).then((res) => {
       if (res.code == 200) {
-        showToast("补交成功");
+        showToast(t("Successfully submitted late"));
         emits("reloadList");
       }
     });

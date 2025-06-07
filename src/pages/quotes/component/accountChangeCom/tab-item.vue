@@ -10,8 +10,8 @@
                 </div>
             </div>
             <div class="right flex-1 text-align-right">
-                <div class="font-size-20" :class="item.type == 1 ? 'down' : 'up'">{{
-                    addCommasToNumber(item.amount) || '-' }}</div>
+                <div class="font-size-20" :class="item.type == 1 ? 'up' : 'down'">{{ item.type == 1 ? '+' : '-' }}{{
+                    addCommasToNumber(item.amount) }}</div>
                 <div class="time font-size-12 text-gray mt-10">{{ item.createdAt }}</div>
             </div>
         </div>

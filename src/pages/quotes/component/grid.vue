@@ -1,10 +1,17 @@
 <template>
   <div class="grid-content">
-    <div v-for="(i, k) in gridList" :key="k" class="grid-item" @click="handleClickItem(k)">
+    <div
+      v-for="(i, k) in gridList"
+      :key="k"
+      class="grid-item"
+      @click="handleClickItem(k)"
+    >
       <div class="grid-img">
         <img :src="i.icon" alt="" />
       </div>
-      <div class="grid-text font-size-14 mt-12 text-align-center">{{ t(i.i18n) }}</div>
+      <div class="grid-text font-size-14 mt-12 text-align-center">
+        {{ t(i.i18n) }}
+      </div>
     </div>
   </div>
 </template>
@@ -81,10 +88,9 @@ const handleClickItem = (k) => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     gap: 6px;
     font-size: 16px;
-
     .grid-img {
       width: 48px;
       height: 48px;
@@ -97,7 +103,7 @@ const handleClickItem = (k) => {
 
     .grid-text {
       color: var(--van-text);
-      word-break: break-word
+      word-break: break-word;
     }
   }
 }

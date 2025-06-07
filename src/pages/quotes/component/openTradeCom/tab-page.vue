@@ -1,95 +1,67 @@
     <template>
-  <div class="openTrade-tab1 pb-60px">
-    <div class="flex flex-justify-between px-12 h-44 flex-items-center">
-      <div
-        class="l flex gap-4 flex-items-center font-size-14 .dark:font-color-#fff .light:font-color-#000 font-extralight"
-      >
-        {{ t("Newest price") }} {{ klineData.close }}
-        <!-- <span class="up">-1.09%</span><span class="down">-1.029%</span> -->
-      </div>
-      <div class="r">
-        <van-icon name="bar-chart-o" @click="toDetail" />
-      </div>
-    </div>
-    <!-- orderbook-container  -->
-    <div class="orderbook-container flex w-full px-12">
-      <div class="orderbook-left w-210px flex-col gap-12 flex">
-        <div
-          class="line w-full border-1px border-solid px-6px py-4 text-align-left font-size-16"
-          :style="{ borderColor: activeColor }"
-        >
-          {{ listtext }}
-        </div>
-        <div
-          class="line w-full border-1px border-solid px-6px py-4 text-align-left font-size-16 relative"
-          :style="{ borderColor: activeColor }"
-        >
+      <div class="openTrade-tab1 pb-60px">
+        <div class="flex flex-justify-between px-12 h-44 flex-items-center">
           <div
-            class="line-content flex flex-justify-between"
-            @click="popShow = !popShow"
-          >
-            {{ t(popList[popActive]) }} <van-icon name="arrow-down" />
+            class="l flex gap-4 flex-items-center font-size-14 .dark:font-color-#fff .light:font-color-#000 font-extralight">
+            {{ t("Newest price") }} {{ klineData.close }}
+            <!-- <span class="up">-1.09%</span><span class="down">-1.029%</span> -->
           </div>
-          <div class="pop absolute w-190px" v-show="popShow">
-            <div
-              class="pop-item p-12"
-              v-for="(i, k) in popList"
-              :key="k"
-              @click.stop="handleClickPopItem(k)"
-            >
-              {{ t(i) }}
+          <div class="r">
+            <van-icon name="bar-chart-o" @click="toDetail" />
+          </div>
+        </div>
+        <!-- orderbook-container  -->
+        <div class="orderbook-container flex w-full px-12">
+          <div class="orderbook-left w-210px flex-col gap-12 flex">
+            <div class="line w-full border-1px border-solid px-6px py-4 text-align-left font-size-16"
+              :style="{ borderColor: activeColor }">
+              {{ listtext }}
             </div>
-          </div>
-        </div>
-        <div
-          class="line w-full border-1px border-solid px-6px py-4 text-align-left font-size-16"
-          :style="{ borderColor: activeColor }"
-        >
-          <input type="number" v-model="form.price" v-if="popActive == 1" />
-          {{ popActive == 0 ? klineData.close : "" }}
-        </div>
-        <div
-          class="line w-full border-1px border-solid text-align-left font-size-16"
-          :style="{ borderColor: activeColor }"
-        >
-          <div class="line-tab flex w-full">
-            <div
-              class="tab-item flex-1 text-align-center px-6px py-4"
-              v-for="(i, k) in tabList"
-              :key="k"
-              @click="tabActive = k"
-              :style="{ background: tabActive == k ? activeColor : '' }"
-            >
-              {{ t(i) }}
+            <div class="line w-full border-1px border-solid px-6px py-4 text-align-left font-size-16 relative"
+              :style="{ borderColor: activeColor }">
+              <div class="line-content flex flex-justify-between" @click="popShow = !popShow">
+                {{ t(popList[popActive]) }} <van-icon name="arrow-down" />
+              </div>
+              <div class="pop absolute w-190px" v-show="popShow">
+                <div class="pop-item p-12" v-for="(i, k) in popList" :key="k" @click.stop="handleClickPopItem(k)">
+                  {{ t(i) }}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div
-          class="line w-full border-color-#F43368 text-align-left font-size-16"
-        >
-          <van-stepper
-            v-model="form.amount"
-            step="1"
-            class="price-stepper w-full"
-          />
-        </div>
-        <div class="buy-number font-size-20px mb-12" v-if="direction != 1">
-          {{ t("Available") }}
-          <span class="my-4 color-amber">{{
-            userBalanceInfo.baseAsset
-              ? addCommasToNumber(userBalanceInfo.baseAsset.baseBalance)
-              : ""
-          }}</span>
-        </div>
-        <div class="buy-number font-size-20px mb-12" v-else>
-          {{ t("Available") }} {{ userBalanceInfo.quoteAsset.quoteSymbol }}
-          <span class="my-4 color-amber">{{
-            userBalanceInfo.quoteAsset
-              ? addCommasToNumber(userBalanceInfo.quoteAsset.quoteBalance)
-              : ""
-          }}</span>
-        </div>
-        <!-- <div class="flex w-full gap-8">
+            <div class="line w-full border-1px border-solid px-6px py-4 text-align-left font-size-16"
+              :style="{ borderColor: activeColor }">
+              <input type="number" v-model="form.price" v-if="popActive == 1" />
+              {{ popActive == 0 ? klineData.close : "" }}
+            </div>
+            <div class="line w-full border-1px border-solid text-align-left font-size-16"
+              :style="{ borderColor: activeColor }">
+              <div class="line-tab flex w-full">
+                <div class="tab-item flex-1 text-align-center px-6px py-4" v-for="(i, k) in tabList" :key="k"
+                  @click="tabActive = k" :style="{ background: tabActive == k ? activeColor : '' }">
+                  {{ t(i) }}
+                </div>
+              </div>
+            </div>
+            <div class="line w-full border-color-#F43368 text-align-left font-size-16">
+              <van-stepper v-model="form.amount" step="1" class="price-stepper w-full" />
+            </div>
+            <div class="buy-number font-size-20px mb-12" v-if="direction != 1">
+              {{ t("Available") }}
+              <span class="my-4 color-amber">{{
+                userBalanceInfo.baseAsset
+                  ? addCommasToNumber(userBalanceInfo.baseAsset.baseBalance)
+                  : ""
+              }}</span>
+            </div>
+            <div class="buy-number font-size-20px mb-12" v-else>
+              {{ t("Available") }} {{ userBalanceInfo.quoteAsset.quoteSymbol }}
+              <span class="my-4 color-amber">{{
+                userBalanceInfo.quoteAsset
+                  ? addCommasToNumber(userBalanceInfo.quoteAsset.quoteBalance)
+                  : ""
+              }}</span>
+            </div>
+            <!-- <div class="flex w-full gap-8">
                         <div class="flex-item flex-1 font-size-12px p-6 text-align-center rounded-4"
                             v-for="(i, k) in percentList" :key="k">{{ i }}</div>
                     </div> 
@@ -98,138 +70,97 @@
                         <div class="l">个股仓位 <span class="my-4 color-amber">12,3213</span> </div>
                         <div class="l">总仓位 <span class="my-4 color-amber">12,3213</span> </div>
                     </div>-->
-        <van-button
-          class="buy-btn"
-          type="primary"
-          block
-          size="small"
-          @click="submit"
-          >{{ t("confirm") }}</van-button
-        >
-      </div>
-      <div class="orderboox-right flex-1 flex-shrink-0 pl-12">
-        <div class="sell h-212px flex flex-col gap-12">
-          <div
-            class="line py-6 flex flex-justify-between gap-12 flex-items-center w-full font-size-14px font-extralight"
-            v-for="(item, e) in depthData.asks"
-            :key="e"
-            :style="[
-              {
-                background: `linear-gradient(to right, rgb(19, 26, 46) 0%, rgb(19, 26, 46) ${linePercent}%, rgba(246, 70, 93, 0.1) ${linePercent}%, rgba(246, 70, 93, 0.1) 100%)`,
-              },
-            ]"
-          >
-            <div class="l-label flex-shrink-0 font-size-12">
-              {{ t("Sell") }}{{ e + 1 }}
+            <van-button class="buy-btn" type="primary" block size="small" @click="submit">{{ t("confirm")
+              }}</van-button>
+          </div>
+          <div class="orderboox-right flex-1 flex-shrink-0 pl-12">
+            <div class="sell h-212px flex flex-col gap-12">
+              <div
+                class="line py-6 flex flex-justify-between gap-12 flex-items-center w-full font-size-14px font-extralight"
+                v-for="(item, e) in depthData.asks" :key="e" :style="[
+                  {
+                    background: `linear-gradient(to right, rgb(19, 26, 46) 0%, rgb(19, 26, 46) ${linePercent}%, rgba(246, 70, 93, 0.1) ${linePercent}%, rgba(246, 70, 93, 0.1) 100%)`,
+                  },
+                ]">
+                <div class="l-label flex-shrink-0 font-size-12">
+                  {{ t("Sell") }}{{ e + 1 }}
+                </div>
+                <div class="r-value w-full flex flex-justify-between">
+                  <div class="p down">{{ item[0].toFixed(2) || "0" }}</div>
+                  <div class="n">{{ item[1] }}</div>
+                </div>
+              </div>
             </div>
-            <div class="r-value w-full flex flex-justify-between">
-              <div class="p up">{{ item[0].toFixed(2) || "0" }}</div>
-              <div class="n">{{ item[1] }}</div>
+            <div class="rect-box w-full flex h-7">
+              <div class="l flex-1"></div>
+              <div class="r-rect flex-1 h-7"></div>
+            </div>
+            <div class="buy h-212px flex flex-col gap-12">
+              <div
+                class="line py-6 flex flex-justify-between gap-12 flex-items-center w-full font-size-14px font-extralight"
+                v-for="(item, e) in depthData.asks" :key="e" :style="[
+                  {
+                    background: `linear-gradient(to right, rgb(19, 26, 46) 0%, rgb(19, 26, 46) 10.892%, rgba(94, 186, 137, 0.1) 90.892%, rgba(94, 186, 137, 0.1) 100%)`,
+                  },
+                ]">
+                <div class="l-label flex-shrink-0 font-size-12">
+                  {{ t("Buy") }}{{ e + 1 }}
+                </div>
+                <div class="r-value w-full flex flex-justify-between">
+                  <div class="p  up">{{ item[0].toFixed(2) || "0" }}</div>
+                  <div class="n">{{ item[1] }}</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="rect-box w-full flex h-7">
-          <div class="l flex-1"></div>
-          <div class="r-rect flex-1 h-7"></div>
-        </div>
-        <div class="buy h-212px flex flex-col gap-12">
-          <div
-            class="line py-6 flex flex-justify-between gap-12 flex-items-center w-full font-size-14px font-extralight"
-            v-for="(item, e) in depthData.asks"
-            :key="e"
-            :style="[
-              {
-                background: `linear-gradient(to right, rgb(19, 26, 46) 0%, rgb(19, 26, 46) 10.892%, rgba(94, 186, 137, 0.1) 90.892%, rgba(94, 186, 137, 0.1) 100%)`,
-              },
-            ]"
-          >
-            <div class="l-label flex-shrink-0 font-size-12">
-              {{ t("Buy") }}{{ e + 1 }}
+        <!-- indicator-index-container -->
+        <div class="indicator-index-container p-12">
+          <div class="indicator-index-tab flex flex-justify-between flex-items-center">
+            <div class="l flex gap-2">
+              <div class="tab-item py-4 px-10 rounded-4" :class="{ tabActice: k == orderStatus }"
+                v-for="(item, k) in indicatorTab" :key="k" @click="handleClickIndicatorTab(k)">
+                {{ t(item) }}
+              </div>
             </div>
-            <div class="r-value w-full flex flex-justify-between">
-              <div class="p down">{{ item[0].toFixed(2) || "0" }}</div>
-              <div class="n">{{ item[1] }}</div>
+            <div class="r flex-shrink-0" @click="herfAssetsLog">
+              <img src="@/assets/image/deliveryContract/Group1663.png" alt="" class="w-24 h-18 pr-6" />
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-    <!-- indicator-index-container -->
-    <div class="indicator-index-container p-12">
-      <div
-        class="indicator-index-tab flex flex-justify-between flex-items-center"
-      >
-        <div class="l flex gap-2">
-          <div
-            class="tab-item py-4 px-10 rounded-4"
-            :class="{ tabActice: k == orderStatus }"
-            v-for="(item, k) in indicatorTab"
-            :key="k"
-            @click="handleClickIndicatorTab(k)"
-          >
-            {{ t(item) }}
+          <div class="tab-content" v-show="orderStatus == 0 || orderStatus == 1">
+            <EntrustItem v-for="item in orderList" :key="item.order_no" :entrust="item" state="submitted"
+              @cancelOrder="cancelOrder" />
+            <Empty v-if="orderList.length == 0" :no-tips="true" />
+            <LoadMore :status="orderLoadStatus" @load-more="loadMore"></LoadMore>
           </div>
-        </div>
-        <div class="r flex-shrink-0" @click="herfAssetsLog">
-          <img
-            src="@/assets/image/deliveryContract/Group1663.png"
-            alt=""
-            class="w-24 h-18 pr-6"
-          />
-        </div>
-      </div>
-      <div class="tab-content" v-show="orderStatus == 0 || orderStatus == 1">
-        <EntrustItem
-          v-for="item in orderList"
-          :key="item.order_no"
-          :entrust="item"
-          state="submitted"
-          @cancelOrder="cancelOrder"
-        />
-        <Empty v-if="orderList.length == 0" />
-        <LoadMore :status="orderLoadStatus" @load-more="loadMore"></LoadMore>
-      </div>
 
-      <div class="tab-content" v-show="orderStatus == 2">
-        <div class="etf-table pt-12 font-size-12">
-          <div class="title text-coolGray px-12">当前币对资产</div>
-          <div
-            class="line flex flex-justify-between p-12"
-            v-if="userBalanceInfo.baseAsset"
-          >
-            <div class="l-title flex items-center gap-6">
-              <img
-                :src="userBalanceInfo.baseAsset.symbolLogo"
-                alt=""
-                class="w-24 h-24 rounded-full"
-              />{{ userBalanceInfo.baseAsset.baseSymbolName }}
-            </div>
-            <div class="l-desc font-extralight text-coolGray">
-              {{ userBalanceInfo.baseAsset.baseBalance }}
-            </div>
-          </div>
-          <div
-            class="line flex flex-justify-between p-12"
-            v-if="userBalanceInfo.quoteAsset"
-          >
-            <div class="l-title flex items-center gap-6">
-              <img
-                :src="userBalanceInfo.quoteAsset.symbolLogo"
-                alt=""
-                class="w-24 h-24 rounded-full"
-              />
-              {{ userBalanceInfo.quoteAsset.quoteSymbolName }}
-            </div>
-            <div class="l-desc font-extralight text-coolGray">
-              {{ userBalanceInfo.quoteAsset.quoteSymbol }}
-              {{ addCommasToNumber(userBalanceInfo.quoteAsset.quoteBalance) }}
+          <div class="tab-content" v-show="orderStatus == 2">
+            <div class="etf-table pt-12 font-size-12">
+              <div class="title text-coolGray px-12">当前币对资产</div>
+              <div class="line flex flex-justify-between p-12" v-if="userBalanceInfo.baseAsset">
+                <div class="l-title flex items-center gap-6">
+                  <img :src="userBalanceInfo.baseAsset.symbolLogo" alt="" class="w-24 h-24 rounded-full" />{{
+                    userBalanceInfo.baseAsset.baseSymbolName }}
+                </div>
+                <div class="l-desc font-extralight text-coolGray">
+                  {{ userBalanceInfo.baseAsset.baseBalance }}
+                </div>
+              </div>
+              <div class="line flex flex-justify-between p-12" v-if="userBalanceInfo.quoteAsset">
+                <div class="l-title flex items-center gap-6">
+                  <img :src="userBalanceInfo.quoteAsset.symbolLogo" alt="" class="w-24 h-24 rounded-full" />
+                  {{ userBalanceInfo.quoteAsset.quoteSymbolName }}
+                </div>
+                <div class="l-desc font-extralight text-coolGray">
+                  {{ userBalanceInfo.quoteAsset.quoteSymbol }}
+                  {{ addCommasToNumber(userBalanceInfo.quoteAsset.quoteBalance) }}
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</template>
+    </template>
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import Empty from "@/components/empty.vue";
@@ -242,6 +173,7 @@ import EntrustItem from "./EntrustItem.vue";
 import { addCommasToNumber } from "@/utils/tool";
 // 应用全局防抖后的提交方法
 import { useLoadingStore } from "@/stores/modules/loading";
+import { kline } from "@/api/market";
 const emits = defineEmits([
   "handleClickSubmit",
   "handleClickIndicatorTab",
@@ -251,7 +183,26 @@ const emits = defineEmits([
 ]);
 
 const store = useStore();
-const klineData = computed(() => store.getlistData);
+const klineData = computed(() => {
+
+  return store.getlistData
+});
+watch(
+  () => store.getklineList,
+  (newV) => {
+    if (newV && klineData.value) {
+
+      let listItem = newV.find(
+        (item) => item.tradingId == props.tradingPairsId
+      );
+      if (listItem) {
+
+        klineData.value.close = listItem.tick.close;
+
+      }
+    }
+  }
+);
 const { t } = useI18n();
 const props = defineProps({
   direction: {
@@ -260,19 +211,18 @@ const props = defineProps({
   },
   depthData: {
     type: Object,
-    default: () => {},
-  },
-  klineData: {
-    type: Object,
-    default: [],
-  },
-  userBalanceInfo: {
-    default: () => {},
-  },
-  orderList: {
-    default: () => {},
+    default: () => { },
   },
 
+  userBalanceInfo: {
+    default: () => { },
+  },
+  orderList: {
+    default: () => { },
+  },
+  tradingPairsId: {
+    default: ''
+  },
   orderStatus: {
     default: 1,
   },
@@ -418,8 +368,7 @@ defineExpose({
   background-color: #f43368;
 
   .r-rect {
-    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJgAAAAOCAYAAADT/dV/AAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAClSURBVHgB7dnBCcJAEIXhN4uEPaaELWVLsAOtwBYsJYJ2o5ASbMNLjBtBJcabO7f/uyzMeXj7YEw/xMvpYGYbAX+y70Hsu2T35iqggrCYDE0WUMliwcy0F1DJbMHi+ZjLkwRUMk8ws62Ait4ln3IPD58Eo9zDwTPBSveShTClVxJQ0SvBslguOAht31Hu4WZKsJazELyE29CsBThZmcZd+SNHAQ4eYeEYrSfBjxMAAAAASUVORK5CYII=)
-      no-repeat;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJgAAAAOCAYAAADT/dV/AAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAClSURBVHgB7dnBCcJAEIXhN4uEPaaELWVLsAOtwBYsJYJ2o5ASbMNLjBtBJcabO7f/uyzMeXj7YEw/xMvpYGYbAX+y70Hsu2T35iqggrCYDE0WUMliwcy0F1DJbMHi+ZjLkwRUMk8ws62Ait4ln3IPD58Eo9zDwTPBSveShTClVxJQ0SvBslguOAht31Hu4WZKsJazELyE29CsBThZmcZd+SNHAQ4eYeEYrSfBjxMAAAAASUVORK5CYII=) no-repeat;
   }
 }
 

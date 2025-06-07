@@ -1,119 +1,146 @@
 <template>
-    <div class="color-blueGray-400 charge-bank-page p-12">
-        <div class="color-blueGray-400 t font-size-18">银行卡提现</div>
-        <inputCom class="mt-12" :label="'银行卡'" :placeholder="''" v-model:value="form.methodId" :type="'picker'">
-            <div class="w-full flex justify-between">
-                <div class="l flex-1 font-size-14" @click="showPicker = true">{{ form.methodId ? form.methodIdText :
-                    '请选择银行卡'
-                    }}</div>
-                <div class="r flex-shrink-0">
-                    <van-icon name="arrow" class="rotate-90" />
-                </div>
-            </div>
-        </inputCom>
-        <inputCom :label="'提现金额'" :placeholder="'请输入'" v-model:value="form.num" :tips="''">
-        </inputCom>
-        <div class="font-size-12">{{ tips }}</div>
-        <div class="font-size-12 mb-12 mt-4">{{ tips2 }}</div>
-
-        <van-button type="primary" block @click="handleClickSubmit">提交</van-button>
-        <van-popup v-model:show="showPicker" destroy-on-close position="bottom">
-            <van-picker :columns="columns" :model-value="[form.methodId]" @confirm="onConfirm"
-                @cancel="showPicker = false" />
-        </van-popup>
+  <div class="color-blueGray-400 charge-bank-page p-12">
+    <div class="color-blueGray-400 t font-size-18">
+      {{ t("Bank card withdrawal") }}
     </div>
+    <inputCom class="mt-12" :label="t('Bank card')" :placeholder="t('input.pleaseEnter')" v-model:value="form.methodId"
+      :type="'picker'">
+      <div class="w-full flex justify-between">
+        <div class="l flex-1 font-size-14" @click="showPicker = true">
+          {{ form.methodId ? form.methodIdText : t("input.PleaseSelect") }}
+        </div>
+        <div class="r flex-shrink-0">
+          <van-icon name="arrow" class="rotate-90" />
+        </div>
+      </div>
+    </inputCom>
+    <inputCom :label="t('Withdrawal amount')" :placeholder="t('input.PleaseEnter')" v-model:value="form.num" :tips="''">
+    </inputCom>
+    <div class="font-size-12 line-height-16">{{ tips }}</div>
+    <div class="font-size-12 mb-12 mt-4">{{ tips2 }}</div>
+
+    <van-button type="primary" block @click="handleClickSubmit">{{
+      t("submit")
+    }}</van-button>
+    <van-popup v-model:show="showPicker" destroy-on-close position="bottom">
+      <van-picker :columns="columns" :model-value="[form.methodId]" @confirm="onConfirm" @cancel="showPicker = false" />
+    </van-popup>
+  </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive } from "vue"
-import { withdrawConfig, withdraw } from '@/api/withdraw'
-import { useStore } from '@/stores/modules/index';
-import { addCommasToNumber } from '@/utils/tool'
-import { userCardGrid } from '@/api/payment'
-import { useLoadingStore } from '@/stores/modules/loading'
+import { ref, reactive } from "vue";
+import { withdrawConfig, withdraw } from "@/api/withdraw";
+import { useStore } from "@/stores/modules/index";
+import { addCommasToNumber } from "@/utils/tool";
+import { userCardGrid } from "@/api/payment";
+import { useLoadingStore } from "@/stores/modules/loading";
 import { method } from "lodash-es";
-const router = useRouter()
-const loadingStore = useLoadingStore()
-const { proxy } = getCurrentInstance()
-const priceTabArr = ref(['1999', '4999', '9999', '19999', '49999', '99999'])
-const tips = ref('')
-const tips2 = ref('')
-const columns = ref([])
-const showPicker = ref(false)
-const store = useStore()
+const router = useRouter();
+const loadingStore = useLoadingStore();
+const { proxy } = getCurrentInstance();
+const { t } = useI18n();
+const priceTabArr = ref(["1999", "4999", "9999", "19999", "49999", "99999"]);
+const tips = ref("");
+const tips2 = ref("");
+const columns = ref([]);
+const showPicker = ref(false);
+const store = useStore();
 const page = reactive({
-    pageIndex: 1,
-    pageSize: 200
-})
+  pageIndex: 1,
+  pageSize: 200,
+});
 const form = reactive({
-    num: '',
-    methodId: '',
-    assetId: '',
-})
+  num: "",
+  methodId: "",
+  assetId: "",
+});
+const withdrawFee = ref(0);
+watch(() => form.num, (newVal) => {
+  if (newVal) {
+    let fee = addCommasToNumber(newVal * ((1 - withdrawFee.value) / 100));
+    tips.value = `${t("Service fee")}: ${config.value.symbol} ${fee}  ${t(
+      "Minimum withdrawal amount"
+    )}: ${config.value.symbol} ${config.value.minWithdraw} `;
+  }
+}
+);
+const config = ref()
 const getRechargeConfig = async () => {
-    withdrawConfig({ mode: 'gp' }).then(res => {
-        console.log(res.data)
-        form.assetId = res.data.assetId
-        tips.value = `手续费${res.data.withdrawFee} 最小提现金额${res.data.minWithdraw} `
-        tips2.value = `余额${addCommasToNumber(res.data.balance)} `
-
-    })
-}
+  withdrawConfig({ mode: "gp" }).then((res) => {
+    config.value = res.data
+    form.assetId = res.data.assetId;
+    withdrawFee.value = res.data.withdrawFee;
+    tips.value = `${t("Service fee")}: ${res.data.symbol} 0   ${t(
+      "Minimum withdrawal amount"
+    )}: ${res.data.symbol} ${res.data.minWithdraw} `;
+    tips2.value = `${t("Balance")}: ${res.data.symbol} ${addCommasToNumber(
+      res.data.balance
+    )} `;
+  });
+};
 const getList = async () => {
-    const { data } = await userCardGrid({
-        ...page
+  const { data } = await userCardGrid({
+    ...page,
+  });
+  columns.value = data.rows
+    ? data.rows.map((e) => {
+      return {
+        text: `${e.address.bankName}(${e.address.bankType})`,
+        value: e.id,
+      };
     })
-    columns.value = data.rows ? data.rows.map((e) => {
-        return {
-            text: `${e.address.bankName}(${e.address.bankType})`,
-            value: e.id
-        }
-    }) : []
-    store.setUserCardList(data.rows)
-
-}
+    : [];
+  store.setUserCardList(data.rows);
+};
 const onConfirm = ({ selectedValues, selectedOptions }) => {
-    form.methodId = selectedValues[0];
-    form.methodIdText = selectedOptions[0].text
-    console.log(form, selectedValues)
-    showPicker.value = false
-}
+  form.methodId = selectedValues[0];
+  form.methodIdText = selectedOptions[0].text;
+  console.log(form, selectedValues);
+  showPicker.value = false;
+};
 const handleClickSubmitOriginal = async () => {
-    //     console.log(store, 'params')
-    store.setWithdrawParams({
-        cardId: form.methodId,
-        amount: form.num,
-        networkId: 0,
-        type: 1,
-        assetId: form.assetId
-    })
-    router.push('/deal/exchange/securityVerification?type=1')
-    // const { data, code } = await withdraw({
-    //     cardId: form.methodId,
-    //     amount: form.num,
-    //     networkId: 0,
-    //     type: 1,
-    //     assetId: 0,
+  //     console.log(store, 'params')
+  store.setWithdrawParams({
+    cardId: form.methodId,
+    amount: form.num,
+    networkId: 0,
+    type: 1,
+    assetId: form.assetId,
+  });
+  router.push("/deal/exchange/securityVerification?type=1");
+  // const { data, code } = await withdraw({
+  //     cardId: form.methodId,
+  //     amount: form.num,
+  //     networkId: 0,
+  //     type: 1,
+  //     assetId: 0,
 
-    // })
-    // if (code == 200) {
-    //     showToast('提交成功')
-    //     getRechargeConfig();
+  // })
+  // if (code == 200) {
+  //     showToast('提交成功')
+  //     getRechargeConfig();
 
-    // }
-}
+  // }
+};
 const handleClickSubmit = proxy!.$throttle(handleClickSubmitOriginal, 1000, {
-    onStart: () => loadingStore.show(),
-    onEnd: () => loadingStore.hide()
+  onStart: () => loadingStore.show(),
+  onEnd: () => loadingStore.hide(),
 });
 onMounted(() => {
-    getRechargeConfig();
-    getList()
-})
+  getRechargeConfig();
+  getList();
+});
 </script>
+<route lang="json5">
+{
+  meta: {
+    i18n: 'Bank Withdrawal',
+  },
+}
+</route>
 <style lang="less" scoped>
 .price-item {
-    width: 33%;
-    border: 1px solid #1678FF;
-
+  width: 33%;
+  border: 1px solid #1678ff;
 }
 </style>

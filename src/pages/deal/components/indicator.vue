@@ -173,6 +173,9 @@ const getOrderList = async (params = {}) => {
     if (code == 200) {
         // showToast('购入成功')
         if (!data.rows) {
+            if (page.pageIndex == 1) {
+                orderList.value = []
+            }
             orderLoadStatus.value = 3
             return
         }
@@ -197,7 +200,7 @@ const cancelOrder = (val) => {
     }
     swapOrderCancel(params).then(res => {
         if (res.code == 200) {
-            showToast('撤单成功')
+            showToast(t('Order canceled successfully'))
             orderList.value = []
 
             if (val.type == 'status1') {

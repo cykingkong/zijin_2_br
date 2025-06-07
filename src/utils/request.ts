@@ -1,6 +1,6 @@
 import type { AxiosError, InternalAxiosRequestConfig } from 'axios'
 import axios from 'axios'
-import { showNotify, showLoadingToast } from 'vant'
+import { showNotify, showLoadingToast, closeToast } from 'vant'
 import { STORAGE_TOKEN_KEY } from '@/stores/mutation-type'
 // import local from './local'
 
@@ -27,7 +27,7 @@ export type RequestError = AxiosError<{
 // 异常拦截处理器
 function errorHandler(error: RequestError): Promise<any> {
   // 确保在错误处理时关闭loading
-  error.config?.loadingToast?.close()
+  // error.config?.loadingToast?.close()
 
   if (error.response) {
     const { data = {}, status, statusText, } = error.response
@@ -62,12 +62,17 @@ declare module 'axios' {
 
 // 请求拦截器
 function requestHandler(config: InternalAxiosRequestConfig): InternalAxiosRequestConfig | Promise<InternalAxiosRequestConfig> {
-  const toast = showLoadingToast({
+  showLoadingToast({
     duration: 0,
     forbidClick: true,
     message: ''
   })
-  config.loadingToast = toast
+  // const toast = showLoadingToast({
+  //   duration: 0,
+  //   forbidClick: true,
+  //   message: ''
+  // })
+  // config.loadingToast = toast
   let lang = localStorage.getItem('language')
 
   const savedToken = localStorage.getItem(STORAGE_TOKEN_KEY)
@@ -85,18 +90,22 @@ request.interceptors.request.use(requestHandler, errorHandler)
 // 响应拦截器
 function responseHandler(response: any) {
   const { code, message } = response.data
-  response.config?.loadingToast?.close()
-
+  // response.config?.loadingToast?.close()
   if (code === 200) {
+    closeToast(true)
+
     // 成功时保持Toast显示
     return response.data
   } else {
+    closeToast(true)
+
     showNotify({
       type: 'danger',
       message: message
     })
     return Promise.reject(new Error(message))
   }
+
 }
 
 // Add a response interceptor

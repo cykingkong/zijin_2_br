@@ -11,7 +11,7 @@
             </div>
             <div class="r flex flex-1 flex-shrink-0 justify-end" @click.stop="handleClickDetail">{{ t('totalYield') }}:
                 {{
-                    _item.totalYield || '-' }} % </div>
+                    _item.totalYield }} % </div>
         </div>
         <div class="li flex justify-between items-center ">
             <div class="li-l font-size-14">{{ t('dailyYield') }}:{{ _item.dailyYield }}%</div>
@@ -34,8 +34,8 @@
     <div class="order-item-content w-full px-12 py-24  font-size-12 flex flex-col gap-10px"
         v-if="props.itemType == 'order'">
         <div class="li flex items-center justify-between">
-            <div class="li-l">{{ dayjs(_item.startTimeBegin).format('YYYY-MM-DD') }}</div>
-            <div class="li-r">{{ dayjs(_item.startTimeEnd).format('YYYY-MM-DD') }}</div>
+            <div class="li-l">{{ dayjs(_item.statusTime).format('YYYY-MM-DD') }}</div>
+            <div class="li-r">{{ dayjs(_item.endTime).format('YYYY-MM-DD') }}</div>
         </div>
         <div class="top-li flex  items-center">
             <div class="l flex flex-shrink-0 items-center gap-6 justify-between">

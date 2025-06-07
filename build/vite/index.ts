@@ -10,10 +10,10 @@ import { VantResolver } from '@vant/auto-import-resolver'
 import Components from 'unplugin-vue-components/vite'
 import { VueRouterAutoImports } from 'unplugin-vue-router'
 import VueRouter from 'unplugin-vue-router/vite'
-import mockDevServerPlugin from 'vite-plugin-mock-dev-server'
-import { VitePWA } from 'vite-plugin-pwa' //  导入VitePWA插件
+// import mockDevServerPlugin from 'vite-plugin-mock-dev-server'
+// import { VitePWA } from 'vite-plugin-pwa' //  导入VitePWA插件
 // import Sitemap from 'vite-plugin-sitemap'
-import VueDevTools from 'vite-plugin-vue-devtools'
+// import VueDevTools from 'vite-plugin-vue-devtools'
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 import { loadEnv } from 'vite'
 import { createViteVConsole } from './vconsole'
@@ -37,7 +37,7 @@ export function createVitePlugins(mode: string) {
     // }),
 
     // https://github.com/pengzhanbo/vite-plugin-mock-dev-server
-    mockDevServerPlugin(),
+    // mockDevServerPlugin(),
 
     // https://github.com/antfu/unplugin-vue-components
     Components({

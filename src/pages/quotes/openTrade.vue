@@ -29,8 +29,8 @@
           'Transaction Price',
           'Order Quantity',
           'operation',
-        ]" :table-data="orderListStatus0" :order-load-status0="orderLoadStatus0"
-          @load-more="loadMoreOrderListStatus0" @cancelOrder="cancelOrder">
+        ]" :table-data="orderListStatus0" :order-load-status0="orderLoadStatus0" @load-more="loadMoreOrderListStatus0"
+          @cancelOrder="cancelOrder">
         </TabTablePage>
       </van-tab>
       <van-tab :title="t('Holdings')" :name="3">
@@ -237,7 +237,21 @@ const changeTab = (val) => {
     // }
   }
 };
+const timer = ref(null)
+const reloadOrderList = () => {
+  if (timer.value) {
+    clearInterval(timer.value)
+    timer.value = null
+  }
+  if (orderStatus.value == 0) {
+    let p = {
+      status: orderStatus.value == 0 ? 1 : 2,
+      direction: activeName.value == 0 ? "buy" : "sell",
+    };
+    getOrderList(p);
 
+  }
+}
 const addOrder = async (params) => {
   swapOrderAdd({
     tradingPairsId: tradingPairsId.value,
@@ -252,6 +266,16 @@ const addOrder = async (params) => {
       showToast(t(toastText));
       getBalancePairInfo();
       getOrderList(p);
+      // 如果是当前委托，则定时5秒后刷新订单列表,如果再次购买，则将之前的5秒定时器重设为5秒
+      if (orderStatus.value == 0) {
+        if (timer.value) {
+          clearTimeout(timer.value)
+          timer.value = null
+        }
+        timer.value = setTimeout(() => {
+          reloadOrderList()
+        }, 5500)
+      }
     }
   });
 };
@@ -314,6 +338,9 @@ const getOrderListStatus0 = async (params = {}) => {
   if (code == 200) {
     // showToast('购入成功')
     if (!data.rows) {
+      if (page.pageIndex == 1) {
+        orderListStatus0.value = []
+      }
       orderLoadStatus0.value = 3;
       return;
     }
@@ -342,6 +369,9 @@ const getOrderList = async (params = {}) => {
   if (code == 200) {
     // showToast('购入成功')
     if (!data.rows) {
+      if (page.pageIndex == 1) {
+        orderList.value = [];
+      }
       orderLoadStatus.value = 3;
       return;
     }
@@ -387,7 +417,10 @@ const changeTradingPairsId = async (item) => {
 const handleClickSubmit = (params) => {
   addOrder(params);
 };
+
+
 const handleClickIndicatorTab = (val) => {
+  // 切换委托状态
   orderList.value = [];
   orderLoadStatus.value = 1;
   page.pageIndex = 1;

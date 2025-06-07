@@ -127,7 +127,7 @@ const SocketWs = () => {
                         close: res.data.tick.close, // 更新收盘价
                         volume: res.data.tick.vol // 更新成交量
                     }
-                    store.setlistData(res.data.tick);
+                    store.setlistData(res.data);
                     chart.value.updateData(data);
                 } catch (e) {
                     console.log(e)

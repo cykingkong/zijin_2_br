@@ -177,7 +177,7 @@ const hanleClickAreaPick = () => {
 const handleClickDel = () => {
   userCardDel({ id: form.id }).then((res) => {
     if (res.code == 200) {
-      showToast("删除成功");
+      showToast(t("Successfully deleted"));
       setTimeout(() => {
         router.push("/profile/payMentMethod/list");
       }, 500);
@@ -212,7 +212,7 @@ const handleClickSubmit = () => {
   if (route.query.edit == "1") {
     userCardUpdate(params).then((res) => {
       if (res.code == 200) {
-        showToast("修改成功");
+        // showToast("修改成功");
         setTimeout(() => {
           router.push("/profile/payMentMethod/list");
         }, 500);
@@ -225,7 +225,7 @@ const handleClickSubmit = () => {
   // 提交
   userCardAdd(params).then((res) => {
     if (res.code == 200) {
-      showToast("添加成功");
+      // showToast("添加成功");
       // 跳转
       setTimeout(() => {
         router.push("/profile/payMentMethod/list");

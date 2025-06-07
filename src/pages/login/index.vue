@@ -13,10 +13,10 @@ const router = useRouter()
 const userStore = useUserStore()
 const loading = ref(false)
 const typeArr = [{
-  label: `${t('input.Phone')}${t('login.login')}`,
+  label: `${t('input.Phone')}`,
   value: 'phone'
 }, {
-  label: `${t('login.email')}${t('login.login')}`,
+  label: `${t('login.email')}`,
   value: 'email'
 }]
 const areaInfo = ref({
@@ -129,7 +129,7 @@ async function login(values: any) {
         </div>
       </template>
     </inputCom>
-    <inputCom :label="t('input.email')" :placeholder="t('input.PleaseEnter')" v-model:value="postData.account"
+    <inputCom :label="t('login.email')" :placeholder="t('input.PleaseEnter')" v-model:value="postData.account"
       :tips="''" v-show="postData.type == 'email'">
     </inputCom>
     <inputCom :label="t('login.password')" :placeholder="t('input.PleaseEnter')" v-model:value="postData.password"

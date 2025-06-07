@@ -70,7 +70,7 @@ const vantLocales = {
 
 export const languageColumns: PickerColumn = [
   { text: 'Português brasileiro', value: 'pt-BR' },
-  // { text: '简体中文', value: 'zh-CN' },
+  { text: '简体中文', value: 'zh-CN' },
   { text: 'English', value: 'en-US' },
   { text: 'Português', value: 'pt-PT' },
   { text: 'Čeština', value: 'cs' },

@@ -9,10 +9,11 @@
                 <div class="name font-size-14">{{ item.tradingInfo.baseAssetInfo.symbol }}</div>
             </div>
             <div class="c w-150 flex-shrink-0 flex justify-center">
-                <KlineSvg :nameId="'myChart10' + _index" :areaStyle="true" :increase="_item.increase"
-                    :data="_item.price" :height="vw(30)" :width="vw(100)"></KlineSvg>
+                <Kline :nameId="'myChart10' + item.tradingPairsId" :areaStyle="true" :increase="_item.increase"
+                    :data="_item.price" :height="vw(30)" :width="vw(100)"></Kline>
             </div>
-            <div class="r flex flex-1 flex-shrink-0 justify-end">{{ _item.unit }} {{ _item.close || '-' }}</div>
+            <div class="r text-nowrap flex flex-1 flex-shrink-0 justify-end">{{ _item.unit }} {{ _item.close || '-' }}
+            </div>
         </div>
         <div class="li flex justify-between items-center ">
             <div class="li-l font-size-14">{{ t('Discount rate') }}:{{ _item.discountRate }}%</div>
@@ -59,16 +60,15 @@
                 _item.earnings }}</div>
         </div>
         <div class="li flex justify-end">
-            <van-button type="primary" :disabled="_item.status == 2"
-                :color="_item.saleStatus != 1 ? '#1989fa' : '#b5b5b5'" @click="handleClickSubmit"
-                class="font-size-16! ">{{
-                    t(orderStatusEnum[_item.status]) }}</van-button>
+            <van-button type="primary" :color="_item.saleStatus == 1 ? '#1989fa' : '#b5b5b5'" @click="handleClickSubmit"
+                class="font-size-16! w-100px!">{{
+                    t(orderStatusEnum[_item.saleStatus]) }}</van-button>
         </div>
     </div>
 </template>
 <script setup lang="ts">
 import { statusEnum, orderStatusEnum } from '../enum'
-import KlineSvg from '@/components/KlineSvg.vue';
+import Kline from '@/components/Kline.vue';
 import dayjs from 'dayjs'
 import vw from '@/utils/inline-px-to-vw'
 const emits = defineEmits(['handleClickBtn'])

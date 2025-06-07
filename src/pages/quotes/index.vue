@@ -10,12 +10,12 @@ import Rank from './component/rank.vue'
 import TopStories from './component/topStories.vue';
 import StockMarketWidget from './component/stockMarketWidget.vue'
 import hotmap from './component/hotmap.vue';
-import ChatItem from './component/chat-item.vue'
-import Kline from '@/components/Kline.vue'
-import klineChat from '@/components/klineChat.vue'
+
+
+
 import { indexInfo, depth, market } from '@/api/market'
 import local from '@/utils/local';
-import Indicator from './component/indicator.vue'
+
 const { t } = useI18n()
 const activeName = ref('')
 const store = useStore();

@@ -9,7 +9,7 @@ const loadingStore = useLoadingStore()
 const store: any = useStore()
 let ws = null
 useHead({
-  title: 'Vue3 Vant Mobile',
+  title: 'Quotes',
   meta: [
     {
       name: 'description',
@@ -17,7 +17,7 @@ useHead({
     },
     {
       name: 'theme-color',
-      content: () => isDark.value ? '#00aba9' : '#ffffff',
+      content: '#1f1f1f',
     },
   ],
   link: [

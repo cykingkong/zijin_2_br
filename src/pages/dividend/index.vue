@@ -23,7 +23,8 @@
                 <van-tab :title="t('Order List')">
                     <div class="discont-list flex flex-col pb-40">
                         <discont-item :item="item" v-for="(item, index) in orderList" :key="index"
-                            @handleClickBtn="handleClickBtn" :item-type="'order'"></discont-item>
+                            :index="item.tradingPairsId" @handleClickBtn="handleClickBtn"
+                            :item-type="'order'"></discont-item>
                         <div class="2 skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
                             v-show="skeleton && orderList.length == 0" v-for="i in 5" :key="i">
                         </div>
@@ -125,10 +126,8 @@ const getDisountList = async () => {
                 return {
                     ...e,
                     percentage: (
-                        ((e.totalQuantity - e.availableQuantity) /
-                            e.totalQuantity) *
-                        100
-                    ).toFixed(2)
+                        ((e.totalQuantity - e.availableQuantity) / e.totalQuantity) * 100
+                    ).toFixed(2),
                 }
             }) || []
         } else {
@@ -136,10 +135,8 @@ const getDisountList = async () => {
                 return {
                     ...e,
                     percentage: (
-                        ((e.totalQuantity - e.availableQuantity) /
-                            e.totalQuantity) *
-                        100
-                    ).toFixed(2)
+                        ((e.totalQuantity - e.availableQuantity) / e.totalQuantity) * 100
+                    ).toFixed(2),
                 }
             })
             list.value = list.value.concat(result)
@@ -185,9 +182,7 @@ const getOrderList = async () => {
                 return {
                     ...e,
                     percentage: (
-                        ((e.totalQuantity - e.availableQuantity) /
-                            e.totalQuantity) *
-                        100
+                        ((e.totalQuantity - e.availableQuantity) / e.totalQuantity) * 100
                     ).toFixed(2),
                     //  discountPrice 购买价格  purchasePrice 市场价
                     giftDividend: (e.discountPrice * e.purchaseQuantity * (e.dividendInfo.totalYield / 100)).toFixed(2) || 0, //  赠送股息金额
@@ -201,9 +196,7 @@ const getOrderList = async () => {
                 return {
                     ...e,
                     percentage: (
-                        ((e.totalQuantity - e.availableQuantity) /
-                            e.totalQuantity) *
-                        100
+                        ((e.totalQuantity - e.availableQuantity) / e.totalQuantity) * 100
                     ).toFixed(2),
                     giftDividend: (e.discountPrice * e.purchaseQuantity * (e.dividendInfo.totalYield / 100)).toFixed(2) || 0, //  赠送股息金额
                     earnings: ((e.purchasePrice - e.discountPrice) * e.purchaseQuantity).toFixed(2) || 0, // 收益，
@@ -239,9 +232,11 @@ watch(() => store.getklineList, (newV) => {
             let listItem = newV.find((item: any) => {
                 return item.tradingId == el.tradingPairsId
             })
+            console.log(listItem, 'listItem')
             if (listItem) {
                 if (listItem.tradingId == el.tradingPairsId) {
                     el.close = listItem.tick.close
+                    el.discountPrice = (el.close * (el.discountRate / 100)).toFixed(2) || 0 // 优惠价格
                 }
             }
 
@@ -252,9 +247,15 @@ watch(() => store.getklineList, (newV) => {
             let listItem = newV.find(item => item.tradingId == el.tradingPairsId)
             if (listItem) {
                 if (listItem.tradingId == el.tradingPairsId) {
-                    el.purchasePrice = listItem.tick.close;
+                    /**
+                     * (市场价-购买价)/市场价 = 收益率
+                     * (市场价-购买价)*数量 = 收益
+                     *  购买价格 * 数量 * 赠送比例 = 赠送股息金额
+                     */
+                    el.close = listItem.tick.close;
+                    el.discountPrice = (el.close * (el.discountRate / 100)).toFixed(2) || 0 // 优惠价格
                     el.giftDividend = (el.discountPrice * el.purchaseQuantity * (el.dividendInfo.totalYield / 100)).toFixed(2) || 0 //  赠送股息金额
-                    el.earnings = ((el.purchasePrice - el.discountPrice) * el.purchaseQuantity).toFixed(2) || 0 // 收益，
+                    el.earnings = ((el.close - el.discountPrice) * el.purchaseQuantity).toFixed(2) || 0 // 收益，
                     el.earningRate = ((el.purchasePrice - el.discountPrice) / el.purchasePrice * 100).toFixed(2) // 收益率
                 }
             }
@@ -294,7 +295,7 @@ const onConfirmOriginal = async (val: any) => {
             })
             if (code == 200) {
                 console.log(data)
-                showToast('下单成功')
+                showToast(t('Order placed successfully'))
                 bottomPopRef.value.show(false)
                 resetPage()
                 getDisountList()
@@ -305,7 +306,7 @@ const onConfirmOriginal = async (val: any) => {
             })
             if (code == 200) {
                 console.log(data)
-                showToast('出售成功')
+                showToast(t('Sold successfully'))
                 resetPage()
 
                 bottomPopRef.value.show(false)

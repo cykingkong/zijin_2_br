@@ -13,6 +13,7 @@ export interface UserState {
   uid?: number
   name?: string
   avatar?: string
+  userId?: string
 }
 
 export function login(data: LoginData): Promise<any> {
@@ -62,6 +63,9 @@ export function UserCardUpdate(data): Promise<any> {
 }
 export function kyc(data): Promise<any> {
   return request.post('/app-api/user/kyc', data)
+}
+export function getKfUrl(params): Promise<any> {
+  return request.get('/app-api/user/getKfUrl', { params })
 }
 // 用户信息相关
 // 获取可用余额（全部）

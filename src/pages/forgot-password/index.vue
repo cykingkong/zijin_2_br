@@ -53,11 +53,11 @@ const form = reactive({
 })
 const forgotType = ref(0) // 1 忘记登录密码  2 忘记支付密码
 const typeArr = [{
-  label: `${t('input.Phone')}${t('login.login')}`,
+  label: `${t('input.Phone')}`,
 
   value: 'phone'
 }, {
-  label: `${t('login.email')}${t('login.login')}`,
+  label: `${t('login.email')}`,
 
   value: 'email'
 }]
@@ -108,7 +108,7 @@ const hanleClickAreaPick = () => {
 const onSubmit = async () => {
   const { password, passwordConfirmation } = form
   if (password !== passwordConfirmation) {
-    return showToast.error('两次密码不一致')
+    return
   }
   let params = {
     ...form,
@@ -121,13 +121,13 @@ const onSubmit = async () => {
 
   const res = await forgetPassword(params)
   if (res.code === 200) {
-    showToast('修改成功')
+    showToast(t('Successfully modified'))
     router.push('/login')
   }
 }
 
 const getName = (val: any) => {
-  console.log(val, 'vvvv')
+
   areaInfo.value = val
 }
 onMounted(() => {
@@ -136,6 +136,14 @@ onMounted(() => {
   }
 })
 </script>
+<route lang="json5">
+{
+  name: 'forgotPassword',
+  meta: {
+    i18n: 'menus.forgot-password',
+  },
+}
+</route>
 <style lang="less" scoped>
 @import "@/components/nationality-list/intl.css";
 </style>

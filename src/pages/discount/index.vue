@@ -122,10 +122,8 @@ const getDisountList = async () => {
                 return {
                     ...e,
                     percentage: (
-                        ((e.totalQuantity - e.availableQuantity) /
-                            e.totalQuantity) *
-                        100
-                    ).toFixed(2)
+                        ((e.totalQuantity - e.availableQuantity) / e.totalQuantity) * 100
+                    ).toFixed(2),
                 }
             }) || []
         } else {
@@ -133,10 +131,8 @@ const getDisountList = async () => {
                 return {
                     ...e,
                     percentage: (
-                        ((e.totalQuantity - e.availableQuantity) /
-                            e.totalQuantity) *
-                        100
-                    ).toFixed(2)
+                        ((e.totalQuantity - e.availableQuantity) / e.totalQuantity) * 100
+                    ).toFixed(2),
                 }
             })
             list.value = list.value.concat(result)
@@ -180,9 +176,7 @@ const getOrderList = async () => {
                 return {
                     ...e,
                     percentage: (
-                        ((e.totalQuantity - e.availableQuantity) /
-                            e.totalQuantity) *
-                        100
+                        ((e.totalQuantity - e.availableQuantity) / e.totalQuantity) * 100
                     ).toFixed(2),
                     earnings: ((e.purchasePrice - e.discountPrice) * e.purchaseQuantity).toFixed(2) || 0, // 收益，
                     earningRate: ((e.purchasePrice - e.discountPrice) / e.purchasePrice * 100).toFixed(2)
@@ -193,9 +187,7 @@ const getOrderList = async () => {
                 return {
                     ...e,
                     percentage: (
-                        ((e.totalQuantity - e.availableQuantity) /
-                            e.totalQuantity) *
-                        100
+                        ((e.totalQuantity - e.availableQuantity) / e.totalQuantity) * 100
                     ).toFixed(2),
                     earnings: ((e.purchasePrice - e.discountPrice) * e.purchaseQuantity).toFixed(2) || 0, // 收益，
                     earningRate: ((e.purchasePrice - e.discountPrice) / e.purchasePrice * 100).toFixed(2)
@@ -282,7 +274,7 @@ const onConfirmOriginal = async (val: any) => {
             })
             if (code == 200) {
                 console.log(data)
-                showToast('下单成功')
+                showToast(t('Order placed successfully'))
                 bottomPopRef.value.show(false)
                 resetPage()
                 getDisountList()
@@ -293,7 +285,7 @@ const onConfirmOriginal = async (val: any) => {
             })
             if (code == 200) {
                 console.log(data)
-                showToast('出售成功')
+                showToast(t('Sold successfully'))
                 resetPage()
 
                 bottomPopRef.value.show(false)

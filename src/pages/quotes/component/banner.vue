@@ -4,7 +4,7 @@
       <!-- <van-swipe-item v-for="(item, index) in banner" :key="index">
         <img :src="item.url" class="swipe-img" />
       </van-swipe-item> -->
-      <van-swipe-item>
+      <van-swipe-item class="rounded-10px overflow-hidden">
         <!-- <div class="w-full h-160px video-bg relative">
           <video autoplay muted loop
             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1;">

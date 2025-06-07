@@ -11,17 +11,20 @@
                 </div>
             </div>
             <div class="c w-150 flex-shrink-0 flex justify-center">
-                <KlineSvg :nameId="'myChart10' + _index" :areaStyle="true" :increase="_item.increase"
-                    :data="_item.price" :height="vw(30)" :width="vw(100)"></KlineSvg>
+                <Kline :nameId="'myChart10' + item.tradingPairsId" :areaStyle="true" :increase="_item.increase"
+                    :data="_item.price" :height="vw(30)" :width="vw(100)"></Kline>
             </div>
-            <div class="r flex flex-1 flex-shrink-0 justify-end">{{ _item.unit }} {{ _item.close || '-' }}</div>
+            <div class="r text-nowrap flex flex-1 flex-shrink-0 justify-end">{{ _item.unit }} {{
+                addCommasToNumber(_item.close) || '-' }}
+            </div>
         </div>
         <div class="li flex justify-between items-center ">
             <div class="li-l font-size-16">{{ t('Discount Rate') }}:{{ _item.discountRate }}%</div>
             <div class="li-r font-size-16">{{ t('cycle') }}:{{ _item.diffDay }}{{ t('Day') }}</div>
         </div>
         <div class="li flex justify-between items-center ">
-            <div class="li-l font-size-16">{{ t('Discount') }}:{{ _item.unit }} {{ _item.discountPrice }}</div>
+            <div class="li-l font-size-16">{{ t('Discount') }}:{{ _item.unit }} {{
+                addCommasToNumber(Number(_item.discountPrice)) }}</div>
 
         </div>
         <div class="li flex justify-between items-center ">
@@ -36,7 +39,7 @@
         </div>
         <div class="li flex justify-end">
             <van-button type="primary" @click="handleClickSubmit" size="small" class="font-size-16!">{{
-                statusEnum[_item.status] }}</van-button>
+                t(statusEnum[_item.status]) }}</van-button>
         </div>
     </div>
     <div class="order-item-content w-full px-12 py-24  font-size-16 flex flex-col gap-12px"
@@ -56,8 +59,10 @@
         </div>
         <div class="li flex justify-between ">
             <div class="li-l font-size-16">
-                {{ t('Market price') }}:{{ _item.assetInfo.unit }} {{ _item.purchasePrice }}</div>
-            <div class="li-r font-size-16">{{ t('Market price') }}:{{ _item.assetInfo.unit }} {{ _item.discountPrice }}
+                {{ t('Market price') }}:{{ _item.assetInfo.unit }} {{ addCommasToNumber(_item.close) }}</div>
+            <div class="li-r font-size-16">{{ t('Purchase price') }}:{{ _item.assetInfo.unit }} {{
+                addCommasToNumber(_item.purchasePrice)
+                }}
             </div>
         </div>
         <div class="li flex justify-between ">
@@ -73,9 +78,9 @@
         </div>
         <div class="li flex justify-between items-center">
             <div class="li-l"></div>
-            <van-button type="primary" :disabled="_item.status == 2" @click="handleClickSubmit" size="small"
-                class="font-size-16!">{{
-                    orderStatusEnum[_item.status] }}</van-button>
+            <van-button type="primary" :color="_item.saleStatus == 1 ? '#1989fa' : '#b5b5b5'" @click="handleClickSubmit"
+                class="font-size-16! w-100px!">{{
+                    t(orderStatusEnum[_item.saleStatus]) }}</van-button>
         </div>
 
 
@@ -83,7 +88,8 @@
 </template>
 <script setup lang="ts">
 import { statusEnum, orderStatusEnum } from '../enum'
-import KlineSvg from '@/components/KlineSvg.vue';
+import Kline from '@/components/Kline.vue';
+import { addCommasToNumber } from '@/utils/tool'
 import dayjs from 'dayjs'
 import vw from '@/utils/inline-px-to-vw'
 const emits = defineEmits(['handleClickBtn'])
@@ -105,7 +111,7 @@ const _item = computed(() => {
     return props.item
 })
 const _index = computed(() => {
-    return 1
+    return props.index
 
 })
 const handleClickSubmit = () => {

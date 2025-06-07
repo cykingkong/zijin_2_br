@@ -1,36 +1,22 @@
 <template>
   <div class="changePassword-content flex flex-col gap-24 p-12">
     <!-- <inputCom :label="'旧密码'" :placeholder="'请输入旧密码'"></inputCom> -->
-    <inputCom
-      :label="t('input.NewPassword')"
-      v-model:value="form.password"
-      :placeholder="t('input.PleaseEnter')"
-    >
+    <inputCom :label="t('input.NewPassword')" v-model:value="form.password" :placeholder="t('input.PleaseEnter')">
     </inputCom>
-    <inputCom
-      :label="t('input.ConfirmPassword')"
-      v-model:value="form.passwordConfirmation"
-      :placeholder="t('input.PleaseEnter')"
-    ></inputCom>
-    <inputCom
-      :label="t('input.VerificationCode')"
-      :placeholder="t('input.PleaseEnter')"
-      v-model:value="form.code"
-      :tips="''"
-    >
+    <inputCom :label="t('input.ConfirmPassword')" v-model:value="form.passwordConfirmation"
+      :placeholder="t('input.PleaseEnter')"></inputCom>
+    <inputCom :label="t('input.VerificationCode')" :placeholder="t('input.PleaseEnter')" v-model:value="form.code"
+      :tips="''">
       <template #sendCode>
-        <div
-          class="absolute right-0 font-size-12 sendCode"
-          :class="countdown > 0 ? 'text-gray-400' : 'text-blue-500'"
-          @click="getCode"
-        >
+        <div class="absolute right-0 font-size-12 sendCode" :class="countdown > 0 ? 'text-gray-400' : 'text-blue-500'"
+          @click="getCode">
           {{ countdown > 0 ? `${countdown}s` : t("input.SendCode") }}
         </div>
       </template>
     </inputCom>
     <van-button type="primary" block @click="onSubmit">{{
       t("confirm")
-    }}</van-button>
+      }}</van-button>
   </div>
 </template>
 <script setup lang="ts">
@@ -80,7 +66,7 @@ const startCountdown = () => {
 const onSubmit = async () => {
   const { password, passwordConfirmation } = form;
   if (password !== passwordConfirmation) {
-    return showToast("两次密码不一致");
+    return
   }
   let params = {
     ...form,
@@ -89,7 +75,7 @@ const onSubmit = async () => {
   };
   const res = await updatePassword(params);
   if (res.code === 200) {
-    showToast("修改成功");
+    showToast(t("Successfully modified"));
     router.push("/profile");
   }
 };

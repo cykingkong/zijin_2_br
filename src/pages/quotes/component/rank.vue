@@ -9,7 +9,8 @@
                             :data="i.price" :height="vw(50)" :width="vw(80)" v-if="i.price && i.price.length > 0">
                         </Kline>
                     </div>
-                    <div class="flex-r-item" :class="{ up: i.increase >= 0, down: i.increase < 0 }">{{ i.increase }}%
+                    <div class="flex-r-item" :class="{ up: i.dayIncrease >= 0, down: i.dayIncrease < 0 }">{{
+                        i.dayIncrease }}%
                     </div>
                     <div class="flex-r-item last-item">
                         {{ i.tradingInfo.baseAssetInfo ?
@@ -26,7 +27,7 @@
 </template>
 <script setup>
 import LoadMore from '@/components/LoadMore.vue';
-import KlineSvg from '@/components/KlineSvg.vue';
+import Kline from '@/components/Kline.vue';
 import vw from '@/utils/inline-px-to-vw'
 
 import { addCommasToNumber } from '@/utils/tool'

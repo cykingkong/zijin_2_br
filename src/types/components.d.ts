@@ -15,7 +15,6 @@ declare module 'vue' {
     GhostButton: typeof import('./../components/GhostButton.vue')['default']
     InputCom: typeof import('./../components/inputCom.vue')['default']
     Kline: typeof import('./../components/Kline.vue')['default']
-    KlineChat: typeof import('./../components/klineChat.vue')['default']
     KlineSvg: typeof import('./../components/klineSvg.vue')['default']
     LoadMore: typeof import('./../components/LoadMore.vue')['default']
     NationalityList: typeof import('./../components/nationality-list/nationalityList.vue')['default']

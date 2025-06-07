@@ -64,7 +64,7 @@ watch(
         (item) => item.tradingId == props.userPositionData.tradingPairsId
       );
       if (listItem) {
-        console.log(listItem, "listItem");
+        console.log(listItem.tick.close, "listItem");
         props.userPositionData.close = listItem.tick.close;
         props.userPositionData.allclose = (
           listItem.tick.close * props.userPositionData.userAssetsAmount
@@ -73,11 +73,11 @@ watch(
           props.userPositionData.allclose
         )
           ? (
-              (((listItem.tick.close - props.userPositionData.averagePrice) *
-                props.userPositionData.userAssetsAmount) /
-                props.userPositionData.allclose) *
-              100
-            ).toFixed(2)
+            (((listItem.tick.close - props.userPositionData.averagePrice) *
+              props.userPositionData.userAssetsAmount) /
+              props.userPositionData.allclose) *
+            100
+          ).toFixed(2)
           : 0;
         props.userPositionData.profit = (
           (listItem.tick.close - props.userPositionData.averagePrice) *

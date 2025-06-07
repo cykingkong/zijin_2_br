@@ -61,7 +61,7 @@ watch(
   () => props.item,
   (newVal) => {
     if (newVal) {
-      tips.value = `${('MinBuyShare')}:${newVal.min}`;
+      tips.value = `${t('MinBuyShare')}:${newVal.min}`;
     }
   },
   {

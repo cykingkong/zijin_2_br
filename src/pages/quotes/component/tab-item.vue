@@ -1,5 +1,5 @@
 <script setup>
-import echarts from '@/components/echarts.vue'
+
 import Kline from '@/components/Kline.vue'
 import vw from '@/utils/inline-px-to-vw'
 

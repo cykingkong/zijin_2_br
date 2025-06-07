@@ -1,5 +1,5 @@
 {
-  "name": "vue3-vant-mobile",
+  "name": "",
   "type": "module",
   "version": "3.8.0",
   "packageManager": "pnpm@10.8.0",
@@ -7,9 +7,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "cross-env MOCK_SERVER_PORT=8086 vite",
-    "build:dev": "vite build --mode development",
+    "build:dev": "vite build --mode development --outDir=devDist",
     "build:pro": "vite build --mode production",
-    "build": "vite build --mode development",
+    "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
     "lint": "eslint .",

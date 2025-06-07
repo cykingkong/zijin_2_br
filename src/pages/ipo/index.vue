@@ -5,18 +5,11 @@
       <van-tabs v-model:active="active" @change="changeActive">
         <van-tab :title="t('IPO List')">
           <div class="discont-list flex flex-col">
-            <discont-item
-              :item="item"
-              v-for="(item, index) in list"
-              :key="index"
-              @handleClickBtn="handleClickBtn"
-            ></discont-item>
-            <div
-              class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
-              v-show="skeleton && list.length == 0"
-              v-for="i in 5"
-              :key="i"
-            ></div>
+            <discont-item :item="item" v-for="(item, index) in list" :key="index"
+              @handleClickBtn="handleClickBtn"></discont-item>
+
+            <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
+              v-show="skeleton && list.length == 0" v-for="i in 5" :key="i"></div>
             <empty v-if="list.length == 0 && !skeleton" :noTips="true"></empty>
 
             <LoadMore :status="listStatus" @load-more="loadMore" />
@@ -24,24 +17,11 @@
         </van-tab>
         <van-tab :title="t('IPO Order List')">
           <div class="discont-list flex flex-col pb-40">
-            <discont-item
-              :item="item"
-              v-for="(item, index) in orderList"
-              :key="index"
-              @handleClickBtn="handleClickBtn"
-              :item-type="'order'"
-              @reloadList="getOrderList"
-            />
-            <div
-              class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
-              v-show="skeleton && orderList.length == 0"
-              v-for="i in 5"
-              :key="i"
-            ></div>
-            <empty
-              v-if="orderList.length == 0 && !skeleton"
-              :noTips="true"
-            ></empty>
+            <discont-item :item="item" v-for="(item, index) in orderList" :key="index" @handleClickBtn="handleClickBtn"
+              :item-type="'order'" @reloadList="getOrderList" />
+            <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
+              v-show="skeleton && orderList.length == 0" v-for="i in 5" :key="i"></div>
+            <empty v-if="orderList.length == 0 && !skeleton" :noTips="true"></empty>
 
             <LoadMore :status="orderLoadStatus" @load-more="loadMore" />
           </div>
@@ -50,32 +30,17 @@
     </template>
     <template v-else>
       <div class="discont-list flex flex-col pb-40">
-        <discont-item
-          :item="item"
-          v-for="(item, index) in orderList"
-          :key="index"
-          @handleClickBtn="handleClickBtn"
-          :item-type="'order'"
-          @reloadList="getOrderList"
-        />
-        <div
-          class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
-          v-show="skeleton && orderList.length == 0"
-          v-for="i in 5"
-          :key="i"
-        ></div>
+        <discont-item :item="item" v-for="(item, index) in orderList" :key="index" @handleClickBtn="handleClickBtn"
+          :item-type="'order'" @reloadList="getOrderList" />
+        <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
+          v-show="skeleton && orderList.length == 0" v-for="i in 5" :key="i"></div>
         <LoadMore :status="orderLoadStatus" @load-more="loadMore" />
         <empty v-if="orderList.length == 0 && !skeleton" :noTips="true"></empty>
       </div>
     </template>
 
-    <bottom-pop
-      ref="bottomPopRef"
-      @onConfirm="onConfirm"
-      :item="activeItem"
-      :active="list[active]"
-      :popType="popType"
-    ></bottom-pop>
+    <bottom-pop ref="bottomPopRef" @onConfirm="onConfirm" :item="activeItem" :active="list[active]"
+      :popType="popType"></bottom-pop>
   </div>
 </template>
 <script setup lang="ts">
@@ -155,7 +120,10 @@ const getDisountList = async () => {
             percentage: (
               ((e.totalNum - e.subscribedNum) / e.totalNum) *
               100
-            ).toFixed(2),
+            ) < 0 ? 0 : (
+              ((e.totalNum - e.subscribedNum) / e.totalNum) *
+              100
+            ),
             formatSubTimeBegin: dayjs(e.subTimeBegin).format("YYYY-MM-DD"),
             formatSubTimeEnd: dayjs(e.subTimeEnd).format("YYYY-MM-DD"),
             formatWonTimeBegin: dayjs(e.wonTimeBegin).format("YYYY-MM-DD"),
@@ -190,7 +158,9 @@ const getDisountList = async () => {
     }
     skeleton.value = false;
     listStatus.value = 2;
-  });
+  }).catch((err) => {
+    skeleton.value = false;
+  });;
 };
 const getOrderList = async () => {
   skeleton.value = true;
@@ -202,7 +172,6 @@ const getOrderList = async () => {
     if (!res.data.rows) {
       orderLoadStatus.value = 3;
       skeleton.value = false;
-
       return;
     }
     if (page.pageIndex == 1) {
@@ -237,6 +206,8 @@ const getOrderList = async () => {
     }
     skeleton.value = false;
     orderLoadStatus.value = 2;
+  }).catch((err) => {
+    skeleton.value = false;
   });
 };
 const loadMore = () => {
@@ -296,12 +267,12 @@ const onConfirmOriginal = async (val: any) => {
       });
       if (code == 200) {
         console.log(data);
-        showToast("出售成功");
+        showToast(t("Sold successfully"));
         bottomPopRef.value.show(false);
         getOrderList();
       }
     }
-  } catch (error) {}
+  } catch (error) { }
 };
 const onConfirm = proxy!.$throttle(onConfirmOriginal, 1000, {
   onStart: () => loadingStore.show(),

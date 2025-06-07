@@ -10,8 +10,8 @@ import Rank from "./component/rank.vue";
 import TopStories from "./component/topStories.vue";
 import StockMarketWidget from "./component/stockMarketWidget.vue";
 import ChatItem from "./component/chat-item.vue";
-import Kline from "@/components/Kline.vue";
-import klineChat from "@/components/klineChat.vue";
+
+
 import { indexInfo, depth, market } from "@/api/market";
 import local from "@/utils/local";
 import Indicator from "./component/indicator.vue";
@@ -27,9 +27,9 @@ const handleClickGrid = (val: any) => {
     local.setlocal("rankInfo", marketData.value.list[0]);
     router.push(
       "/quotes/openTrade?id=" +
-        marketData.value.list[0].tradingPairsId +
-        "&categoryId=" +
-        categoryId.value
+      marketData.value.list[0].tradingPairsId +
+      "&categoryId=" +
+      categoryId.value
     );
   }
   if (val == 1) {
@@ -124,6 +124,7 @@ watch(
         let listItem = newV.find((item: any) => {
           return item.tradingId == el.tradingPairsId;
         });
+        console.log(listItem, 'listItem')
         if (listItem) {
           if (listItem.tradingId == el.tradingPairsId) {
             el.lastPrice = listItem.tick.close;
@@ -165,9 +166,9 @@ const handleClickIndicator = (val) => {
   local.setlocal("rankInfo", val);
   router.push(
     "/quotes/detail?id=" +
-      val.tradingPairsId +
-      "&categoryId=" +
-      categoryId.value
+    val.tradingPairsId +
+    "&categoryId=" +
+    categoryId.value
   );
 };
 const clickNotice = () => {
@@ -195,36 +196,28 @@ onMounted(() => {
 
 <template>
   <div class="quotes">
-    <van-search
-      v-model="search"
-      show-action
-      :placeholder="t('input.PleaseEnter')"
-      @search="onSearch"
-    >
+    <van-search v-model="search" show-action :placeholder="t('input.PleaseEnter')" @search="onSearch">
       <template #action>
         <div @click="onSearch">{{ t("input.Search") }}</div>
       </template>
     </van-search>
     <van-tabs v-model:active="activeName" shrink @change="handleClickTabs">
-      <van-tab
-        class="flex flex-col gap-12 pt-12"
-        :title="item.name"
-        :name="item.category_id"
-        v-for="item in marketData.category"
-        :key="item.category_id"
-      >
+      <van-tab class="flex flex-col gap-12 pt-12" :title="item.name" :name="item.category_id"
+        v-for="item in marketData.category" :key="item.category_id">
         <!-- 排行 -->
-        <Rank
-          :rankList="marketData.list"
-          :categoryId="item.category_id"
-          @loadMore="loadMore"
-          :rankListStatus="rankListStatus"
-        />
+        <Rank :rankList="marketData.list" :categoryId="item.category_id" @loadMore="loadMore"
+          :rankListStatus="rankListStatus" />
       </van-tab>
     </van-tabs>
   </div>
 </template>
-
+<route lang="json5">
+{
+  meta: {
+    i18n: 'Stock List',
+  },
+}
+</route>
 
 
 <style lang="less" scoped>
@@ -261,8 +254,7 @@ onMounted(() => {
 }
 
 :deep(.van-tabs__line) {
-  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADxSURBVHgBnVHLDYJAEJ1ZjJ+LoQTsQDtA48GjJXj1YNQKKIGDIR4pQY8eTLQD7EBKIIZIBGEEiQSR5eNLNrs7efP27RsEDiZbR3J9OEXnrtce7Ndo5fEYT8D1cRluUrTslqPweFjw+jVdawrQO8w7ZiUHbkBqtub5oOdxfwRGmjMDwmm2TgDyeOPIpQIhk/vfAEGfqiRyBUbaI2qWgA/p1riv0oUkxHdwTzIAUYRCoNUUaPAJNHHgBaH10uYIJHoBql8OZM3uMxIMqAFGMDwuOmcWX4Qd1ARhHDbGY8ufcQWZNSsaWzmYwsIQTPgTCHR5AaMKT03qmstiAAAAAElFTkSuQmCC)
-    no-repeat center;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADxSURBVHgBnVHLDYJAEJ1ZjJ+LoQTsQDtA48GjJXj1YNQKKIGDIR4pQY8eTLQD7EBKIIZIBGEEiQSR5eNLNrs7efP27RsEDiZbR3J9OEXnrtce7Ndo5fEYT8D1cRluUrTslqPweFjw+jVdawrQO8w7ZiUHbkBqtub5oOdxfwRGmjMDwmm2TgDyeOPIpQIhk/vfAEGfqiRyBUbaI2qWgA/p1riv0oUkxHdwTzIAUYRCoNUUaPAJNHHgBaH10uYIJHoBql8OZM3uMxIMqAFGMDwuOmcWX4Qd1ARhHDbGY8ufcQWZNSsaWzmYwsIQTPgTCHR5AaMKT03qmstiAAAAAElFTkSuQmCC) no-repeat center;
   width: 9px;
   height: 8px;
   background-size: 100% 100%;
