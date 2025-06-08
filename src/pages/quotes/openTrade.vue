@@ -1,36 +1,77 @@
 <template>
   <div class="openTrade-content">
-    <VanNavBar title="" :fixed="true" clickable placeholder :left-arrow="true" @click-left="onBack" z-index="999">
+    <VanNavBar
+      title=""
+      :fixed="true"
+      clickable
+      placeholder
+      :left-arrow="true"
+      @click-left="onBack"
+      z-index="999"
+    >
       <template #title>
         <div class="flex flex-items-center gap-6">
-          <van-icon name="exchange" @click="handleClickExchange" :size="20"
-            class=".dark:text-white .light:text-black" />
+          <van-icon
+            name="exchange"
+            @click="handleClickExchange"
+            :size="20"
+            class=".dark:text-white .light:text-black"
+          />
           {{ listtext }}
         </div>
       </template>
     </VanNavBar>
     <van-tabs v-model:active="activeName" @change="changeTab">
       <van-tab :title="t('Buy')" :name="0">
-        <tab1Page ref="tab1PageBuyRef" :tradingPairsId="tradingPairsId" :depthData="depthData" :listtext="listtext"
-          :userBalanceInfo="userBalanceInfo" :orderStatus="orderStatus" :orderLoadStatus="orderLoadStatus"
-          :orderList="orderList" @handleClickSubmit="handleClickSubmit" @load-more="loadMoreOrderList"
-          @handleClickIndicatorTab="handleClickIndicatorTab" @cancelOrder="cancelOrder" @to-detail="toDetail"
-          v-if="activeName == 0" />
+        <tab1Page
+          ref="tab1PageBuyRef"
+          :tradingPairsId="tradingPairsId"
+          :depthData="depthData"
+          :listtext="listtext"
+          :routeItem="routeItem"
+          :userBalanceInfo="userBalanceInfo"
+          :orderStatus="orderStatus"
+          :orderLoadStatus="orderLoadStatus"
+          :orderList="orderList"
+          @handleClickSubmit="handleClickSubmit"
+          @load-more="loadMoreOrderList"
+          @handleClickIndicatorTab="handleClickIndicatorTab"
+          @cancelOrder="cancelOrder"
+          @to-detail="toDetail"
+          v-if="activeName == 0"
+        />
       </van-tab>
       <van-tab :title="t('Sell')" :name="1">
-        <tab1Page ref="tab1PageSellRef" :tradingPairsId="tradingPairsId" :direction="2" :listtext="listtext"
-          :userBalanceInfo="userBalanceInfo" :orderStatus="orderStatus" :orderLoadStatus="orderLoadStatus"
-          :depthData="depthData" @handleClickSubmit="handleClickSubmit" @load-more="loadMoreOrderList"
-          @handleClickIndicatorTab="handleClickIndicatorTab" :orderList="orderList" v-if="activeName == 1" />
+        <tab1Page
+          ref="tab1PageSellRef"
+          :tradingPairsId="tradingPairsId"
+          :direction="2"
+          :routeItem="routeItem"
+          :listtext="listtext"
+          :userBalanceInfo="userBalanceInfo"
+          :orderStatus="orderStatus"
+          :orderLoadStatus="orderLoadStatus"
+          :depthData="depthData"
+          @handleClickSubmit="handleClickSubmit"
+          @load-more="loadMoreOrderList"
+          @handleClickIndicatorTab="handleClickIndicatorTab"
+          :orderList="orderList"
+          v-if="activeName == 1"
+        />
       </van-tab>
       <van-tab :title="t('Cancel order')" :name="2">
-        <TabTablePage :table-th="[
-          'Entrustment time',
-          'Transaction Price',
-          'Order Quantity',
-          'operation',
-        ]" :table-data="orderListStatus0" :order-load-status0="orderLoadStatus0" @load-more="loadMoreOrderListStatus0"
-          @cancelOrder="cancelOrder">
+        <TabTablePage
+          :table-th="[
+            'Entrustment time',
+            'Transaction Price',
+            'Order Quantity',
+            'operation',
+          ]"
+          :table-data="orderListStatus0"
+          :order-load-status0="orderLoadStatus0"
+          @load-more="loadMoreOrderListStatus0"
+          @cancelOrder="cancelOrder"
+        >
         </TabTablePage>
       </van-tab>
       <van-tab :title="t('Holdings')" :name="3">
@@ -40,26 +81,42 @@
 
     <div
       class="fixed px-12 flex items-center justify-between bottom-0 w-full bottom-chart-line line-height-24 font-size-16"
-      @click="showBottom = !showBottom">
+      @click="showBottom = !showBottom"
+    >
       {{ t("Introduction") }}<van-icon name="arrow-up" />
     </div>
 
     <!-- Popup -->
-    <van-popup v-model:show="showLeft" position="left" :style="{ width: '80%', height: '100%' }">
+    <van-popup
+      v-model:show="showLeft"
+      position="left"
+      :style="{ width: '80%', height: '100%' }"
+    >
       <div class="pop-content flex-col flex">
-        <van-search v-model="search" show-action :placeholder="t('input.PleaseEnter')" @search="onSearch">
+        <van-search
+          v-model="search"
+          show-action
+          :placeholder="t('input.PleaseEnter')"
+          @search="onSearch"
+        >
           <template #action>
             <div @click="onSearch">{{ t("input.Search") }}</div>
           </template>
         </van-search>
-        <div class="pop-th flex-justify-between flex font-size-14 text-coolGray my-12 px-12">
+        <div
+          class="pop-th flex-justify-between flex font-size-14 text-coolGray my-12 px-12"
+        >
           <div class="th-item">{{ t("Name") }}</div>
           <div class="th-item text-align-right">
             {{ t("Latest Price / 24H Change") }}
           </div>
         </div>
-        <div class="td flex-justify-between flex font-size-14 py-12 px-12" v-for="(i, k) in marketList" :key="k"
-          @click="changeTradingPairsId(i)">
+        <div
+          class="td flex-justify-between flex font-size-14 py-12 px-12"
+          v-for="(i, k) in marketList"
+          :key="k"
+          @click="changeTradingPairsId(i)"
+        >
           <div class="th-item">{{ i.tradingInfo.baseAssetInfo.symbol }}</div>
           <div class="th-item text-align-right">
             <div class="t">
@@ -75,14 +132,20 @@
             </div>
           </div>
         </div>
-        <LoadMore :status="marketListLoadStatus" @load-more="loadMore"></LoadMore>
+        <LoadMore
+          :status="marketListLoadStatus"
+          @load-more="loadMore"
+        ></LoadMore>
       </div>
     </van-popup>
     <van-popup v-model:show="showBottom" position="bottom">
       <div class="title px-12 py-12 font-size-14">{{ t("Introduction") }}</div>
       <div class="h-500 px-12">
         <!-- <charts v-if="tradingPairsId" ref="EhartsData" :trading_pair_id="tradingPairsId" :itemsKey="1"></charts> -->
-        <symbolDetail :symbol="routeItem.tradingInfo.baseAssetInfo.symbol" v-if="tradingPairsId"></symbolDetail>
+        <symbolDetail
+          :symbol="routeItem.tradingInfo.baseAssetInfo"
+          v-if="tradingPairsId"
+        ></symbolDetail>
       </div>
     </van-popup>
   </div>
@@ -237,21 +300,24 @@ const changeTab = (val) => {
     // }
   }
 };
-const timer = ref(null)
+const timer = ref(null);
 const reloadOrderList = () => {
   if (timer.value) {
-    clearInterval(timer.value)
-    timer.value = null
+    clearInterval(timer.value);
+    timer.value = null;
   }
-  if (orderStatus.value == 0) {
+  if (orderStatus.value == 0 || activeName.value == 2) {
+    if (activeName.value == 2) {
+      getOrderListStatus0();
+      return;
+    }
     let p = {
       status: orderStatus.value == 0 ? 1 : 2,
       direction: activeName.value == 0 ? "buy" : "sell",
     };
     getOrderList(p);
-
   }
-}
+};
 const addOrder = async (params) => {
   swapOrderAdd({
     tradingPairsId: tradingPairsId.value,
@@ -265,16 +331,18 @@ const addOrder = async (params) => {
       let toastText = p.direction == "buy" ? "Buy Success" : "Sell Success";
       showToast(t(toastText));
       getBalancePairInfo();
+
+      getPositionData();
       getOrderList(p);
       // 如果是当前委托，则定时5秒后刷新订单列表,如果再次购买，则将之前的5秒定时器重设为5秒
-      if (orderStatus.value == 0) {
+      if (orderStatus.value == 0 || activeName.value == 2) {
         if (timer.value) {
-          clearTimeout(timer.value)
-          timer.value = null
+          clearTimeout(timer.value);
+          timer.value = null;
         }
         timer.value = setTimeout(() => {
-          reloadOrderList()
-        }, 5500)
+          reloadOrderList();
+        }, 5500);
       }
     }
   });
@@ -290,6 +358,8 @@ const cancelOrder = (val) => {
       let params = {
         status: orderStatus.value == 0 ? 1 : 2,
       };
+      getBalancePairInfo();
+      getPositionData();
       if (val.type == "status1") {
         getOrderListStatus0(params);
         return;
@@ -301,9 +371,9 @@ const cancelOrder = (val) => {
 const toDetail = () => {
   router.push(
     "/quotes/detail?id=" +
-    tradingPairsId.value +
-    "&categoryId=" +
-    categoryId.value
+      tradingPairsId.value +
+      "&categoryId=" +
+      categoryId.value
   );
 };
 const loadMoreOrderList = () => {
@@ -339,7 +409,7 @@ const getOrderListStatus0 = async (params = {}) => {
     // showToast('购入成功')
     if (!data.rows) {
       if (page.pageIndex == 1) {
-        orderListStatus0.value = []
+        orderListStatus0.value = [];
       }
       orderLoadStatus0.value = 3;
       return;
@@ -405,8 +475,9 @@ const changeTradingPairsId = async (item) => {
   local.setlocal("rankInfo", item);
   // 更新浏览器URL
   const currentCategoryId = route.query.categoryId || categoryId.value; // 保留现有的categoryId
-  const newUrl = `${window.location.pathname}?id=${item.tradingPairsId}${currentCategoryId ? "&categoryId=" + currentCategoryId : ""
-    }`;
+  const newUrl = `${window.location.pathname}?id=${item.tradingPairsId}${
+    currentCategoryId ? "&categoryId=" + currentCategoryId : ""
+  }`;
   window.history.replaceState(null, "", newUrl);
   getPositionData();
 
@@ -417,7 +488,6 @@ const changeTradingPairsId = async (item) => {
 const handleClickSubmit = (params) => {
   addOrder(params);
 };
-
 
 const handleClickIndicatorTab = (val) => {
   // 切换委托状态
@@ -477,6 +547,8 @@ const init = async () => {
   await getKline();
   await getDepth();
   await getBalancePairInfo();
+  await getPositionData();
+
   SocketWs();
   let params = {
     status: orderStatus.value == 0 ? 1 : 2,

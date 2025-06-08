@@ -42,7 +42,7 @@ import type { PickerColumn } from 'vant'
 const FALLBACK_LOCALE = 'en-US'
 
 const vantLocales = {
-  'zh-CN': { ...zhCN },
+  // 'zh-CN': { ...zhCN },
   'en-US': { ...enUS },
   'pt-PT': { ...ptPT, ...enUS }, // 葡萄牙语使用英文作为兜底
   'pt-BR': { ...ptBR, ...enUS }, // 巴西葡萄牙语使用英文作为兜底
@@ -70,7 +70,7 @@ const vantLocales = {
 
 export const languageColumns: PickerColumn = [
   { text: 'Português brasileiro', value: 'pt-BR' },
-  { text: '简体中文', value: 'zh-CN' },
+  // { text: '简体中文', value: 'zh-CN' },
   { text: 'English', value: 'en-US' },
   { text: 'Português', value: 'pt-PT' },
   { text: 'Čeština', value: 'cs' },

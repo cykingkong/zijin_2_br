@@ -12,7 +12,7 @@
         @click="handleClickTab(index)"
       >
         <!-- <img :src="item.icon" alt="" class="block w-55px h-55px mx-auto" /> -->
-        <div class="font-size-12">{{ item.method.name }}</div>
+        <div class="font-size-18">{{ item.method.name }}</div>
       </div>
     </div>
     <div class="w-full h-1 bg-[#212C4E] mb-12"></div>
@@ -45,7 +45,7 @@
         t("Save QR code")
       }}</van-button>
     </div>
-    <div class="font-size-14 mt-12 text-#1678FF text-align-center">
+    <div class="font-size-14 mt-12 text-align-center">
       {{ qrValue }}
     </div>
 

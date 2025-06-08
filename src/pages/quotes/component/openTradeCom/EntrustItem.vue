@@ -1,7 +1,11 @@
 <template>
   <div class="entrust-item pt-12 flex-col gap-12 flex">
     <div class="flex w-full justify-between items-center">
-      <div style="min-width: 70px" class="text-18" :class="entrust.direction_id == 'sell' ? 'down' : 'up'">
+      <div
+        style="min-width: 70px"
+        class="text-18"
+        :class="entrust.direction_id == 'sell' ? 'down' : 'up'"
+      >
         {{ entrust.order_type }}/{{ entrust.direction }}
       </div>
       <div class="status">
@@ -36,19 +40,31 @@
           <div class="flex mt-20 items-center">
             <div class="text-grey">{{ $t("Price") }}</div>
             <div class="ml-10 text-14 textColor">
-              {{ entrust.amount_total_symbol }} {{ entrust.amountTotal || "--" }}
+              {{ entrust.amount_total_symbol }}
+              {{ entrust.amountTotal || "--" }}
             </div>
           </div>
         </div>
       </div>
       <div class="btn-wrap mt-64">
-        <van-button v-if="entrust.status == '1' && entrust.direction_id == 'buy'" type="primary"
-          class="ml-19 order-btn border-none h-54 lh-54 cancel-btn" @click.stop="cancelSingle(entrust)">
-          {{ $t("Cancel order") }}</van-button>
-        <button v-if="state == 'created'" class="ml-19 order-btn border-none h-54 lh-54 cancel-btn down">
+        <van-button
+          v-if="entrust.status == '1'"
+          type="primary"
+          class="ml-19 order-btn border-none h-54 lh-54 cancel-btn"
+          @click.stop="cancelSingle(entrust)"
+        >
+          {{ $t("Cancel order") }}</van-button
+        >
+        <button
+          v-if="state == 'created'"
+          class="ml-19 order-btn border-none h-54 lh-54 cancel-btn down"
+        >
           {{ $t("已完成") }}
         </button>
-        <button v-if="state == 'canceled'" class="ml-19 order-btn border-none h-54 lh-54 cancel-btn">
+        <button
+          v-if="state == 'canceled'"
+          class="ml-19 order-btn border-none h-54 lh-54 cancel-btn"
+        >
           {{ $t("canceled") }}
         </button>
       </div>
@@ -94,7 +110,7 @@ export default {
       // console.log(val)
     },
   },
-  mounted() { },
+  mounted() {},
   methods: {
     handleWord(type, offset) {
       let str1 = type == "limit" ? this.$t("限价") : this.$t("市价");
@@ -167,7 +183,8 @@ export default {
 
   border-bottom: 1px solid var(--border_color);
 
-  :deep(.van-circle__text) {}
+  :deep(.van-circle__text) {
+  }
 
   s .greyBg {
     background: transparent;
@@ -191,7 +208,8 @@ export default {
     font-size: 13px;
   }
 
-  .cancel-btn {}
+  .cancel-btn {
+  }
 }
 
 .w-100 {

@@ -378,14 +378,14 @@ const hanleClickAreaPick = () => {
         >
         </inputCom>
         <inputCom
-          :label="t('input.Upload')"
+          :label="t('input.IDCard')"
           :placeholder="t('input.PleaseEnter')"
           v-model:value="kycForm.idCard"
           :type="'text'"
         >
         </inputCom>
         <inputCom
-          :label="'證件照/上傳護照'"
+          :label="t('input.Upload')"
           v-model:value="kycForm.idCard"
           :type="'imageShow'"
         >

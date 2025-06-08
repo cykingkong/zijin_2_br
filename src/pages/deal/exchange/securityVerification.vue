@@ -50,7 +50,7 @@ const handleClickSubmitOriginal = async () => {
   if (code === 200) {
     showToast(t("Recharge submitted successfully"));
     store.setWithdrawParams({});
-    router.push("/deal/exchange/withdraw-usdt");
+    router.push("/profile");
   }
 };
 onUnmounted(() => {

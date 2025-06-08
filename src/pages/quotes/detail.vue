@@ -1,50 +1,70 @@
 <template>
   <div class="detail px-12 pb-120 pt-12">
-    <VanNavBar :title="listtext" :fixed="true" clickable placeholder :left-arrow="true" @click-left="onBack" />
+    <VanNavBar
+      :title="listtext"
+      :fixed="true"
+      clickable
+      placeholder
+      :left-arrow="true"
+      @click-left="onBack"
+    />
 
     <!-- <userBalance :data="userBalanceInfo"></userBalance> -->
+
     <div class="flex">
       <div class="l flex flex-1 flex-col gap-12">
         <div class="picker flex items-center" @click="handleClickPop">
           {{ listtext }}
           <van-icon style="margin-left: 5px" name="arrow-down" />
         </div>
-        <div class="" :style="{
-          color:
-            klineData.increase < 0 ? 'rgb(255, 72, 52)' : 'rgb(0, 197, 114)',
-        }">
-          {{ klineData.close }}
-        </div>
-        <div class="">
-          <span :style="{
+        <div
+          class=""
+          :style="{
             color:
-              klineData.increase < 0
+              klineData.dayIncrease < 0
                 ? 'rgb(255, 72, 52)'
                 : 'rgb(0, 197, 114)',
-          }">{{ klineData.increase }}</span>
+          }"
+        >
+          {{ addCommasToNumber(klineData.close) }}
+        </div>
+        <div class="">
+          <span
+            :style="{
+              color:
+                klineData.dayIncrease < 0
+                  ? 'rgb(255, 72, 52)'
+                  : 'rgb(0, 197, 114)',
+            }"
+            >{{ klineData.dayIncrease }}%</span
+          >
         </div>
       </div>
       <div class="options-h flex-1 font-size-12 line-height-25">
         <div class="flex justify-between items-center">
           <div class="text-blueGray-400">{{ t("Highest price") }}</div>
-          <div>{{ klineData.high }}</div>
+          <div>{{ addCommasToNumber(klineData.high) }}</div>
         </div>
         <div class="flex justify-between items-center">
           <div class="text-blueGray-400">{{ t("Lowest price") }}</div>
-          <div>{{ klineData.low }}</div>
+          <div>{{ addCommasToNumber(klineData.low) }}</div>
         </div>
         <div class="flex justify-between items-center">
           <div class="text-blueGray-400">{{ t("Open price") }}</div>
-          <div>{{ klineData.open }}</div>
+          <div>{{ addCommasToNumber(klineData.open) }}</div>
         </div>
         <div class="flex justify-between items-center">
           <div class="text-blueGray-400">{{ t("Close price") }}</div>
-          <div>{{ klineData.close }}</div>
+          <div>{{ addCommasToNumber(klineData.close) }}</div>
         </div>
       </div>
     </div>
     <div class="h-500">
-      <charts v-if="tradingPairsId" ref="EhartsData" :trading_pair_id="tradingPairsId"></charts>
+      <charts
+        v-if="tradingPairsId"
+        ref="EhartsDataRef"
+        :trading_pair_id="Number(tradingPairsId)"
+      ></charts>
     </div>
     <div class="w-full mt-12">
       <div class="flex th gap-12 mb-6 text-blueGray-400 font-size-12">
@@ -53,14 +73,22 @@
       </div>
       <div class="flex td gap-12 font-size-14">
         <div class="l flex-1">
-          <div class="w-full flex mb-6" v-for="(item, index) in asks" :key="index">
+          <div
+            class="w-full flex mb-6"
+            v-for="(item, index) in asks"
+            :key="index"
+          >
             <div class="l flex-1">{{ addCommasToNumber(item[0]) }}</div>
-            <div class="l flex-1 text-right down">{{ item[1] }}</div>
+            <div class="l flex-1 text-right up">{{ item[1] }}</div>
           </div>
         </div>
         <div class="l flex-1">
-          <div class="w-full flex mb-6" v-for="(item, index) in bids" :key="index">
-            <div class="l flex-1 up">{{ item[1] }}</div>
+          <div
+            class="w-full flex mb-6"
+            v-for="(item, index) in bids"
+            :key="index"
+          >
+            <div class="l flex-1 down">{{ item[1] }}</div>
             <div class="l flex-1 text-right">
               {{ addCommasToNumber(item[0]) }}
             </div>
@@ -68,26 +96,42 @@
         </div>
       </div>
     </div>
-    <div class="fixed bottom-0 w-full left-0 flex justify-center bottom-btn-box z-99">
+    <div
+      class="fixed bottom-0 w-full left-0 flex justify-center bottom-btn-box z-99"
+    >
       <div class="btn-box flex gap-30">
         <div class="b1 flex-1 w-140">
-          <van-button type="primary" block color="#F43368" @click="handelClickBtn(0)">{{ t("Buy") }}</van-button>
+          <van-button
+            type="primary"
+            block
+            color="#06cda5"
+            @click="handelClickBtn(0)"
+            >{{ t("Buy") }}</van-button
+          >
         </div>
         <div class="b1 flex-1 w-140">
-          <van-button type="primary" block @click="handelClickBtn(1)">{{
-            t("Sell")
-            }}</van-button>
+          <van-button
+            type="primary"
+            color="#F43368"
+            block
+            @click="handelClickBtn(1)"
+            >{{ t("Sell") }}</van-button
+          >
         </div>
       </div>
     </div>
     <van-popup v-model:show="showPicker" destroy-on-close position="bottom">
-      <van-picker :columns="columns" :model-value="[tradingPairsId]" @confirm="onConfirm"
-        @cancel="showPicker = false" />
+      <van-picker
+        :columns="columns"
+        :model-value="[tradingPairsId]"
+        @confirm="onConfirm"
+        @cancel="showPicker = false"
+      />
     </van-popup>
   </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { ref, reactive, onBeforeUnmount } from "vue";
 import { getBalancePair } from "@/api/user";
 import { depth, kline } from "@/api/market";
 import { useStore } from "@/stores/modules/index";
@@ -101,7 +145,7 @@ const tradingPairsId = ref();
 const categoryId = ref();
 const { t } = useI18n();
 const store = useStore();
-const EhartsData = ref(null);
+const EhartsDataRef = ref(null);
 const router = useRouter();
 const listtext = ref("");
 const routeItem = ref("");
@@ -137,7 +181,7 @@ const getMarketList = async () => {
 const onConfirm = async ({ selectedOptions }) => {
   await closews();
   if (selectedOptions[0].tradingPairsId != tradingPairsId.value) {
-    EhartsData.value.childInte();
+    EhartsDataRef.value.childInte();
   }
   const item = selectedOptions[0];
   listtext.value =
@@ -155,7 +199,11 @@ const onConfirm = async ({ selectedOptions }) => {
   showPicker.value = false;
   SocketWs();
 };
-const klineData = computed(() => store.getlistData);
+const klineData = computed(() => {
+  console.log(store.getlistData, "klineData");
+  return store.getlistData;
+});
+
 const route = useRoute();
 const time = ref(["1m", "5m", "15m", "30m", "60m", "4h", "1d", "1w"]);
 const userBalanceInfo = ref({
@@ -239,8 +287,10 @@ onMounted(async () => {
     SocketWs();
   }
 });
+
 onBeforeUnmount(() => {
-  EhartsData.value.close();
+  console.log("onBeforeUnmount", EhartsDataRef.value, tradingPairsId.value);
+  EhartsDataRef.value.close();
   closews();
 });
 </script>

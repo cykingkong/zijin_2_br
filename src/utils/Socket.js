@@ -167,6 +167,7 @@ class Socket {
         return new Promise((resolve) => {
             this.send(JSON.stringify(data));
             this.on('message', function(data) {
+                console.log(data,'data123')
                 resolve(data);
             });
         });

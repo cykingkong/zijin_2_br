@@ -52,4 +52,12 @@ const rechargeEnum = {
 .recharge {
   border-bottom: 1px solid var(--border_color);
 }
+.li {
+  gap: 14px;
+  justify-content: space-between;
+  line-height: 30px;
+  .value {
+    text-align: right;
+  }
+}
 </style>

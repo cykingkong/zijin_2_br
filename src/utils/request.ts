@@ -27,10 +27,9 @@ export type RequestError = AxiosError<{
 // 异常拦截处理器
 function errorHandler(error: RequestError): Promise<any> {
   // 确保在错误处理时关闭loading
-  // error.config?.loadingToast?.close()
-
+  closeToast(true)
   if (error.response) {
-    const { data = {}, status, statusText, } = error.response
+    const { data = {}, status, statusText } = error.response
     console.log(error.response, 'err')
     // 403 无权限
     if (status === 403) {
@@ -39,6 +38,7 @@ function errorHandler(error: RequestError): Promise<any> {
         message: (data && data.message) || statusText,
       })
     }
+
     // 401 未登录/未授权
     // if (status === 401) {
     //   showNotify({

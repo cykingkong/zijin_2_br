@@ -1,5 +1,5 @@
 <template>
-  <div class="withdraw p-12">
+  <div class="withdraw px-12 py-20px">
     <div class="li flex items-center">
       <div class="label text-blueGray-400">{{ t("Withdrawal time") }}:</div>
       <div class="value">{{ item.createdAt }}</div>
@@ -44,5 +44,10 @@ const withdrawEnum = {
 }
 .li {
   gap: 14px;
+  justify-content: space-between;
+  line-height: 30px;
+  .value {
+    text-align: right;
+  }
 }
 </style>

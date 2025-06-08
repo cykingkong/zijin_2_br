@@ -37,7 +37,6 @@ const languageValues = ref<Array<string>>([locale.value]);
 const language = computed(
   () => languageColumns.find((l) => l.value === locale.value).text
 );
-const showKfPage = ref(false);
 
 const languageColumnsForPicker = computed(() => {
   const mode = import.meta.env.MODE;
@@ -55,8 +54,7 @@ const toKfUrl = async () => {
   });
   if (code == 200) {
     kfUrl.value = data.kfUrl || "";
-    showKfPage.value = true;
-    // window.open(data.kfUrl);
+    window.open(data.kfUrl);
   }
 };
 const gridList = [
@@ -198,9 +196,7 @@ const handleLogout = () => {
         <van-icon name="service-o" class="icon" />
       </template>
     </VanNavBar>
-    <van-popup v-model:show="showKfPage" position="bottom">
-      <iframe :src="kfUrl" class="w-full h-full" frameborder="0"></iframe>
-    </van-popup>
+
     <section class="myself flex flex-col">
       <UserInfo :userInfo="userInfo" />
       <van-cell-group :title="t('profile.Quick Access')" />

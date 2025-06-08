@@ -3,8 +3,13 @@
     <div class="color-blueGray-400 t font-size-18">
       {{ t("Bank card withdrawal") }}
     </div>
-    <inputCom class="mt-12" :label="t('Bank card')" :placeholder="t('input.pleaseEnter')" v-model:value="form.methodId"
-      :type="'picker'">
+    <inputCom
+      class="mt-12"
+      :label="t('Bank card')"
+      :placeholder="t('input.PleaseEnter')"
+      v-model:value="form.methodId"
+      :type="'picker'"
+    >
       <div class="w-full flex justify-between">
         <div class="l flex-1 font-size-14" @click="showPicker = true">
           {{ form.methodId ? form.methodIdText : t("input.PleaseSelect") }}
@@ -14,7 +19,12 @@
         </div>
       </div>
     </inputCom>
-    <inputCom :label="t('Withdrawal amount')" :placeholder="t('input.PleaseEnter')" v-model:value="form.num" :tips="''">
+    <inputCom
+      :label="t('Withdrawal amount')"
+      :placeholder="t('input.PleaseEnter')"
+      v-model:value="form.num"
+      :tips="''"
+    >
     </inputCom>
     <div class="font-size-12 line-height-16">{{ tips }}</div>
     <div class="font-size-12 mb-12 mt-4">{{ tips2 }}</div>
@@ -23,7 +33,12 @@
       t("submit")
     }}</van-button>
     <van-popup v-model:show="showPicker" destroy-on-close position="bottom">
-      <van-picker :columns="columns" :model-value="[form.methodId]" @confirm="onConfirm" @cancel="showPicker = false" />
+      <van-picker
+        :columns="columns"
+        :model-value="[form.methodId]"
+        @confirm="onConfirm"
+        @cancel="showPicker = false"
+      />
     </van-popup>
   </div>
 </template>
@@ -55,19 +70,21 @@ const form = reactive({
   assetId: "",
 });
 const withdrawFee = ref(0);
-watch(() => form.num, (newVal) => {
-  if (newVal) {
-    let fee = addCommasToNumber(newVal * ((1 - withdrawFee.value) / 100));
-    tips.value = `${t("Service fee")}: ${config.value.symbol} ${fee}  ${t(
-      "Minimum withdrawal amount"
-    )}: ${config.value.symbol} ${config.value.minWithdraw} `;
+watch(
+  () => form.num,
+  (newVal) => {
+    if (newVal) {
+      let fee = addCommasToNumber(newVal * ((1 - withdrawFee.value) / 100));
+      tips.value = `${t("Service fee")}: ${config.value.symbol} ${fee}  ${t(
+        "Minimum withdrawal amount"
+      )}: ${config.value.symbol} ${config.value.minWithdraw} `;
+    }
   }
-}
 );
-const config = ref()
+const config = ref();
 const getRechargeConfig = async () => {
   withdrawConfig({ mode: "gp" }).then((res) => {
-    config.value = res.data
+    config.value = res.data;
     form.assetId = res.data.assetId;
     withdrawFee.value = res.data.withdrawFee;
     tips.value = `${t("Service fee")}: ${res.data.symbol} 0   ${t(
@@ -84,11 +101,11 @@ const getList = async () => {
   });
   columns.value = data.rows
     ? data.rows.map((e) => {
-      return {
-        text: `${e.address.bankName}(${e.address.bankType})`,
-        value: e.id,
-      };
-    })
+        return {
+          text: `${e.address.bankName}(${e.address.bankType})`,
+          value: e.id,
+        };
+      })
     : [];
   store.setUserCardList(data.rows);
 };
@@ -100,6 +117,15 @@ const onConfirm = ({ selectedValues, selectedOptions }) => {
 };
 const handleClickSubmitOriginal = async () => {
   //     console.log(store, 'params')
+  if (!form.methodId) {
+    showToast(t("input.PleaseSelect") + " " + t("Bank card"));
+    return;
+  }
+  if (!form.num) {
+    showToast(t("input.PleaseEnter") + " " + t("Withdrawal amount"));
+    return;
+  }
+
   store.setWithdrawParams({
     cardId: form.methodId,
     amount: form.num,

@@ -24,8 +24,13 @@ const throttleAfterCompletion = <T extends (...args: any[]) => Promise<any>>(
     }
 }
 
-const addCommasToNumber = (number, shouldToFixed = true) => {
-    if (number === null || number === undefined || number === 0) return '0';
+const addCommasToNumber = (number, shouldToFixed = true, noshowZero = false) => {
+
+    if (number === null || number === undefined || number === 0) {
+        if (noshowZero) return ''
+        return '0'
+
+    };
     let integerPart, decimalPart;
     if (shouldToFixed) {
         [integerPart, decimalPart] = number.toFixed(2).split('.');

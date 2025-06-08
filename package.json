@@ -9,7 +9,7 @@
     "dev": "cross-env MOCK_SERVER_PORT=8086 vite",
     "build:dev": "vite build --mode development --outDir=devDist",
     "build:pro": "vite build --mode production",
-    "build": "vite build",
+    "build": "vite build --mode production",
     "preview": "vite preview",
     "test": "vitest",
     "lint": "eslint .",

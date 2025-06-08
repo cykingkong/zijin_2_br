@@ -29,7 +29,10 @@
           </div>
         </div>
         <div class="td-item flex-1">
-          <div>{{ e.entrustPrice }}</div>
+          <div class="mb-4">{{ e.entrustPrice }}</div>
+          <div class="title font-size-11 text-coolGray">
+            {{ e.direction }}
+          </div>
         </div>
         <div class="td-item flex-1">
           <div>{{ e.amount }}</div>
@@ -57,6 +60,7 @@ const emits = defineEmits(["loadMore", "cancelOrder"]);
 const loadMore = () => {
   emits("loadMore");
 };
+
 const { t } = useI18n();
 const props = defineProps({
   tableTh: {

@@ -199,9 +199,9 @@ const getBalanceColumns = async () => {
 };
 const maxAmount = () => {
   if (balanceType.value == 0) {
-    form.amount = addCommasToNumber(conversionInfoData.value.baseAssetBalance);
+    form.amount = conversionInfoData.value.baseAssetBalance;
   } else {
-    form.amount = addCommasToNumber(conversionInfoData.value.quoteAssetBalance);
+    form.amount = conversionInfoData.value.quoteAssetBalance;
   }
 };
 
