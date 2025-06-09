@@ -59,7 +59,7 @@
           v-if="state == 'created'"
           class="ml-19 order-btn border-none h-54 lh-54 cancel-btn down"
         >
-          {{ $t("已完成") }}
+          {{ $t("Completed") }}
         </button>
         <button
           v-if="state == 'canceled'"

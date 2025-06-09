@@ -11,13 +11,17 @@ import hotmap from "./quotes/component/hotmap.vue";
 import TopStories from "./quotes/component/topStories.vue";
 import StockMarketWidget from "./quotes/component/stockMarketWidget.vue";
 import { useUserStore } from "@/stores";
+import { navTitleStore } from "@/stores/index";
 
 import { useI18n } from "vue-i18n";
 import { indexInfo, appCharts, market } from "@/api/market";
 import { getKfUrl } from "@/api/user";
 import local from "@/utils/local";
+import { closeToast, showLoadingToast } from "vant";
 const { t } = useI18n();
 const activeName = ref("");
+const navStore = navTitleStore();
+
 const store = useStore();
 const requestCount = ref(0);
 
@@ -210,8 +214,23 @@ const toDetail = () => {
     },
   });
 };
+showLoadingToast({
+  message: "",
+  duration: 0,
+});
+navStore.setShowNavLeft(false);
+watch(
+  () => navStore.showNavLeft,
+  () => {
+    if (navStore.showNavLeft) {
+      closeToast();
+    }
+  }
+);
 onMounted(() => {
   init();
+  // closeToast();
+  navStore.setShowNavLeft(true);
 });
 </script>
 

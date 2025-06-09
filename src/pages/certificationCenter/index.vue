@@ -99,7 +99,8 @@ const toKyc = () => {
       name: 'certificationCenter',
       path: '/certificationCenter', // 添加静态路径段明确层级
       meta: {
-        title: '认证中心',
+
+        i18n:'CertificationCenter'
       }
     }
   </route>

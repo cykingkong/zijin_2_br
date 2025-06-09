@@ -1,6 +1,12 @@
 <template>
-  <VanNavBar :title="hasHistory ? t('detail') : t('apply')" :fixed="true" clickable placeholder :left-arrow="true"
-    @click-left="onBack">
+  <VanNavBar
+    :title="hasHistory ? t('detail') : t('apply')"
+    :fixed="true"
+    clickable
+    placeholder
+    :left-arrow="true"
+    @click-left="onBack"
+  >
     <template #right>
       <div class="font-size-16" @click="inDetail" v-if="hasHistory">
         {{ !isEdit ? t("edit") : "" }}
@@ -8,17 +14,36 @@
     </template>
   </VanNavBar>
 
-  <div class="form-box p-12 flex flex-col gap-12 relative" :class="{ 'pt-60': isEdit }">
-    <div class="w-full h-40 flex items-center justify-center fixed status-top left-0"
-      :class="statusClass[creditInfo.status]">
-      {{ creditInfo.statusDesc }}
+  <div
+    class="form-box p-12 flex flex-col gap-12 relative"
+    :class="{ 'pt-60': isEdit }"
+  >
+    <div
+      class="w-full h-40 flex items-center justify-center fixed status-top left-0"
+      :class="statusClass[creditInfo.status]"
+      v-if="creditInfo && creditInfo.status"
+    >
+      {{ t(creditInfo.statusDesc) }}
     </div>
-    <inputCom :label="t('input.name')" :placeholder="t('input.PleaseEnter')" v-model:value="form.name" require
-      :only-read="isEdit" />
-    <inputCom :label="t('input.birthday')" :placeholder="t('input.PleaseEnter')" v-model:value="form.birthday"
-      :inputType="'picker'" require>
+    <inputCom
+      :label="t('input.name')"
+      :placeholder="t('input.PleaseEnter')"
+      v-model:value="form.name"
+      require
+      :only-read="isEdit"
+    />
+    <inputCom
+      :label="t('input.birthday')"
+      :placeholder="t('input.PleaseEnter')"
+      v-model:value="form.birthday"
+      :inputType="'picker'"
+      require
+    >
       <template #picker>
-        <div class="w-full flex items-center justify-between" @click="handleClickDatePop">
+        <div
+          class="w-full flex items-center justify-between"
+          @click="handleClickDatePop"
+        >
           <div class="text-gray">
             {{ form.birthdayDesc ? form.birthdayDesc : t("input.PleaseEnter") }}
           </div>
@@ -28,11 +53,20 @@
         <van-icon name="arrow" class="rotate-90deg" size="20" color="#999999" />
       </template>
     </inputCom>
-    <inputCom :label="t('input.gender')" :placeholder="''" v-model:value="form.gender" require :inputType="'picker'">
+    <inputCom
+      :label="t('input.gender')"
+      :placeholder="''"
+      v-model:value="form.gender"
+      require
+      :inputType="'picker'"
+    >
       <template #picker>
-        <div class="w-full flex items-center justify-between" @click="showGenderPicker = true">
+        <div
+          class="w-full flex items-center justify-between"
+          @click="showGenderPicker = true"
+        >
           <div class="text-blueGray-400">
-            {{ form.genderDesc ? form.genderDesc : t("input.PleaseSelect") }}
+            {{ form.genderDesc ? t(form.genderDesc) : t("input.PleaseSelect") }}
           </div>
         </div>
       </template>
@@ -40,29 +74,70 @@
         <van-icon name="arrow" class="rotate-90deg" size="20" color="#999999" />
       </template>
     </inputCom>
-    <inputCom :label="t('input.IDCard')" :placeholder="t('input.PleaseEnter')" v-model:value="form.idCard" require />
-    <inputCom :label="t('input.work')" :placeholder="t('input.PleaseEnter')" v-model:value="form.work" require />
-    <inputCom :label="t('input.taxNumber')" :placeholder="t('input.PleaseEnter')" v-model:value="form.taxNumber"
-      require />
-    <inputCom :label="t('input.YearIncome')" :placeholder="t('input.PleaseEnter')" v-model:value="form.income"
-      require />
-    <inputCom :label="t('input.phone')" :placeholder="t('input.PleaseEnter')" v-model:value="form.phone" require />
-    <inputCom :label="t('input.address')" :placeholder="t('input.PleaseEnter')" v-model:value="form.address" require />
-    <inputCom :label="t('input.creditAmount')" :placeholder="t('input.PleaseEnter')" v-model:value="form.creditAmount"
-      require />
+    <inputCom
+      :label="t('input.IDCard')"
+      :placeholder="t('input.PleaseEnter')"
+      v-model:value="form.idCard"
+      require
+    />
+    <inputCom
+      :label="t('input.work')"
+      :placeholder="t('input.PleaseEnter')"
+      v-model:value="form.work"
+      require
+    />
+    <inputCom
+      :label="t('input.taxNumber')"
+      :placeholder="t('input.PleaseEnter')"
+      v-model:value="form.taxNumber"
+      require
+    />
+    <inputCom
+      :label="t('input.YearIncome')"
+      :placeholder="t('input.PleaseEnter')"
+      v-model:value="form.income"
+      require
+    />
+    <inputCom
+      :label="t('input.phone')"
+      :placeholder="t('input.PleaseEnter')"
+      v-model:value="form.phone"
+      require
+    />
+    <inputCom
+      :label="t('input.address')"
+      :placeholder="t('input.PleaseEnter')"
+      v-model:value="form.address"
+      require
+    />
+    <inputCom
+      :label="t('input.creditAmount')"
+      :placeholder="t('input.PleaseEnter')"
+      v-model:value="form.creditAmount"
+      require
+    />
     <div class="btn-box" v-if="!isEdit || (isEdit && creditInfo.status == 3)">
       <van-button type="primary" block @click="submit">{{
         isEdit ? t("Resubmit") : t("submit")
-        }}</van-button>
+      }}</van-button>
     </div>
   </div>
   <van-popup v-model:show="showDatePicker" position="bottom">
-    <van-date-picker v-model="currentDate" :title="t('input.PleaseSelect')" :min-date="minDate" :max-date="maxDate"
-      @confirm="onDateConfirm" />
+    <van-date-picker
+      v-model="currentDate"
+      :title="t('input.PleaseSelect')"
+      :min-date="minDate"
+      :max-date="maxDate"
+      @confirm="onDateConfirm"
+    />
   </van-popup>
   <van-popup v-model:show="showGenderPicker" position="bottom">
-    <van-picker :model-value="[form.gender]" :columns="columns" @cancel="showGenderPicker = false"
-      @confirm="onConfirm" />
+    <van-picker
+      :model-value="[form.gender]"
+      :columns="columns"
+      @cancel="showGenderPicker = false"
+      @confirm="onConfirm"
+    />
   </van-popup>
 </template>
 <script setup lang="ts">
@@ -76,9 +151,9 @@ const isEdit = ref(false);
 const { t } = useI18n();
 import dayjs from "dayjs";
 let statusEnum = {
-  "1": "审核中",
-  "2": "审核通过",
-  "3": "审核失败",
+  "1": "Under review",
+  "2": "Approved",
+  "3": "Dismissed",
 };
 let statusClass = {
   "1": "status1",
@@ -97,8 +172,8 @@ function onBack() {
 }
 const currentDate = ref(["2021", "01", "01"]);
 const columns = [
-  { text: "男", value: "male" },
-  { text: "女", value: "female" },
+  { text: t("Male"), value: "male" },
+  { text: t("Female"), value: "female" },
 ];
 const showDatePicker = ref(false);
 const showGenderPicker = ref(false);
@@ -142,7 +217,7 @@ const onDateConfirm = ({ selectedValues }) => {
 };
 const onConfirm = ({ selectedValues }) => {
   form.gender = selectedValues[0];
-  form.genderDesc = selectedValues[0] === "male" ? "男" : "女";
+  form.genderDesc = selectedValues[0] === "male" ? "Male" : "Female";
   showGenderPicker.value = false;
 };
 const submitOriginal = async () => {
@@ -166,7 +241,6 @@ const submitOriginal = async () => {
     ...params,
   });
   if (code == 200) {
-
     setTimeout(() => {
       router.push("/ipo");
     }, 800);
@@ -203,7 +277,7 @@ const getPageList = async () => {
       form[key] = cInfo[key];
     }
     form.creditAmount = data.creditAmount;
-    data.statusDesc = statusEnum[data.status];
+    data.statusDesc = data.status ? statusEnum[data.status] : "";
     creditInfo.value = data;
     console.log(creditInfo.value);
   }

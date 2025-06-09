@@ -2,7 +2,7 @@
   <div class="bindVerify-content p-12 flex flex-col gap-24">
     <nationalityList
       ref="controlChildRef"
-      :title="'选择'"
+      :title="t('pick')"
       @getName="getName"
     ></nationalityList>
 
@@ -55,7 +55,7 @@ import nationalityList from "@/components/nationality-list/nationalityList.vue";
 import { sendCode, bindPhone, kyc } from "@/api/user";
 import { useLoadingStore } from "@/stores/modules/loading";
 const loadingStore = useLoadingStore();
-
+const { t } = useI18n();
 const { proxy } = getCurrentInstance();
 const form = reactive({
   phone: "",

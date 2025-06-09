@@ -14,8 +14,9 @@ import ChatItem from "./component/chat-item.vue";
 import { indexInfo, depth, market } from "@/api/market";
 import local from "@/utils/local";
 import Indicator from "./component/indicator.vue";
+
 const { t } = useI18n();
-const activeName = ref("");
+const activeName = ref<any>("");
 const store = useStore();
 const requestCount = ref(0);
 const marketData = ref<any>([]);
@@ -52,14 +53,20 @@ const indexData = ref({});
 
 const onSearch = () => {
   marketData.value.list = [];
-  getMarketInfo({
-    categoryId: categoryId.value,
+  let allCategoryArr = marketData.value.category.map((e) => {
+    return e.category_id;
   });
+  getMarketInfo(
+    {
+      categoryId: allCategoryArr,
+    },
+    true
+  );
 };
 const init = () => {
   indexInfo().then((res) => {
     indexInfoData.value = res.data;
-    indexInfoData.value.noticeContent = getContent(indexInfoData.value.notice);
+
     console.log(indexInfoData.value);
   });
   getMarketInfo({});
@@ -76,11 +83,20 @@ const getMarketIndex = (params) => {
     }
   });
 };
-const getMarketInfo = (params) => {
+function isString(value) {
+  return typeof value === "string" && value.constructor === String;
+}
+
+const getMarketInfo = (params, isSearch = false) => {
   let p = {
     ...page,
   };
+
   p.pageIndex = params.pageIndex || 1;
+  if (params.categoryId && isString(params.categoryId)) {
+    params.categoryId = params.categoryId.split(",");
+  }
+
   rankListStatus.value = 1;
   requestCount.value++;
   market({ ...p, ...params, symbol: search.value }).then((res) => {
@@ -97,15 +113,33 @@ const getMarketInfo = (params) => {
       } else {
         result = marketData.value.list.concat(data.list || []);
       }
-      if (requestCount.value == 1) {
-        activeName.value = data.category[0].category_id;
-        categoryId.value = data.category[0].category_id;
-      }
 
       marketData.value = {
         ...res.data,
         list: result,
       };
+      console.log(requestCount.value);
+      // let allCategoryArr = {
+      //   name: "All Stocks",
+      //   exchangeName: "",
+      //   category_id: data.category
+      //     .map((e) => {
+      //       return e.category_id;
+      //     })
+      //     .join(","),
+      // };
+      // marketData.value.category.push(allCategoryArr);
+      if (requestCount.value == 1) {
+        activeName.value = data.category[0].category_id;
+        categoryId.value = data.category[0].category_id;
+        console.log(activeName.value, requestCount.value);
+      }
+      if (isSearch) {
+        if (data.list && data.list.length) {
+          const { tradingInfo } = data.list[0];
+          activeName.value = tradingInfo.categoryId;
+        }
+      }
       store.setMarketList(result || []);
       if (data.total <= marketData.value.list.length) {
         rankListStatus.value = 3;
@@ -141,13 +175,15 @@ watch(
 );
 const categoryId = ref();
 const handleClickTabs = (val: any) => {
-  console.log(val);
   rankListStatus.value = 1;
   categoryId.value = val;
   marketData.value.list = [];
-  getMarketInfo({
-    categoryId: val,
-  });
+  getMarketInfo(
+    {
+      categoryId: val,
+    },
+    true
+  );
   // if (val == 200) {
   //   getMarketIndex({
   //     categoryId: 500

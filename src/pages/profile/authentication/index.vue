@@ -92,7 +92,7 @@
 
     <nationalityList
       ref="controlChildRef"
-      :title="'选择'"
+      :title="t('pick')"
       @getName="getName"
     ></nationalityList>
   </div>

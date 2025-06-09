@@ -398,5 +398,7 @@
     "Successfully submitted late": "Úspěšně odesláno",
     "Upload failed": "Nahrání selhalo",
     "Upload successful": "Nahrání úspěšné",
-    "Binding successful": "Propojení úspěšné"
+    "Binding successful": "Propojení úspěšné",
+    "Male": "Muž",
+    "Female": "Žena"
 }

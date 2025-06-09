@@ -157,12 +157,16 @@ function onBack() {
 let ws = reactive(null);
 const showPicker = ref(false);
 const handleClickPop = () => {
+  if (!canPick.value) {
+    return;
+  }
   showPicker.value = true;
 };
+const canPick = ref(false);
 const getMarketList = async () => {
   const { data, code } = await market({
     pageIndex: 1,
-    pageSize: 1000,
+    pageSize: 500,
     categoryId: categoryId.value,
   });
   if (code == 200) {
@@ -176,6 +180,7 @@ const getMarketList = async () => {
         value: e.tradingPairsId,
       };
     });
+    canPick.value = true;
   }
 };
 const onConfirm = async ({ selectedOptions }) => {

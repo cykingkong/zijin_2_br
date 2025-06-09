@@ -43,7 +43,7 @@
             class="order-btn border-none h-54 lh-54 cancel-btn"
             @click.stop="cancelSingle(e)"
           >
-            {{ $t("撤单") }}</van-button
+            {{ $t("Cancel order") }}</van-button
           >
         </div>
       </div>

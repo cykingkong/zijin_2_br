@@ -398,5 +398,7 @@
     "Successfully submitted late": "Pomyślnie złożono spóźnione",
     "Upload failed": "Przesyłanie nieudane",
     "Upload successful": "Przesyłanie udane",
-    "Binding successful": "Powiązanie udane"
+    "Binding successful": "Powiązanie udane",
+    "Male": "Mężczyzna",
+    "Female": "Kobieta"
 }

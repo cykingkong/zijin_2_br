@@ -398,5 +398,7 @@
     "Successfully submitted late": "Отправлено с опозданием",
     "Upload failed": "Ошибка загрузки",
     "Upload successful": "Загружено успешно",
-    "Binding successful": "Привязка успешна"
+    "Binding successful": "Привязка успешна",
+    "Male": "Мужской",
+    "Female": "Женский"
 }

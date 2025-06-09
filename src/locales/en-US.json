@@ -398,5 +398,7 @@
   "Successfully submitted late": "Successfully submitted late",
   "Upload failed": "Upload failed",
   "Upload successful": "Upload successful",
-  "Binding successful": "Binding successful"
+  "Binding successful": "Binding successful",
+  "Male": "Male",
+  "Female": "Female"
 }

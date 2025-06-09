@@ -1,63 +1,65 @@
 <script setup lang="ts">
-import useRouteCache from '@/stores/modules/routeCache'
-import { Overlay } from 'vant'
-import { useLoadingStore } from '@/stores/modules/loading'
-import { useStore } from '@/stores/modules/index';
+import useRouteCache from "@/stores/modules/routeCache";
+import { Overlay, showLoadingToast, closeToast } from "vant";
+import { useLoadingStore } from "@/stores/modules/loading";
+import { useStore } from "@/stores/modules/index";
+import { navTitleStore } from "@/stores/index";
 
-import Socket from './utils/Socket'
-const loadingStore = useLoadingStore()
-const store: any = useStore()
-let ws = null
+import Socket from "./utils/Socket";
+const navStore = navTitleStore();
+const loadingStore = useLoadingStore();
+const store: any = useStore();
+let ws = null;
 useHead({
-  title: 'Quotes',
+  title: "Quotes",
   meta: [
     {
-      name: 'description',
-      content: 'An mobile web apps template based on the Vue 3 ecosystem',
+      name: "description",
+      content: "An mobile web apps template based on the Vue 3 ecosystem",
     },
     {
-      name: 'theme-color',
-      content: '#1f1f1f',
+      name: "theme-color",
+      content: "#1f1f1f",
     },
   ],
   link: [
     {
-      rel: 'icon',
-      type: 'image/svg+xml',
-      href: () => preferredDark.value ? '/favicon-dark.svg' : '/favicon.svg',
+      rel: "icon",
+      type: "image/svg+xml",
+      href: () => (preferredDark.value ? "/favicon-dark.svg" : "/favicon.svg"),
     },
   ],
-})
+});
 
 const keepAliveRouteNames = computed(() => {
-  return useRouteCache().routeCaches as string[]
-})
-
+  return useRouteCache().routeCaches as string[];
+});
 
 const SocketWs = () => {
-  ws = new Socket('/wss');
+  ws = new Socket("/wss");
   ws.on("open", () => {
     ws.send({
       action: "Subscribe",
       params: {
         tradingPairsId: 0,
-        period: ''
-      }
+        period: "",
+      },
     });
   });
-  ws.on("message", res => {
-    if (res.code == 200 && JSON.stringify(res.data) != '{}') {
+  ws.on("message", (res) => {
+    if (res.code == 200 && JSON.stringify(res.data) != "{}") {
       store?.setklineList(res.data);
     }
   });
   // tradingPairsId.value = props.trading_pair_id
-}
+};
+
 onMounted(() => {
   setTimeout(() => {
-    localStorage.setItem('vueuse-color-scheme', 'dark')
-  }, 80)
-  SocketWs()
-})
+    localStorage.setItem("vueuse-color-scheme", "dark");
+  }, 80);
+  SocketWs();
+});
 </script>
 
 <template>
@@ -74,7 +76,6 @@ onMounted(() => {
   </van-config-provider>
 
   <Overlay :show="loadingStore.showGlobalLoading" class="overlay" z-index="99">
-
   </Overlay>
 </template>
 

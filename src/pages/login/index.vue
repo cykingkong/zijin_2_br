@@ -109,7 +109,7 @@ async function login(values: any) {
   <div class="m-x-a w-7xl">
     <nationalityList
       ref="controlChildRef"
-      :title="'选择'"
+      :title="t('pick')"
       @getName="getName"
     ></nationalityList>
     <!-- <div class="title font-size-14 font-bold mt-24 mb-12 flex gap-12 items-center">

@@ -398,5 +398,7 @@
     "Successfully submitted late": "Succesvol ingediend",
     "Upload failed": "Upload mislukt",
     "Upload successful": "Upload succesvol",
-    "Binding successful": "Koppeling succesvol"
+    "Binding successful": "Koppeling succesvol",
+    "Male": "Mannelijk",
+    "Female": "Vrouwelijk"
 }

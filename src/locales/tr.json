@@ -398,5 +398,7 @@
     "Successfully submitted late": "Geç gönderme başarılı",
     "Upload failed": "Yükleme başarısız",
     "Upload successful": "Yükleme başarılı",
-    "Binding successful": "Bağlama başarılı"
+    "Binding successful": "Bağlama başarılı",
+    "Male": "Erkek",
+    "Female": "Kadın"
 }

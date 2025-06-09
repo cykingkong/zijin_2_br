@@ -398,5 +398,7 @@
     "Successfully submitted late": "제출 성공",
     "Upload failed": "업로드 실패",
     "Upload successful": "업로드 성공",
-    "Binding successful": "연동 성공"
+    "Binding successful": "연동 성공",
+    "Male": "남성",
+    "Female": "여성"
 }

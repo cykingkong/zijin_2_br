@@ -398,5 +398,7 @@
     "Successfully submitted late": "ส่งสายสำเร็จ",
     "Upload failed": "อัปโหลดล้มเหลว",
     "Upload successful": "อัปโหลดสำเร็จ",
-    "Binding successful": "ผูกมัดสำเร็จ"
+    "Binding successful": "ผูกมัดสำเร็จ",
+    "Male": "ชาย",
+    "Female": "หญิง"
 }

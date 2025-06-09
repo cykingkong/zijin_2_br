@@ -398,5 +398,7 @@
     "Successfully submitted late": "提出成功",
     "Upload failed": "アップロード失敗",
     "Upload successful": "アップロード成功",
-    "Binding successful": "紐付け成功"
+    "Binding successful": "紐付け成功",
+    "Male": "男性",
+    "Female": "女性"
 }

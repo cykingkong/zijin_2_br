@@ -228,7 +228,7 @@ const getInfo = async () => {
 const handleClickSubmit = async () => {
   if (form.amount == "") {
     showToast({
-      message: "请输入划转金额",
+      message: t("input.PleaseEnter") + t("Amount"),
       zIndex: 99,
     });
     return;
@@ -241,8 +241,7 @@ const handleClickSubmit = async () => {
   if (code == 200) {
     console.log(data);
 
-    showToast({
-      message: "划转成功",
+    showSuccessToast({
       zIndex: 9999,
     });
     form.amount = "";
@@ -258,9 +257,7 @@ onMounted(async () => {
 <route lang="json5">
     {
         name:"conversion",
-        
       meta: {
-        title: '划转',
         i18n: 'profile.conversion'
       }
     }

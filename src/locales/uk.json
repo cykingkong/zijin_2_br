@@ -398,5 +398,7 @@
     "Successfully submitted late": "Успішно подано пізно",
     "Upload failed": "Завантаження не вдалося",
     "Upload successful": "Завантаження успішне",
-    "Binding successful": "Прив'язка успішна"
+    "Binding successful": "Прив'язка успішна",
+    "Male": "Чоловічий",
+    "Female": "Жіночий"
 }

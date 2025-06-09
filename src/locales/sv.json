@@ -398,5 +398,7 @@
     "Successfully submitted late": "Sent skickat",
     "Upload failed": "Uppladdning misslyckades",
     "Upload successful": "Uppladdning lyckades",
-    "Binding successful": "Bindning lyckades"
+    "Binding successful": "Bindning lyckades",
+    "Male": "Man",
+    "Female": "Kvinna"
 }

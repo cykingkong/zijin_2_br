@@ -419,5 +419,7 @@
   },
   "The address has been copied to the clipboard": {
     "": "地址已复制到剪贴板"
-  }
+  },
+  "Male": "男",
+  "Female": "女"
 }

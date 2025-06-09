@@ -51,12 +51,13 @@
             popActive == 0 ? addCommasToNumber(klineData.close, true, true) : ""
           }}
         </div>
-        <!-- <div
-          class="line w-full border-1px border-solid px-6px py-4 text-align-left font-size-16 h-30px flex items-center"
+        <div
+          class="line w-full border-1px border-solid px-6px py-6 text-align-left font-size-16 min-h-30px flex items-center"
           :style="{ borderColor: activeColor }"
+          v-if="direction == 1"
         >
           {{ t("MinBuyShare") }}:{{ routeItem ? routeItem.minOrderSize : "-" }}
-        </div> -->
+        </div>
         <div
           class="line w-full border-1px border-solid text-align-left font-size-16"
           :style="{ borderColor: activeColor }"

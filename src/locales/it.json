@@ -398,5 +398,7 @@
     "Successfully submitted late": "Inviato con successo",
     "Upload failed": "Caricamento fallito",
     "Upload successful": "Caricamento riuscito",
-    "Binding successful": "Collegamento riuscito"
+    "Binding successful": "Collegamento riuscito",
+    "Male": "Maschio",
+    "Female": "Femmina"
 }
