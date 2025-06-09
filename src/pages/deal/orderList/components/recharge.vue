@@ -16,7 +16,7 @@
     </div>
     <div class="li flex items-center">
       <div class="text-blueGray-400 label">{{ t("Top-up Currency") }}:</div>
-      <div class="value">{{ item.assetId }}</div>
+      <div class="value">{{ item.assetId == 198 ? "BRL" : "USD" }}</div>
     </div>
     <div class="li flex items-center">
       <div class="text-blueGray-400 label">{{ t("Top-up type") }}:</div>
