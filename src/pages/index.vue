@@ -76,11 +76,10 @@ const initKfUrl = async () => {
   });
   if (code == 200) {
     kfUrl.value = data.kfUrl || "";
+    window.open(kfUrl.value);
   }
 };
-const toKfUrl = () => {
-  window.open(kfUrl.value);
-};
+const toKfUrl = () => {};
 const getChartsDesc = async (type) => {
   const { data, code } = await appCharts({ type });
   if (code == 200) {
@@ -97,7 +96,7 @@ const init = () => {
   getMarketIndex({
     categoryId: 500,
   });
-  initKfUrl();
+  // initKfUrl();
 };
 const page = reactive({
   pageIndex: 1,
@@ -291,8 +290,7 @@ onMounted(() => {
     </van-tabs>
     <div
       class="fixed right-0 bottom-120px w-40 h-auto kf-fixed"
-      v-if="kfUrl"
-      @click="toKfUrl"
+      @click="initKfUrl"
     >
       <img src="@/assets/kf.png" class="w-full h-full block" alt="" />
     </div>
