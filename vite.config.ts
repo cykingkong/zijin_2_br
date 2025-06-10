@@ -19,7 +19,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       port: 3200,
       proxy: {
         '/api': {
-          target: `https://api.hcenvio.com`, // 代理接口
+          target: `http://152.53.166.120:18399`, // 代理接口
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, ''),
           ws: false,

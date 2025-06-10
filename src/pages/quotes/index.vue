@@ -192,7 +192,6 @@ onMounted(() => {
           ></div>
           <TopStories v-if="item.category_id == 200" />
         </div>
-
         <!-- <Indicator :list="marketData.list" v-if="item.category_id == 200" @handle-click="handleClickIndicator" /> -->
         <!-- 金刚区 -->
         <Grid
