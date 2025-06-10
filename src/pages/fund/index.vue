@@ -35,13 +35,12 @@
               v-show="skeleton && orderList.length == 0"
               v-for="i in 5"
               :key="i"
-            >
-              <LoadMore :status="orderLoadStatus" @load-more="loadMore" />
-              <empty
-                v-if="orderList.length == 0 && !skeleton"
-                :noTips="true"
-              ></empty>
-            </div>
+            ></div>
+            <LoadMore :status="orderLoadStatus" @load-more="loadMore" />
+            <empty
+              v-if="orderList.length == 0 && !skeleton"
+              :noTips="true"
+            ></empty>
           </div>
         </van-tab>
       </van-tabs>

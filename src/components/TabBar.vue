@@ -1,22 +1,21 @@
 <script setup lang="ts">
-import { routeWhiteList } from '@/config/routes'
-import tab1 from '@/assets/tabNav/tab1.png';
-import tab1Active from '@/assets/tabNav/tab1-active.png';
-import tab2 from '@/assets/tabNav/tab2.png';
-import tab2Active from '@/assets/tabNav/tab2-active.png';
-import tab3 from '@/assets/tabNav/tab3.png';
-import tab3Active from '@/assets/tabNav/tab3-active.png';
-import tab4 from '@/assets/tabNav/tab4.png';
-import tab4Active from '@/assets/tabNav/tab4-active.png';
-import tab5 from '@/assets/tabNav/tab5.png';
-import tab5Active from '@/assets/tabNav/tab5-active.png';
+import { routeWhiteList } from "@/config/routes";
+import tab1 from "@/assets/tabNav/tab1.png";
+import tab1Active from "@/assets/tabNav/tab1-active.png";
+import tab2 from "@/assets/tabNav/tab2.png";
+import tab2Active from "@/assets/tabNav/tab2-active.png";
+import tab3 from "@/assets/tabNav/tab3.png";
+import tab3Active from "@/assets/tabNav/tab3-active.png";
+import tab4 from "@/assets/tabNav/tab4.png";
+import tab4Active from "@/assets/tabNav/tab4-active.png";
+import tab5 from "@/assets/tabNav/tab5.png";
+import tab5Active from "@/assets/tabNav/tab5-active.png";
 
+const { t } = useI18n();
+const active = ref(0);
+const route = useRoute();
 
-const { t } = useI18n()
-const active = ref(0)
-const route = useRoute()
-
-const show = computed(() => route.name && routeWhiteList.includes(route.name))
+const show = computed(() => route.name && routeWhiteList.includes(route.name));
 const tabList = [
   // {
   //   name: '自选',
@@ -25,45 +24,44 @@ const tabList = [
   //   offIcon: tab1
   // },
   {
-    name: 'layouts.quotes',
-    path: '/',
+    name: "layouts.quotes",
+    path: "/",
     onIcon: tab2Active,
-    offIcon: tab2
-
+    offIcon: tab2,
   },
   {
-    name: 'layouts.deal',
-    path: '/deal',
+    name: "layouts.deal",
+    path: "/deal",
     onIcon: tab3Active,
-    offIcon: tab3
-
+    offIcon: tab3,
   },
   {
-    name: 'IPO',
-    path: '/ipo',
+    name: "IPO",
+    path: "/ipo",
     onIcon: tab4Active,
-    offIcon: tab4
-
+    offIcon: tab4,
   },
   {
-    name: 'layouts.profile',
-    path: '/profile',
+    name: "layouts.profile",
+    path: "/profile",
     onIcon: tab5Active,
-    offIcon: tab5
-  }
-]
-
+    offIcon: tab5,
+  },
+];
 </script>
 
 <template>
-  <van-tabbar v-if="show" v-model="active" placeholder route>
-    <van-tabbar-item replace :to="item.path" v-for="(item, k) in tabList" :key="k">
+  <van-tabbar v-if="show" v-model="active" placeholder route z-index="9999">
+    <van-tabbar-item
+      replace
+      :to="item.path"
+      v-for="(item, k) in tabList"
+      :key="k"
+    >
       {{ t(item.name) }}
       <template #icon="props">
         <img :src="props.active ? item.onIcon : item.offIcon" />
-
       </template>
     </van-tabbar-item>
-
   </van-tabbar>
 </template>
