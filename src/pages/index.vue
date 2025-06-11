@@ -79,7 +79,7 @@ const initKfUrl = async () => {
     window.open(kfUrl.value);
   }
 };
-const toKfUrl = () => {};
+const toKfUrl = () => { };
 const getChartsDesc = async (type) => {
   const { data, code } = await appCharts({ type });
   if (code == 200) {
@@ -105,7 +105,7 @@ const page = reactive({
 const rankListStatus = ref(1); // 1-加载中 2-成功 3-已无更多
 const proName = ref("");
 const getMarketIndex = (params) => {
-  market({ pageIndex: 1, pageSize: 3, ...params }).then(({ data, code }) => {
+  market({ pageIndex: 1, pageSize: 20, ...params }).then(({ data, code }) => {
     if (code == 200) {
       indexData.value = data.list;
     }
@@ -239,59 +239,31 @@ onMounted(() => {
       <div class="left">{{ t("menus.quotes") }}</div>
     </header>
     <van-tabs v-model:active="activeName" shrink @change="handleClickTabs">
-      <van-tab
-        class="flex flex-col gap-12 pt-12"
-        :title="item.name"
-        :name="item.category_id"
-        v-for="item in marketData.category"
-        :key="item.category_id"
-      >
+      <van-tab class="flex flex-col gap-12 pt-12" :title="item.name" :name="item.category_id"
+        v-for="item in marketData.category" :key="item.category_id">
         <Banner :banner="indexInfoData.banners" />
         <tabItem :categoryId="item.category_id" :item="indexData"> </tabItem>
         <div class="top relative">
-          <div
-            class="z-index-999 absolute top-0 left-0 w-full h-full"
-            @click="toDetail"
-          ></div>
-          <TopStories
-            :chartsDesc="chartsDesc"
-            :category_id="item.category_id"
-          />
+          <div class="z-index-999 absolute top-0 left-0 w-full h-full" @click="toDetail"></div>
+          <TopStories :chartsDesc="chartsDesc" :category_id="item.category_id" />
         </div>
         <!-- <Indicator :list="marketData.list" v-if="item.category_id == 200" @handle-click="handleClickIndicator" /> -->
         <!-- 金刚区 -->
-        <Grid
-          @handleClickGrid="handleClickGrid"
-          :categoryId="Number(item.category_id)"
-        />
+        <Grid @handleClickGrid="handleClickGrid" :categoryId="Number(item.category_id)" />
         <!-- 公告 -->
-        <Notice
-          @clickNotice="clickNotice"
-          :data="indexInfoData"
-          v-if="indexInfoData.notice"
-        />
+        <Notice @clickNotice="clickNotice" :data="indexInfoData" v-if="indexInfoData.notice" />
         <!-- 排行 -->
         <!-- <Rank :rankList="marketData.list" :categoryId="item.category_id" @loadMore="loadMore"
           :rankListStatus="rankListStatus" /> -->
 
         <div class="top relative">
-          <div
-            class="z-index-999 absolute top-0 left-0 w-full h-full"
-            @click="toDetail"
-          ></div>
+          <div class="z-index-999 absolute top-0 left-0 w-full h-full" @click="toDetail"></div>
           <hotmap :category_id="item.category_id" />
         </div>
-        <StockMarketWidget
-          :chartsDesc="chartsDesc"
-          :category_id="item.category_id"
-          class="mt-12"
-        />
+        <StockMarketWidget :chartsDesc="chartsDesc" :category_id="item.category_id" class="mt-12" />
       </van-tab>
     </van-tabs>
-    <div
-      class="fixed right-0 bottom-120px w-40 h-auto kf-fixed"
-      @click="initKfUrl"
-    >
+    <div class="fixed right-0 bottom-120px w-40 h-auto kf-fixed" @click="initKfUrl">
       <img src="@/assets/kf.png" class="w-full h-full block" alt="" />
     </div>
     <van-popup v-model:show="showDatePicker" position="bottom">
@@ -344,12 +316,13 @@ onMounted(() => {
     }
   }
 }
+
 .kf-fixed {
   z-index: 1002;
 }
+
 :deep(.van-tabs__line) {
-  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADxSURBVHgBnVHLDYJAEJ1ZjJ+LoQTsQDtA48GjJXj1YNQKKIGDIR4pQY8eTLQD7EBKIIZIBGEEiQSR5eNLNrs7efP27RsEDiZbR3J9OEXnrtce7Ndo5fEYT8D1cRluUrTslqPweFjw+jVdawrQO8w7ZiUHbkBqtub5oOdxfwRGmjMDwmm2TgDyeOPIpQIhk/vfAEGfqiRyBUbaI2qWgA/p1riv0oUkxHdwTzIAUYRCoNUUaPAJNHHgBaH10uYIJHoBql8OZM3uMxIMqAFGMDwuOmcWX4Qd1ARhHDbGY8ufcQWZNSsaWzmYwsIQTPgTCHR5AaMKT03qmstiAAAAAElFTkSuQmCC)
-    no-repeat center;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADxSURBVHgBnVHLDYJAEJ1ZjJ+LoQTsQDtA48GjJXj1YNQKKIGDIR4pQY8eTLQD7EBKIIZIBGEEiQSR5eNLNrs7efP27RsEDiZbR3J9OEXnrtce7Ndo5fEYT8D1cRluUrTslqPweFjw+jVdawrQO8w7ZiUHbkBqtub5oOdxfwRGmjMDwmm2TgDyeOPIpQIhk/vfAEGfqiRyBUbaI2qWgA/p1riv0oUkxHdwTzIAUYRCoNUUaPAJNHHgBaH10uYIJHoBql8OZM3uMxIMqAFGMDwuOmcWX4Qd1ARhHDbGY8ufcQWZNSsaWzmYwsIQTPgTCHR5AaMKT03qmstiAAAAAElFTkSuQmCC) no-repeat center;
   width: 9px;
   height: 8px;
   background-size: 100% 100%;

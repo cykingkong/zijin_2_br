@@ -1,6 +1,13 @@
 <template>
   <div class="account-change-content">
-    <VanNavBar title="" :fixed="true" clickable placeholder :left-arrow="true" @click-left="onBack">
+    <VanNavBar
+      title=""
+      :fixed="true"
+      clickable
+      placeholder
+      :left-arrow="true"
+      @click-left="onBack"
+    >
       <template #title>
         <div class="flex flex-items-center gap-6">{{ t(title) }}</div>
       </template>
@@ -10,19 +17,34 @@
             </van-tab>
         </van-tabs> -->
     <div class="tab-content w-full flex">
-      <div class="tab-item text-center font-size-16 flex-1 py-12" :class="active == index ? 'active-item' : ''"
-        v-for="(item, index) in tabList" :key="index" @click="tabChange(index)" :title="item.name">
+      <div
+        class="tab-item text-center font-size-16 flex-1 py-12"
+        :class="active == index ? 'active-item' : ''"
+        v-for="(item, index) in tabList"
+        :key="index"
+        @click="tabChange(index)"
+        :title="item.name"
+      >
         {{ t(item.name) }}
       </div>
     </div>
 
     <block v-if="type != '3'">
-      <TabItem v-for="(item, el) in accountChangeList" :key="el" :item="item"></TabItem>
+      <TabItem
+        v-for="(item, el) in accountChangeList"
+        :key="el"
+        :item="item"
+      ></TabItem>
     </block>
     <block v-if="type == '3'">
       <div class="px-12">
-        <EntrustItem v-for="item in accountChangeList" :key="item.order_no" :entrust="item" state="submitted"
-          @cancelOrder="cancelOrder" />
+        <EntrustItem
+          v-for="item in accountChangeList"
+          :key="item.order_no"
+          :entrust="item"
+          state="submitted"
+          @cancelOrder="cancelOrder"
+        />
       </div>
     </block>
     <empty v-if="!accountChangeList.length" :no-tips="true"></empty>
@@ -181,7 +203,7 @@ const getOrderList = async (params = {}) => {
     // showToast('购入成功')
     if (!data.rows) {
       if (page.pageIndex == 1) {
-        accountChangeList.value = []
+        accountChangeList.value = [];
       }
       listStatus.value = 3;
       return;
@@ -206,7 +228,7 @@ const getAssetsLogsGrid = async (params = {}) => {
   if (code == 200) {
     if (!data.rows) {
       if (page.pageIndex == 1) {
-        accountChangeList.value = []
+        accountChangeList.value = [];
       }
       listStatus.value = 3;
       return;

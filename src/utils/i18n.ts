@@ -39,7 +39,8 @@ import vn from '@/locales/vn.json'
 import { Locale } from 'vant'
 import type { PickerColumn } from 'vant'
 
-const FALLBACK_LOCALE = 'en-US'
+const FALLBACK_LOCALE = 'pt-BR'
+
 
 const vantLocales = {
   // 'zh-CN': { ...zhCN },

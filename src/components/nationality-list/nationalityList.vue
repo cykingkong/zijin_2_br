@@ -36,7 +36,7 @@ const props = defineProps({
     }
 })
 
-let language = ref('en')
+let language = ref('pt-BR')
 let isShow = ref(false)
 let val = ref('')
 let list = ref([])

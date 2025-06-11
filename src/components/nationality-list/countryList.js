@@ -641,6 +641,8 @@ const countries = {
     'ax': { 'code': 'ax', 'name': 'オーランド諸島', 'dialCode': 358, 'phoneFormat': '041 2345678' }
   },
   'Korean': {
+    'br': { 'code': 'br', 'name': '브라질', 'dialCode': 55, 'phoneFormat': '(11) 96123-4567' },
+
     'af': { 'code': 'af', 'name': '아프가니스탄', 'dialCode': 93, 'phoneFormat': '070 123 4567' },
     'al': { 'code': 'al', 'name': '알바니아', 'dialCode': 355, 'phoneFormat': '066 123 4567' },
     'dz': { 'code': 'dz', 'name': '알제리', 'dialCode': 213, 'phoneFormat': '0551 23 45 67' },
@@ -673,7 +675,6 @@ const countries = {
       'phoneFormat': '061 123 456'
     },
     'bw': { 'code': 'bw', 'name': '보츠와나', 'dialCode': 267, 'phoneFormat': '71 123 456' },
-    'br': { 'code': 'br', 'name': '브라질', 'dialCode': 55, 'phoneFormat': '(11) 96123-4567' },
     'io': { 'code': 'io', 'name': '영국령 인도양 지역', 'dialCode': 246, 'phoneFormat': '380 1234' },
     'vg': { 'code': 'vg', 'name': '영국령 버진 아일랜드', 'dialCode': 1284, 'phoneFormat': '(284) 300-1234' },
     'bn': { 'code': 'bn', 'name': '브루나이', 'dialCode': 673, 'phoneFormat': '712 3456' },
@@ -961,6 +962,7 @@ const countries = {
     'ax': { 'code': 'ax', 'name': '올란드 제도', 'dialCode': 358, 'phoneFormat': '041 2345678' }
   },
   'de': {
+    'br': { 'code': 'br', 'name': `Brasilien`, 'dialCode': 55, 'phoneFormat': '(11) 96123-4567' },
     'af': { 'code': 'af', 'name': `Afghanistan`, 'dialCode': 93, 'phoneFormat': '070 123 4567' },
     'al': { 'code': 'al', 'name': `Albanien`, 'dialCode': 355, 'phoneFormat': '066 123 4567' },
     'dz': { 'code': 'dz', 'name': `Algerien`, 'dialCode': 213, 'phoneFormat': '0551 23 45 67' },
@@ -993,7 +995,6 @@ const countries = {
       'phoneFormat': '061 123 456'
     },
     'bw': { 'code': 'bw', 'name': `Botswana`, 'dialCode': 267, 'phoneFormat': '71 123 456' },
-    'br': { 'code': 'br', 'name': `Brasilien`, 'dialCode': 55, 'phoneFormat': '(11) 96123-4567' },
     'io': { 'code': 'io', 'name': `Britisches Territorium im Indischen Ozean`, 'dialCode': 246, 'phoneFormat': '380 1234' },
     'vg': { 'code': 'vg', 'name': `Britische Jungferninseln`, 'dialCode': 1284, 'phoneFormat': '(284) 300-1234' },
     'bn': { 'code': 'bn', 'name': `Brunei`, 'dialCode': 673, 'phoneFormat': '712 3456' },
@@ -1281,6 +1282,7 @@ const countries = {
     'ax': { 'code': 'ax', 'name': `Åland-Inseln`, 'dialCode': 358, 'phoneFormat': '041 2345678' }
   },
   'fr': {
+    'br': { 'code': 'br', 'name': `Brésil`, 'dialCode': 55, 'phoneFormat': '(11) 96123-4567' },
     'af': { 'code': 'af', 'name': `Afghanistan`, 'dialCode': 93, 'phoneFormat': '070 123 4567' },
     'al': { 'code': 'al', 'name': `Albanie`, 'dialCode': 355, 'phoneFormat': '066 123 4567' },
     'dz': { 'code': 'dz', 'name': `Algérie`, 'dialCode': 213, 'phoneFormat': '0551 23 45 67' },
@@ -1313,7 +1315,6 @@ const countries = {
       'phoneFormat': '061 123 456'
     },
     'bw': { 'code': 'bw', 'name': `Botswana`, 'dialCode': 267, 'phoneFormat': '71 123 456' },
-    'br': { 'code': 'br', 'name': `Brésil`, 'dialCode': 55, 'phoneFormat': '(11) 96123-4567' },
     'io': { 'code': 'io', 'name': `Territoire britannique de l'océan Indien`, 'dialCode': 246, 'phoneFormat': '380 1234' },
     'vg': { 'code': 'vg', 'name': `Îles Vierges britanniques`, 'dialCode': 1284, 'phoneFormat': '(284) 300-1234' },
     'bn': { 'code': 'bn', 'name': `Brunei`, 'dialCode': 673, 'phoneFormat': '712 3456' },
@@ -1602,7 +1603,6 @@ const countries = {
   },
   'CN': {
     'br': { 'code': 'br', 'name': `巴西`, 'dialCode': 55, 'phoneFormat': '(11) 96123-4567' },
-
     'af': { 'code': 'af', 'name': `阿富汗`, 'dialCode': 93, 'phoneFormat': '070 123 4567' },
     'al': { 'code': 'al', 'name': `阿爾巴尼亞`, 'dialCode': 355, 'phoneFormat': '066 123 4567' },
     'dz': { 'code': 'dz', 'name': `阿爾及利亞`, 'dialCode': 213, 'phoneFormat': '0551 23 45 67' },
@@ -1922,6 +1922,7 @@ const countries = {
     'ax': { 'code': 'ax', 'name': `奧蘭群島`, 'dialCode': 358, 'phoneFormat': '041 2345678' }
   },
   'zh-CN': {
+    'br': { 'code': 'br', 'name': `巴西`, 'dialCode': 55, 'phoneFormat': '(11) 96123-4567' },
     'af': { 'code': 'af', 'name': `阿富汗`, 'dialCode': 93, 'phoneFormat': '070 123 4567' },
     'al': { 'code': 'al', 'name': `阿尔巴尼亚`, 'dialCode': 355, 'phoneFormat': '066 123 4567' },
     'dz': { 'code': 'dz', 'name': `阿尔及利亚`, 'dialCode': 213, 'phoneFormat': '0551 23 45 67' },
@@ -1954,7 +1955,6 @@ const countries = {
       'phoneFormat': '061 123 456'
     },
     'bw': { 'code': 'bw', 'name': `博茨瓦纳`, 'dialCode': 267, 'phoneFormat': '71 123 456' },
-    'br': { 'code': 'br', 'name': `巴西`, 'dialCode': 55, 'phoneFormat': '(11) 96123-4567' },
     'io': { 'code': 'io', 'name': `英属印度洋领地`, 'dialCode': 246, 'phoneFormat': '380 1234' },
     'vg': { 'code': 'vg', 'name': `英属维尔京群岛`, 'dialCode': 1284, 'phoneFormat': '(284) 300-1234' },
     'bn': { 'code': 'bn', 'name': `文莱`, 'dialCode': 673, 'phoneFormat': '712 3456' },
@@ -2242,6 +2242,7 @@ const countries = {
     'ax': { 'code': 'ax', 'name': `奥兰群岛`, 'dialCode': 358, 'phoneFormat': '041 2345678' }
   },
   'th': {
+    'br': { 'code': 'br', 'name': 'บราซิล', 'dialCode': 55, 'phoneFormat': '(11) 96123-4567' },
     'af': { 'code': 'af', 'name': 'อัฟกานิสถาน', 'dialCode': 93, 'phoneFormat': '070 123 4567' },
     'al': { 'code': 'al', 'name': 'แอลเบเนีย', 'dialCode': 355, 'phoneFormat': '066 123 4567' },
     'dz': { 'code': 'dz', 'name': 'แอลจีเรีย ', 'dialCode': 213, 'phoneFormat': '0551 23 45 67' },
@@ -2274,7 +2275,6 @@ const countries = {
       'phoneFormat': '061 123 456'
     },
     'bw': { 'code': 'bw', 'name': 'บอตสวานา', 'dialCode': 267, 'phoneFormat': '71 123 456' },
-    'br': { 'code': 'br', 'name': 'บราซิล', 'dialCode': 55, 'phoneFormat': '(11) 96123-4567' },
     'io': { 'code': 'io', 'name': 'อังกฤษ ดินแดนมหาสมุทรอินเดีย', 'dialCode': 246, 'phoneFormat': '380 1234' },
     'vg': { 'code': 'vg', 'name': 'หมู่เกาะบริติชเวอร์จิน', 'dialCode': 1284, 'phoneFormat': '(284) 300-1234' },
     'bn': { 'code': 'bn', 'name': 'บรูไน', 'dialCode': 673, 'phoneFormat': '712 3456' },
@@ -2562,6 +2562,7 @@ const countries = {
     'ax': { 'code': 'ax', 'name': 'หมู่เกาะโอลันด์', 'dialCode': 358, 'phoneFormat': '041 2345678' }
   },
   'es': {
+    'br': { 'code': 'br', 'name': 'Brasil', 'dialCode': 55, 'phoneFormat': '(11) 96123-4567' },
     'af': { 'code': 'af', 'name': 'Afganistán', 'dialCode': 93, 'phoneFormat': '070 123 4567' },
     'al': { 'code': 'al', 'name': 'Albania', 'dialCode': 355, 'phoneFormat': '066 123 4567' },
     'dz': { 'code': 'dz', 'name': 'Argelia', 'dialCode': 213, 'phoneFormat': '0551 23 45 67' },
@@ -2594,7 +2595,6 @@ const countries = {
       'phoneFormat': '061 123 456'
     },
     'bw': { 'code': 'bw', 'name': 'Botsuano', 'dialCode': 267, 'phoneFormat': '71 123 456' },
-    'br': { 'code': 'br', 'name': 'Brasil', 'dialCode': 55, 'phoneFormat': '(11) 96123-4567' },
     'io': { 'code': 'io', 'name': 'Territorio Británico del Océano Índico', 'dialCode': 246, 'phoneFormat': '380 1234' },
     'vg': { 'code': 'vg', 'name': 'Islas Vírgenes Británicas', 'dialCode': 1284, 'phoneFormat': '(284) 300-1234' },
     'bn': { 'code': 'bn', 'name': 'Brunéi', 'dialCode': 673, 'phoneFormat': '712 3456' },
@@ -2882,6 +2882,7 @@ const countries = {
     'ax': { 'code': 'ax', 'name': 'Islas Aland', 'dialCode': 358, 'phoneFormat': '041 2345678' }
   },
   'ind': {
+    'br': { 'code': 'br', 'name': `Brazil`, 'dialCode': 55, 'phoneFormat': '(11) 96123-4567' },
     'af': { 'code': 'af', 'name': `Afganistan`, 'dialCode': 93, 'phoneFormat': '070 123 4567' },
     'al': { 'code': 'al', 'name': `Albania`, 'dialCode': 355, 'phoneFormat': '066 123 4567' },
     'dz': { 'code': 'dz', 'name': `Aljazair`, 'dialCode': 213, 'phoneFormat': '0551 23 45 67' },
@@ -2914,7 +2915,6 @@ const countries = {
       'phoneFormat': '061 123 456'
     },
     'bw': { 'code': 'bw', 'name': `Botswana`, 'dialCode': 267, 'phoneFormat': '71 123 456' },
-    'br': { 'code': 'br', 'name': `Brazil`, 'dialCode': 55, 'phoneFormat': '(11) 96123-4567' },
     'io': { 'code': 'io', 'name': `Wilayah Samudra Hindia Inggris`, 'dialCode': 246, 'phoneFormat': '380 1234' },
     'vg': { 'code': 'vg', 'name': `Kepulauan Virgin Inggris`, 'dialCode': 1284, 'phoneFormat': '(284) 300-1234' },
     'bn': { 'code': 'bn', 'name': `Brunei`, 'dialCode': 673, 'phoneFormat': '712 3456' },
@@ -4161,6 +4161,7 @@ const countries = {
     'zw': { 'code': 'zw', 'name': `Zimbabwe`, 'dialCode': 263, 'phoneFormat': '071 123 4567' },
     'ax': { 'code': 'ax', 'name': `Isole Aland`, 'dialCode': 358, 'phoneFormat': '041 2345678' }
   },
+  
 }
 
 export default countries

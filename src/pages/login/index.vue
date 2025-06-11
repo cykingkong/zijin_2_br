@@ -4,6 +4,7 @@ import type { RouteMap } from "vue-router";
 import { useUserStore } from "@/stores";
 import inputCom from "@/components/inputCom.vue";
 import nationalityList from "@/components/nationality-list/nationalityList.vue";
+import { languageColumns, locale } from "@/utils/i18n";
 
 import loginTab from "@/components/tab.vue";
 import vw from "@/utils/inline-px-to-vw";
@@ -92,6 +93,8 @@ async function login(values: any) {
     }
     await userStore.login({ ...params, ...values });
     // await userStore.info()
+    localStorage.setItem("language", "pt-BR");
+    locale.value = "pt-BR";
     const { redirect, ...othersQuery } = router.currentRoute.value.query;
     router.push({
       name: "home",

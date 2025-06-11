@@ -23,7 +23,7 @@ service.interceptors.request.use(
     let lang = local.getlocal('lang')
     config.headers.Authorization = `Bearer ${token}` || ''
     config.headers['content-type'] = 'multipart/form-data'
-    config.headers.language = lang || 'zh'
+    config.headers.language = lang || 'pt-BR'
     return config
   },
   (error) => {
