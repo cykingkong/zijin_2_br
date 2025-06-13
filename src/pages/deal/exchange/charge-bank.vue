@@ -115,7 +115,9 @@ const onConfirm = ({ selectedValues, selectedOptions }) => {
 const handleClickSubmitOriginal = async () => {
   const { data, code } = await recharge(form);
   if (code === 200) {
-    window.open(data.payUrl, "_blank");
+     setTimeout(()=>{
+           window.open(data.payUrl, "_blank");
+    },40)
   }
 };
 const handleClickSubmit = proxy!.$throttle(handleClickSubmitOriginal, 1000, {

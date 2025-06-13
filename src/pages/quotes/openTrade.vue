@@ -138,12 +138,12 @@
         ></LoadMore>
       </div>
     </van-popup>
-    <van-popup v-model:show="showBottom" position="bottom">
+    <van-popup v-model:show="showBottom" position="bottom" :safe-area-inset-bottom="true">
       <div class="title px-12 py-12 font-size-14">{{ t("Introduction") }}</div>
-      <div class="h-500 px-12">
+      <div class="h-500 px-12 overflow-y-scroll pb-20px">
         <!-- <charts v-if="tradingPairsId" ref="EhartsData" :trading_pair_id="tradingPairsId" :itemsKey="1"></charts> -->
         <symbolDetail
-          :symbol="routeItem.tradingInfo.baseAssetInfo"
+          :baseAssetInfo="routeItem.tradingInfo.baseAssetInfo"
           v-if="tradingPairsId"
         ></symbolDetail>
       </div>

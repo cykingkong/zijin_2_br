@@ -76,7 +76,10 @@ const initKfUrl = async () => {
   });
   if (code == 200) {
     kfUrl.value = data.kfUrl || "";
-    window.open(kfUrl.value);
+    setTimeout(()=>{
+        window.open(kfUrl.value,'_blank');
+    },40)
+   
   }
 };
 const toKfUrl = () => { };
@@ -263,8 +266,8 @@ onMounted(() => {
         <StockMarketWidget :chartsDesc="chartsDesc" :category_id="item.category_id" class="mt-12" />
       </van-tab>
     </van-tabs>
-    <div class="fixed right-0 bottom-120px w-40 h-auto kf-fixed" @click="initKfUrl">
-      <img src="@/assets/kf.png" class="w-full h-full block" alt="" />
+    <div class="fixed right-0 bottom-120px w-40 h-auto kf-fixed rounded-12px overflow-hidden" @click="initKfUrl"> 
+      <img src="@/assets/kf.png" class="w-full h-full block bg-white scale-[1.1]" alt="" />
     </div>
     <van-popup v-model:show="showDatePicker" position="bottom">
       <div class="h-auto max-h-500 overflow-y-auto p-12">

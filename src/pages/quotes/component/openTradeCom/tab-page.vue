@@ -121,33 +121,37 @@
         >
       </div>
       <div class="orderboox-right flex-1 flex-shrink-0 pl-12">
-        <div class="sell h-212px flex flex-col gap-12">
+        <div class="sell ">
+          <div class="sell-title mb-6 down font-size-12">
+            {{ t("Sell") }}
+          </div>
           <div
-            class="line py-6 flex flex-justify-between gap-12 flex-items-center w-full font-size-14px font-extralight"
+            class="line py-8 flex flex-justify-between gap-12 flex-items-center w-full font-size-14px font-extralight "
             v-for="(item, e) in depthData.asks"
             :key="e"
             :style="[
               {
-                background: `linear-gradient(to right, rgb(19, 26, 46) 0%, rgb(19, 26, 46) ${linePercent}%, rgba(246, 70, 93, 0.1) ${linePercent}%, rgba(246, 70, 93, 0.1) 100%)`,
+                background: `linear-gradient(to right, rgb(19, 26, 46) 0%, rgb(19, 26, 46) 10.892%, rgba(246, 70, 93, 0.1) 90.892%, rgba(246, 70, 93, 0.1) 100%)`,
               },
             ]"
           >
-            <div class="l-label flex-shrink-0 font-size-12">
-              {{ t("Sell") }}{{ e + 1 }}
-            </div>
+           
             <div class="r-value w-full flex flex-justify-between">
               <div class="p down">{{ item[0].toFixed(2) || "0" }}</div>
-              <div class="n">{{ item[1] }}</div>
+              <div class="n ">{{ item[1] }}</div>
             </div>
           </div>
         </div>
-        <div class="rect-box w-full flex h-7">
+        <div class="rect-box w-full flex h-7 my-6">
           <div class="l flex-1"></div>
           <div class="r-rect flex-1 h-7"></div>
         </div>
-        <div class="buy h-212px flex flex-col gap-12">
+        <div class="buy  ">
+           <div class="buy-title mb-6 up font-size-12">
+              {{ t("Buy") }}
+            </div>
           <div
-            class="line py-6 flex flex-justify-between gap-12 flex-items-center w-full font-size-14px font-extralight"
+            class="line py-8 flex flex-justify-between gap-12 flex-items-center w-full font-size-14px font-extralight"
             v-for="(item, e) in depthData.asks"
             :key="e"
             :style="[
@@ -156,9 +160,7 @@
               },
             ]"
           >
-            <div class="l-label flex-shrink-0 font-size-12">
-              {{ t("Buy") }}{{ e + 1 }}
-            </div>
+           
             <div class="r-value w-full flex flex-justify-between">
               <div class="p up">{{ item[0].toFixed(2) || "0" }}</div>
               <div class="n">{{ item[1] }}</div>
@@ -473,5 +475,11 @@ input {
   border: none;
   color: #fff;
   width: 100%;
+}
+.text-ellipsis-1{
+  // white-space: nowrap;
+  // overflow: hidden;
+  // text-overflow: ellipsis;
+
 }
 </style>

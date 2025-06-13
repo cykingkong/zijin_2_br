@@ -1,5 +1,5 @@
 <template>
-  <div class="tradingview-widget-container">
+  <div class="tradingview-widget-container flex flex-col gap-12px">
     <div
       :id="widgetId"
       :key="widgetKey"
@@ -44,6 +44,7 @@ const createWidgetCompany = async () => {
 
   // 延迟一点确保DOM完全更新
   setTimeout(() => {
+    console.log(`${props.baseAssetInfo.expName}:${props.baseAssetInfo.symbol}`,'expName',props.baseAssetInfo)
     const script = document.createElement("script");
     script.type = "text/javascript";
     script.src =
@@ -52,7 +53,7 @@ const createWidgetCompany = async () => {
     script.innerHTML = JSON.stringify({
       symbol: `${props.baseAssetInfo.expName}:${props.baseAssetInfo.symbol}`,
       width: "100%",
-      height: 500,
+      height:500,
       locale: "en",
       colorTheme: "dark",
       isTransparent: false,
@@ -80,7 +81,7 @@ const createWidget = async () => {
       "https://s3.tradingview.com/external-embedding/embed-widget-financials.js";
     script.async = true;
     script.innerHTML = JSON.stringify({
-      symbol: `${props.baseAssetInfo.expName}:${props.symbol}`,
+      symbol: `${props.baseAssetInfo.expName}:${props.baseAssetInfo.symbol}`,
       width: "100%",
       height: 500,
       locale: "en",
@@ -115,7 +116,7 @@ watch(
 .tradingview-widget-container {
   width: 100%;
   height: 100%;
-  min-height: 600px;
+  // min-height: 600px;
 
   &__widget {
     width: 100%;

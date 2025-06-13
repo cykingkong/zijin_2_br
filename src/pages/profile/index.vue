@@ -54,7 +54,10 @@ const toKfUrl = async () => {
   });
   if (code == 200) {
     kfUrl.value = data.kfUrl || "";
-    window.open(data.kfUrl);
+    // 需要延迟一下，不然safari 会拦截
+    setTimeout(()=>{
+        window.open(data.kfUrl,'_blank');
+    },40)
   }
 };
 const gridList = [
@@ -124,15 +127,16 @@ const cellList = [
     text: "资产流转",
     i18n: "profile.assetsLog",
   },
+
+  // {
+  //   icon: icon7,
+  //   text: "帮助中心",
+  //   i18n: "profile.helpCenter",
+  // },
   {
     icon: icon6,
     text: "关于我们",
     i18n: "profile.aboutUs",
-  },
-  {
-    icon: icon7,
-    text: "帮助中心",
-    i18n: "profile.helpCenter",
   },
 ];
 const handleClickCell = (index: any) => {
@@ -159,10 +163,10 @@ const handleClickCell = (index: any) => {
     case 6:
       router.push("/quotes/accountChange?type=2");
       break;
+    // case 7:
+    //   router.push("/helpCenter");
+    //   break;
     case 7:
-      router.push("/helpCenter");
-      break;
-    case 8:
       router.push("/aboutUs");
 
       break;

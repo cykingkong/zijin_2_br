@@ -1,5 +1,5 @@
 <template>
-    <div class="aboutUs text-align-center py-12">
+    <div class="aboutUs  p-12">
         <div class="about-us-content " v-html="data?.aboutUs"></div>
 
 
@@ -20,4 +20,15 @@ getData()
 
 
 </script>
-<style lang="less" scoped></style>
+<route lang="json5">
+{
+  meta: {
+    i18n: 'profile.aboutUs',
+  },
+}
+</route>
+<style lang="less" scoped>
+.aboutUs{
+    padding-bottom:calc(env(safe-area-inset-bottom) + 20px);
+}
+</style>
