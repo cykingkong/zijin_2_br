@@ -16,12 +16,12 @@
         :label="popType == 'fund' ? t('BuyShare') : t('SellShare')"
         :placeholder="t('input.PleaseEnter')"
         v-model:value="form.amount"
-        :tips="`${t('minimum quantity')}${item.minAmount}`"
+        :tips="`${t('minimum quantity')}:${addCommasToNumber(item.minAmount)}`"
         v-if="popType == 'fund'"
       >
       </inputCom>
       <div class="sell-tips font-size-18 font-500" v-if="popType == 'order'">
-        {{ t("You need to pay") }}{{ item.assetInfo.unit }} {{ item.amount }}
+        {{ t("You need to pay") }}{{ item.assetInfo.unit }} {{ addCommasToNumber(item.amount) }}
       </div>
       <div class="w-full flex gap-12">
         <div class="btn-box flex-1">
@@ -46,6 +46,8 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import inputCom from "@/components/inputCom.vue";
+import { addCommasToNumber } from '@/utils/tool'
+
 const { t } = useI18n();
 const props = defineProps({
   item: {

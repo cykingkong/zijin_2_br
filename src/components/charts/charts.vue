@@ -154,7 +154,6 @@ const marketkline = () => {
     tradingPairsId: props.trading_pair_id,
     period: period,
   }).then((res) => {
-    console.log(res, "marketklineREs");
     if (res.data) {
       res.data.forEach((e) => {
         e.volume = e.vol;
