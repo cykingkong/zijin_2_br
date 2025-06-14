@@ -42,10 +42,10 @@ const props = defineProps({
     type: Number,
     default: 1,
   },
-  itemsKey: {
-    type: Number,
-    default: 0,
-  },
+  // itemsKey: {
+  //   type: Number,
+  //   default: 0,
+  // },
 });
 const times = ref([
   { text: "Time", id: 0, key: "area" },
@@ -89,8 +89,8 @@ let valPeriod = "1min";
 let listData = {};
 
 const initChart = () => {
-  timesIndex.value = props.itemsKey;
-  period = time.value[props.itemsKey];
+  // timesIndex.value = props.itemsKey;
+  // period = time.value[props.itemsKey];
 
   chart.value = init("k-line-chart");
   chart.value.setPriceVolumePrecision(4);
@@ -107,10 +107,10 @@ const initChart = () => {
 };
 
 watch(
-  () => [props.trading_pair_id, props.itemsKey],
-  ([newId, newKey]) => {
-    console.log("trading pair id:", newId, "itemsKey:", newKey);
-    period = time.value[newKey];
+  () => props.trading_pair_id,
+  (newId) => {
+    console.log("trading pair id:", newId,);
+    // period = time.value[newKey];
     marketkline();
     childInte();
   }

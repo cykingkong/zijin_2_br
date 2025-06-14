@@ -142,6 +142,7 @@ import charts from "@/components/charts/charts.vue";
 import { market } from "@/api/market";
 
 const tradingPairsId = ref();
+
 const categoryId = ref();
 const { t } = useI18n();
 const store = useStore();
@@ -163,6 +164,7 @@ const handleClickPop = () => {
   showPicker.value = true;
 };
 const canPick = ref(false);
+
 const getMarketList = async () => {
   const { data, code } = await market({
     pageIndex: 1,
