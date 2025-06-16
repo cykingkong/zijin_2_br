@@ -30,8 +30,9 @@
 
         </div>
         <div class="li flex justify-end">
-            <van-button type="primary" @click="handleClickSubmit" class=" font-size-16!">{{
-                t(statusEnum[_item.status]) }}</van-button>
+            <van-button type="primary" @click="handleClickSubmit" class="font-size-16!"
+                :color="_item.status == 1 ? '#1989fa' : '#b5b5b5'">{{
+                    t(statusEnum[_item.status]) }}</van-button>
         </div>
     </div>
     <div class="order-item-content w-full px-12 py-24  font-size-16 flex flex-col gap-12px"

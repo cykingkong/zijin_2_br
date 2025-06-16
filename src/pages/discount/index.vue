@@ -263,6 +263,9 @@ const loadMore = () => {
 const handleClickBtn = (val: any) => {
     activeItem.value = val.item
     popType.value = val.itemType
+    if (val.itemType == 'discount' && val.status != 1) {
+        return
+    }
     bottomPopRef.value.show(true)
 }
 const onConfirmOriginal = async (val: any) => {

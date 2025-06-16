@@ -38,8 +38,9 @@
             <div class="li-r font-size-16 text-no-wrap text-align-right">{{ t('Sell') }}:{{ _item.percentage }}%</div>
         </div>
         <div class="li flex justify-end">
-            <van-button type="primary" @click="handleClickSubmit" size="small" class="font-size-16!">{{
-                t(statusEnum[_item.status]) }}</van-button>
+            <van-button type="primary" @click="handleClickSubmit" size="small"
+                :color="_item.status == 1 ? '#1989fa' : '#b5b5b5'" class="font-size-16!">{{
+                    t(statusEnum[_item.status]) }}</van-button>
         </div>
     </div>
     <div class="order-item-content w-full px-12 py-24  font-size-16 flex flex-col gap-12px"
@@ -115,6 +116,9 @@ const _index = computed(() => {
 
 })
 const handleClickSubmit = () => {
+    if (props.itemType == 'discount' && _item.value.status != 1) {
+        return
+    }
     let data = {
         item: props.item,
         itemType: props.itemType
