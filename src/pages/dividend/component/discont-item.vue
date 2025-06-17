@@ -80,11 +80,9 @@
         <div class="li flex justify-between items-center">
             <div class="li-l"></div>
             <van-button type="primary" :color="_item.saleStatus == 1 ? '#1989fa' : '#b5b5b5'" @click="handleClickSubmit"
-                class="font-size-16! w-100px!">{{
+                class="font-size-16!">{{
                     t(orderStatusEnum[_item.saleStatus]) }}</van-button>
         </div>
-
-
     </div>
 </template>
 <script setup lang="ts">
