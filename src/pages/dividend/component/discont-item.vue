@@ -61,6 +61,10 @@
         <div class="li flex justify-between ">
             <div class="li-l font-size-16">
                 {{ t('Market price') }}:{{ _item.assetInfo.unit }} {{ addCommasToNumber(_item.close) }}</div>
+
+        </div>
+        <div class="li flex justify-between ">
+
             <div class="li-r font-size-16">{{ t('Purchase price') }}:{{ _item.assetInfo.unit }} {{
                 addCommasToNumber(_item.purchasePrice)
                 }}
@@ -68,7 +72,12 @@
         </div>
         <div class="li flex justify-between ">
             <div class="li-l font-size-16">
-                {{ t('yield rate') }}:{{ _item.earningRate }}%</div>
+                {{ t('yield rate') }}: <span :class="_item.earningRate > 0 ? 'up' : 'down'">{{ _item.earningRate }}%
+                </span></div>
+
+        </div>
+        <div class="li flex justify-between ">
+
             <div class="li-r font-size-16"> {{ t('yield') }}:{{ _item.assetInfo.unit }} {{
                 _item.earnings }}</div>
         </div>

@@ -49,16 +49,27 @@
             <div class="name font-size-16">{{ _item.tradingInfo.baseAssetInfo.symbol }} x {{ _item.purchaseQuantity }}
             </div>
         </div>
+
         <div class="li flex justify-between gap-24px">
             <div class="li-l font-size-16">
                 {{ t('Market price') }}:{{ _item.assetInfo.unit }} {{ _item.purchasePrice }}</div>
-            <div class="li-r font-size-16 text-align-right">{{ t('Purchase price') }}:{{ _item.assetInfo.unit }} {{ _item.discountPrice }}</div>
+
+        </div>
+        <div class="li flex justify-between gap-24px">
+
+            <div class="li-r font-size-16 text-align-right">{{ t('Purchase price') }}:{{ _item.assetInfo.unit }} {{
+                _item.discountPrice }}</div>
         </div>
         <div class="li flex justify-between gap-25px">
             <div class="li-l font-size-16">
-                {{ t('yield rate') }}: <span :class="_item.earningRate > 0 ? 'up' : 'down'">{{ _item.earningRate }}%</span></div>
-            <div class="li-r font-size-16 text-align-right">{{ t("yield") }}:{{ _item.assetInfo.unit }} {{
-                _item.earnings }}</div>
+                {{ t('yield rate') }}: <span :class="_item.earningRate > 0 ? 'up' : 'down'">{{ _item.earningRate
+                    }}%</span></div>
+
+        </div>
+        <div class="li flex justify-between gap-25px">
+
+            <div class="li-r font-size-16 text-align-right">{{ t("yield") }}:{{ _item.assetInfo.unit }}
+                {{ _item.earnings }}</div>
         </div>
         <div class="li flex justify-end">
             <van-button type="primary" :color="_item.saleStatus == 1 ? '#1989fa' : '#b5b5b5'" @click="handleClickSubmit"

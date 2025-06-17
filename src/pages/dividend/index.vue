@@ -1,15 +1,7 @@
 <template>
   <div class="discont-content px-12 w-full">
-    <VanNavBar
-      title=""
-      :fixed="true"
-      placeholder
-      clickable
-      :left-arrow="true"
-      @click-left="onBack"
-      z-index="999"
-      v-if="!onlyShowOrder"
-    >
+    <VanNavBar title="" :fixed="true" placeholder clickable :left-arrow="true" @click-left="onBack" z-index="999"
+      v-if="!onlyShowOrder">
       <template #title>
         <div class="flex flex-items-center gap-6">{{ t("dividend") }}</div>
       </template>
@@ -19,43 +11,21 @@
         <!-- 折扣股玩法 -->
         <van-tab :title="t('dividend list')">
           <div class="discont-list flex flex-col pb-40">
-            <discont-item
-              :item="item"
-              v-for="(item, index) in list"
-              :key="index"
-              @handleClickBtn="handleClickBtn"
-            ></discont-item>
-            <div
-              class="1 skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
-              v-show="skeleton && list.length == 0"
-              v-for="i in 5"
-              :key="i"
-            ></div>
+            <discont-item :item="item" v-for="(item, index) in list" :key="index"
+              @handleClickBtn="handleClickBtn"></discont-item>
+            <div class="1 skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
+              v-show="skeleton && list.length == 0" v-for="i in 5" :key="i"></div>
             <empty v-if="list.length == 0 && !skeleton" :noTips="true"></empty>
             <LoadMore :status="listStatus" @load-more="loadMore" />
           </div>
         </van-tab>
         <van-tab :title="t('Order List')">
           <div class="discont-list flex flex-col pb-40">
-            <discont-item
-              :item="item"
-              v-for="(item, index) in orderList"
-              :key="index"
-              :index="item.tradingPairsId"
-              @handleClickBtn="handleClickBtn"
-              :item-type="'order'"
-            ></discont-item>
-            <div
-              class="2 skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
-              v-show="skeleton && orderList.length == 0"
-              v-for="i in 5"
-              :key="i"
-            ></div>
-            <empty
-              v-if="orderList.length == 0 && !skeleton"
-              :noTips="true"
-            ></empty>
-
+            <discont-item :item="item" v-for="(item, index) in orderList" :key="index" :index="item.tradingPairsId"
+              @handleClickBtn="handleClickBtn" :item-type="'order'"></discont-item>
+            <div class="2 skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
+              v-show="skeleton && orderList.length == 0" v-for="i in 5" :key="i"></div>
+            <empty v-if="orderList.length == 0 && !skeleton" :noTips="true"></empty>
             <LoadMore :status="orderLoadStatus" @load-more="loadMore" />
           </div>
         </van-tab>
@@ -63,32 +33,18 @@
     </template>
     <template v-else>
       <div class="discont-list flex flex-col pb-40">
-        <discont-item
-          :item="item"
-          v-for="(item, index) in orderList"
-          :key="index"
-          @handleClickBtn="handleClickBtn"
-          :item-type="'order'"
-        ></discont-item>
+        <discont-item :item="item" v-for="(item, index) in orderList" :key="index" @handleClickBtn="handleClickBtn"
+          :item-type="'order'"></discont-item>
         <div class="skeleton-box" v-if="skeleton && orderList.length == 0">
-          <div
-            class="3 skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
-            v-for="i in 5"
-            :key="i"
-          ></div>
+          <div class="3 skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12" v-for="i in 5"
+            :key="i"></div>
         </div>
         <empty v-if="orderList.length == 0 && !skeleton" :noTips="true"></empty>
-
         <LoadMore :status="orderLoadStatus" @load-more="loadMore" />
       </div>
     </template>
-    <bottom-pop
-      ref="bottomPopRef"
-      @onConfirm="onConfirm"
-      :item="activeItem"
-      :active="list[active]"
-      :popType="popType"
-    ></bottom-pop>
+    <bottom-pop ref="bottomPopRef" @onConfirm="onConfirm" :item="activeItem" :active="list[active]"
+      :popType="popType"></bottom-pop>
   </div>
 </template>
 <script setup lang="ts">
@@ -396,7 +352,7 @@ const onConfirmOriginal = async (val: any) => {
         getOrderList();
       }
     }
-  } catch (error) {}
+  } catch (error) { }
 };
 const onConfirm = proxy!.$throttle(onConfirmOriginal, 1000, {
   onStart: () => loadingStore.show(),
