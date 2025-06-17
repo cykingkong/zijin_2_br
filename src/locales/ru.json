@@ -400,5 +400,6 @@
     "Upload successful": "Загружено успешно",
     "Binding successful": "Привязка успешна",
     "Male": "Мужской",
-    "Female": "Женский"
+    "Female": "Женский",
+    "Confirm to cancel this order?": "Подтвердить отмену этого заказа?"
 }

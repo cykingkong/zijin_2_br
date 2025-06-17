@@ -400,5 +400,6 @@
     "Upload successful": "อัปโหลดสำเร็จ",
     "Binding successful": "ผูกมัดสำเร็จ",
     "Male": "ชาย",
-    "Female": "หญิง"
+    "Female": "หญิง",
+    "Confirm to cancel this order?": "ยืนยันการยกเลิกคำสั่งซื้อนี้ใช่ไหม?"
 }

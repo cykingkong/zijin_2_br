@@ -400,5 +400,6 @@
     "Upload successful": "Yükleme başarılı",
     "Binding successful": "Bağlama başarılı",
     "Male": "Erkek",
-    "Female": "Kadın"
+    "Female": "Kadın",
+    "Confirm to cancel this order?": "Bu siparişi iptal etmeyi onaylıyor musunuz?"
 }

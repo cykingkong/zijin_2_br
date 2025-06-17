@@ -400,5 +400,6 @@
     "Upload successful": "업로드 성공",
     "Binding successful": "연동 성공",
     "Male": "남성",
-    "Female": "여성"
+    "Female": "여성",
+    "Confirm to cancel this order?": "이 주문을 취소하시겠습니까?"
 }

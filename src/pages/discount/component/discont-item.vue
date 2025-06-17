@@ -94,6 +94,10 @@ const _index = computed(() => {
 
 })
 const handleClickSubmit = () => {
+    console.log(_item.value)
+    if (props.itemType == 'discount' && _item.value.status != 1) {
+        return
+    }
     let data = {
         item: props.item,
         itemType: props.itemType

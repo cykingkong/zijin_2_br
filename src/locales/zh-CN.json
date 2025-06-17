@@ -421,5 +421,6 @@
     "": "地址已复制到剪贴板"
   },
   "Male": "男",
-  "Female": "女"
+  "Female": "女",
+  "Confirm to cancel this order?": "确定撤销该订单?"
 }

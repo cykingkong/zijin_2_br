@@ -400,5 +400,6 @@
     "Upload successful": "Caricamento riuscito",
     "Binding successful": "Collegamento riuscito",
     "Male": "Maschio",
-    "Female": "Femmina"
+    "Female": "Femmina",
+    "Confirm to cancel this order?": "Confermare l'annullamento di questo ordine?"
 }

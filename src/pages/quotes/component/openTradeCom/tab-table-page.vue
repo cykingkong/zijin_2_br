@@ -98,4 +98,7 @@ const cancelSingle = (orderItem) => {
 .td {
   border-bottom: 1px solid #747a8f;
 }
+.th-item{
+word-break: break-all;
+}
 </style>

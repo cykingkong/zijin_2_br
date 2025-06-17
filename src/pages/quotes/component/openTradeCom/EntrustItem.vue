@@ -127,8 +127,8 @@ export default {
     cancelSingle(order_no) {
       // 撤单
       showConfirmDialog({
-        title: "提示",
-        message: "确定撤销该订单？",
+        title: t("Friendly reminder"),
+        message: t("Confirm to cancel this order?"),
       })
         .then(() => {
           // on confirm

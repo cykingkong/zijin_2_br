@@ -93,7 +93,11 @@ const router = useRouter();
 const toKyc = () => {
   router.push({ path: "/profile/authentication" });
 };
+onMounted(async () => {
+  await userStore.info();
+});
 </script>
+
 <route lang="json5">
     {
       name: 'certificationCenter',
@@ -117,7 +121,7 @@ const toKyc = () => {
 }
 
 .fixed-status {
-  width: 80px;
+  // width: 80px;
   border-radius: 40px 0 0 40px;
   height: 40px;
   right: 0%;
@@ -126,6 +130,7 @@ const toKyc = () => {
   font-size: 14px;
   padding-left: 6px;
   line-height: 40px;
+  
 }
 
 .status0 {

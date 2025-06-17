@@ -400,5 +400,6 @@
     "Upload successful": "Uppladdning lyckades",
     "Binding successful": "Bindning lyckades",
     "Male": "Man",
-    "Female": "Kvinna"
+    "Female": "Kvinna",
+    "Confirm to cancel this order?": "Bekräfta avbokning av denna order?"
 }
