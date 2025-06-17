@@ -77,7 +77,8 @@ const initKfUrl = async () => {
   if (code == 200) {
     kfUrl.value = data.kfUrl || "";
     setTimeout(()=>{
-        window.open(kfUrl.value,'_blank');
+        // window.open(kfUrl.value,'_blank');
+        window.location.href = kfUrl.value
     },40)
    
   }

@@ -116,7 +116,8 @@ const handleClickSubmitOriginal = async () => {
   const { data, code } = await recharge(form);
   if (code === 200) {
      setTimeout(()=>{
-           window.open(data.payUrl, "_blank");
+          //  window.open(data.payUrl, "_blank");
+           window.location.href = data.payUrl
     },40)
   }
 };

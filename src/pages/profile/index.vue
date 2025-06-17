@@ -56,7 +56,8 @@ const toKfUrl = async () => {
     kfUrl.value = data.kfUrl || "";
     // 需要延迟一下，不然safari 会拦截
     setTimeout(()=>{
-        window.open(data.kfUrl,'_blank');
+
+        window.location.href = data.kfUrl
     },40)
   }
 };
