@@ -1,51 +1,27 @@
 <template>
   <div class="bindVerify-content p-12 flex flex-col gap-24">
-    <nationalityList
-      ref="controlChildRef"
-      :title="t('pick')"
-      @getName="getName"
-    ></nationalityList>
+    <nationalityList ref="controlChildRef" :title="t('pick')" @getName="getName"></nationalityList>
 
-    <inputCom
-      :label="t('input.Phone')"
-      :placeholder="t('input.PleaseEnter')"
-      v-model:value="form.phone"
-      :tips="''"
-    >
+    <inputCom :label="t('input.Phone')" :placeholder="t('input.PleaseEnter')" v-model:value="form.phone" :tips="''">
       <template #picker>
-        <div
-          class="picker-box pr-8 mr-6 h-full flex items-center gap-8"
-          @click="hanleClickAreaPick"
-        >
+        <div class="picker-box pr-8 mr-6 h-full flex items-center gap-8" @click="hanleClickAreaPick">
           <!-- <img :src="icon1" alt="" class="w16 h16"> -->
-          <div
-            class="iti-flag mr-10"
-            :class="areaInfo?.code"
-            style="transform: scale(1.5)"
-          ></div>
+          <div class="iti-flag mr-10" :class="areaInfo?.code" style="transform: scale(1.5)"></div>
           <div class="num">+{{ areaInfo?.dialCode }}</div>
         </div>
       </template>
     </inputCom>
-    <inputCom
-      :label="t('VerificationCode')"
-      :placeholder="t('input.PleaseEnter')"
-      v-model:value="form.code"
-      :tips="''"
-    >
+    <inputCom :label="t('VerificationCode')" :placeholder="t('input.PleaseEnter')" v-model:value="form.code" :tips="''">
       <template #sendCode>
-        <div
-          class="absolute right-0 font-size-12 sendCode"
-          :class="countdown > 0 ? 'text-gray-400' : 'text-blue-500'"
-          @click="getCode"
-        >
+        <div class="absolute right-0 font-size-12 sendCode" :class="countdown > 0 ? 'text-gray-400' : 'text-blue-500'"
+          @click="getCode">
           {{ countdown > 0 ? `${countdown}s` : t("input.SendCode") }}
         </div>
       </template>
     </inputCom>
     <van-button type="primary" block @click="handleClickSubmit">{{
       t("confirm")
-    }}</van-button>
+      }}</van-button>
   </div>
 </template>
 <script setup lang="ts">
@@ -103,7 +79,7 @@ const handleClickSubmit = proxy!.$throttle(handleClickSubmitOriginal, 1000, {
 const getCode = async () => {
   if (countdown.value > 0) return;
   if (!form.phone && form.type == "phone") {
-    showToast("input.PleaseEnter");
+    showToast(t("input.PleaseEnter"));
     return;
   }
 
@@ -139,3 +115,10 @@ const getName = (val: any) => {
 <style lang="less" scoped>
 @import "@/components/nationality-list/intl.css";
 </style>
+<route lang="json5">
+{
+  meta: {
+    i18n: 'Phone verification'
+  },
+}
+</route>

@@ -69,7 +69,7 @@ const toRegister = () => {
 
 const toForget = () => {
   try {
-    router.push("/forgot-password?forgotType=1");
+    router.push("/forgot-password?forgotType=3");
   } catch (e) {
     console.log(e);
   }
@@ -110,11 +110,7 @@ async function login(values: any) {
 
 <template>
   <div class="m-x-a w-7xl">
-    <nationalityList
-      ref="controlChildRef"
-      :title="t('pick')"
-      @getName="getName"
-    ></nationalityList>
+    <nationalityList ref="controlChildRef" :title="t('pick')" @getName="getName"></nationalityList>
     <!-- <div class="title font-size-14 font-bold mt-24 mb-12 flex gap-12 items-center">
       <div class="flex justify-center tab-item rounded-10px p-12" :class="{ 'active': postData.type == item.value }"
         v-for="(item, index) in typeArr" :key="index" @click="postData.type = item.value">
@@ -122,46 +118,24 @@ async function login(values: any) {
     </div> -->
     <loginTab :list="typeArr" @change="changeIndex"></loginTab>
 
-    <inputCom
-      :label="t('input.Phone')"
-      :placeholder="t('input.PleaseEnter')"
-      v-model:value="postData.account"
-      :tips="''"
-      v-show="postData.type == 'phone'"
-    >
+    <inputCom :label="t('input.Phone')" :placeholder="t('input.PleaseEnter')" v-model:value="postData.account"
+      :tips="''" v-show="postData.type == 'phone'">
       <template #picker>
-        <div
-          class="picker-box pr-8 mr-6 h-full flex items-center gap-8"
-          @click="hanleClickAreaPick"
-        >
-          <div
-            class="iti-flag mr-10"
-            :class="areaInfo?.code"
-            style="transform: scale(1.5)"
-          ></div>
+        <div class="picker-box pr-8 mr-6 h-full flex items-center gap-8" @click="hanleClickAreaPick">
+          <div class="iti-flag mr-10" :class="areaInfo?.code" style="transform: scale(1.5)"></div>
           <div class="num">+{{ areaInfo?.dialCode }}</div>
         </div>
       </template>
     </inputCom>
-    <inputCom
-      :label="t('login.email')"
-      :placeholder="t('input.PleaseEnter')"
-      v-model:value="postData.account"
-      :tips="''"
-      v-show="postData.type == 'email'"
-    >
+    <inputCom :label="t('login.email')" :placeholder="t('input.PleaseEnter')" v-model:value="postData.account"
+      :tips="''" v-show="postData.type == 'email'">
     </inputCom>
-    <inputCom
-      :label="t('login.password')"
-      :placeholder="t('input.PleaseEnter')"
-      v-model:value="postData.password"
-      :tips="''"
-      :inputType="'password'"
-    >
+    <inputCom :label="t('login.password')" :placeholder="t('input.PleaseEnter')" v-model:value="postData.password"
+      :tips="''" :inputType="'password'">
     </inputCom>
     <van-button type="primary" class="login-btn" block @click="login({})">{{
       t("login.login")
-    }}</van-button>
+      }}</van-button>
 
     <GhostButton block class="mt-24" @click="toRegister">
       {{ $t("login.sign-up") }}

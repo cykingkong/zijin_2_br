@@ -73,12 +73,26 @@ const route = useRoute()
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
 const countdown = ref(0)
+const timer = ref()
 const getCode = async () => {
   if (countdown.value > 0) return
-  console.log(userInfo)
+  if (!form.username) {
+    showToast(t('input.PleaseEnter'))
+    return
+  }
   try {
+    let params = {
+      type: form.type,
+      phone: '',
+      email: ''
+    }
+    if (params.type == 'phone') {
+      params.phone = `${areaInfo.value.dialCode}${form.username}`
+    } else if (params.type == 'email') {
+      params.email = form.username
+    }
 
-    await sendCode(form)
+    await sendCode(params)
     startCountdown()
   } catch (e) {
     // 处理错误
@@ -127,12 +141,11 @@ const onSubmit = async () => {
 }
 
 const getName = (val: any) => {
-
   areaInfo.value = val
 }
 onMounted(() => {
   if (route.query.forgotType) {
-
+    form.passwordType = Number(route.query.forgotType)
   }
 })
 </script>
