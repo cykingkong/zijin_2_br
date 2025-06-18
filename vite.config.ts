@@ -13,7 +13,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
   return {
     base: env.VITE_APP_PUBLIC_PATH,
     plugins: createVitePlugins(mode),
-
+    mode: env.VITE_USER_NODE_ENV,
     server: {
       host: true,
       port: 3200,

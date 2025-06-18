@@ -62,8 +62,8 @@
         </div>
         <div class="li flex justify-between gap-25px">
             <div class="li-l font-size-16">
-                {{ t('yield rate') }}: <span :class="_item.earningRate > 0 ? 'up' : 'down'">{{ _item.earningRate
-                    }}%</span></div>
+                {{ t('yield rate') }}: <span :class="_item.earningRate >= 0 ? 'up' : 'down'">{{ _item.earningRate
+                }}%</span></div>
 
         </div>
         <div class="li flex justify-between gap-25px">

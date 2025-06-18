@@ -2,38 +2,39 @@
   <div class="hold-page px-12 pt-12">
     <!-- <div class="title font-size-18">港股账户</div> -->
     <div class="title font-size-16 my-12 font-size-18">
-      {{ userPositionData.symbol }} ({{ userPositionData.symbolId }})
+      {{ userPositionData.symbol }}
     </div>
 
-    <div class="flex line font-size-16 mb-12 line-height-28">
+    <div class="flex line flex-col font-size-16  line-height-28">
       <div class="line-item flex-1">
         <div class="item-title">{{ t("Holding quantity") }}</div>
         <div class="item-value">{{ userPositionData.userAssetsAmount }}</div>
       </div>
-      <div class="line-item flex-1 text-align-center">
+      <div class="line-item flex-1 ">
         <div class="item-title">{{ t("Average price") }}</div>
         <div class="item-value">
           {{ userPositionData.currency }} {{ userPositionData.averagePrice }}
         </div>
       </div>
-      <div class="line-item flex-1 text-align-right">
+      <div class="line-item flex-1 ">
         <div class="item-title">{{ t("Current price") }}</div>
         <div class="item-value">
           {{ userPositionData.currency }} {{ userPositionData.close || 0 }}
         </div>
       </div>
     </div>
-    <div class="flex line font-size-16 line-height-28">
+    <div class="flex line flex-col font-size-16 line-height-28">
       <div class="line-item flex-1">
         <div class="item-title">{{ t("Current earnings ratio") }}</div>
         <div class="item-value whitespace-nowrap">
-          {{ userPositionData.currency }} {{ userPositionData.profit || 0 }} ({{
-            userPositionData.ProfitPercent || 0
-          }}%)
+          {{ userPositionData.currency }} <span :class="Number(userPositionData.ProfitPercent) >= 0 ? 'up' : 'down'">{{
+            userPositionData.profit || 0 }}({{
+              userPositionData.ProfitPercent || 0
+            }}%)</span>
         </div>
       </div>
-      <div class="line-item flex-1"></div>
-      <div class="line-item flex-1 text-align-right">
+
+      <div class="line-item flex-1 ">
         <div class="item-title">{{ t("Total value") }}</div>
         <div class="item-value">
           {{ userPositionData.currency }}{{ userPositionData.allclose || 0 }}
@@ -45,6 +46,7 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import { useStore } from "@/stores/modules/index";
+
 
 const { proxy } = getCurrentInstance();
 const store = useStore();
@@ -92,5 +94,10 @@ watch(
 <style lang="less" scoped>
 .item-value {
   font-size: 14px;
+}
+
+.line-item {
+  display: flex;
+  gap: 8px;
 }
 </style>

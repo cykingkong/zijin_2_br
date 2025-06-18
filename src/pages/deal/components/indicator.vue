@@ -1,7 +1,7 @@
 <template>
     <div class="indicator-content pb-12px">
         <div class="tab-box flex gap-4 px-12 py-12">
-            <div class="tab-item flex-1 rounded-4 line-height-24 h-24 text-align-center"
+            <div class="tab-item flex-1 rounded-4 line-height-24 flex items-center justify-center text-align-center"
                 v-for="(item, index) in tabList" :key="index" :class="{ 'active': index === activeIndex }"
                 @click="changeTab(index)">
                 <span>{{ t(item.i18n) }}</span>

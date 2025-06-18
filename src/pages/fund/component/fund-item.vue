@@ -59,7 +59,7 @@
         {{ t("dailyYield") }}:{{ _item.dailyYield }}%
       </div>
       <div class="li-r font-size-14">
-        {{ t("totalYield") }}: {{ _item.totalYield }} %
+        {{ t("totalYield") }}: <span :class="_item.totalYield >= 0 ? 'up' : 'down'"> {{ _item.totalYield }} %</span>
       </div>
     </div>
     <div class="li flex justify-between items-center">
