@@ -24,7 +24,8 @@
         </div>
         <div class="li flex justify-between items-center gap-12px">
             <div class="li-l w-70%">
-                <van-progress :percentage="_item.percentage" stroke-width="8px" :show-pivot="false" />
+                <van-progress :percentage="_item.percentage" stroke-width="8px" track-color="#1989fa" color="#e5e5e5"
+                    :show-pivot="false" />
             </div>
             <div class="li-r font-size-16 text-no-wrap text-align-right">{{ t('Sell') }}:{{ _item.percentage }}%</div>
 

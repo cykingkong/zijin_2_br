@@ -98,7 +98,7 @@
     }
 </route>
 <script setup>
-import charts from "@/components/charts/charts.vue";
+// import charts from "@/components/charts/charts.vue";
 import tab1Page from "./component/openTradeCom/tab-page.vue";
 import TabTablePage from "./component/openTradeCom/tab-table-page.vue";
 import symbolDetail from "./component/openTradeCom/symbolDetail.vue";

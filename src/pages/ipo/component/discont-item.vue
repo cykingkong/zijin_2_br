@@ -11,6 +11,8 @@
         <van-progress
           :percentage="_item.percentage"
           stroke-width="8px"
+          track-color="#1989fa"
+          color="#e5e5e5"
           :show-pivot="false"
         />
       </div>

@@ -2,25 +2,15 @@
   <div>
     <div class="time-select" style="color: white">
       <div class="my-12">
-        <div
-          v-for="(item, index) in times"
-          :key="index"
-          class="font-size-12"
-          @click="setKline(item, index)"
-          :class="{ active: timesIndex === index }"
-        >
+        <div v-for="(item, index) in times" :key="index" class="font-size-12" @click="setKline(item, index)"
+          :class="{ active: timesIndex === index }">
           {{ item.text }}
         </div>
       </div>
     </div>
     <div id="k-line-chart" class="content"></div>
     <div class="k-line-btn" v-if="false">
-      <div
-        class="K_btn"
-        v-for="(item, index) in mainIndicators"
-        :key="index"
-        @click="setMainIndicator(item)"
-      >
+      <div class="K_btn" v-for="(item, index) in mainIndicators" :key="index" @click="setMainIndicator(item)">
         {{ item.text }}
       </div>
     </div>
@@ -190,7 +180,8 @@ const setKline = (item, index) => {
   childInte();
 };
 const close = () => {
-  if (ws && JSON.stringify(listData) != "{}") {
+  console.log(ws, ws && JSON.stringify(listData), 'chasclose()')
+  if (ws) {
     ws.send({
       action: "UnSubscribe",
       params: {
@@ -222,7 +213,7 @@ onMounted(() => {
   -webkit-overflow-scrolling: touch;
   padding: 20rpx 0;
 
-  > div {
+  >div {
     display: flex;
     align-items: center;
 
@@ -231,7 +222,7 @@ onMounted(() => {
       color: white;
     }
 
-    > div {
+    >div {
       margin: 0 10px;
       padding: 4px 10px;
       border-radius: 10px;
