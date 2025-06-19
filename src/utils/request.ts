@@ -2,6 +2,7 @@ import type { AxiosError, InternalAxiosRequestConfig } from 'axios'
 import axios from 'axios'
 import { showNotify, showLoadingToast, closeToast } from 'vant'
 import { STORAGE_TOKEN_KEY } from '@/stores/mutation-type'
+import router from '@/router'  // 导入Vue Router实例
 // import local from './local'
 
 
@@ -40,15 +41,16 @@ function errorHandler(error: RequestError): Promise<any> {
     }
 
     // 401 未登录/未授权
-    // if (status === 401) {
-    //   showNotify({
-    //     type: 'danger',
-    //     message: '请重新登录',
-    //   })
-    //   // 如果你需要直接跳转登录页面
-    //   location.replace('/login')
-
-    // }
+    if (status === 401) {
+      // showNotify({
+      //   type: 'danger',
+      //   message: '请重新登录',
+      // })
+      // 如果你需要直接跳转登录页面
+      if (router) {
+        router.replace('/login')  // 使用Vue Router的replace方法进行跳转
+      }
+    }
   }
   return Promise.reject(error)
 }

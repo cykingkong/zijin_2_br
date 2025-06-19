@@ -170,8 +170,9 @@ const queryUploadFile = async (file: any, type: any) => {
   formData.append("file", file.file);
   // 发起上传请求
   try {
-    const { data } = await uploadFile(formData);
-    if (type == 1) {
+    const { data,code } = await uploadFile(formData);
+    if(code == 200){
+ if (type == 1) {
       kycForm.idCardFront = data.url;
       list1.value = [{ url: data.url }];
     } else if (type == 2) {
@@ -182,11 +183,19 @@ const queryUploadFile = async (file: any, type: any) => {
       list3.value = [{ url: data.url }];
     }
 
-    showSuccessToast("文件上传成功");
 
+    showSuccessToast(t("Upload successful"));
     console.log(kycForm);
+    }else{
+        showFailToast("");
+        file.status = 'failed';
+        file.message = '';
+    }
+   
   } catch (error) {
-    showFailToast("文件上传失败");
+      file.status = 'failed';
+      file.message = '';
+    showFailToast(t("Upload failed"));
   }
 };
 onMounted(() => {

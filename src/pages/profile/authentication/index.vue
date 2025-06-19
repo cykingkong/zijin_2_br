@@ -102,7 +102,12 @@ import { ref, reactive } from "vue";
 import inputCom from "@/components/inputCom.vue";
 import nationalityList from "@/components/nationality-list/nationalityList.vue";
 import { uploadFile } from "@/api/tool";
-
+import {
+  showToast,
+  type FieldRule,
+  showSuccessToast,
+  showFailToast,
+} from "vant";
 import { sendCode, register, kyc } from "@/api/user";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
@@ -150,8 +155,9 @@ const queryUploadFile = async (file: any, type: any) => {
   formData.append("file", file.file);
   // 发起上传请求
   try {
-    const { data } = await uploadFile(formData);
-    if (type == 1) {
+    const { data,code } = await uploadFile(formData);
+    if(code == 200){
+       if (type == 1) {
       kycForm.idCardFront = data.url;
       list1.value = [{ url: data.url }];
     } else if (type == 2) {
@@ -162,11 +168,21 @@ const queryUploadFile = async (file: any, type: any) => {
       list3.value = [{ url: data.url }];
     }
 
-    showToast(t("Upload successful"));
+    showSuccessToast(t("Upload successful"));
+    }else{
+        showFailToast("");
+        file.status = 'failed';
+        file.message = '';
+    }
+   
 
     console.log(kycForm);
   } catch (error) {
-    showToast(t("Upload failed"));
+        showFailToast("");
+        file.status = 'failed';
+        file.message = '';
+    showFailToast(t("Upload failed"));
+
   }
 };
 const handleClickSubmit = async () => {
