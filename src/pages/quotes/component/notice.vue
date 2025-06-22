@@ -1,22 +1,25 @@
+<script setup>
+import JPHorn from '../../../assets/JPHorn.png'
+import more from '../../../assets/more.png'
+
+const props = defineProps({
+  data: {},
+})
+const emits = defineEmits(['clickNotice'])
+function handleClickNotice() {
+  emits('clickNotice')
+}
+</script>
+
 <template>
   <div class="notice flex" @click="handleClickNotice">
     <van-image :src="JPHorn" class="icon" />
 
-    <van-notice-bar scrollable :text="data.noticeContent" class="flex-1 notice" />
+    <van-notice-bar scrollable :text="data.noticeContent" class="notice flex-1" />
     <van-image :src="more" class="icon" />
   </div>
 </template>
-<script setup>
-import JPHorn from '../../../assets/JPHorn.png'
-import more from '../../../assets/more.png'
-const emits = defineEmits(['clickNotice'])
-// const handleClickNotice = () => {
-//   emits('clickNotice')
-// }
-const props = defineProps({
-  data: {}
-})
-</script>
+
 <style lang="less">
 .notice {
   width: 100%;
