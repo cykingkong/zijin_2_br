@@ -401,5 +401,7 @@
     "Binding successful": "紐付け成功",
     "Male": "男性",
     "Female": "女性",
-    "Confirm to cancel this order?": "この注文をキャンセルしますか？"
+    "Confirm to cancel this order?": "この注文をキャンセルしますか？",
+    "Stock name": "株式名",
+    "Total price": "合計価格"
 }

@@ -422,5 +422,7 @@
   },
   "Male": "男",
   "Female": "女",
-  "Confirm to cancel this order?": "确定撤销该订单?"
+  "Confirm to cancel this order?": "确定撤销该订单?",
+  "Stock name": "股票名称",
+  "Total price": "总价格"
 }

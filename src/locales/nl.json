@@ -401,5 +401,7 @@
     "Binding successful": "Koppeling succesvol",
     "Male": "Mannelijk",
     "Female": "Vrouwelijk",
-    "Confirm to cancel this order?": "Bevestig annulering van deze bestelling?"
+    "Confirm to cancel this order?": "Bevestig annulering van deze bestelling?",
+    "Stock name": "Aandeel naam",
+    "Total price": "Totale prijs"
 }

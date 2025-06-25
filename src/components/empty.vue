@@ -1,13 +1,6 @@
-<template>
-  <div class="empty py-24 flex-col flex gap-8 flex-items-center px-12">
-    <img src="@/assets/image/no-data.png" alt="" class="w-full block" />
-    <div class="font-size-14px font-extralight" v-if="!noTips">
-      {{ tipsText }}
-    </div>
-  </div>
-</template>
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { reactive, ref } from 'vue'
+
 const props = defineProps({
   noTips: {
     type: Boolean,
@@ -15,8 +8,19 @@ const props = defineProps({
   },
   tipsText: {
     type: String,
-    default: "No more",
+    default: 'No more',
   },
-});
+})
+const { t } = useI18n()
 </script>
+
+<template>
+  <div class="empty flex flex-col gap-8 flex-items-center px-12 py-24">
+    <img src="@/assets/image/no-data.png" alt="" class="block w-full">
+    <div v-if="!noTips" class="font-size-14px font-extralight">
+      {{ t(tipsText) }}
+    </div>
+  </div>
+</template>
+
 <style lang="less" scoped></style>

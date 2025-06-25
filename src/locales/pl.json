@@ -401,5 +401,7 @@
     "Binding successful": "Powiązanie udane",
     "Male": "Mężczyzna",
     "Female": "Kobieta",
-    "Confirm to cancel this order?": "Potwierdzić anulowanie tego zamówienia?"
+    "Confirm to cancel this order?": "Potwierdzić anulowanie tego zamówienia?",
+    "Stock name": "Nazwa akcji",
+    "Total price": "Całkowita cena"
 }

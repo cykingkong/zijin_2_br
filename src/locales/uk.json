@@ -401,5 +401,7 @@
     "Binding successful": "Прив'язка успішна",
     "Male": "Чоловічий",
     "Female": "Жіночий",
-    "Confirm to cancel this order?": "Підтвердити скасування цього замовлення?"
+    "Confirm to cancel this order?": "Підтвердити скасування цього замовлення?",
+    "Stock name": "Назва акції",
+    "Total price": "Загальна ціна"
 }

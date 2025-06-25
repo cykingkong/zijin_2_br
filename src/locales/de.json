@@ -401,5 +401,7 @@
     "Binding successful": "Bindung erfolgreich",
     "Male": "Мужской",
     "Female": "Женский",
-    "Confirm to cancel this order?": "Bestätigen Sie die Stornierung dieser Bestellung?"
+    "Confirm to cancel this order?": "Bestätigen Sie die Stornierung dieser Bestellung?",
+    "Stock name": "Aktienname",
+    "Total price": "Gesamtpreis"
 }

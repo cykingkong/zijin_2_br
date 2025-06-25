@@ -33,7 +33,7 @@ const indexInfoData = ref<any>({
   banners: [],
 })
 function handleClickGrid(val: any) {
-  if (val == 0) {
+  if (val === 0) {
     // local.setlocal('rankInfo', marketData.value.list[0])
     // router.push('/quotes/openTrade?id=' + marketData.value.list[0].tradingPairsId + '&categoryId=' + categoryId.value)
     router.push({
@@ -44,13 +44,13 @@ function handleClickGrid(val: any) {
       // }
     })
   }
-  if (val == 1) {
+  if (val === 1) {
     router.push(`/discount?categoryId=${categoryId.value}`)
   }
-  if (val == 2) {
+  if (val === 2) {
     router.push({ path: '/fund' })
   }
-  if (val == 3) {
+  if (val === 3) {
     // router.push('/quotes/accountChange?type=3' + '&categoryId=' + categoryId.value)
     router.push({
       path: '/quotes/accountChange',
@@ -65,7 +65,7 @@ function handleClickGrid(val: any) {
 function getContent(html: string) {
   if (!html)
     return ''
-  let reg = /<[^>]+>/g
+  const reg: RegExp = /<[^>]+>/g
   return html.replace(reg, '')
 }
 const indexData = ref({})

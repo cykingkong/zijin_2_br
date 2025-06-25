@@ -401,5 +401,7 @@
     "Binding successful": "Propojení úspěšné",
     "Male": "Muž",
     "Female": "Žena",
-    "Confirm to cancel this order?": "Potvrdit zrušení této objednávky?"
+    "Confirm to cancel this order?": "Potvrdit zrušení této objednávky?",
+    "Stock name": "Název akcie",
+    "Total price": "Celková cena"
 }

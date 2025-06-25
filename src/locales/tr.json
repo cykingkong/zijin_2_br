@@ -401,5 +401,7 @@
     "Binding successful": "Bağlama başarılı",
     "Male": "Erkek",
     "Female": "Kadın",
-    "Confirm to cancel this order?": "Bu siparişi iptal etmeyi onaylıyor musunuz?"
+    "Confirm to cancel this order?": "Bu siparişi iptal etmeyi onaylıyor musunuz?",
+    "Stock name": "Hisse senedi adı",
+    "Total price": "Toplam fiyat"
 }

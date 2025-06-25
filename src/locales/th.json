@@ -401,5 +401,7 @@
     "Binding successful": "ผูกมัดสำเร็จ",
     "Male": "ชาย",
     "Female": "หญิง",
-    "Confirm to cancel this order?": "ยืนยันการยกเลิกคำสั่งซื้อนี้ใช่ไหม?"
+    "Confirm to cancel this order?": "ยืนยันการยกเลิกคำสั่งซื้อนี้ใช่ไหม?",
+    "Stock name": "ชื่อหุ้น",
+    "Total price": "ราคารวม"
 }

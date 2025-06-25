@@ -401,5 +401,7 @@
     "Binding successful": "Liên kết thành công",
     "Male": "Nam",
     "Female": "Nữ",
-    "Confirm to cancel this order?": "Xác nhận hủy đơn hàng này?"
+    "Confirm to cancel this order?": "Xác nhận hủy đơn hàng này?",
+    "Stock name": "Tên cổ phiếu",
+    "Total price": "Tổng giá"
 }

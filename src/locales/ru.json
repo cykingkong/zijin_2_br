@@ -401,5 +401,7 @@
     "Binding successful": "Привязка успешна",
     "Male": "Мужской",
     "Female": "Женский",
-    "Confirm to cancel this order?": "Подтвердить отмену этого заказа?"
+    "Confirm to cancel this order?": "Подтвердить отмену этого заказа?",
+    "Stock name": "Название акции",
+    "Total price": "Общая цена"
 }

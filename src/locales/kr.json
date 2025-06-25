@@ -401,5 +401,7 @@
     "Binding successful": "연동 성공",
     "Male": "남성",
     "Female": "여성",
-    "Confirm to cancel this order?": "이 주문을 취소하시겠습니까?"
+    "Confirm to cancel this order?": "이 주문을 취소하시겠습니까?",
+    "Stock name": "주식명",
+    "Total price": "총 가격"
 }

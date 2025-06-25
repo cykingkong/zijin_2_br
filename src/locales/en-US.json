@@ -290,7 +290,6 @@
   "Blockchain network": "Blockchain Network",
   "Deposit amount": "Deposit Amount",
   "Amount to be received": "Amount to be Received",
-  "Withdrawal fee": "Withdrawal Fee",
   "Confirm order": "Confirm Order",
   "Actual amount received": "Actual Amount Received",
   "Withdrawal address": "Withdrawal Address",
@@ -401,5 +400,7 @@
   "Binding successful": "Binding successful",
   "Male": "Male",
   "Confirm to cancel this order?": "Confirm to cancel this order?",
-  "Female": "Female"
+  "Female": "Female",
+  "Stock name": "Stock name",
+  "Total price": "Total price"
 }

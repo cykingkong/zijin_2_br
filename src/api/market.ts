@@ -18,3 +18,6 @@ export function market(params): Promise<any> {
 export function assetsList(params): Promise<any> {
     return request.get('/app-api/market/assetsList', { params })
 }
+export function getCategoryPosition(params): Promise<any> {
+    return request.get('/app-api/gameplay/swap_api/getCategoryPosition', { params })
+}

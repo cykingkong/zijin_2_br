@@ -401,5 +401,7 @@
     "Binding successful": "Bindning lyckades",
     "Male": "Man",
     "Female": "Kvinna",
-    "Confirm to cancel this order?": "Bekräfta avbokning av denna order?"
+    "Confirm to cancel this order?": "Bekräfta avbokning av denna order?",
+    "Stock name": "Aktienamn",
+    "Total price": "Totalt pris"
 }
