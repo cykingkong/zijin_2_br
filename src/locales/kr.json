@@ -403,5 +403,6 @@
     "Female": "여성",
     "Confirm to cancel this order?": "이 주문을 취소하시겠습니까?",
     "Stock name": "주식명",
-    "Total price": "총 가격"
+    "Total price": "총 가격",
+    "Stock": "주식"
 }

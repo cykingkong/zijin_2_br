@@ -403,5 +403,6 @@
     "Female": "Женский",
     "Confirm to cancel this order?": "Подтвердить отмену этого заказа?",
     "Stock name": "Название акции",
-    "Total price": "Общая цена"
+    "Total price": "Общая цена",
+    "Stock": "Акция"
 }

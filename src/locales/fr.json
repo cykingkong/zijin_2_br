@@ -403,5 +403,6 @@
     "Female": "Femme",
     "Confirm to cancel this order?": "Confirmez-vous l'annulation de cette commande ?",
     "Stock name": "Nom de l'action",
-    "Total price": "Prix total"
+    "Total price": "Prix total",
+    "Stock": "Action"
 }

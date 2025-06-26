@@ -403,5 +403,6 @@
     "Female": "Kadın",
     "Confirm to cancel this order?": "Bu siparişi iptal etmeyi onaylıyor musunuz?",
     "Stock name": "Hisse senedi adı",
-    "Total price": "Toplam fiyat"
+    "Total price": "Toplam fiyat",
+    "Stock": "Hisse senedi"
 }
