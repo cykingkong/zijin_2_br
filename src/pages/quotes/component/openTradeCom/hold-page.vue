@@ -13,13 +13,13 @@
       <div class="line-item flex-1 ">
         <div class="item-title">{{ t("Average price") }}</div>
         <div class="item-value">
-          {{ userPositionData.currency }} {{ userPositionData.averagePrice }}
+          {{ userPositionData.currency }} {{ addCommasToNumber(userPositionData.averagePrice) }}
         </div>
       </div>
       <div class="line-item flex-1 ">
         <div class="item-title">{{ t("Current price") }}</div>
         <div class="item-value">
-          {{ userPositionData.currency }} {{ userPositionData.close || 0 }}
+          {{ userPositionData.currency }} {{ addCommasToNumber(userPositionData.close) || 0 }}
         </div>
       </div>
     </div>
@@ -46,6 +46,7 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import { useStore } from "@/stores/modules/index";
+import { addCommasToNumber } from "@/utils/tool";
 
 
 const { proxy } = getCurrentInstance();
@@ -99,5 +100,8 @@ watch(
 .line-item {
   display: flex;
   gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+
 }
 </style>

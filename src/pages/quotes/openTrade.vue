@@ -330,7 +330,7 @@ const getPositionData = async () => {
     // 判断data返回的数据是否为{}
     // if (!Object.keys(data).length) {
     userPositionData.value = data;
-
+    userPositionData.value.ProfitPercent = '0.00'
     // }
     console.log(userPositionData.value);
   }

@@ -53,7 +53,7 @@ const tabList = ref([
   },
   {
     label: '股票',
-    i18n: 'Stocks',
+    i18n: 'Stock',
     value: '1',
     // objKey: 'ipoAssetsData',
     objKey: 'assetsData',
