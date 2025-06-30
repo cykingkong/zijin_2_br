@@ -22,7 +22,7 @@
     <inputCom :label="t('input.VerificationCode')" :placeholder="t('input.PleaseEnter')" v-model:value="form.code"
       :tips="''">
       <template #sendCode>
-        <div class="absolute right-0 font-size-12 sendCode" :class="countdown > 0 ? 'text-gray-400' : 'text-blue-500'"
+        <div class="absolute right-0 font-size-12 sendCode" :class="countdown > 0 ? 'text-gray-400' : 'text-white'"
           @click="getCode">
           {{ countdown > 0 ? `${countdown}s` : t("input.SendCode") }}
         </div>
@@ -159,4 +159,10 @@ onMounted(() => {
 </route>
 <style lang="less" scoped>
 @import "@/components/nationality-list/intl.css";
+
+.sendCode {
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #868c9a;
+}
 </style>

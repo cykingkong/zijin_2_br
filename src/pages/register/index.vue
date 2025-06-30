@@ -93,7 +93,7 @@ const handleClickRegister = async () => {
       showSuccessToast("");
       await userStore.info();
     }
-  } catch (e) {}
+  } catch (e) { }
 };
 const handleClickSubmit = async () => {
   try {
@@ -111,7 +111,7 @@ const handleClickSubmit = async () => {
       router.push("/");
       return;
     }
-  } catch (e) {}
+  } catch (e) { }
 };
 const getCode = async () => {
   if (countdown.value > 0) return;
@@ -170,31 +170,31 @@ const queryUploadFile = async (file: any, type: any) => {
   formData.append("file", file.file);
   // 发起上传请求
   try {
-    const { data,code } = await uploadFile(formData);
-    if(code == 200){
- if (type == 1) {
-      kycForm.idCardFront = data.url;
-      list1.value = [{ url: data.url }];
-    } else if (type == 2) {
-      kycForm.idCardBack = data.url;
-      list2.value = [{ url: data.url }];
-    } else if (type == 3) {
-      kycForm.idCardHand = data.url;
-      list3.value = [{ url: data.url }];
-    }
+    const { data, code } = await uploadFile(formData);
+    if (code == 200) {
+      if (type == 1) {
+        kycForm.idCardFront = data.url;
+        list1.value = [{ url: data.url }];
+      } else if (type == 2) {
+        kycForm.idCardBack = data.url;
+        list2.value = [{ url: data.url }];
+      } else if (type == 3) {
+        kycForm.idCardHand = data.url;
+        list3.value = [{ url: data.url }];
+      }
 
 
-    showSuccessToast(t("Upload successful"));
-    console.log(kycForm);
-    }else{
-        showFailToast("");
-        file.status = 'failed';
-        file.message = '';
-    }
-   
-  } catch (error) {
+      showSuccessToast(t("Upload successful"));
+      console.log(kycForm);
+    } else {
+      showFailToast("");
       file.status = 'failed';
       file.message = '';
+    }
+
+  } catch (error) {
+    file.status = 'failed';
+    file.message = '';
     showFailToast(t("Upload failed"));
   }
 };
@@ -225,30 +225,20 @@ const hanleClickAreaPick = () => {
 
 <template>
   <div class="m-x-a px-12 pb-24">
-    <nationalityList
-      ref="controlChildRef"
-      :title="t('pick')"
-      @getName="getName"
-    ></nationalityList>
+    <nationalityList ref="controlChildRef" :title="t('pick')" @getName="getName"></nationalityList>
     <div class="steps flex items-center mt-35">
-      <div
-        class="steps-item w-40 h-40 rounded-full line-height-40 font-size-14 text-align-center"
-        :class="{ green: step >= 1 }"
-      >
+      <div class="steps-item w-40 h-40 rounded-full line-height-40 font-size-14 text-align-center"
+        :class="{ green: step >= 1 }">
         1
       </div>
       <div class="line w-64 h-5" :class="{ green: step >= 1 }"></div>
-      <div
-        class="steps-item w-40 h-40 rounded-full line-height-40 font-size-14 text-align-center"
-        :class="{ green: step >= 2 }"
-      >
+      <div class="steps-item w-40 h-40 rounded-full line-height-40 font-size-14 text-align-center"
+        :class="{ green: step >= 2 }">
         2
       </div>
       <div class="line w-64 h-5" :class="{ green: step >= 3 }"></div>
-      <div
-        class="steps-item w-40 h-40 rounded-full line-height-40 font-size-14 text-align-center"
-        :class="{ green: step == 3 }"
-      >
+      <div class="steps-item w-40 h-40 rounded-full line-height-40 font-size-14 text-align-center"
+        :class="{ green: step == 3 }">
         3
       </div>
     </div>
@@ -262,100 +252,53 @@ const hanleClickAreaPick = () => {
       </div>
     </div>
     <block v-if="step == 1">
-      <div
-        class="title font-size-24 font-bold mt-26 mb-33 flex gap-24 items-center w-full"
-      >
-        <div
-          class="flex flex-1 flex-shrink-0 justify-center"
-          :class="{ active: form.type == item.value }"
-          v-for="(item, index) in typeArr"
-          :key="index"
-          @click="form.type = item.value"
-        >
+      <div class="title font-size-24 font-bold mt-26 mb-33 flex gap-24 items-center w-full">
+        <div class="flex flex-1 flex-shrink-0 justify-center" :class="{ active: form.type == item.value }"
+          v-for="(item, index) in typeArr" :key="index" @click="form.type = item.value">
           {{ item.label }}
         </div>
       </div>
-      <inputCom
-        :label="t('input.Phone')"
-        :placeholder="t('input.PleaseEnter')"
-        v-model:value="form.phone"
-        :tips="''"
-        v-if="form.type == 'phone'"
-      >
+      <inputCom :label="t('input.Phone')" :placeholder="t('input.PleaseEnter')" v-model:value="form.phone" :tips="''"
+        v-if="form.type == 'phone'">
         <template #picker>
-          <div
-            class="picker-box pr-8 mr-6 h-full flex items-center gap-8"
-            @click="hanleClickAreaPick"
-          >
+          <div class="picker-box pr-8 mr-6 h-full flex items-center gap-8" @click="hanleClickAreaPick">
             <!-- <img :src="icon1" alt="" class="w16 h16"> -->
-            <div
-              class="iti-flag mr-10"
-              :class="areaInfo?.code"
-              style="transform: scale(1.5)"
-            ></div>
+            <div class="iti-flag mr-10" :class="areaInfo?.code" style="transform: scale(1.5)"></div>
             <div class="num">+{{ areaInfo?.dialCode }}</div>
           </div>
         </template>
       </inputCom>
-      <inputCom
-        :label="t('register.email')"
-        :placeholder="t('input.PleaseEnter')"
-        v-model:value="form.email"
-        :tips="''"
-        v-if="form.type == 'email'"
-      >
+      <inputCom :label="t('register.email')" :placeholder="t('input.PleaseEnter')" v-model:value="form.email" :tips="''"
+        v-if="form.type == 'email'">
       </inputCom>
-      <inputCom
-        :label="t('login.password')"
-        :placeholder="t('input.PleaseEnter')"
-        v-model:value="form.password"
-        :tips="''"
-        :inputType="'password'"
-      >
+      <inputCom :label="t('login.password')" :placeholder="t('input.PleaseEnter')" v-model:value="form.password"
+        :tips="''" :inputType="'password'">
       </inputCom>
-      <inputCom
-        :label="t('input.ConfirmPassword')"
-        :placeholder="t('input.PleaseEnter')"
-        v-model:value="form.passwordConfirmation"
-        :tips="''"
-        :inputType="'password'"
-      >
+      <inputCom :label="t('input.ConfirmPassword')" :placeholder="t('input.PleaseEnter')"
+        v-model:value="form.passwordConfirmation" :tips="''" :inputType="'password'">
       </inputCom>
-      <inputCom
-        :label="t('register.code')"
-        :placeholder="t('input.PleaseEnter')"
-        v-model:value="form.code"
-        :tips="''"
-      >
+      <inputCom :label="t('register.code')" :placeholder="t('input.PleaseEnter')" v-model:value="form.code" :tips="''">
         <template #sendCode>
-          <div
-            class="absolute right-0 font-size-12 sendCode"
-            :class="countdown > 0 ? 'text-gray-400' : 'text-blue-500'"
-            @click="getCode"
-          >
+          <div class="absolute right-0 font-size-12 sendCode" :class="countdown > 0 ? 'text-gray-400' : 'text-white'"
+            @click="getCode">
             {{ countdown > 0 ? `${countdown}s` : t("input.SendCode") }}
           </div>
         </template>
       </inputCom>
-      <inputCom
-        :label="t('menus.InvitationCode')"
-        :placeholder="t('input.PleaseEnter')"
-        :only-read="inviteCodeOnlyRead"
-        v-model:value="form.inviteCode"
-      >
+      <inputCom :label="t('menus.InvitationCode')" :placeholder="t('input.PleaseEnter')" :only-read="inviteCodeOnlyRead"
+        v-model:value="form.inviteCode">
       </inputCom>
       <div class="protocol wfull flex gap-8 font-size-12 mb-12 mt-8">
         <van-checkbox :icon-size="14" v-model="agree">
           {{
             t("menus.I have read and agree to the Terms of Service")
-          }}</van-checkbox
-        >
+          }}</van-checkbox>
         <div></div>
       </div>
       <div class="flex-col gap-12 flex">
         <van-button type="primary" block @click="handleClickRegister">{{
           t("menus.register")
-        }}</van-button>
+          }}</van-button>
         <!-- <van-button type="primary" block @click="handleClickRegister">登陆</van-button> -->
       </div>
       <!-- <div class="protocol wfull flex  font-size-12  mt-12">
@@ -365,60 +308,29 @@ const hanleClickAreaPick = () => {
     <block v-if="step == 2">
       <div class="px-12 pt-12 flex-col flex gap-12">
         <vue-flag code="fr" size="small" />
-        <inputCom
-          :label="t('input.Nationality')"
-          :placeholder="t('input.PleaseEnter')"
-          v-model:value="kycForm.nationality"
-          :type="'picker'"
-        >
-          <div
-            class="picker pr-8 mr-6 h-full flex items-center gap-8"
-            @click="hanleClickAreaPick"
-          >
+        <inputCom :label="t('input.Nationality')" :placeholder="t('input.PleaseEnter')"
+          v-model:value="kycForm.nationality" :type="'picker'">
+          <div class="picker pr-8 mr-6 h-full flex items-center gap-8" @click="hanleClickAreaPick">
             <img :src="icon1" alt="" class="w16 h16" />
             <div class="num">{{ areaInfo?.name }}</div>
           </div>
         </inputCom>
-        <inputCom
-          :label="t('input.True Name')"
-          :placeholder="t('input.PleaseEnter')"
-          v-model:value="kycForm.name"
-          :type="'text'"
-        >
+        <inputCom :label="t('input.True Name')" :placeholder="t('input.PleaseEnter')" v-model:value="kycForm.name"
+          :type="'text'">
         </inputCom>
-        <inputCom
-          :label="t('input.IDCard')"
-          :placeholder="t('input.PleaseEnter')"
-          v-model:value="kycForm.idCard"
-          :type="'text'"
-        >
+        <inputCom :label="t('input.IDCard')" :placeholder="t('input.PleaseEnter')" v-model:value="kycForm.idCard"
+          :type="'text'">
         </inputCom>
-        <inputCom
-          :label="t('input.Upload')"
-          v-model:value="kycForm.idCard"
-          :type="'imageShow'"
-        >
-          <div
-            class="flex flex-justify-around w-full text-align-center font-size-12"
-          >
+        <inputCom :label="t('input.Upload')" v-model:value="kycForm.idCard" :type="'imageShow'">
+          <div class="flex flex-justify-around w-full text-align-center font-size-12">
             <div class="w80">
-              <van-uploader
-                preview-image
-                multiple
-                :max-count="1"
-                v-model="list1"
-                :after-read="(file) => handleAfterRead(file, 1)"
-              />
+              <van-uploader preview-image multiple :max-count="1" v-model="list1"
+                :after-read="(file) => handleAfterRead(file, 1)" />
               {{ t("input.Front") }}
             </div>
             <div class="w80">
-              <van-uploader
-                preview-image
-                multiple
-                :max-count="1"
-                v-model="list2"
-                :after-read="(file) => handleAfterRead(file, 2)"
-              />
+              <van-uploader preview-image multiple :max-count="1" v-model="list2"
+                :after-read="(file) => handleAfterRead(file, 2)" />
               {{ t("input.Back") }}
             </div>
             <!-- <div class=" w80 ">
@@ -430,7 +342,7 @@ const hanleClickAreaPick = () => {
         </inputCom>
         <van-button type="primary" block @click="handleClickSubmit">{{
           t("submit")
-        }}</van-button>
+          }}</van-button>
       </div>
     </block>
     <slidePop ref="slidePopRef" />
@@ -491,5 +403,11 @@ const hanleClickAreaPick = () => {
     height: 4px;
     background: #06cda5;
   }
+}
+
+.sendCode {
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #868c9a;
 }
 </style>
