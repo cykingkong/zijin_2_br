@@ -173,26 +173,49 @@ const getOrderList = async () => {
         }
         if (page.pageIndex == 1) {
             orderList.value = res.data.rows.map((e) => {
-                return {
-                    ...e,
-                    percentage: (
-                        ((e.totalQuantity - e.availableQuantity) / e.totalQuantity) * 100
-                    ).toFixed(2),
-                    earnings: ((e.purchasePrice - e.discountPrice) * e.purchaseQuantity).toFixed(2) || 0, // 收益，
-                    earningRate: ((e.purchasePrice - e.discountPrice) / e.purchasePrice * 100).toFixed(2)
+                if (e.saleStatus == 1) {
+                    return {
+                        ...e,
+                        percentage: (
+                            ((e.totalQuantity - e.availableQuantity) / e.totalQuantity) * 100
+                        ).toFixed(2),
+                        earnings: ((e.purchasePrice - e.discountPrice) * e.purchaseQuantity).toFixed(2) || 0, // 收益，
+                        earningRate: ((e.purchasePrice - e.discountPrice) / e.purchasePrice * 100).toFixed(2)
+                    }
+                } else {
+                    return {
+                        ...e,
+                        percentage: (
+                            ((e.totalQuantity - e.availableQuantity) / e.totalQuantity) * 100
+                        ).toFixed(2),
+                        earnings: ((e.salePrice - e.discountPrice) * e.purchaseQuantity).toFixed(2) || 0, // 收益，
+                        earningRate: e.salePrice ? ((e.salePrice - e.discountPrice) / e.salePrice * 100).toFixed(2) : 0
+                    }
                 }
+
             }) || []
         } else {
-            let result = res.data.rows.map((e) => {
-                return {
-                    ...e,
-                    percentage: (
-                        ((e.totalQuantity - e.availableQuantity) / e.totalQuantity) * 100
-                    ).toFixed(2),
-                    earnings: ((e.purchasePrice - e.discountPrice) * e.purchaseQuantity).toFixed(2) || 0, // 收益，
-                    earningRate: ((e.purchasePrice - e.discountPrice) / e.purchasePrice * 100).toFixed(2)
+            let result = res.data.rows ? res.data.rows.map((e) => {
+                if (e.saleStatus == 1) {
+                    return {
+                        ...e,
+                        percentage: (
+                            ((e.totalQuantity - e.availableQuantity) / e.totalQuantity) * 100
+                        ).toFixed(2),
+                        earnings: ((e.purchasePrice - e.discountPrice) * e.purchaseQuantity).toFixed(2) || 0, // 收益，
+                        earningRate: ((e.purchasePrice - e.discountPrice) / e.purchasePrice * 100).toFixed(2)
+                    }
+                } else {
+                    return {
+                        ...e,
+                        percentage: (
+                            ((e.totalQuantity - e.availableQuantity) / e.totalQuantity) * 100
+                        ).toFixed(2),
+                        earnings: ((e.salePrice - e.discountPrice) * e.purchaseQuantity).toFixed(2) || 0, // 收益，
+                        earningRate: e.salePrice ? ((e.salePrice - e.discountPrice) / e.salePrice * 100).toFixed(2) : 0
+                    }
                 }
-            })
+            }) : []
             orderList.value = orderList.value.concat(result)
         }
         if (res.data.total <= orderList.value.length) {
@@ -225,8 +248,14 @@ watch(() => store.getklineList, (newV) => {
             if (listItem) {
                 if (listItem.tradingId == el.tradingPairsId) {
                     el.purchasePrice = listItem.tick.close;
-                    el.earnings = ((el.purchasePrice - el.discountPrice) * el.purchaseQuantity).toFixed(2) || 0 // 收益，
-                    el.earningRate = ((el.purchasePrice - el.discountPrice) / el.purchasePrice * 100).toFixed(2) // 收益率
+                    if (el.saleStatus == 1) {
+                        el.earnings = ((el.purchasePrice - el.discountPrice) * el.purchaseQuantity).toFixed(2) || 0 // 收益，
+                        el.earningRate = ((el.purchasePrice - el.discountPrice) / el.purchasePrice * 100).toFixed(2) // 收益率
+                    } else {
+                        el.earnings = ((el.salePrice - el.discountPrice) * el.purchaseQuantity).toFixed(2) || 0 // 收益，
+                        el.earningRate = el.salePrice ? ((el.salePrice - el.discountPrice) / el.salePrice * 100).toFixed(2) : 0 // 收益率
+                    }
+
                 }
             }
         })
@@ -263,7 +292,6 @@ const loadMore = () => {
 const handleClickBtn = (val: any) => {
     activeItem.value = val.item
     popType.value = val.itemType
-
     bottomPopRef.value.show(true)
 }
 const onConfirmOriginal = async (val: any) => {

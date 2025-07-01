@@ -24,15 +24,15 @@
         </div>
         <div class="li flex justify-between items-center gap-12px">
             <div class="li-l w-70%">
-                <van-progress :percentage="_item.percentage" stroke-width="8px" track-color="#1989fa" color="#e5e5e5"
+                <van-progress :percentage="_item.percentage" track-color="#1989fa" color="#e5e5e5" stroke-width="8px"
                     :show-pivot="false" />
             </div>
             <div class="li-r font-size-16 text-no-wrap text-align-right">{{ t('Sell') }}:{{ _item.percentage }}%</div>
 
         </div>
         <div class="li flex justify-end">
-            <van-button type="primary" @click="handleClickSubmit" class="font-size-16!"
-                :color="_item.status == 1 ? '#1989fa' : '#b5b5b5'">{{
+            <van-button type="primary" @click="handleClickSubmit" :color="_item.status == 1 ? '#1989fa' : '#b5b5b5'"
+                class=" font-size-16!">{{
                     t(statusEnum[_item.status]) }}</van-button>
         </div>
     </div>
@@ -50,10 +50,9 @@
             <div class="name font-size-16">{{ _item.tradingInfo.baseAssetInfo.symbol }} x {{ _item.purchaseQuantity }}
             </div>
         </div>
-
         <div class="li flex justify-between gap-24px">
             <div class="li-l font-size-16">
-                {{ t('Market price') }}:{{ _item.assetInfo.unit }} {{ _item.purchasePrice }}</div>
+                {{ t('Market price') }}:{{ _item.assetInfo.unit }} {{ _item.saleStatus == 1?addCommasToNumber(_item.purchasePrice):addCommasToNumber(_item.salePrice) }}</div>
 
         </div>
         <div class="li flex justify-between gap-24px">
@@ -61,16 +60,14 @@
             <div class="li-r font-size-16 text-align-right">{{ t('Purchase price') }}:{{ _item.assetInfo.unit }} {{
                 _item.discountPrice }}</div>
         </div>
-        <div class="li flex justify-between gap-25px">
+        <div class="li flex justify-between gap-24px">
             <div class="li-l font-size-16">
                 {{ t('yield rate') }}: <span :class="_item.earningRate >= 0 ? 'up' : 'down'">{{ _item.earningRate
-                }}%</span></div>
-
+                    }}%</span> </div>
         </div>
-        <div class="li flex justify-between gap-25px">
-
-            <div class="li-r font-size-16 text-align-right">{{ t("yield") }}:{{ _item.assetInfo.unit }}
-                {{ _item.earnings }}</div>
+        <div class="li flex justify-between gap-24px">
+            <div class="li-r font-size-16 text-align-right">{{ t("yield") }}:{{ _item.assetInfo.unit }} {{
+                _item.earnings }}</div>
         </div>
         <div class="li flex justify-end">
             <van-button type="primary" :color="_item.saleStatus == 1 ? '#1989fa' : '#b5b5b5'" @click="handleClickSubmit"
@@ -81,6 +78,8 @@
 </template>
 <script setup lang="ts">
 import { statusEnum, orderStatusEnum } from '../enum'
+import { addCommasToNumber } from '@/utils/tool'
+
 import Kline from '@/components/Kline.vue';
 import dayjs from 'dayjs'
 import vw from '@/utils/inline-px-to-vw'
@@ -106,8 +105,10 @@ const _index = computed(() => {
 
 })
 const handleClickSubmit = () => {
-    console.log(_item.value)
     if (props.itemType == 'discount' && _item.value.status != 1) {
+        return
+    }
+    if(props.itemType == 'order' && _item.value.saleStatus != 1){
         return
     }
     let data = {
