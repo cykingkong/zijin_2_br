@@ -62,6 +62,16 @@ export const useUserStore = defineStore('user', () => {
       throw error
     }
   }
+  const getInfo = async () => {
+    try {
+      const { data } = await getUserInfo()
+      setInfo(data)
+    }
+    catch (error) {
+      // clearToken()
+      throw error
+    }
+  }
   const getAssetsData = async () => {
     try {
       const { data } = await dataAssets()
@@ -104,6 +114,7 @@ export const useUserStore = defineStore('user', () => {
   return {
     userInfo,
     info,
+    getInfo,
     login,
     logout,
     getCode,

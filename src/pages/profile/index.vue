@@ -185,6 +185,9 @@ const handleLogout = () => {
   userStore.logout();
   router.push({ path: "/login" });
 };
+onMounted(async () => {
+  await userStore.getInfo();
+});
 </script>
 
 <template>
