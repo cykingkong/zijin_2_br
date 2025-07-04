@@ -2,12 +2,8 @@
   <div class="securityVerificationContent p-12">
     <!-- 安全认证 -->
     <div class="font-size-24 mb-24">{{ t("Security certification") }}</div>
-    <inputCom
-      :label="t('Fund Password')"
-      :placeholder="t('input.PleaseEnter')"
-      v-model:value="form.password"
-      class="mb-24"
-    >
+    <inputCom :label="t('Fund Password')" :placeholder="t('input.PleaseEnter')" v-model:value="form.password"
+      class="mb-24">
     </inputCom>
     <van-button type="primary" block @click="handelClickBtn">{{
       t("submit")
@@ -48,15 +44,20 @@ const handleClickSubmitOriginal = async () => {
   };
   const { data, code } = await withdraw(submitData);
   if (code === 200) {
-    showToast(t("Recharge submitted successfully"));
-    store.setWithdrawParams({});
-    router.push("/profile");
+    showToast({
+      message: t("Recharge submitted successfully"),
+      onClose: () => {
+        store.setWithdrawParams({});
+        router.push("/profile");
+      }
+    });
+
   }
 };
 onUnmounted(() => {
   store.setWithdrawParams({});
 });
-onMounted(() => {});
+onMounted(() => { });
 const handelClickBtn = proxy!.$throttle(handleClickSubmitOriginal, 1000, {
   onStart: () => loadingStore.show(),
   onEnd: () => loadingStore.hide(),

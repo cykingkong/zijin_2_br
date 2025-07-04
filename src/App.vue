@@ -49,9 +49,7 @@ const SocketWs = () => {
   ws.on("message", (res) => {
     if (res.code == 200 && JSON.stringify(res.data) != "{}" && res.msgType) {
       if (res.data && res.data.length) {
-        console.log(res.data, 'alksjdlaskjdlkaj')
         store?.setklineList(res.data);
-
       }
     }
   });

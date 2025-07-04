@@ -60,11 +60,11 @@ async function getList() {
   })
   columns.value = data.rows
     ? data.rows.map((e) => {
-        return {
-          text: `${e.address.bankName}(${e.address.bankType})`,
-          value: e.id,
-        }
-      })
+      return {
+        text: `${e.address.bankName}(${e.address.bankType})`,
+        value: e.id,
+      }
+    })
     : []
   store.setUserCardList(data.rows)
 }
@@ -73,6 +73,18 @@ function onConfirm({ selectedValues, selectedOptions }) {
   form.methodIdText = selectedOptions[0].text
   console.log(form, selectedValues)
   showPicker.value = false
+}
+function handleClickPicker() {
+  if (columns.value && columns.value.length == 0) {
+    showToast({
+      message: `${t('PleaseAdd Bank Card')}`,
+      onClose: () => {
+        router.push('/profile/payMentMethod/list')
+      }
+    })
+    return
+  }
+  showPicker.value = true
 }
 async function handleClickSubmitOriginal() {
   //     console.log(store, 'params')
@@ -122,15 +134,10 @@ onMounted(() => {
     <div class="t font-size-18 color-blueGray-400">
       {{ t("Bank card withdrawal") }}
     </div>
-    <inputCom
-      v-model:value="form.methodId"
-      class="mt-12"
-      :label="t('Bank card')"
-      :placeholder="t('input.PleaseEnter')"
-      type="picker"
-    >
+    <inputCom v-model:value="form.methodId" class="mt-12" :label="t('Bank card')" :placeholder="t('input.PleaseEnter')"
+      type="picker">
       <div class="w-full flex justify-between">
-        <div class="l flex-1 font-size-14" @click="showPicker = true">
+        <div class="l flex-1 font-size-14" @click="handleClickPicker">
           {{ form.methodId ? form.methodIdText : t("input.PleaseSelect") }}
         </div>
         <div class="r flex-shrink-0">
@@ -138,12 +145,7 @@ onMounted(() => {
         </div>
       </div>
     </inputCom>
-    <inputCom
-      v-model:value="form.num"
-      :label="t('Withdrawal amount')"
-      :placeholder="t('input.PleaseEnter')"
-      tips=""
-    />
+    <inputCom v-model:value="form.num" :label="t('Withdrawal amount')" :placeholder="t('input.PleaseEnter')" tips="" />
     <div class="font-size-12 line-height-16">
       {{ tips }}
     </div>
@@ -159,12 +161,7 @@ onMounted(() => {
       }}
     </van-button>
     <van-popup v-model:show="showPicker" destroy-on-close position="bottom">
-      <van-picker
-        :columns="columns"
-        :model-value="[form.methodId]"
-        @confirm="onConfirm"
-        @cancel="showPicker = false"
-      />
+      <van-picker :columns="columns" :model-value="[form.methodId]" @confirm="onConfirm" @cancel="showPicker = false" />
     </van-popup>
   </div>
 </template>
