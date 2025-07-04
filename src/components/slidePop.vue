@@ -69,7 +69,7 @@ const submit = async () => {
     dot.x = thumbLeft.value
     const { data } = await sendCode({
         dot,
-        phone: '18825490355',
+        phone: '',
         key: slideData.value.key,
         type: 'phone'
 

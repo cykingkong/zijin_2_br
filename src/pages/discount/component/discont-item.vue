@@ -52,7 +52,8 @@
         </div>
         <div class="li flex justify-between gap-24px">
             <div class="li-l font-size-16">
-                {{ t('Market price') }}:{{ _item.assetInfo.unit }} {{ _item.saleStatus == 1?addCommasToNumber(_item.purchasePrice):addCommasToNumber(_item.salePrice) }}</div>
+                {{ t('Market price') }}:{{ _item.assetInfo.unit }} {{ _item.status == 1 ?
+                    addCommasToNumber(_item.purchasePrice) : addCommasToNumber(_item.salePrice) }}</div>
 
         </div>
         <div class="li flex justify-between gap-24px">
@@ -70,9 +71,9 @@
                 _item.earnings }}</div>
         </div>
         <div class="li flex justify-end">
-            <van-button type="primary" :color="_item.saleStatus == 1 ? '#1989fa' : '#b5b5b5'" @click="handleClickSubmit"
+            <van-button type="primary" :color="_item.status == 1 ? '#1989fa' : '#b5b5b5'" @click="handleClickSubmit"
                 class="font-size-16!">{{
-                    t(orderStatusEnum[_item.saleStatus]) }}</van-button>
+                    t(orderStatusEnum[_item.status]) }}</van-button>
         </div>
     </div>
 </template>
@@ -108,7 +109,7 @@ const handleClickSubmit = () => {
     if (props.itemType == 'discount' && _item.value.status != 1) {
         return
     }
-    if(props.itemType == 'order' && _item.value.saleStatus != 1){
+    if (props.itemType == 'order' && _item.value.status != 1) {
         return
     }
     let data = {

@@ -173,7 +173,7 @@ const getOrderList = async () => {
         }
         if (page.pageIndex == 1) {
             orderList.value = res.data.rows.map((e) => {
-                if (e.saleStatus == 1) {
+                if (e.status == 1) {
                     return {
                         ...e,
                         percentage: (
@@ -196,7 +196,7 @@ const getOrderList = async () => {
             }) || []
         } else {
             let result = res.data.rows ? res.data.rows.map((e) => {
-                if (e.saleStatus == 1) {
+                if (e.status == 1) {
                     return {
                         ...e,
                         percentage: (
@@ -248,7 +248,7 @@ watch(() => store.getklineList, (newV) => {
             if (listItem) {
                 if (listItem.tradingId == el.tradingPairsId) {
                     el.purchasePrice = listItem.tick.close;
-                    if (el.saleStatus == 1) {
+                    if (el.status == 1) {
                         el.earnings = ((el.purchasePrice - el.discountPrice) * el.purchaseQuantity).toFixed(2) || 0 // 收益，
                         el.earningRate = ((el.purchasePrice - el.discountPrice) / el.purchasePrice * 100).toFixed(2) // 收益率
                     } else {
