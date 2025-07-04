@@ -53,13 +53,13 @@
             <div class="li-m">——</div>
             <div class="li-r">{{ _item.dividendOrderInfo ? dayjs(_item.dividendOrderInfo?.endTime).format('YYYY-MM-DD')
                 : '-'
-                }}</div>
+            }}</div>
         </div>
         <div class="l flex flex-[2] flex-shrink-0 items-center gap-6">
             <div class="logo w-35 h-35 rounded-full overflow-hidden ">
                 <img :src="_item.tradingInfo.logo" alt="" v-if="_item.tradingInfo" class="w-full h-full">
             </div>
-            <div class="name font-size-16">{{ item.tradingInfo.baseAssetInfo.symbol }}({{ item.dividendInfo.name }}) x
+            <div class="name font-size-16">{{ item.tradingInfo.baseAssetInfo.symbol }} x
                 {{ _item.purchaseQuantity }}
             </div>
         </div>
@@ -73,7 +73,7 @@
         <div class="li flex justify-between ">
             <div class="li-r font-size-16">{{ t('Purchase price') }}:{{ _item.assetInfo.unit }} {{
                 addCommasToNumber(_item.discountPrice)
-            }}
+                }}
             </div>
         </div>
         <div class="li flex justify-between ">
