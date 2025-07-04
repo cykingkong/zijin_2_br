@@ -404,5 +404,7 @@
     "Confirm to cancel this order?": "Confirmar o cancelamento deste pedido?",
     "Stock name": "Nome da ação",
     "Total price": "Preço total",
-    "Stock": "Ação"
+    "Stock": "Ação",
+    "Freeze price": "Congelar preço",
+    "Freeze": "Congelar"
 }

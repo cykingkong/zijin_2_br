@@ -22,7 +22,7 @@
         <van-tab :title="t('Order List')">
           <div class="discont-list flex flex-col pb-40">
             <discont-item :item="item" v-for="(item, index) in orderList" :key="index" :index="item.tradingPairsId"
-              @handleClickBtn="handleClickBtn" :item-type="'order'"></discont-item>
+              @handleClickBtn="handleClickBtn" @reloadOrderList="reloadOrderList" :item-type="'order'"></discont-item>
             <div class="2 skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
               v-show="skeleton && orderList.length == 0" v-for="i in 5" :key="i"></div>
             <empty v-if="orderList.length == 0 && !skeleton" :noTips="true"></empty>
@@ -34,7 +34,7 @@
     <template v-else>
       <div class="discont-list flex flex-col pb-40">
         <discont-item :item="item" v-for="(item, index) in orderList" :key="index" @handleClickBtn="handleClickBtn"
-          :item-type="'order'"></discont-item>
+          @reloadOrderList="reloadOrderList" :item-type="'order'"></discont-item>
         <div class="skeleton-box" v-if="skeleton && orderList.length == 0">
           <div class="3 skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12" v-for="i in 5"
             :key="i"></div>
@@ -235,6 +235,11 @@ const getOrderList = async () => {
     orderLoadStatus.value = 2;
   });
 };
+const reloadOrderList = async (val) => {
+  console.log('123123', val)
+  await resetPage()
+  await getOrderList()
+}
 const store = useStore();
 watch(
   () => props.categoryId,
@@ -273,7 +278,7 @@ watch(
       orderList.value.forEach((el) => {
         let listItem = newV.find((item) => item.tradingId == el.tradingPairsId);
         if (listItem) {
-          if (listItem.tradingId == el.tradingPairsId) {
+          if (listItem.tradingId == el.tradingPairsId && el.status != 3) {
             /**
              * (市场价-购买价)/市场价 = 收益率
              * (市场价-购买价)*数量 = 收益

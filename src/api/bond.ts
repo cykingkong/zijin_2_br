@@ -96,3 +96,7 @@ export function orderReserve(data): Promise<any> {
 export function orderGetProfit(data): Promise<any> {
     return request.post<any>('/app-api/gameplay/fund/orderGetProfit', data)
 }
+// 领取收益
+export function discountOrderFreeze(data): Promise<any> {
+    return request.post<any>('/app-api/gameplay/discount/discountOrderFreeze', data)
+}

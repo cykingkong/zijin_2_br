@@ -403,5 +403,7 @@
   "Female": "Female",
   "Stock name": "Stock name",
   "Stock": "Stock",
-  "Total price": "Total price"
+  "Total price": "Total price",
+  "Freeze price": "Freeze price",
+  "Freeze": "Freeze"
 }
