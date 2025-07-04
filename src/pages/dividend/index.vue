@@ -187,11 +187,11 @@ const getOrderList = async () => {
               ).toFixed(2) || 0, //  赠送股息金额
             earnings:
               (
-                (e.purchasePrice - e.discountPrice) *
+                (e.close - e.discountPrice) *
                 e.purchaseQuantity
               ).toFixed(2) || 0, // 收益，
             earningRate: (
-              ((e.purchasePrice - e.discountPrice) / e.purchasePrice) *
+              ((e.close - e.discountPrice) / e.close) *
               100
             ).toFixed(2),
           };
@@ -215,11 +215,11 @@ const getOrderList = async () => {
               (e.dividendInfo.totalYield / 100)
             ).toFixed(2) || 0, //  赠送股息金额
           earnings:
-            ((e.purchasePrice - e.discountPrice) * e.purchaseQuantity).toFixed(
+            ((e.close - e.discountPrice) * e.purchaseQuantity).toFixed(
               2
             ) || 0, // 收益，
           earningRate: (
-            ((e.purchasePrice - e.discountPrice) / e.purchasePrice) *
+            ((e.close - e.discountPrice) / e.close) *
             100
           ).toFixed(2),
         };
@@ -298,7 +298,7 @@ watch(
                 2
               ) || 0; // 收益，
             el.earningRate = (
-              ((el.purchasePrice - el.discountPrice) / el.purchasePrice) *
+              ((el.close - el.discountPrice) / el.close) *
               100
             ).toFixed(2); // 收益率
           }

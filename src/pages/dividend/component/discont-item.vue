@@ -39,7 +39,6 @@
             <div class="li-l w-70% flex-shrink-0 ">
                 <van-progress :percentage="_item.percentage" stroke-width="8px" :show-pivot="false" />
             </div>
-
         </div>
         <div class="li flex justify-end">
             <van-button type="primary" @click="handleClickSubmit" size="small"
@@ -54,7 +53,7 @@
             <div class="li-m">——</div>
             <div class="li-r">{{ _item.dividendOrderInfo ? dayjs(_item.dividendOrderInfo?.endTime).format('YYYY-MM-DD')
                 : '-'
-            }}</div>
+                }}</div>
         </div>
         <div class="l flex flex-[2] flex-shrink-0 items-center gap-6">
             <div class="logo w-35 h-35 rounded-full overflow-hidden ">
@@ -72,10 +71,9 @@
                     v-if="_item.status == 3 && _item.freezeStatus == 1">({{ t('Freeze') }})</span></div>
         </div>
         <div class="li flex justify-between ">
-
             <div class="li-r font-size-16">{{ t('Purchase price') }}:{{ _item.assetInfo.unit }} {{
-                addCommasToNumber(_item.purchasePrice)
-                }}
+                addCommasToNumber(_item.discountPrice)
+            }}
             </div>
         </div>
         <div class="li flex justify-between ">
