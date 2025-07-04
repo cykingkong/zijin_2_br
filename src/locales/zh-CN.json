@@ -424,5 +424,8 @@
   "Female": "女",
   "Confirm to cancel this order?": "确定撤销该订单?",
   "Stock name": "股票名称",
-  "Total price": "总价格"
+  "Total price": "总价格",
+  "Freeze price": "冻结金额",
+  "Freeze": "冻结",
+  "PleaseAdd Bank Card": "请添加银行卡"
 }
