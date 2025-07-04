@@ -225,7 +225,7 @@ onMounted(async () => {
           {{ t("profile.logout") }}
         </van-button>
         <div class="pt-24 text-align-center text-gray-400 text-12">
-          v1.0.3
+          v1.0.4
         </div>
       </div>
     </section>
