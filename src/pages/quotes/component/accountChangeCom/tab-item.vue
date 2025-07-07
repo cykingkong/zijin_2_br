@@ -12,7 +12,8 @@
             <div class="right flex-1 text-align-right">
                 <div class="font-size-20" :class="item.type == 1 ? 'up' : 'down'">{{ item.type == 1 ? '+' : '-' }}{{
                     addCommasToNumber(item.amount) }}</div>
-                <div class="time font-size-12 text-gray mt-10">{{ item.createdAt }}</div>
+                <div class="time font-size-12 text-gray mt-10">{{ dayjs(item.createdAt).format("MM/DD/YYYY HH:mm:ss") }}
+                </div>
             </div>
         </div>
 
@@ -22,6 +23,7 @@
 </template>
 <script setup lang="ts">
 import { ref, reactive } from "vue"
+import dayjs from 'dayjs'
 import { addCommasToNumber } from '@/utils/tool'
 const props = defineProps({
     item: {

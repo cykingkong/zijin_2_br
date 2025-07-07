@@ -2,7 +2,7 @@
   <div class="recharge p-12">
     <div class="li flex items-center">
       <div class="label text-blueGray-400">{{ t("Top-up time") }}:</div>
-      <div class="value">{{ item.createdAt }}</div>
+      <div class="value">{{ dayjs(item.createdAt).format("MM/DD/YYYY HH:mm:ss") }}</div>
     </div>
     <div class="li flex items-center">
       <div class="text-blueGray-400 label">{{ t("Top-up amount") }}:</div>
@@ -33,6 +33,7 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import { useI18n } from "vue-i18n";
+import dayjs from 'dayjs'
 const { t } = useI18n();
 const { proxy } = getCurrentInstance()!;
 const props = defineProps({
@@ -52,10 +53,12 @@ const rechargeEnum = {
 .recharge {
   border-bottom: 1px solid var(--border_color);
 }
+
 .li {
   gap: 14px;
   justify-content: space-between;
   line-height: 30px;
+
   .value {
     text-align: right;
   }

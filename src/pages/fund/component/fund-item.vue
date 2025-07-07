@@ -21,7 +21,7 @@
       <div class="li-l font-size-14">
         {{ t("dailyYield") }}:{{ _item.dailyYield }}%
       </div>
-      <div class="li-r font-size-14">
+      <div class="li-r font-size-14 text-align-right">
         {{ t("expectedYield") }}:{{ _item.expectedYield }}%
       </div>
     </div>
