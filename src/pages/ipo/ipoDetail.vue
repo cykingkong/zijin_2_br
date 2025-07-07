@@ -24,11 +24,11 @@ const getIpoInfo = async (id) => {
     ipoInfo.value = res.data
     // 将文字颜色color: #000000 全部改为 color: #ffffff
     ipoInfo.value.content = res.data.content.replace(/color: #000/g, 'color: #ffffff')
-    ipoInfo.value.formatSubTimeBegin = dayjs(res.data.subTimeBegin).format('MM/DD/YYYY');
-    ipoInfo.value.formatSubTimeEnd = dayjs(res.data.subTimeEnd).format('MM/DD/YYYY');
-    ipoInfo.value.formatWonTimeBegin = dayjs(res.data.wonTimeBegin).format('MM/DD/YYYY')
-    ipoInfo.value.formatWonTimeEnd = dayjs(res.data.wonTimeEnd).format('MM/DD/YYYY');
-    ipoInfo.value.formatMarketTime = dayjs(res.data.marketTime).format('MM/DD/YYYY');
+    ipoInfo.value.formatSubTimeBegin = dayjs(res.data.subTimeBegin).format('DD/MM/YYYY ');
+    ipoInfo.value.formatSubTimeEnd = dayjs(res.data.subTimeEnd).format('DD/MM/YYYY ');
+    ipoInfo.value.formatWonTimeBegin = dayjs(res.data.wonTimeBegin).format('DD/MM/YYYY ')
+    ipoInfo.value.formatWonTimeEnd = dayjs(res.data.wonTimeEnd).format('DD/MM/YYYY ');
+    ipoInfo.value.formatMarketTime = dayjs(res.data.marketTime).format('DD/MM/YYYY ');
     console.log(ipoInfo.value.content.substring(0, 600), 'ipoInfoval')
     // ipoInfo.value.content = res.data.content.replace(/<img/g, '<img style="max-width:100%"')
 }

@@ -2,7 +2,7 @@
   <div class="recharge p-12">
     <div class="li flex items-center">
       <div class="label text-blueGray-400">{{ t("Top-up time") }}:</div>
-      <div class="value">{{ dayjs(item.createdAt).format("MM/DD/YYYY HH:mm:ss") }}</div>
+      <div class="value">{{ dayjs(item.createdAt).format("DD/MM/YYYY HH:mm:ss") }}</div>
     </div>
     <div class="li flex items-center">
       <div class="text-blueGray-400 label">{{ t("Top-up amount") }}:</div>

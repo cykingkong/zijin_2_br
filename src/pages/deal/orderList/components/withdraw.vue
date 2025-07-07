@@ -2,7 +2,7 @@
   <div class="withdraw px-12 py-20px">
     <div class="li flex items-center">
       <div class="label text-blueGray-400">{{ t("Withdrawal time") }}:</div>
-      <div class="value">{{ dayjs(item.createdAt).format("MM/DD/YYYY HH:mm:ss") }}</div>
+      <div class="value">{{ dayjs(item.createdAt).format("DD/MM/YYYY HH:mm:ss") }}</div>
     </div>
     <div class="li flex items-center">
       <div class="text-blueGray-400 label">{{ t("Withdrawal amount") }}:</div>

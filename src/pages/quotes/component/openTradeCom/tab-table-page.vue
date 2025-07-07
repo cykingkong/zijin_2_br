@@ -2,8 +2,8 @@
   <div class="tab-table-table-page px-12 py-12 pb-60px">
     <div class="th font-size-14px flex flex-items-center text-align-center font-500">
       <div class="th-item px-12" :class="index == 0
-          ? 'w-100 flex-shrink-0 text-align-left'
-          : 'flex-1 flex-shrink-0 max-w-92px'
+        ? 'w-100 flex-shrink-0 text-align-left'
+        : 'flex-1 flex-shrink-0 max-w-92px'
         " v-for="(item, index) in props.tableTh" :key="index">
         {{ t(item) }}
       </div>
@@ -14,7 +14,7 @@
         <div class="td-item w-100 flex-shrink-0 text-align-left">
           <div class="title mb-12">{{ e.symbol_name }}</div>
           <div class="title font-size-11 text-coolGray">
-            {{ dayjs(e.createdAt).format("MM/DD/YYYY") }}
+            {{ dayjs(e.createdAt).format("DD/MM/YYYY ") }}
           </div>
         </div>
         <div class="td-item flex-1">

@@ -12,7 +12,7 @@
             <div class="right flex-1 text-align-right">
                 <div class="font-size-20" :class="item.type == 1 ? 'up' : 'down'">{{ item.type == 1 ? '+' : '-' }}{{
                     addCommasToNumber(item.amount) }}</div>
-                <div class="time font-size-12 text-gray mt-10">{{ dayjs(item.createdAt).format("MM/DD/YYYY HH:mm:ss") }}
+                <div class="time font-size-12 text-gray mt-10">{{ dayjs(item.createdAt).format("DD/MM/YYYY HH:mm:ss") }}
                 </div>
             </div>
         </div>

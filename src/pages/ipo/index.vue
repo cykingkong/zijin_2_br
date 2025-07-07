@@ -125,11 +125,11 @@ const getDisountList = async () => {
               ((e.totalNum - e.subscribedNum) / e.totalNum) *
               100
             ),
-            formatSubTimeBegin: dayjs(e.subTimeBegin).format("MM/DD/YYYY"),
-            formatSubTimeEnd: dayjs(e.subTimeEnd).format("MM/DD/YYYY"),
-            formatWonTimeBegin: dayjs(e.wonTimeBegin).format("MM/DD/YYYY"),
-            formatWonTimeEnd: dayjs(e.wonTimeEnd).format("MM/DD/YYYY"),
-            formatMarketTime: dayjs(e.marketTime).format("MM/DD/YYYY"),
+            formatSubTimeBegin: dayjs(e.subTimeBegin).format("DD/MM/YYYY "),
+            formatSubTimeEnd: dayjs(e.subTimeEnd).format("DD/MM/YYYY "),
+            formatWonTimeBegin: dayjs(e.wonTimeBegin).format("DD/MM/YYYY "),
+            formatWonTimeEnd: dayjs(e.wonTimeEnd).format("DD/MM/YYYY "),
+            formatMarketTime: dayjs(e.marketTime).format("DD/MM/YYYY "),
           };
         }) || [];
     } else {
@@ -142,11 +142,11 @@ const getDisountList = async () => {
               ((e.totalNum - e.subscribedNum) / e.totalNum) *
               100
             ).toFixed(2),
-            formatSubTimeBegin: dayjs(e.subTimeBegin).format("MM/DD/YYYY"),
-            formatSubTimeEnd: dayjs(e.subTimeEnd).format("MM/DD/YYYY"),
-            formatWonTimeBegin: dayjs(e.wonTimeBegin).format("MM/DD/YYYY"),
-            formatWonTimeEnd: dayjs(e.wonTimeEnd).format("MM/DD/YYYY"),
-            formatMarketTime: dayjs(e.marketTime).format("MM/DD/YYYY"),
+            formatSubTimeBegin: dayjs(e.subTimeBegin).format("DD/MM/YYYY "),
+            formatSubTimeEnd: dayjs(e.subTimeEnd).format("DD/MM/YYYY "),
+            formatWonTimeBegin: dayjs(e.wonTimeBegin).format("DD/MM/YYYY "),
+            formatWonTimeEnd: dayjs(e.wonTimeEnd).format("DD/MM/YYYY "),
+            formatMarketTime: dayjs(e.marketTime).format("DD/MM/YYYY "),
           };
         }) || []),
       ];

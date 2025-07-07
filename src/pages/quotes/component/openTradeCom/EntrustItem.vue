@@ -18,7 +18,7 @@
         </div>
       </div>
       <div class="text-grey text-14 flex flex-col justify-between">
-        {{ entrust.createdAt ? dayjs(entrust.createdAt).format("MM/DD/YYYY HH:mm:ss") : "--" }}
+        {{ entrust.createdAt ? dayjs(entrust.createdAt).format("DD/MM/YYYY HH:mm:ss") : "--" }}
       </div>
     </div>
     <div class="flex justify-between pb-34">

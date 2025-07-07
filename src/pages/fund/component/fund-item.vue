@@ -3,10 +3,10 @@
     <!-- 玩法 - 基金 -->
     <div class="li flex items-center justify-between">
       <div class="li-l">
-        {{ dayjs(_item.startTimeBegin).format("MM/DD/YYYY") }}
+        {{ dayjs(_item.startTimeBegin).format("DD/MM/YYYY ") }}
       </div>
       <div class="li-r">
-        {{ dayjs(_item.startTimeEnd).format("MM/DD/YYYY") }}
+        {{ dayjs(_item.startTimeEnd).format("DD/MM/YYYY ") }}
       </div>
     </div>
     <div class="top-li flex items-center">
@@ -41,8 +41,8 @@
   <div class="order-item-content w-full px-12 py-24 font-size-12 flex flex-col gap-10px"
     v-if="props.itemType == 'order'">
     <div class="li flex items-center justify-between">
-      <div class="li-l">{{ dayjs(_item.statusTime).format("MM/DD/YYYY") }}</div>
-      <div class="li-r">{{ dayjs(_item.endTime).format("MM/DD/YYYY") }}</div>
+      <div class="li-l">{{ dayjs(_item.statusTime).format("DD/MM/YYYY ") }}</div>
+      <div class="li-r">{{ dayjs(_item.endTime).format("DD/MM/YYYY ") }}</div>
     </div>
     <div class="top-li flex items-center">
       <div class="l flex flex-shrink-0 items-center gap-6 justify-between">
