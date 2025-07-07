@@ -39,9 +39,9 @@
     <div class="order-item-content w-full px-12 py-24  font-size-16 flex flex-col gap-12px"
         v-if="props.itemType == 'order'">
         <div class="li flex items-center justify-between">
-            <div class="li-l">{{ dayjs(_item.createdAt).format('YYYY-MM-DD') }}</div>
+            <div class="li-l">{{ dayjs(_item.createdAt).format('MM/DD/YYYY') }}</div>
             <div class="li-m">——</div>
-            <div class="li-r">{{ dayjs(_item.saleEndTime).format('YYYY-MM-DD') }}</div>
+            <div class="li-r">{{ dayjs(_item.saleEndTime).format('MM/DD/YYYY') }}</div>
         </div>
         <div class="l flex flex-[2] flex-shrink-0 items-center gap-6">
             <div class="logo w-35 h-35 rounded-full overflow-hidden ">

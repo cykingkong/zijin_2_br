@@ -49,11 +49,11 @@
     <div class="order-item-content w-full px-12 py-24  font-size-16 flex flex-col gap-12px"
         v-if="props.itemType == 'order'">
         <div class="li flex items-center justify-between">
-            <div class="li-l">{{ dayjs(_item.dividendInfo.startTimeEnd).format('YYYY-MM-DD') }}</div>
+            <div class="li-l">{{ dayjs(_item.dividendInfo.startTimeEnd).format('MM/DD/YYYY') }}</div>
             <div class="li-m">——</div>
-            <div class="li-r">{{ _item.dividendOrderInfo ? dayjs(_item.dividendOrderInfo?.endTime).format('YYYY-MM-DD')
+            <div class="li-r">{{ _item.dividendOrderInfo ? dayjs(_item.dividendOrderInfo?.endTime).format('MM/DD/YYYY')
                 : '-'
-            }}</div>
+                }}</div>
         </div>
         <div class="l flex flex-[2] flex-shrink-0 items-center gap-6">
             <div class="logo w-35 h-35 rounded-full overflow-hidden ">
@@ -73,7 +73,7 @@
         <div class="li flex justify-between ">
             <div class="li-r font-size-16">{{ t('Purchase price') }}:{{ _item.assetInfo.unit }} {{
                 addCommasToNumber(_item.discountPrice)
-                }}
+            }}
             </div>
         </div>
         <div class="li flex justify-between ">
