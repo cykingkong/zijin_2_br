@@ -3,7 +3,7 @@
     <inputCom
       :label="t('bankCardType')"
       :placeholder="''"
-      v-model:value="t"
+      v-model:value="bankCardType"
       :type="'picker'"
       require
     >
@@ -71,7 +71,7 @@
       require
     ></inputCom>
     <inputCom
-      :label="t('input.other') + '(PIX/CNPJ)'"
+      :label="t('input.other') + '(PIX)'"
       :placeholder="''"
       v-model:value="form.other"
       :tips="''"
@@ -134,8 +134,9 @@ const pickerValue = ref([]);
 const columns = [
   { text: "PIX", value: "PIX" },
   { text: "CPF", value: "CPF" },
-  { text: "CNPJ", value: "CNPJ" },
+  // { text: "CNPJ", value: "CNPJ" },
 ];
+const bankCardType = ref("");
 const form = reactive({
   id: 0,
   type: "",
