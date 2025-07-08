@@ -45,7 +45,17 @@ const addCommasToNumber = (number, shouldToFixed = true, noshowZero = false) => 
                 if (noshowZero) return '';
                 return '0';
             }
-            [integerPart, decimalPart] = num.toFixed(2).split('.');
+            // [integerPart, decimalPart] = num.toFixed(2).split('.');
+            // 将数字转换为字符串进行处理
+            const numStr = num.toString();
+            const parts = numStr.split('.');
+            integerPart = parts[0];
+            // 如果有小数部分，截取前两位；如果没有，补充 '00'
+            if (parts.length > 1) {
+                decimalPart = parts[1].length >= 2 ? parts[1].substring(0, 2) : parts[1].padEnd(2, '0');
+            } else {
+                decimalPart = '00';
+            }
         } catch (e) {
             console.error('数字格式化错误:', e);
             // if (noshowZero) return '';
