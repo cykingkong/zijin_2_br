@@ -18,8 +18,8 @@
               @handleClickOrder="handleClickOrder" :item-type="'order'"></fund-item>
             <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12px"
               v-show="skeleton && orderList.length == 0" v-for="i in 5" :key="i"></div>
-            <LoadMore :status="orderLoadStatus" @load-more="loadMore" />
             <empty v-if="orderList.length == 0 && !skeleton" :noTips="true"></empty>
+            <LoadMore :status="orderLoadStatus" @load-more="loadMore" />
           </div>
         </van-tab>
       </van-tabs>
@@ -149,8 +149,10 @@ const changeActive = (val: any) => {
   skeleton.value = true;
   resetPage();
   if (val) {
+    orderList.value = [];
     getOrderList();
   } else {
+    list.value = [];
     getDisountList();
   }
 };

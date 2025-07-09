@@ -225,8 +225,10 @@ const changeActive = (val: any) => {
   skeleton.value = true;
   resetPage();
   if (val) {
+    orderList.value = [];
     getOrderList();
   } else {
+    list.value = [];
     getDisountList();
   }
 };

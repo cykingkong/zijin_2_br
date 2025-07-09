@@ -313,8 +313,10 @@ const changeActive = (val: any) => {
   resetPage();
   skeleton.value = true;
   if (val) {
+    orderList.value = [];
     getOrderList();
   } else {
+    list.value = []
     getDisountList();
   }
 };
