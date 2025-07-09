@@ -8,7 +8,8 @@
         </div>
       </div>
       <inputCom :label="popType == 'fund' ? t('BuyShare') : t('SellShare')" :placeholder="t('input.PleaseEnter')"
-        v-model:value="form.amount" :tips="`${t('minimum quantity')}:${addCommasToNumber(item.minAmount)}`"
+        v-model:value="form.amount"
+        :tips="`${t('minimum quantity')}: ${item.assetInfo.unit} ${addCommasToNumber(item.minAmount)}`"
         v-if="popType == 'fund'">
       </inputCom>
       <div class="sell-tips font-size-18 font-500" v-if="popType == 'order'">

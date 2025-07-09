@@ -4,75 +4,39 @@
       <van-tabs v-model:active="active" @change="changeActive">
         <van-tab :title="t('fund')">
           <div class="discont-list flex flex-col pb-40">
-            <fund-item
-              :item="item"
-              v-for="(item, index) in list"
-              :key="index"
-              @handleClickBtn="handleClickBtn"
-            ></fund-item>
-            <div
-              class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12px"
-              v-show="skeleton && list.length == 0"
-              v-for="i in 5"
-              :key="i"
-            ></div>
+            <fund-item :item="item" v-for="(item, index) in list" :key="index"
+              @handleClickBtn="handleClickBtn"></fund-item>
+            <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12px"
+              v-show="skeleton && list.length == 0" v-for="i in 5" :key="i"></div>
             <empty v-if="list.length == 0 && !skeleton" :noTips="true"></empty>
             <LoadMore :status="listStatus" @load-more="loadMore" />
           </div>
         </van-tab>
         <van-tab :title="t('Order List')">
           <div class="discont-list flex flex-col pb-40">
-            <fund-item
-              :item="item"
-              v-for="(item, index) in orderList"
-              :key="index"
-              @handleClickBtn="handleClickBtn"
-              @handleClickOrder="handleClickOrder"
-              :item-type="'order'"
-            ></fund-item>
-            <div
-              class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12px"
-              v-show="skeleton && orderList.length == 0"
-              v-for="i in 5"
-              :key="i"
-            ></div>
+            <fund-item :item="item" v-for="(item, index) in orderList" :key="index" @handleClickBtn="handleClickBtn"
+              @handleClickOrder="handleClickOrder" :item-type="'order'"></fund-item>
+            <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12px"
+              v-show="skeleton && orderList.length == 0" v-for="i in 5" :key="i"></div>
             <LoadMore :status="orderLoadStatus" @load-more="loadMore" />
-            <empty
-              v-if="orderList.length == 0 && !skeleton"
-              :noTips="true"
-            ></empty>
+            <empty v-if="orderList.length == 0 && !skeleton" :noTips="true"></empty>
           </div>
         </van-tab>
       </van-tabs>
     </template>
     <template v-else>
       <div class="discont-list flex flex-col pb-40">
-        <fund-item
-          v-for="(item, index) in orderList"
-          :key="index"
-          :item="item"
-          @handleClickBtn="handleClickBtn"
-          @handleClickOrder="handleClickOrder"
-          :item-type="'order'"
-        />
-        <div
-          class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12px"
-          v-show="skeleton && orderList.length === 0"
-          v-for="i in 5"
-          :key="i"
-        />
+        <fund-item v-for="(item, index) in orderList" :key="index" :item="item" @handleClickBtn="handleClickBtn"
+          @handleClickOrder="handleClickOrder" :item-type="'order'" />
+        <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12px"
+          v-show="skeleton && orderList.length === 0" v-for="i in 5" :key="i" />
         <empty v-if="orderList.length == 0 && !skeleton" :noTips="true"></empty>
         <LoadMore :status="orderLoadStatus" @load-more="loadMore" />
       </div>
     </template>
 
-    <bottom-pop
-      ref="bottomPopRef"
-      @onConfirm="onConfirm"
-      :item="activeItem"
-      :active="list[active]"
-      :popType="popType"
-    />
+    <bottom-pop ref="bottomPopRef" @onConfirm="onConfirm" :item="activeItem" :active="list[active]"
+      :popType="popType" />
   </div>
 </template>
 <route lang="json5">
@@ -130,6 +94,7 @@ const getDisountList = async () => {
   // resetPage()
   listStatus.value = 1;
   fundProductList({
+    assetId: categoryId.value,
     ...page,
   }).then((res) => {
     if (!res.data.rows) {
@@ -156,6 +121,7 @@ const getOrderList = async () => {
   orderLoadStatus.value = 1;
   // resetPage()
   fundOrderList({
+    assetId: categoryId.value,
     ...page,
   }).then((res) => {
     if (!res.data.rows) {
@@ -191,8 +157,8 @@ const loadMore = () => {
   props.onlyShowOrder
     ? getOrderList()
     : active.value === 0
-    ? getDisountList()
-    : getOrderList();
+      ? getDisountList()
+      : getOrderList();
 };
 const handleClickBtn = (val: any) => {
   activeItem.value = val.item;
@@ -262,13 +228,18 @@ const onConfirmOriginal = async (val: any) => {
 
       // }
     }
-  } catch (error) {}
+  } catch (error) { }
 };
 const onConfirm = proxy!.$throttle(onConfirmOriginal, 1000, {
   onStart: () => loadingStore.show(),
   onEnd: () => loadingStore.hide(),
 });
+const route = useRoute();
+const categoryId = ref<any>("");
 onMounted(() => {
+  if (route.query.categoryId) {
+    categoryId.value = route.query.categoryId;
+  }
   if (props.onlyShowOrder) {
     getOrderList();
   } else {

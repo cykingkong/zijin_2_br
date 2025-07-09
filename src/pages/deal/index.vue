@@ -43,7 +43,12 @@ const gridList = [
 const handleClickTab = (index: any) => {
   switch (index) {
     case 0:
-      router.push({ path: "/fund" });
+      // 基金特殊处理 查assetId
+      router.push({
+        path: "/fund", query: {
+          categoryId: activeName.value == "1" ? "202" : "198",
+        },
+      });
       break;
     case 1:
       router.push({
@@ -87,16 +92,12 @@ onMounted(async () => {
       <div class="tab-content flex flex-col">
         <UserInfo :show-asset="true" :activeName="activeName" />
         <van-grid :border="false" column-num="4">
-          <van-grid-item
-            v-for="(i, k) in gridList"
-            :key="k"
-            @click="handleClickTab(k)"
-          >
+          <van-grid-item v-for="(i, k) in gridList" :key="k" @click="handleClickTab(k)">
             <div class="flex flex-col items-center">
               <img :src="i.icon" class="w-48 h-48" />
               <span class="text-12 mt-8 text-align-center h-32px">{{
                 i.text
-              }}</span>
+                }}</span>
             </div>
           </van-grid-item>
         </van-grid>
