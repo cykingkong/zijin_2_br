@@ -62,6 +62,8 @@ import fundItem from "./component/fund-item.vue";
 import LoadMore from "@/components/LoadMore.vue";
 import bottomPop from "./component/bottom-pop.vue";
 import { useLoadingStore } from "@/stores/modules/loading";
+import { showToast, showSuccessToast, allowMultipleToast } from "vant";
+
 import { navTitleStore } from "@/stores/index";
 const navStore = navTitleStore();
 const loadingStore = useLoadingStore();
@@ -199,10 +201,17 @@ const onConfirmOriginal = async (val: any) => {
         ...val,
       });
       if (code == 200) {
-        showToast(t("Successfully booked an appointment"));
         bottomPopRef.value.show(false);
-        resetPage();
-        getDisountList();
+
+        showToast({
+          message: t("Successfully booked an appointment"),
+          onClose: () => {
+            active.value = 1;
+            changeActive(1)
+          }
+        });
+        // resetPage();
+        // getDisountList();
       }
     } else {
       if (val.status == 1) {
@@ -211,10 +220,15 @@ const onConfirmOriginal = async (val: any) => {
           orderId: val.fundId,
         });
         if (code == 200) {
-          showToast(t("Purchase successful"));
           bottomPopRef.value.show(false);
-          resetPage();
-          getOrderList();
+          showToast({
+            message: t("Purchase successful"),
+            onClose: () => {
+              resetPage();
+              getOrderList();
+            }
+          });
+
         }
       }
       // const { data, code } = await orderPay({
@@ -245,6 +259,7 @@ onMounted(() => {
   } else {
     getDisountList();
   }
+  allowMultipleToast()
   // navStore.setNavTitle('基金')
 });
 onUnmounted(() => {

@@ -59,6 +59,8 @@ import {
 import discontItem from "./component/discont-item.vue";
 import bottomPop from "./component/bottom-pop.vue";
 import LoadMore from "@/components/LoadMore.vue";
+import { showToast, allowMultipleToast } from "vant";
+
 import { useLoadingStore } from "@/stores/modules/loading";
 import { useStore } from "@/stores/modules/index";
 
@@ -339,10 +341,17 @@ const onConfirmOriginal = async (val: any) => {
       });
       if (code == 200) {
         console.log(data);
-        showToast(t("Order placed successfully"));
         bottomPopRef.value.show(false);
-        resetPage();
-        getDisountList();
+
+        showToast({
+          message: t("Order placed successfully"),
+          onClose: () => {
+            active.value = 1;
+            changeActive(1);
+          }
+        });
+        // resetPage();
+        // getDisountList();
       }
     } else {
       const { data, code } = await discountOrderSell({
@@ -350,11 +359,14 @@ const onConfirmOriginal = async (val: any) => {
       });
       if (code == 200) {
         console.log(data);
-        showToast(t("Sold successfully"));
-        resetPage();
-
         bottomPopRef.value.show(false);
-        getOrderList();
+        showToast({
+          message: t("Sold successfully"),
+          onClose: () => {
+            resetPage();
+            getOrderList();
+          }
+        });
       }
     }
   } catch (error) { }
@@ -374,6 +386,7 @@ onMounted(() => {
   } else {
     getDisountList();
   }
+  allowMultipleToast()
   route.meta.title = "股息"; // 设置你需要的标题
 });
 </script>

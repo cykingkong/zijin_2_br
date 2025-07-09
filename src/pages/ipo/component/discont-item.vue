@@ -13,7 +13,7 @@
       <div class="flex-1">
         <van-button type="default" plain block @click="handleClickDetail">{{
           t("detail")
-        }}</van-button>
+          }}</van-button>
       </div>
       <div class="flex-1">
         <van-button type="primary" :color="item.status == 1 ? '#007aff' : '#ccc'" block

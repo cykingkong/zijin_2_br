@@ -59,6 +59,8 @@ import LoadMore from "@/components/LoadMore.vue";
 import bottomPop from "./component/bottom-pop.vue";
 import { useLoadingStore } from "@/stores/modules/loading";
 import { navTitleStore } from "@/stores/index";
+import { showToast, showSuccessToast, allowMultipleToast } from "vant";
+
 import { isLogin } from "@/utils/auth";
 const { t } = useI18n();
 const route = useRoute();
@@ -244,8 +246,9 @@ const onConfirmOriginal = async (val: any) => {
         });
         if (code == 200) {
           bottomPopRef.value.show(false);
-
-          getDisountList();
+          active.value = 1;
+          changeActive(1)
+          // getDisountList();
         }
         return;
       }
@@ -255,8 +258,9 @@ const onConfirmOriginal = async (val: any) => {
       });
       if (code == 200) {
         bottomPopRef.value.show(false);
-
-        getDisountList();
+        active.value = 1;
+        changeActive(1)
+        // getDisountList();
       }
       return;
     }
@@ -267,10 +271,13 @@ const onConfirmOriginal = async (val: any) => {
         id: val.ipoId,
       });
       if (code == 200) {
-        console.log(data);
-        showToast(t("Sold successfully"));
         bottomPopRef.value.show(false);
-        getOrderList();
+        showToast({
+          message: t("Sold successfully"), onClose: () => {
+            resetPage()
+            getOrderList();
+          }
+        });
       }
     }
   } catch (error) { }
@@ -286,6 +293,7 @@ onMounted(() => {
   } else {
     getDisountList();
   }
+  allowMultipleToast()
   navStore.setNavTitle("IPO");
   route.meta.title = "IPO"; // 设置你需要的标题
 });

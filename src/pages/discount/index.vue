@@ -58,7 +58,6 @@ import bottomPop from "./component/bottom-pop.vue";
 import LoadMore from "@/components/LoadMore.vue";
 import { useLoadingStore } from '@/stores/modules/loading'
 import { navTitleStore } from '@/stores/index'
-allowMultipleToast()
 const navStore = navTitleStore()
 const loadingStore = useLoadingStore()
 
@@ -303,10 +302,16 @@ const onConfirmOriginal = async (val: any) => {
             })
             if (code == 200) {
                 console.log(data)
-                showToast(t('Order placed successfully'))
                 bottomPopRef.value.show(false)
-                resetPage()
-                getDisountList()
+                showToast({
+                    message: t('Order placed successfully'),
+                    onClose: () => {
+                        active.value = 1
+                        changeActive(1)
+                    }
+                })
+                // resetPage()
+                // getDisountList()
             }
         } else {
             const { data, code } = await discountOrderSell({
@@ -314,13 +319,15 @@ const onConfirmOriginal = async (val: any) => {
             })
             if (code == 200) {
                 console.log(data)
-                showToast(t('Sold successfully'))
-                resetPage()
-
                 bottomPopRef.value.show(false)
-                getOrderList()
+                showToast({
+                    message: t('Sold successfully'),
+                    onClose: () => {
+                        resetPage()
+                        getOrderList()
 
-
+                    }
+                })
             }
         }
 
@@ -350,7 +357,7 @@ onMounted(() => {
     } else {
         getDisountList()
     }
-
+    allowMultipleToast()
     // navStore.setNavTitle('折扣股')
     route.meta.title = '折扣股'  // 设置你需要的标题
 })
