@@ -75,9 +75,9 @@
     <div class="li flex gap-12px justify-end items-center">
       <van-button v-if="_item.status == 3 && item.getType == 1 && item.surplusProfit > 0" color="#7232dd"
         @click="handleClickSubmit" size="small" class="font-size-12!">{{ t("ReceiveIncome") }}</van-button>
-      <van-button type="primary" v-if="_item.status == 4" @click="handleClickOrder(1)" size="small"
+      <van-button type="primary" v-if="_item.status == 7" @click="handleClickOrder(1)" size="small"
         class="font-size-12!">{{ t("Redeem") }}</van-button>
-      <van-button type="primary" v-if="_item.status == 4" @click="handleClickOrder(2)" size="small"
+      <van-button type="primary" v-if="_item.status == 7" @click="handleClickOrder(2)" size="small"
         class="font-size-12!">{{ t("Renewal") }}</van-button>
 
       <van-button :color="_item.status == 1 ? '#1989fa' : '#b5b5b5'" @click="handleClickSubmit" size="small"

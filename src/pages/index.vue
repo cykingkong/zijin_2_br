@@ -33,6 +33,7 @@ const indexInfoData = ref<any>({
   banners: [],
 })
 function handleClickGrid(val: any) {
+
   if (val === 0) {
     // local.setlocal('rankInfo', marketData.value.list[0])
     // router.push('/quotes/openTrade?id=' + marketData.value.list[0].tradingPairsId + '&categoryId=' + categoryId.value)
@@ -48,7 +49,12 @@ function handleClickGrid(val: any) {
     router.push(`/discount?categoryId=${categoryId.value}`)
   }
   if (val === 2) {
-    router.push({ path: '/fund' })
+    router.push({
+      path: '/fund',
+      query: {
+        categoryId: activeName.value == '200' ? "202" : "198",
+      },
+    })
   }
   if (val === 3) {
     // router.push('/quotes/accountChange?type=3' + '&categoryId=' + categoryId.value)

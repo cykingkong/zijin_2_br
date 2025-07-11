@@ -7,11 +7,11 @@ export const statusEnum = {
 } as const;
 export const orderStatusEnum = {
     //  1 = 已预约 2 = 已支付 3 = 已激活 4 = 已完成 5 = 未支付/失败 6 = 已赎回
-
     1: 'Reserved',
     2: 'Paid',
     3: 'Activated',
     4: 'Completed',
     5: 'Unpaid/Failed',
-    6: 'Redeemed'
+    6: 'Redeemed',
+    7: 'Completed'
 } as const;
