@@ -43,10 +43,11 @@ const methodType = {
   crypto: "数字货币",
   bank_card: t("bankCard"),
 };
+// 0:支付中 1:已支付 2:支付超时/支付失败
 const rechargeEnum = {
   0: t("Processing payment"),
-  1: t("Payment timeout"),
-  2: t("Paid"),
+  1: t("Paid"),
+  2: t("Payment timeout"),
 };
 </script>
 <style lang="less" scoped>
