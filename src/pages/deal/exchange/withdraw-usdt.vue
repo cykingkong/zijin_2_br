@@ -132,12 +132,7 @@
         </div>
         <div class="li flex justify-between font-size-16 mb-12">
           <div class="l text-white">{{ t("Network fee") }}</div>
-          <div class="v">
-            {{ networkInfo.symbol }}
-            {{
-              addCommasToNumber(Number(form.amount) - Number(canWithdrawAmount))
-            }}
-          </div>
+          <div class="v">{{ networkInfo.withdrawFee }} %</div>
         </div>
         <div class="tips text-align-left mb-12">
           {{
@@ -196,7 +191,7 @@ const form = reactive({
 const networkInfo = ref({
   balance: 0,
   symbol: "USDT",
-  withdrawFee: 0,
+  withdrawFee: 0.1,
 });
 watch(
   () => form.methodId,
@@ -221,7 +216,7 @@ watch(
 const canWithdrawAmount = computed(() => {
   if (networkInfo.value) {
     if (networkInfo.value.withdrawFee == 0) return Number(form.amount);
-    return Number(form.amount) * (1 - networkInfo.value.withdrawFee / 100);
+    return (Number(form.amount) * networkInfo.value.withdrawFee) / 100;
   }
   return 0;
 });
