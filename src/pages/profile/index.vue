@@ -56,9 +56,8 @@ const toKfUrl = async () => {
     kfUrl.value = data.kfUrl || "";
     // 需要延迟一下，不然safari 会拦截
     setTimeout(() => {
-
-      window.location.href = data.kfUrl
-    }, 40)
+      window.location.href = data.kfUrl;
+    }, 40);
   }
 };
 const gridList = [
@@ -192,7 +191,14 @@ onMounted(async () => {
 
 <template>
   <div class="myself-index">
-    <VanNavBar title="" :fixed="true" clickable placeholder :left-arrow="false" @click-right="toKfUrl">
+    <VanNavBar
+      title=""
+      :fixed="true"
+      clickable
+      placeholder
+      :left-arrow="false"
+      @click-right="toKfUrl"
+    >
       <template #right>
         <van-icon name="service-o" class="icon" />
       </template>
@@ -202,7 +208,12 @@ onMounted(async () => {
       <UserInfo :userInfo="userInfo" />
       <van-cell-group :title="t('profile.Quick Access')" />
       <van-grid :border="false" center>
-        <van-grid-item v-for="(i, k) in gridList" direction="horizontal" :key="k" @click="handleClickGrid(k)">
+        <van-grid-item
+          v-for="(i, k) in gridList"
+          direction="horizontal"
+          :key="k"
+          @click="handleClickGrid(k)"
+        >
           <div class="items-center flex-1">
             <img :src="i.icon" class="w-48 h-48 flex-shrink-0 block mx-auto" />
             <div class="text-12 mt-8 text-align-center max-w-103px c">
@@ -213,7 +224,13 @@ onMounted(async () => {
       </van-grid>
 
       <van-cell-group :title="t('profile.common')">
-        <van-cell is-link :title="t(item.i18n)" @click="handleClickCell(k)" v-for="(item, k) in cellList" :key="k">
+        <van-cell
+          is-link
+          :title="t(item.i18n)"
+          @click="handleClickCell(k)"
+          v-for="(item, k) in cellList"
+          :key="k"
+        >
           <template #icon>
             <img :src="item.icon" class="w20 h20 mr-8 mt-2" />
           </template>
@@ -221,12 +238,15 @@ onMounted(async () => {
       </van-cell-group>
 
       <div class="btn-box mt-24 w-full">
-        <van-button square type="primary" class="mt-12 w-full" @click="handleLogout">
+        <van-button
+          square
+          type="primary"
+          class="mt-12 w-full"
+          @click="handleLogout"
+        >
           {{ t("profile.logout") }}
         </van-button>
-        <div class="pt-24 text-align-center text-gray-400 text-12">
-          v1.0.10
-        </div>
+        <div class="pt-24 text-align-center text-gray-400 text-12">v1.0.11</div>
       </div>
     </section>
     <!-- <section class="unLogin px-12" >
@@ -240,8 +260,12 @@ onMounted(async () => {
       </div>
     </section> -->
     <van-popup v-model:show="showLanguagePicker" position="bottom">
-      <van-picker v-model="languageValues" :columns="languageColumns" @confirm="onLanguageConfirm"
-        @cancel="showLanguagePicker = false" />
+      <van-picker
+        v-model="languageValues"
+        :columns="languageColumns"
+        @confirm="onLanguageConfirm"
+        @cancel="showLanguagePicker = false"
+      />
     </van-popup>
   </div>
 </template>
