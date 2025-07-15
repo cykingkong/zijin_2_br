@@ -298,7 +298,7 @@ const hanleClickAreaPick = () => {
       <div class="flex-col gap-12 flex">
         <van-button type="primary" block @click="handleClickRegister">{{
           t("menus.register")
-          }}</van-button>
+        }}</van-button>
         <!-- <van-button type="primary" block @click="handleClickRegister">登陆</van-button> -->
       </div>
       <!-- <div class="protocol wfull flex  font-size-12  mt-12">
@@ -324,12 +324,12 @@ const hanleClickAreaPick = () => {
         <inputCom :label="t('input.Upload')" v-model:value="kycForm.idCard" :type="'imageShow'">
           <div class="flex flex-justify-around w-full text-align-center font-size-12">
             <div class="w80">
-              <van-uploader preview-image multiple :max-count="1" v-model="list1"
+              <van-uploader accept="image/*" preview-image multiple :max-count="1" v-model="list1"
                 :after-read="(file) => handleAfterRead(file, 1)" />
               {{ t("input.Front") }}
             </div>
             <div class="w80">
-              <van-uploader preview-image multiple :max-count="1" v-model="list2"
+              <van-uploader accept="image/*" preview-image multiple :max-count="1" v-model="list2"
                 :after-read="(file) => handleAfterRead(file, 2)" />
               {{ t("input.Back") }}
             </div>
@@ -342,7 +342,7 @@ const hanleClickAreaPick = () => {
         </inputCom>
         <van-button type="primary" block @click="handleClickSubmit">{{
           t("submit")
-          }}</van-button>
+        }}</van-button>
       </div>
     </block>
     <slidePop ref="slidePopRef" />

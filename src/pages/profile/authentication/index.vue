@@ -61,6 +61,7 @@
             <div class="w80">
               <van-uploader
                 preview-image
+                accept="image/*"
                 multiple
                 :max-count="1"
                 v-model="list1"
@@ -71,6 +72,7 @@
             <div class="w80">
               <van-uploader
                 preview-image
+                accept="image/*"
                 multiple
                 :max-count="1"
                 v-model="list2"
@@ -155,34 +157,32 @@ const queryUploadFile = async (file: any, type: any) => {
   formData.append("file", file.file);
   // 发起上传请求
   try {
-    const { data,code } = await uploadFile(formData);
-    if(code == 200){
-       if (type == 1) {
-      kycForm.idCardFront = data.url;
-      list1.value = [{ url: data.url }];
-    } else if (type == 2) {
-      kycForm.idCardBack = data.url;
-      list2.value = [{ url: data.url }];
-    } else if (type == 3) {
-      kycForm.idCardHand = data.url;
-      list3.value = [{ url: data.url }];
-    }
+    const { data, code } = await uploadFile(formData);
+    if (code == 200) {
+      if (type == 1) {
+        kycForm.idCardFront = data.url;
+        list1.value = [{ url: data.url }];
+      } else if (type == 2) {
+        kycForm.idCardBack = data.url;
+        list2.value = [{ url: data.url }];
+      } else if (type == 3) {
+        kycForm.idCardHand = data.url;
+        list3.value = [{ url: data.url }];
+      }
 
-    showSuccessToast(t("Upload successful"));
-    }else{
-        showFailToast("");
-        file.status = 'failed';
-        file.message = '';
+      showSuccessToast(t("Upload successful"));
+    } else {
+      showFailToast("");
+      file.status = "failed";
+      file.message = "";
     }
-   
 
     console.log(kycForm);
   } catch (error) {
-        showFailToast("");
-        file.status = 'failed';
-        file.message = '';
+    showFailToast("");
+    file.status = "failed";
+    file.message = "";
     showFailToast(t("Upload failed"));
-
   }
 };
 const handleClickSubmit = async () => {

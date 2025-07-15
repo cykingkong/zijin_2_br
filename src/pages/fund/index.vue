@@ -172,7 +172,7 @@ const handleClickBtn = (val: any) => {
 const handleClickOrder = async (val: any) => {
   try {
     let resCode = 0;
-    if (val.status == 4) {
+    if (val.status == 7) {
       if (val.type == 1) {
         const { data, code } = await orderRedeem({
           orderId: val.id,
