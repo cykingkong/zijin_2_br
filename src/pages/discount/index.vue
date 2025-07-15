@@ -244,6 +244,7 @@ watch(() => store.getklineList, (newV) => {
     if (newV && orderList.value.length) {
         orderList.value.forEach(el => {
             let listItem = newV.find(item => item.tradingId == el.tradingPairsId)
+            console.log(listItem, 'listItem')
             if (listItem) {
                 if (listItem.tradingId == el.tradingPairsId) {
                     el.purchasePrice = listItem.tick.close;
