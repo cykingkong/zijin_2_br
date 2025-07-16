@@ -25,7 +25,7 @@ class Socket {
       this.socket = link
     }
     else {
-      this.wsUrl = link || envWs
+      this.wsUrl = envWs
       this.socket = new WebSocket(this.wsUrl)
     }
 

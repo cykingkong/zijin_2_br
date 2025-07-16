@@ -287,8 +287,8 @@ watch(
              *  购买价格 * 数量 * 赠送比例 = 赠送股息金额
              */
             el.close = listItem.tick.close;
-            el.discountPrice =
-              (el.close * (el.discountRate / 100)).toFixed(2) || 0; // 优惠价格
+            // el.discountPrice =
+            //   (el.close * (el.discountRate / 100)).toFixed(2) || 0; // 优惠价格
             el.giftDividend =
               (
                 el.discountPrice *
