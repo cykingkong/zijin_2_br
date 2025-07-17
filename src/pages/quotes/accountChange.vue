@@ -156,12 +156,21 @@ const tabChange = (e) => {
 };
 const loadMore = () => {
   page.pageIndex++;
+  console.log(type.value);
   if (type.value == "2") {
-    getAssetsLogsGrid();
+    if (active.value == 0) {
+      getAssetsLogsGrid();
+    } else {
+      getAssetsLogsGrid({ type: active.value });
+    }
   } else if (type.value == "3") {
     getOrderList();
   } else {
-    getAccountChangeList();
+    if (active.value == 0) {
+      getAccountChangeList();
+    } else {
+      getAccountChangeList({ type: active.value });
+    }
   }
 };
 const listStatus = ref(1);
