@@ -178,8 +178,8 @@ const getOrderList = async () => {
                         percentage: (
                             ((e.totalQuantity - e.availableQuantity) / e.totalQuantity) * 100
                         ).toFixed(2),
-                        earnings: ((e.purchasePrice - e.discountPrice) * e.purchaseQuantity).toFixed(2) || 0, // 收益，
-                        earningRate: ((e.purchasePrice - e.discountPrice) / e.purchasePrice * 100).toFixed(2)
+                        earnings: ((e.close - e.discountPrice) * e.purchaseQuantity).toFixed(2) || 0, // 收益，
+                        earningRate: ((e.close - e.discountPrice) / e.close * 100).toFixed(2)
                     }
                 } else {
                     return {
@@ -201,8 +201,8 @@ const getOrderList = async () => {
                         percentage: (
                             ((e.totalQuantity - e.availableQuantity) / e.totalQuantity) * 100
                         ).toFixed(2),
-                        earnings: ((e.purchasePrice - e.discountPrice) * e.purchaseQuantity).toFixed(2) || 0, // 收益，
-                        earningRate: ((e.purchasePrice - e.discountPrice) / e.purchasePrice * 100).toFixed(2)
+                        earnings: ((e.close - e.discountPrice) * e.purchaseQuantity).toFixed(2) || 0, // 收益，
+                        earningRate: ((e.close - e.discountPrice) / e.close * 100).toFixed(2)
                     }
                 } else {
                     return {
@@ -244,13 +244,12 @@ watch(() => store.getklineList, (newV) => {
     if (newV && orderList.value.length) {
         orderList.value.forEach(el => {
             let listItem = newV.find(item => item.tradingId == el.tradingPairsId)
-            console.log(listItem, 'listItem')
             if (listItem) {
                 if (listItem.tradingId == el.tradingPairsId) {
-                    el.purchasePrice = listItem.tick.close;
+                    el.close = listItem.tick.close;
                     if (el.status == 1) {
-                        el.earnings = ((el.purchasePrice - el.discountPrice) * el.purchaseQuantity).toFixed(2) || 0 // 收益，
-                        el.earningRate = ((el.purchasePrice - el.discountPrice) / el.purchasePrice * 100).toFixed(2) // 收益率
+                        el.earnings = ((el.close - el.discountPrice) * el.purchaseQuantity).toFixed(2) || 0 // 收益，
+                        el.earningRate = ((el.close - el.discountPrice) / el.close * 100).toFixed(2) // 收益率
                     } else {
                         el.earnings = ((el.salePrice - el.discountPrice) * el.purchaseQuantity).toFixed(2) || 0 // 收益，
                         el.earningRate = el.salePrice ? ((el.salePrice - el.discountPrice) / el.salePrice * 100).toFixed(2) : 0 // 收益率
