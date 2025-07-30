@@ -57,15 +57,15 @@ const SocketWs = () => {
 };
 
 onMounted(() => {
-  setTimeout(() => {
-    localStorage.setItem("vueuse-color-scheme", "dark");
-  }, 80);
+  // setTimeout(() => {
+  //   localStorage.setItem("vueuse-color-scheme", "dark");
+  // }, 80);
   SocketWs();
 });
 </script>
 
 <template>
-  <van-config-provider theme="dark">
+  <van-config-provider>
     <nav-bar />
     <router-view v-slot="{ Component }">
       <section class="app-wrapper">

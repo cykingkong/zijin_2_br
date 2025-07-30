@@ -16,7 +16,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
     mode: env.VITE_USER_NODE_ENV,
     server: {
       host: true,
-      port: 3200,
+      port: 3323,
       proxy: {
         '/api': {
           target: `http://152.53.166.120:18399`, // 代理接口
