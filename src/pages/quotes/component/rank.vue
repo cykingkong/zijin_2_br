@@ -1,21 +1,33 @@
 <template>
-    <div class="rank-content">
-        <div v-for="(i, k) in rankList" :key="k" class="rank-item" @click="handleClickLi(i)">
+    <div class="rank-content px-24px">
+        <div v-for="(i, k) in rankList" :key="k" class="rank-item mb-16px" @click="handleClickLi(i)">
             <div class="rank-title flex items-center">
-                <div class="flex-l font-size-16">{{ i.tradingInfo.baseAssetInfo.symbol }}</div>
-                <div class="flex-r">
+                <div class="flex-l font-size-16">
+                    <div class="left label flex gap-16">
+                        <img :src="i.tradingInfo.baseAssetInfo.logo" alt="" class="block h-40 w-40 rounded-full">
+                        <div class="info h-40 flex-col flex justify-between">
+                            <div class="name text-14px font-700">{{ i.tradingInfo.baseAssetInfo.symbol }}</div>
+                            <div class="name color-#6B7280 text-12px">{{ i.tradingInfo.baseAssetInfo.expName }}</div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="flex-r ">
                     <div class="flex-r-item flex items-center up">
-                        <Kline :nameId="'myChart10' + k + categoryId" :areaStyle="true" :increase="i.dayIncrease"
+                        <!-- <Kline :nameId="'myChart10' + k + categoryId" :areaStyle="true" :increase="i.dayIncrease"
                             :data="i.price" :height="vw(50)" :width="vw(80)" v-if="i.price && i.price.length > 0">
-                        </Kline>
+                        </Kline> -->
                     </div>
-                    <div class="flex-r-item" :class="{ up: i.dayIncrease >= 0, down: i.dayIncrease < 0 }">{{
-                        i.dayIncrease }}%
-                    </div>
-                    <div class="flex-r-item last-item">
+                    <div class="flex-r-item last-item text-align-right! text-14px">
                         {{ i.tradingInfo.baseAssetInfo ?
                             i.tradingInfo.baseAssetInfo.unit : '' }} {{ addCommasToNumber(i.lastPrice) }}
                     </div>
+                    <div class="flex-r-item text-align-right! text-12px"
+                        :class="{ up: i.dayIncrease >= 0, down: i.dayIncrease < 0 }">{{
+                            i.dayIncrease }}%
+                    </div>
+
                 </div>
             </div>
             <div class="rank-text"></div>
@@ -60,12 +72,14 @@ const handleClickLi = (i) => {
     width: 100%;
 
     padding-bottom: 20px;
-    background: var(--rank-bg);
+
 
     .rank-item {
         width: 100%;
         padding: 14px 12px;
-        border-bottom: 1px solid var(--van-gray-7);
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
+
 
         // &:last-child {
         //   border: none;
@@ -82,14 +96,14 @@ const handleClickLi = (i) => {
 
             .flex-r {
                 flex: 1;
-                display: flex;
-                align-items: center;
+                // display: flex;
+                // align-items: center;
 
                 .flex-r-item {
-                    flex: 1;
-                    align-self: center;
-                    text-align: center;
-
+                    //     flex: 1;
+                    //     align-self: center;
+                    //     text-align: center;
+                    text-align: right;
                 }
 
                 .up {

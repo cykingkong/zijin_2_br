@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 export interface LoginData {
-  email: string
+  account: string
   password: string
 }
 
@@ -16,7 +16,7 @@ export interface UserState {
   userId?: string
 }
 
-export function login(data: LoginData): Promise<any> {
+export function login(data: any): Promise<any> {
   return request.post<LoginRes>('/app-api/user/login', data)
 }
 

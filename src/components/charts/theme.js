@@ -1,11 +1,11 @@
 const textColorDark = 'white'
 const gridColorDark = '#404040'
-const axisLineColorDark = 'black'
+const axisLineColorDark = 'white'
 const crossTextBackgroundColorDark = '#373a40'
 
 const textColorLight = '#76808F'
 const gridColorLight = '#35477c'
-const axisLineColorLight = '#1f1f1f'
+const axisLineColorLight = 'white'
 const crossTextBackgroundColorLight = '#c3c3c3'
 
 export default function(theme) {
@@ -25,8 +25,8 @@ export default function(theme) {
         },
         candle: {
             bar: {
-                // upColor: '#EF5350',
-                // downColor: '#26A69A',
+                upColor: '#00C851',
+                downColor: '#ff4444',
                 noChangeColor: '#888888'
             },
             priceMark: {
@@ -41,13 +41,13 @@ export default function(theme) {
                 showRule: 'none',
                 labels: ['Time', 'Open', 'Close', 'High', 'Low'],
                 text: {
-                    color: '#000',
+                    color: theme === 'dark' ? 'white' : 'black',
                 },
                 showType: 'standard',
                 rect: {
                     offsetTop: 24,
-                    borderColor: '#3f4254',
-                    backgroundColor: 'rgba(17, 17, 17, .3)'
+                    borderColor: theme === 'dark' ? 'white' : '#ddd',
+                    backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.95)'
                 }
             }
         },
@@ -62,10 +62,10 @@ export default function(theme) {
                 color: axisLineColor
             },
             tickLine: {
-                color: axisLineColor
+                color: '#94A3B8'
             },
             tickText: {
-                color: textColor
+                color: '#94A3B8'
             },
         },
         yAxis: {
@@ -73,10 +73,10 @@ export default function(theme) {
                 color: axisLineColor
             },
             tickLine: {
-                color: axisLineColor
+                color: 'white'
             },
             tickText: {
-                color: textColor
+                color: '#94A3B8'
             }
         },
         separator: {
@@ -85,18 +85,24 @@ export default function(theme) {
         crosshair: {
             horizontal: {
                 line: {
-                    color: crossLineColor
+                    color: '#00C851',
+                    size: 1
                 },
                 text: {
-                    backgroundColor: crossTextBackgroundColor
+                    backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.95)',
+                    color: theme === 'dark' ? 'white' : 'black',
+                    borderColor: theme === 'dark' ? 'white' : '#ddd'
                 }
             },
             vertical: {
                 line: {
-                    color: crossLineColor
+                    color: '#00C851',
+                    size: 1
                 },
                 text: {
-                    backgroundColor: crossTextBackgroundColor
+                    backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.95)',
+                    color: theme === 'dark' ? 'white' : 'black',
+                    borderColor: theme === 'dark' ? 'white' : '#ddd'
                 }
             }
         }

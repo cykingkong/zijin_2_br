@@ -1,11 +1,16 @@
 <script setup lang="ts">
 import router from '@/router'
 import { useStore } from '@/stores/modules/index'
+import grid1 from '@/assets/grid/grid1.jpg'
+import grid2 from '@/assets/grid/grid2.jpg'
+import grid3 from '@/assets/grid/grid3.jpg'
+import grid4 from '@/assets/grid/grid4.jpg'
+import Indicator from "@/pages/deal/components/indicator.vue";
 
 import tabItem from './quotes/component/tab-item.vue'
 import Banner from './quotes/component/banner.vue'
 import Notice from './quotes/component/notice.vue'
-import Grid from './quotes/component/grid.vue'
+import Grid from '@/components/grid.vue'
 
 import hotmap from './quotes/component/hotmap.vue'
 import TopStories from './quotes/component/topStories.vue'
@@ -32,13 +37,31 @@ const marketData = ref<any>([])
 const indexInfoData = ref<any>({
   banners: [],
 })
+const gridList = ref<any>([
+  {
+    name: "股票",
+    image: grid1
+  },
+  {
+    name: "增发股",
+    image: grid2
+  },
+  {
+    name: "基金",
+    image: grid3
+  },
+  {
+    name: "IPO",
+    image: grid4
+  }
+])
 function handleClickGrid(val: any) {
 
   if (val === 0) {
     // local.setlocal('rankInfo', marketData.value.list[0])
     // router.push('/quotes/openTrade?id=' + marketData.value.list[0].tradingPairsId + '&categoryId=' + categoryId.value)
     router.push({
-      path: '/quotes/rankList',
+      path: '/market',
       // query: {
       //   id: marketData.value.list[0].tradingPairsId,
       //   categoryId: categoryId.value
@@ -46,20 +69,20 @@ function handleClickGrid(val: any) {
     })
   }
   if (val === 1) {
-    router.push(`/discount?categoryId=${categoryId.value}`)
+    router.push(`/discount`)
   }
   if (val === 2) {
     router.push({
       path: '/fund',
-      query: {
-        categoryId: activeName.value == '200' ? "202" : "198",
-      },
+      // query: {
+      //   categoryId: activeName.value == '200' ? "202" : "198",
+      // },
     })
   }
   if (val === 3) {
     // router.push('/quotes/accountChange?type=3' + '&categoryId=' + categoryId.value)
     router.push({
-      path: '/quotes/accountChange',
+      path: '/IPO',
       query: {
         type: 3,
         categoryId: categoryId.value,
@@ -276,36 +299,43 @@ onMounted(() => {
 
 <template>
   <div class="quotes">
-    <header class="header flex">
-      <div class="left">
-        {{ t("menus.quotes") }}
+    <header class="header flex items-center justify-between">
+      <div class="left flex items-center gap-16px">
+        <div class="icon w-24 h-24"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M7.40777 0.91344C8.86368 0.310423 10.4242 0 12 0V6C11.212 6 10.4318 6.15518 9.70389 6.45675C8.97593 6.75826 8.31449 7.20021 7.75735 7.75735C7.20021 8.31449 6.75826 8.97593 6.45675 9.70389C6.15518 10.4318 6 11.212 6 12H0C0 10.4242 0.310423 8.86368 0.91344 7.40777C1.51653 5.95186 2.40041 4.62905 3.5147 3.5147C4.62905 2.40041 5.95186 1.51653 7.40777 0.91344Z"
+              fill="#6B39F4" />
+            <path
+              d="M0 12C0 13.5758 0.310423 15.1363 0.91344 16.5922C1.51653 18.0481 2.40041 19.3709 3.5147 20.4853C4.62905 21.5996 5.95186 22.4835 7.40777 23.0866C8.86368 23.6896 10.4242 24 12 24C13.5758 24 15.1363 23.6896 16.5922 23.0866C18.0481 22.4835 19.3709 21.5996 20.4853 20.4853C21.5996 19.3709 22.4835 18.0481 23.0866 16.5922C23.6896 15.1363 24 13.5758 24 12H18C18 12.788 17.8448 13.5682 17.5432 14.2961C17.2417 15.0241 16.7998 15.6855 16.2427 16.2427C15.6855 16.7998 15.0241 17.2417 14.2961 17.5432C13.5682 17.8448 12.788 18 12 18C11.212 18 10.4318 17.8448 9.70389 17.5432C8.97593 17.2417 8.31449 16.7998 7.75735 16.2427C7.20021 15.6855 6.75826 15.0241 6.45675 14.2961C6.15518 13.5682 6 12.788 6 12H0Z"
+              fill="#9774F7" />
+            <path
+              d="M12 8.18176C9.89127 8.18176 8.18182 9.89122 8.18182 11.9999H15.8182C15.8182 9.89122 14.1087 8.18176 12 8.18176Z"
+              fill="#9774F7" />
+            <path
+              d="M12 15.8182C9.89127 15.8182 8.18182 14.1088 8.18182 12.0001H15.8182C15.8182 14.1088 14.1087 15.8182 12 15.8182Z"
+              fill="#6B39F4" />
+          </svg>
+        </div> {{ t("Finline") }}
       </div>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M12.02 2.91003C8.71 2.91003 6.02 5.60003 6.02 8.91003V11.8C6.02 12.41 5.76 13.34 5.45 13.86L4.3 15.77C3.59 16.95 4.08 18.26 5.38 18.7C9.69 20.14 14.34 20.14 18.65 18.7C19.86 18.3 20.39 16.87 19.73 15.77L18.58 13.86C18.28 13.34 18.02 12.41 18.02 11.8V8.91003C18.02 5.61003 15.32 2.91003 12.02 2.91003Z"
+          stroke="#94A3B8" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" />
+        <path
+          d="M13.87 3.19994C13.56 3.10994 13.24 3.03994 12.91 2.99994C11.95 2.87994 11.03 2.94994 10.17 3.19994C10.46 2.45994 11.18 1.93994 12.02 1.93994C12.86 1.93994 13.58 2.45994 13.87 3.19994Z"
+          stroke="#94A3B8" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+        <path
+          d="M15.02 19.0601C15.02 20.7101 13.67 22.0601 12.02 22.0601C11.2 22.0601 10.44 21.7201 9.89999 21.1801C9.35999 20.6401 9.01999 19.8801 9.01999 19.0601"
+          stroke="#94A3B8" stroke-width="1.5" stroke-miterlimit="10" />
+      </svg>
     </header>
-    <van-tabs v-model:active="activeName" shrink @change="handleClickTabs">
-      <van-tab v-for="item in marketData.category" :key="item.category_id" class="flex flex-col gap-12 pt-12"
-        :title="item.name" :name="item.category_id">
-        <Banner :banner="indexInfoData.banners" />
-        <tabItem :category-id="item.category_id" :item="indexData" />
-        <div class="top relative">
-          <div class="z-index-999 absolute left-0 top-0 h-full w-full" @click="toDetail" />
-          <TopStories :charts-desc="chartsDesc" :category_id="item.category_id" />
-        </div>
-        <!-- <Indicator :list="marketData.list" v-if="item.category_id == 200" @handle-click="handleClickIndicator" /> -->
-        <!-- 金刚区 -->
-        <Grid :category-id="Number(item.category_id)" @handle-click-grid="handleClickGrid" />
-        <!-- 公告 -->
-        <Notice v-if="indexInfoData.notice" :data="indexInfoData" @click-notice="clickNotice" />
-        <!-- 排行 -->
-        <!-- <Rank :rankList="marketData.list" :categoryId="item.category_id" @loadMore="loadMore"
-          :rankListStatus="rankListStatus" /> -->
+    <div class="w-full px-24px mt-8">
+      <img src="@/assets/bannerCard.jpg" class="w-full" alt="">
+    </div>
+    <Grid @handleClickGrid="handleClickGrid" />
+    <Indicator :activeName="activeName" />
 
-        <div class="top relative">
-          <div class="z-index-999 absolute left-0 top-0 h-full w-full" @click="toDetail" />
-          <hotmap :category_id="item.category_id" />
-        </div>
-        <StockMarketWidget :charts-desc="chartsDesc" :category_id="item.category_id" class="mt-12" />
-      </van-tab>
-    </van-tabs>
     <div class="kf-fixed fixed bottom-120px right-0 h-auto w-40 overflow-hidden rounded-12px" @click="initKfUrl">
       <img src="@/assets/kf.png" class="block h-full w-full scale-[1.1] bg-white" alt="">
     </div>
@@ -352,8 +382,8 @@ onMounted(() => {
 
 .header {
   display: flex;
-  height: var(--van-nav-bar-height);
-  padding: 0 12px;
+  height: 64px;
+  padding: 0 24px;
   align-items: center;
   justify-content: space-between;
   color: var(--van-text);

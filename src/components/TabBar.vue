@@ -30,14 +30,14 @@ const tabList = [
     offIcon: tab2,
   },
   {
-    name: "layouts.deal",
-    path: "/deal",
+    name: "Market",
+    path: "/market",
     onIcon: tab3Active,
     offIcon: tab3,
   },
   {
-    name: "IPO",
-    path: "/ipo",
+    name: "Wallet",
+    path: "/wallet",
     onIcon: tab4Active,
     offIcon: tab4,
   },
@@ -51,13 +51,8 @@ const tabList = [
 </script>
 
 <template>
-  <van-tabbar v-if="show" v-model="active" placeholder route z-index="9999">
-    <van-tabbar-item
-      replace
-      :to="item.path"
-      v-for="(item, k) in tabList"
-      :key="k"
-    >
+  <van-tabbar v-if="show" v-model="active" placeholder route z-index="9999" active-color="#6b39f4">
+    <van-tabbar-item replace :to="item.path" v-for="(item, k) in tabList" :key="k">
       {{ t(item.name) }}
       <template #icon="props">
         <img :src="props.active ? item.onIcon : item.offIcon" />

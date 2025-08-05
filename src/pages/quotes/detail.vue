@@ -1,13 +1,6 @@
 <template>
   <div class="detail px-12 pb-120 pt-12">
-    <VanNavBar
-      :title="listtext"
-      :fixed="true"
-      clickable
-      placeholder
-      :left-arrow="true"
-      @click-left="onBack"
-    />
+    <VanNavBar :title="listtext" :fixed="true" clickable placeholder :left-arrow="true" @click-left="onBack" />
 
     <!-- <userBalance :data="userBalanceInfo"></userBalance> -->
 
@@ -17,27 +10,21 @@
           {{ listtext }}
           <van-icon style="margin-left: 5px" name="arrow-down" />
         </div>
-        <div
-          class=""
-          :style="{
+        <div class="" :style="{
+          color:
+            klineData.dayIncrease < 0
+              ? 'rgb(255, 72, 52)'
+              : 'rgb(0, 197, 114)',
+        }">
+          {{ addCommasToNumber(klineData.close) }}
+        </div>
+        <div class="">
+          <span :style="{
             color:
               klineData.dayIncrease < 0
                 ? 'rgb(255, 72, 52)'
                 : 'rgb(0, 197, 114)',
-          }"
-        >
-          {{ addCommasToNumber(klineData.close) }}
-        </div>
-        <div class="">
-          <span
-            :style="{
-              color:
-                klineData.dayIncrease < 0
-                  ? 'rgb(255, 72, 52)'
-                  : 'rgb(0, 197, 114)',
-            }"
-            >{{ klineData.dayIncrease }}%</span
-          >
+          }">{{ klineData.dayIncrease }}%</span>
         </div>
       </div>
       <div class="options-h flex-1 font-size-12 line-height-25">
@@ -60,11 +47,7 @@
       </div>
     </div>
     <div class="h-500">
-      <charts
-        v-if="tradingPairsId"
-        ref="EhartsDataRef"
-        :trading_pair_id="Number(tradingPairsId)"
-      ></charts>
+      <charts v-if="tradingPairsId" ref="EhartsDataRef" :trading_pair_id="Number(tradingPairsId)"></charts>
     </div>
     <div class="w-full mt-12">
       <div class="flex th gap-12 mb-6 text-blueGray-400 font-size-12">
@@ -73,21 +56,13 @@
       </div>
       <div class="flex td gap-12 font-size-14">
         <div class="l flex-1">
-          <div
-            class="w-full flex mb-6"
-            v-for="(item, index) in asks"
-            :key="index"
-          >
+          <div class="w-full flex mb-6" v-for="(item, index) in asks" :key="index">
             <div class="l flex-1">{{ addCommasToNumber(item[0]) }}</div>
             <div class="l flex-1 text-right up">{{ item[1] }}</div>
           </div>
         </div>
         <div class="l flex-1">
-          <div
-            class="w-full flex mb-6"
-            v-for="(item, index) in bids"
-            :key="index"
-          >
+          <div class="w-full flex mb-6" v-for="(item, index) in bids" :key="index">
             <div class="l flex-1 down">{{ item[1] }}</div>
             <div class="l flex-1 text-right">
               {{ addCommasToNumber(item[0]) }}
@@ -96,37 +71,19 @@
         </div>
       </div>
     </div>
-    <div
-      class="fixed bottom-0 w-full left-0 flex justify-center bottom-btn-box z-99"
-    >
+    <div class="fixed bottom-0 w-full left-0 flex justify-center bottom-btn-box z-99">
       <div class="btn-box flex gap-30">
         <div class="b1 flex-1 w-140">
-          <van-button
-            type="primary"
-            block
-            color="#06cda5"
-            @click="handelClickBtn(0)"
-            >{{ t("Buy") }}</van-button
-          >
+          <van-button type="primary" block color="#1BC256" @click="handelClickBtn(0)">{{ t("Buy") }}</van-button>
         </div>
         <div class="b1 flex-1 w-140">
-          <van-button
-            type="primary"
-            color="#F43368"
-            block
-            @click="handelClickBtn(1)"
-            >{{ t("Sell") }}</van-button
-          >
+          <van-button type="primary" color="#E82C81" block @click="handelClickBtn(1)">{{ t("Sell") }}</van-button>
         </div>
       </div>
     </div>
     <van-popup v-model:show="showPicker" destroy-on-close position="bottom">
-      <van-picker
-        :columns="columns"
-        :model-value="[tradingPairsId]"
-        @confirm="onConfirm"
-        @cancel="showPicker = false"
-      />
+      <van-picker :columns="columns" :model-value="[tradingPairsId]" @confirm="onConfirm"
+        @cancel="showPicker = false" />
     </van-popup>
   </div>
 </template>
@@ -304,7 +261,7 @@ onBeforeUnmount(() => {
 <style lang="less" scoped>
 .bottom-btn-box {
   padding-top: 12px;
-  background: var(--bg);
+  background: white;
   padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
 }
 </style>

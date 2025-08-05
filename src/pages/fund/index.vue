@@ -2,7 +2,7 @@
   <div class="discont-content px-12 w-full">
     <template v-if="!onlyShowOrder">
       <van-tabs v-model:active="active" @change="changeActive">
-        <van-tab :title="t('fund')">
+        <van-tab :title="t('fund')" class="mt-24px">
           <div class="discont-list flex flex-col pb-40">
             <fund-item :item="item" v-for="(item, index) in list" :key="index"
               @handleClickBtn="handleClickBtn"></fund-item>
@@ -12,7 +12,7 @@
             <LoadMore :status="listStatus" @load-more="loadMore" />
           </div>
         </van-tab>
-        <van-tab :title="t('Order List')">
+        <van-tab :title="t('Order List')" class="mt-24px">
           <div class="discont-list flex flex-col pb-40">
             <fund-item :item="item" v-for="(item, index) in orderList" :key="index" @handleClickBtn="handleClickBtn"
               @handleClickOrder="handleClickOrder" :item-type="'order'"></fund-item>
@@ -167,7 +167,10 @@ const loadMore = () => {
 const handleClickBtn = (val: any) => {
   activeItem.value = val.item;
   popType.value = val.itemType;
-  bottomPopRef.value.show(true);
+  setTimeout(() => {
+    bottomPopRef.value.show(true);
+  }, 80)
+
 };
 const handleClickOrder = async (val: any) => {
   try {

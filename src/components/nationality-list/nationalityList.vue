@@ -5,18 +5,26 @@
                 <van-search class="tabBackground vant-search-box" v-model="val" :placeholder="$t('input.PleaseEnter')"
                     @update:model-value="onSearch(val)" @clear="onClear" />
             </form>
+            <div class="px-12px flex flex-col gap-16px">
+                <div class="flex px-12px pt-10 pb-8 h-64px bg-#F9FAFB rounded-12px justify-between list-view box-border textColor container items-center"
+                    style=" box-sizing: border-box;" v-for="(item, key) in countriesFind" :key="key"
+                    @click="selectItem(item, key)">
+                    <div class="flex items-center gap-16px">
+                        <div class="bd w-40px h-40px rounded-12px  bg-#EBECEF flex items-center justify-center">
+                            <div class="iti-flag" :class="key"></div>
 
-            <div class="flex px-24px pt-10 pb-8 justify-between list-view box-border textColor container items-center"
-                style="height: 50px; box-sizing: border-box;" v-for="(item, key) in countriesFind" :key="key"
-                @click="selectItem(item, key)">
-                <div class="flex items-center">
-                    <div class="iti-flag mr-10" :class="key"></div>
-                    <div>{{ item.name }}</div>
-                </div>
-                <span>{{ item.dialCode }}</span>
-                <!-- <img v-show="selectIndex==key" src="../../../assets/image/public/checked.png"
+                        </div>
+                        <div>(+{{ item.dialCode }}){{ item.name }}</div>
+                    </div>
+                    <div class="radio border-solid border-1px border-#D1D5DB rounded-full w-16px h-16px relative"
+                        :class="selectIndex == key ? 'radio-active' : ''">
+                    </div>
+                    <!-- <span>{{ item.dialCode }}</span> -->
+                    <!-- <img v-show="selectIndex==key" src="../../../assets/image/public/checked.png"
                     style="width: 20px;height: 20px;" /> -->
+                </div>
             </div>
+
         </van-action-sheet>
     </div>
 </template>
@@ -42,7 +50,7 @@ let val = ref('')
 let list = ref([])
 let countriesFind = ref({})
 const countries = ref(countriesinit)
-let selectIndex = ref(0)
+let selectIndex = ref(1)
 let countryCodeList = ref(['93', '355', '213', '684', '376', '244',
     '1264', '1268', '54', '374', '297', '61', '43', '994', '1242',
     '973', '880', '1246', '375', '32',
@@ -252,4 +260,21 @@ defineExpose({
 </script>
 <style lang="less" scoped>
 @import "intl.css";
+
+.radio-active {
+    border-color: #6B39F4 !important;
+    position: relative;
+}
+
+.radio-active::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    background-color: #6B39F4;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
 </style>

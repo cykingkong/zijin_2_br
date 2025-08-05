@@ -79,34 +79,35 @@ export default {
 						color: value >= 0 ?
 							'rgba(18,208,83,1)' : 'rgba(255,72,52,1)'
 					},
-					areaStyle: {
-						normal: {
-							color: new echarts.graphic.LinearGradient(
-								0,
-								0,
-								0,
-								1,
-								[{
-									offset: 0,
-									color: value >= 0 ? 'rgba(18,208,83,0.8)' :
-										'rgba(255,72,52,.8)'
-								},
-								{
-									offset: 1,
-									color: value >= 0 ? 'rgba(20,79,48,0.1)' :
-										'rgba(108,20,29,0.1)'
-								}
-								]
-							)
-						}
-					},
+					// areaStyle: {
+					// 	normal: {
+					// 		color: new echarts.graphic.LinearGradient(
+					// 			0,
+					// 			0,
+					// 			0,
+					// 			1,
+					// 			[{
+					// 				offset: 0,
+					// 				color: value >= 0 ? 'rgba(18,208,83,0.8)' :
+					// 					'rgba(255,72,52,.8)'
+					// 			},
+					// 			{
+					// 				offset: 1,
+					// 				color: value >= 0 ? 'rgba(20,79,48,0.1)' :
+					// 					'rgba(108,20,29,0.1)'
+					// 			}
+					// 			]
+					// 		)
+					// 	}
+					// },
 					markLine: {
 						data: [{
 							yAxis: this.data.reduce((sum, val) => sum + val, 0) / this.data.length,
 							name: 'Threshold',
 						}],
 						lineStyle: {
-							color: value < 0 ? 'rgba(255,72,52,1)' : 'rgba(18,208,83,1)', // 设置线条颜色
+							// color: value < 0 ? 'rgba(255,72,52,1)' : 'rgba(18,208,83,1)', // 设置线条颜色
+							color: '#E2E8F0', // 设置线条颜色
 							type: 'dashed', // 设置线条样式
 							width: 1 // 设置线条宽度
 						}
@@ -182,32 +183,32 @@ export default {
 					data: this.data,
 					type: 'line',
 					showSymbol: false,
-					smooth: true,
+					smooth: false,
 					lineStyle: {
 						color: this.increase >= 0 ?
 							'rgba(18,208,83,1)' : 'rgba(255,72,52,1)'
 					},
-					areaStyle: {
-						normal: {
-							color: new echarts.graphic.LinearGradient(
-								0,
-								0,
-								0,
-								1,
-								[{
-									offset: 0,
-									color: this.increase >= 0 ? 'rgba(18,208,83,0.8)' :
-										'rgba(255,72,52,.8)'
-								},
-								{
-									offset: 1,
-									color: this.increase >= 0 ? 'rgba(20,79,48,0.1)' :
-										'rgba(108,20,29,0.1)'
-								}
-								]
-							)
-						}
-					},
+					// areaStyle: {
+					// 	normal: {
+					// 		color: new echarts.graphic.LinearGradient(
+					// 			0,
+					// 			0,
+					// 			0,
+					// 			1,
+					// 			[{
+					// 				offset: 0,
+					// 				color: this.increase >= 0 ? 'rgba(18,208,83,0.8)' :
+					// 					'rgba(255,72,52,.8)'
+					// 			},
+					// 			{
+					// 				offset: 1,
+					// 				color: this.increase >= 0 ? 'rgba(20,79,48,0.1)' :
+					// 					'rgba(108,20,29,0.1)'
+					// 			}
+					// 			]
+					// 		)
+					// 	}
+					// },
 					markLine: {
 						symbol: 'none',
 						data: [{
@@ -216,7 +217,9 @@ export default {
 						} // 水平参考线
 						],
 						lineStyle: {
-							color: this.increase < 0 ? 'rgba(255,72,52,1)' : 'rgba(18,208,83,1)', // 设置线条颜色
+							// color: this.increase < 0 ? 'rgba(255,72,52,1)' : 'rgba(18,208,83,1)', // 设置线条颜色
+							color: '#E2E8F0', // 设置线条颜色
+
 							type: 'dashed', // 设置线条样式
 							width: 1 // 设置线条宽度
 						},

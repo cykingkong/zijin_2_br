@@ -24,6 +24,12 @@ const assetsData = computed(() => userStore.userInfo.assetsData)
 const userInfo = computed(() => userStore.userInfo)
 const tabList = ref([
   {
+    label: '股票',
+    i18n: 'Stock',
+    value: '1',
+    objKey: 'assetsData',
+  },
+  {
     label: '折扣股',
     objKey: 'discountAssetsData',
     i18n: 'deal.discount',
@@ -33,31 +39,21 @@ const tabList = ref([
     label: '基金',
     objKey: 'fundAssetsData',
     i18n: 'deal.fund',
-
     value: '3',
   },
   {
-    label: '股息',
-    // objKey: 'dividendAssetsData',
-    objKey: 'discountFundData',
-    i18n: 'deal.dividend',
-
-    value: '4',
-  },
-  {
     label: 'IPO',
-    value: '1',
+    value: '4',
     objKey: 'ipoAssetsData',
     i18n: 'deal.IPO',
-
   },
-  {
-    label: '股票',
-    i18n: 'Stock',
-    value: '1',
-    // objKey: 'ipoAssetsData',
-    objKey: 'assetsData',
-  },
+  // {
+  //   label: '股息',
+  //   // objKey: 'dividendAssetsData',
+  //   objKey: 'discountFundData',
+  //   i18n: 'deal.dividend',
+  //   value: '4',
+  // },
 ],
 )
 
@@ -74,7 +70,7 @@ function getUserInfoByObjKey(value) {
 function changeTab(index) {
   // userStore.getAssetsData()
 
-  if (index == 4) {
+  if (index == 0 || index == 4) {
     getCategoryPositionData()
   }
   activeIndex.value = index
@@ -96,7 +92,7 @@ async function getCategoryPositionData(params = {}) {
 }
 const store = useStore();
 watch(() => props.activeName, (newV) => {
-  if (newV && activeIndex.value == 4) {
+  if (newV && (activeIndex.value == 0 || activeIndex.value == 4)) {
     getCategoryPositionData()
   }
 })
@@ -193,112 +189,63 @@ function confirm() {
 
 <template>
   <div class="indicator-content pb-12px">
-    <div class="tab-box flex gap-4 px-12 py-12">
+    <div class="tab-box flex gap-8px px-12 py-12">
       <div v-for="(item, index) in tabList" :key="index"
-        class="tab-item flex flex-1 items-center justify-center rounded-4 text-align-center line-height-24"
+        class="tab-item flex flex-1 items-center justify-center rounded-4 text-align-center line-height-24 px-10px"
         :class="{ active: index === activeIndex }" @click="changeTab(index)">
         <span>{{ t(item.i18n) }}</span>
       </div>
     </div>
 
-    <div v-if="userInfo && userInfo[tabList[activeIndex].objKey] && activeIndex !== 4" class="asset px-12 font-size-12">
-      <div class="line flex">
-        <div class="line-item flex-1 text-align-left">
-          <p class="title">
-            {{ t('deal.totalAmount') }}
-          </p>
-          <p v-show="activeName == '1'" class="content">
-            {{ activeName == '1' ? '$' : 'R$' }} {{ userInfo[tabList[activeIndex].objKey].totalAmountUsd }}
-          </p>
-          <p v-show="activeName == '2'" class="content">
-            {{ activeName == '1' ? '$' : 'R$' }} {{ userInfo[tabList[activeIndex].objKey].totalAmountBrl }}
-          </p>
-        </div>
-        <div class="line-item flex-1 text-align-center">
-          <p class="title">
-            {{ t('deal.totalProfit') }}
-          </p>
-          <p v-show="activeName == '1'" class="content"
-            :class="{ up: userInfo[tabList[activeIndex].objKey].totalProfitUsd >= 0, down: userInfo[tabList[activeIndex].objKey].totalProfitUsd < 0 }">
-            {{ activeName == '1' ? '$' : 'R$' }} {{ userInfo[tabList[activeIndex].objKey].totalProfitUsd }}
-          </p>
-          <p v-show="activeName == '2'" class="content"
-            :class="{ up: userInfo[tabList[activeIndex].objKey].totalProfitBrl >= 0, down: userInfo[tabList[activeIndex].objKey].totalProfitBrl < 0 }">
-            {{ activeName == '1' ? '$' : 'R$' }} {{ userInfo[tabList[activeIndex].objKey].totalProfitBrl }}
-          </p>
-        </div>
-        <div class="line-item flex-1 text-align-right">
-          <p class="title">
-            {{ t('deal.totalProfitRate') }}
-          </p>
-          <p v-if="activeName == '1'" class="content"
-            :class="{ up: userInfo[tabList[activeIndex].objKey].totalProfitRateUsd >= 0, down: userInfo[tabList[activeIndex].objKey].totalProfitRateUsd < 0 }">
-            {{ userInfo[tabList[activeIndex].objKey].totalProfitRateUsd }} %
-          </p>
-          <p v-if="activeName == '2'" class="content"
-            :class="{ up: userInfo[tabList[activeIndex].objKey].totalProfitRateBrl >= 0, down: userInfo[tabList[activeIndex].objKey].totalProfitRateBrl < 0 }">
-            {{ userInfo[tabList[activeIndex].objKey].totalProfitRateBrl }} %
-          </p>
-        </div>
-      </div>
-      <div class="line flex" />
-    </div>
-    <div class="divdiver" />
-    <div v-if="activeIndex === 0" class="indicator-td flex">
-      <discount :only-show-order="true" :category-id="activeName == '1' ? '200' : '201'" />
-    </div>
-    <div v-if="activeIndex === 1" class="indicator-td flex">
-      <fund :only-show-order="true" />
-    </div>
-    <div v-if="activeIndex === 2" class="indicator-td flex">
-      <dividend :only-show-order="true" :category-id="activeName == '1' ? '200' : '201'" />
-    </div>
-    <div v-if="activeIndex === 3" class="indicator-td flex">
-      <ipo :only-show-order="true" />
-    </div>
-    <div v-if="activeIndex === 4" class="indicator-td flex flex-col px-12">
-      <div v-for="(item, index) in categoryPositionData" :key="index" class="w-full flex flex-col gap-12px p-12">
+
+    <div v-if="activeIndex === 0" class="indicator-td flex flex-col px-12">
+      <div v-for="(item, index) in categoryPositionData" :key="index"
+        class="w-full  px-16 py-9px bg-#F3F4F6 rounded-12px ">
         <div class="li flex items-center justify-between">
-          <div class="left label">
-            {{ t('Stock name') }}
+          <div class="left label flex gap-16">
+            <img :src="item.symbolLogo" alt="" class="block h-40 w-40 rounded-full">
+            <div class="info h-40">
+              <div class="name">{{ item.symbol }}</div>
+              <div class="name color-#6B7280 text-12px">{{ item.symbolId }}</div>
+            </div>
           </div>
-          <div class="right flex flex-shrink-0 items-center gap-12px text-align-left">
-            <img :src="item.symbolLogo" alt="" class="block h-20 w-20 rounded-full"> {{ item.symbol }}
+          <div class="right  flex-shrink-0  gap-12px text-align-right h-40">
+            <div class="num up text-14px">+ {{ item.userAssetsAmount }}</div>
+            <div class="num  color-#6B7280 text-12px">数量</div>
           </div>
         </div>
+        <div class="categoryPositionDivider w-full h-1px bg-#EBECEF mt-16px mb-12px"></div>
         <div class="li flex items-center justify-between">
-          <div class="left label">
-            {{ t('Current price') }}
+          <div class="left label flex-1 flex gap-4px flex-col">
+            <div class="label text-#6B7280 text-12px">资产价值</div>
+            <div class="value text-#111827 text-16px">{{ item.currency }} {{ addCommasToNumber(item.close *
+              item.userAssetsAmount) }} </div>
           </div>
-          <div class="right flex flex-shrink-0 items-center gap-12px text-align-left">
-            {{ item.currency }} {{ item.close }}
-          </div>
-        </div>
-        <div class="li flex items-center justify-between">
-          <div class="left label">
-            {{ t('Holding quantity') }}
-          </div>
-          <div class="right flex flex-shrink-0 items-center gap-12px text-align-left">
-            {{ item.userAssetsAmount }}
+          <div class="right flex-1 flex gap-4px flex-col flex-shrink-0  gap-12px text-align-right">
+            <div class="label text-#6B7280 text-12px">盈利</div>
+            <div class="value text-#111827 text-16px">{{ item.currency }} {{ addCommasToNumber(item.close *
+              item.userAssetsAmount) }} </div>
           </div>
         </div>
-        <div class="li flex items-center justify-between">
-          <div class="left label">
-            {{ t('Total price') }}
-          </div>
-          <div class="right flex flex-shrink-0 items-center gap-12px text-align-left">
-            {{ item.currency }} {{ addCommasToNumber(item.close * item.userAssetsAmount) }}
-          </div>
-        </div>
-        <div class="btn-box w-full flex justify-end">
+
+        <div class="btn-box w-full flex justify-end mt-6px">
           <van-button size="small" class="font-size-14!" @click="handleClickSubmit(item)">
             {{ t('Sell') }}
           </van-button>
         </div>
-        <div class="divdiver" />
       </div>
       <empty v-if="categoryPositionData && categoryPositionData.length === 0" />
     </div>
+    <div v-if="activeIndex === 1" class="indicator-td flex">
+      <discount :only-show-order="true" :category-id="activeName == '1' ? '200' : '201'" />
+    </div>
+    <div v-if="activeIndex === 2" class="indicator-td flex">
+      <fund :only-show-order="true" />
+    </div>
+    <div v-if="activeIndex === 3" class="indicator-td flex">
+      <ipo :only-show-order="true" />
+    </div>
+
 
     <van-popup v-model:show="showPicker" destroy-on-close round position="bottom" :safe-area-inset-bottom="true"
       z-index="10000">
@@ -343,10 +290,16 @@ function confirm() {
     .tab-item {
       font-size: 12px;
       transition: all 0.3s;
+      background: #F8F9FD;
+      color: #94A3B8;
+      font-weight: 700;
+      white-space: nowrap;
+
     }
 
     .active {
-      background: var(--btn-bg);
+      background: #F8F5FF;
+      color: #6B39F4;
     }
   }
 

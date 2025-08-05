@@ -29,14 +29,7 @@ const areaInfo = ref({
   key: "br",
   name: "",
 });
-const dark = ref<boolean>(isDark.value);
 
-watch(
-  () => isDark.value,
-  (newMode) => {
-    dark.value = newMode;
-  }
-);
 
 const postData = reactive({
   account: "",
@@ -66,10 +59,13 @@ const toRegister = () => {
     console.log(e);
   }
 };
-
+const toLogin = (type: number) => {
+  router.push({ name: "login", query: { type: type.toString() } });
+}
 const toForget = () => {
   try {
-    router.push("/forgot-password?forgotType=3");
+    // router.push("/forgot-password?forgotType=3");
+    router.push("/selectLoginType");
   } catch (e) {
     console.log(e);
   }
@@ -77,6 +73,7 @@ const toForget = () => {
 const getName = (val: any) => {
   areaInfo.value = val;
 };
+
 async function login(values: any) {
   if (!postData.password) {
     showToast("input.PleaseEnter");
@@ -109,49 +106,40 @@ async function login(values: any) {
 </script>
 
 <template>
-  <div class="m-x-a w-7xl">
-    <nationalityList ref="controlChildRef" :title="t('pick')" @getName="getName"></nationalityList>
-    <!-- <div class="title font-size-14 font-bold mt-24 mb-12 flex gap-12 items-center">
-      <div class="flex justify-center tab-item rounded-10px p-12" :class="{ 'active': postData.type == item.value }"
-        v-for="(item, index) in typeArr" :key="index" @click="postData.type = item.value">
-        {{ item.label }} </div>
-    </div> -->
-    <loginTab :list="typeArr" @change="changeIndex"></loginTab>
+  <div class="m-x-a w-full max-h-100vh">
+    <div class="top-image w-full min-h-366px bg-#D3C4FC">
 
-    <inputCom :label="t('input.Phone')" :placeholder="t('input.PleaseEnter')" v-model:value="postData.account"
-      :tips="''" v-show="postData.type == 'phone'">
-      <template #picker>
-        <div class="picker-box pr-8 mr-6 h-full flex items-center gap-8" @click="hanleClickAreaPick">
-          <div class="iti-flag mr-10" :class="areaInfo?.code" style="transform: scale(1.5)"></div>
-          <div class="num">+{{ areaInfo?.dialCode }}</div>
-        </div>
-      </template>
-    </inputCom>
-    <inputCom :label="t('login.email')" :placeholder="t('input.PleaseEnter')" v-model:value="postData.account"
-      :tips="''" v-show="postData.type == 'email'">
-    </inputCom>
-    <inputCom :label="t('login.password')" :placeholder="t('input.PleaseEnter')" v-model:value="postData.password"
-      :tips="''" :inputType="'password'">
-    </inputCom>
-    <van-button type="primary" class="login-btn" block @click="login({})">{{
-      t("login.login")
-      }}</van-button>
+    </div>
+    <div class="btn-box w-7xl m-x-a">
+      <van-button type="primary" color="#6b39f4" class="login-btn" block @click="toLogin(1)">{{
+        t("邮箱登陆")
+        }}</van-button>
+      <van-button type="primary" color="#6b39f4" class="login-btn" block @click="toLogin(2)">{{
+        t("手机登陆")
+        }}</van-button>
+      <van-button type="primary" plain color="#6b39f4" class="login-btn" block @click="login({})">{{
+        t("Continue with Apple")
+        }}</van-button>
+      <van-button type="primary" plain color="#6b39f4" class="login-btn" block @click="login({})">{{
+        t("Continue with Google")
+        }}</van-button>
 
-    <GhostButton block class="mt-24" @click="toRegister">
-      {{ $t("login.sign-up") }}
-    </GhostButton>
+      <div class="flex items-center mt-36px justify-center">
+        Don’t have an account? <span @click="toForget()" class="ml-4px color-#6b39f4">
+          {{ $t("Sign Up") }}
+        </span>
+      </div>
+    </div>
 
-    <GhostButton block @click="toForget">
-      {{ $t("login.forgot-password") }}
-    </GhostButton>
+
   </div>
 </template>
 
 <route lang="json5">
 {
-  name: 'login',
+  name: '',
   meta: {
-    i18n: 'menus.login'
+    i18n: ''
   },
 }
 </route>

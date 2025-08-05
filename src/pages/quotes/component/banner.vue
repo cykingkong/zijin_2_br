@@ -9,10 +9,10 @@
         <!-- <video  :autoplay="false" muted loop :webkit-playsinline="true"
           :playsinline="true"   /> -->
 
-        <video ref="videoRef" muted playsinline loop webkit-playsinline x5-playsinline="true" x-webkit-airplay="deny"
+        <!-- <video ref="videoRef" muted playsinline loop webkit-playsinline x5-playsinline="true" x-webkit-airplay="deny"
           disablePictureInPicture :controls="false" class="swipe-img h-full!" @click="togglePlay">
           <source src="@/assets/bannerVideo.mp4?playsinline=1" type="video/mp4">
-        </video>
+        </video> -->
 
 
       </van-swipe-item>

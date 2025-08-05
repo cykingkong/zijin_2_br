@@ -10,9 +10,11 @@ declare module 'vue' {
   export interface GlobalComponents {
     AreaPop: typeof import('./../components/areaPop.vue')['default']
     Charts: typeof import('./../components/charts/charts.vue')['default']
+    CodeInput: typeof import('./../components/CodeInput.vue')['default']
     Echarts: typeof import('./../components/echarts.vue')['default']
     Empty: typeof import('./../components/empty.vue')['default']
     GhostButton: typeof import('./../components/GhostButton.vue')['default']
+    Grid: typeof import('./../components/grid.vue')['default']
     InputCom: typeof import('./../components/inputCom.vue')['default']
     Kline: typeof import('./../components/Kline.vue')['default']
     KlineSvg: typeof import('./../components/klineSvg.vue')['default']

@@ -6,7 +6,10 @@ export const routeWhiteList: readonly string[] = [
   'optional',
   'news',
   'deal',
-  'IPO'
+  'IPO',
+  'portfolio',
+  'wallet',
+  'Market'
 ]
 export const navWhiteList: readonly string[] = [
   'home', // 首页
@@ -21,6 +24,12 @@ export const navWhiteList: readonly string[] = [
   'dividend',
   '/quotes/detail',
   '/quotes/accountChange',
-  'ipo'
-
+  'portfolio',
+  'ipo',
+  'login', // 登录页面
+  '/login/', // 登录主页面
+  'register',
+  '/buy/success',
+  'wallet',
+  'Market'
 ]

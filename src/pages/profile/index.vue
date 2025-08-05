@@ -9,18 +9,14 @@ import { clearToken, isLogin } from "@/utils/auth";
 import { getKfUrl } from "@/api/user";
 
 import UserInfo from "../../components/user-info.vue";
-import grid1 from "@/assets/grid/grid1.png";
-import grid2 from "@/assets/grid/grid2.png";
-import grid3 from "@/assets/grid/grid3.png";
-import grid4 from "@/assets/grid/grid4.png";
-import grid5 from "@/assets/grid/grid5.png";
-import icon1 from "@/assets/image/icon/icon1.png";
-import icon2 from "@/assets/image/icon/icon2.png";
-import icon3 from "@/assets/image/icon/icon3.png";
-import icon4 from "@/assets/image/icon/icon4.png";
-import icon5 from "@/assets/image/icon/icon5.png";
-import icon6 from "@/assets/image/icon/icon6.png";
-import icon7 from "@/assets/image/icon/icon7.png";
+import cell1 from '@/assets/cell/cell1.svg';
+import cell2 from '@/assets/cell/cell2.svg';
+import cell3 from '@/assets/cell/cell3.svg';
+import cell4 from '@/assets/cell/cell4.svg';
+import cell5 from '@/assets/cell/cell5.svg';
+import cell6 from '@/assets/cell/cell6.svg';
+import cell7 from '@/assets/cell/cell7.svg';
+import right from '@/assets/icon/right.svg'
 
 const userStore = useUserStore();
 const userInfo = computed(() => userStore.userInfo);
@@ -60,117 +56,68 @@ const toKfUrl = async () => {
     }, 40);
   }
 };
-const gridList = [
-  {
-    icon: grid1,
-    text: "安全",
-    i18n: "profile.safety",
-    url: "/profile/safetyPage/safety",
-  },
-  {
-    icon: grid2,
-    text: "修改密码",
-    i18n: "profile.changePassword",
-    url: "/profile/changePassword/changePassword",
-  },
-  {
-    icon: grid3,
-    text: "账变记录",
-    i18n: "profile.accountChange",
-    url: "/quotes/accountChange?type=1",
-  },
-  // {
-  //   icon: grid4,
-  //   text: '邀请推广'
-  // },
-  {
-    icon: grid5,
-    text: "身份验证",
-    i18n: "profile.certificationCenter",
-    url: "/certificationCenter",
-  },
-];
+
 const cellList = [
   {
-    icon: icon1,
-    text: "语言",
-    i18n: "profile.language",
+    label: 'Account Details',
+    cell: [
+      {
+        text: 'Identify Verification',
+        tips: 'Your verification status',
+        icon: cell1,
+      },
+      {
+        text: 'Bank Account',
+        tips: 'Manage your bank account',
+        icon: cell2,
+        url: '/profile/bankAccount'
+      },
+
+    ]
   },
   {
-    icon: icon2,
-    text: "身份认证",
-    i18n: "profile.certificationCenter",
+    label: 'Settings',
+    cell: [
+      {
+        text: 'Push Notifications',
+        tips: 'Notification preferences',
+        icon: cell3,
+      },
+      {
+        text: 'Languange',
+        tips: 'English (USA)',
+        icon: cell4,
+      },
+    ]
+  },
+  {
+    label: 'Others',
+    cell: [
+      {
+        text: 'Help Center',
+        tips: 'Get supports',
+        icon: cell5,
+      },
+      {
+        text: 'Terms & Conditions',
+        tips: 'Our terms & conditions',
+        icon: cell6,
+      },
+      {
+        text: 'Privacy Policy',
+        tips: 'Our privacy policy',
+        icon: cell7,
+      },
+    ]
   },
 
-  {
-    icon: icon4,
-    text: "划转",
-    i18n: "profile.conversion",
-  },
-  {
-    icon: icon5,
-    text: "添加收款方式",
-    i18n: "profile.paymentMethod",
-  },
-  {
-    icon: icon5,
-    text: "充值记录",
-    i18n: "profile.rechargeRecord",
-  },
-  {
-    icon: icon5,
-    text: "提现记录",
-    i18n: "profile.withdrawRecord",
-  },
-  {
-    icon: icon5,
-    text: "资产流转",
-    i18n: "profile.assetsLog",
-  },
+]
+const handleClickCell = (item: any) => {
 
-  // {
-  //   icon: icon7,
-  //   text: "帮助中心",
-  //   i18n: "profile.helpCenter",
-  // },
-  {
-    icon: icon6,
-    text: "关于我们",
-    i18n: "profile.aboutUs",
-  },
-];
-const handleClickCell = (index: any) => {
-  console.log(index, "index");
-  switch (index) {
-    case 0:
-      showLanguagePicker.value = true;
-      break;
-    case 1:
-      router.push("/certificationCenter");
-      break;
-    case 2:
-      router.push("/conversion"); // 划转
-      break;
-    case 3:
-      router.push("/profile/payMentMethod/list");
-      break;
-    case 4:
-      router.push("/deal/orderList?type=1");
-      break;
-    case 5:
-      router.push("/deal/orderList?type=2");
-      break;
-    case 6:
-      router.push("/quotes/accountChange?type=2");
-      break;
-    // case 7:
-    //   router.push("/helpCenter");
-    //   break;
-    case 7:
-      router.push("/aboutUs");
-
-      break;
+  if (item && item.url) {
+    router.push(item.url)
   }
+
 };
 const handleClickGrid = (index: any) => {
   router.push(gridList[index].url);
@@ -191,13 +138,51 @@ onMounted(async () => {
 
 <template>
   <div class="myself-index">
-    <VanNavBar title="" :fixed="true" clickable placeholder :left-arrow="false" @click-right="toKfUrl">
+    <!-- <VanNavBar title="" :fixed="true" clickable placeholder :left-arrow="false" @click-right="toKfUrl">
       <template #right>
         <van-icon name="service-o" class="icon" />
       </template>
-    </VanNavBar>
+</VanNavBar> -->
+    <div class="h-265px w-full top-info">
+      <div class="w-full h-56px mb-4px flex items-center justify-between px-24px">
+        <div></div>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M13.26 3.60022L5.05 12.2902C4.74 12.6202 4.44 13.2702 4.38 13.7202L4.01 16.9602C3.88 18.1302 4.72 18.9302 5.88 18.7302L9.1 18.1802C9.55 18.1002 10.18 17.7702 10.49 17.4302L18.7 8.74022C20.12 7.24022 20.76 5.53022 18.55 3.44022C16.35 1.37022 14.68 2.10022 13.26 3.60022Z"
+            stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M11.89 5.0498C12.32 7.8098 14.56 9.9198 17.34 10.1998" stroke="white" stroke-width="1.5"
+            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M3 22H21" stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </div>
+      <div class="info flex flex-col items-center justify-center">
+        <div class="mid w-88 h-88 rounded-full overflow-hidden bg-#fff"></div>
+        <div class="id text-20px text-#fff mt-16px">UID:{{ userInfo.userId }}</div>
+        <div class="name text-14px text-#B59CFA mt-16px ">{{ userInfo.username }}</div>
+      </div>
+    </div>
+    <div class="setting-list p-24px">
+      <div class="setting-box" v-for="(item, index) in cellList" :key="index">
+        <div class="setting-label mb-16px text-#0F172A font-700 lett">{{ item.label }}</div>
+        <div
+          class="cell-item px-12px w-full rounded-12px border-1px border-#E2E8F0 border-solid h-72px flex items-center justify-between mb-16px"
+          v-for="(cell, k) in item.cell" :key="k" @click="handleClickCell(cell)">
+          <div class="left flex items-center h-40 gap-12px">
+            <img :src="cell.icon" class="w-40 h-40 flex-shrink-0 block" alt="">
+            <div class="info h-full flex flex-col justify-between">
+              <div class="t">{{ cell.text }}</div>
+              <div class="t2 text-#64748B text-10px">{{ cell.tips }}</div>
+            </div>
+          </div>
+          <div class="r flex items-center">
+            <img :src="right" alt="" class="block w-20 h-20">
 
-    <section class="myself flex flex-col">
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <section class="myself flex flex-col">
       <UserInfo :userInfo="userInfo" />
       <van-cell-group :title="t('profile.Quick Access')" />
       <van-grid :border="false" center>
@@ -225,7 +210,7 @@ onMounted(async () => {
         </van-button>
         <div class="pt-24 text-align-center text-gray-400 text-12">v1.0.12</div>
       </div>
-    </section>
+    </section> -->
     <!-- <section class="unLogin px-12" >
       <div class="flex flex-col items-center">
         <span class="text-12 mt-8">您还未登录</span>
@@ -236,10 +221,7 @@ onMounted(async () => {
         </van-button>
       </div>
     </section> -->
-    <van-popup v-model:show="showLanguagePicker" position="bottom">
-      <van-picker v-model="languageValues" :columns="languageColumns" @confirm="onLanguageConfirm"
-        @cancel="showLanguagePicker = false" />
-    </van-popup>
+
   </div>
 </template>
 
@@ -256,6 +238,17 @@ onMounted(async () => {
 <style lang="less" scoped>
 .icon {
   color: var(--van-text);
+}
+
+.top-info {
+  background: url('../../assets/portfolio-bg.jpg') no-repeat;
+  background-size: cover;
+
+  background-position: center;
+}
+
+.setting-label {
+  letter-spacing: 0.4px;
 }
 
 .myself-index {

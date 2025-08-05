@@ -7,39 +7,65 @@
             </template>
         </VanNavBar>
         <template v-if="!onlyShowOrder">
-            <van-tabs v-model:active="active" @change="changeActive">
-                <!-- 折扣股玩法 -->
-                <van-tab :title="t('discount list')">
-                    <div class="discont-list  flex flex-col pb-40">
+
+            <!-- 自定义Tab组件 -->
+            <div class="custom-tabs">
+                <div class="tab-container">
+                    <div class="tab-item" :class="{ active: active === 0 }" @click="changeActive(0)">
+                        <svg class="tab-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2 2H6V6H2V2Z" fill="currentColor" />
+                            <path d="M10 2H14V6H10V2Z" fill="currentColor" />
+                            <path d="M2 10H6V14H2V10Z" fill="currentColor" />
+                            <path d="M10 10H14V14H10V10Z" fill="currentColor" />
+                        </svg>
+                        <span class="tab-text">{{ t('discount list') }}</span>
+                    </div>
+                    <div class="tab-item" :class="{ active: active === 1 }" @click="changeActive(1)">
+                        <svg class="tab-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2 12L6 8L10 10L14 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                            <path d="M14 6L12 4L10 6L14 6Z" fill="currentColor" />
+                        </svg>
+                        <span class="tab-text">{{ t('Order List') }}</span>
+                    </div>
+                </div>
+
+                <!-- Tab内容 -->
+                <div v-if="active === 0" class="tab-content">
+                    <div class="discont-list flex flex-col pb-40">
                         <discont-item :item="item" v-for="(item, index) in list" :key="index"
                             @handleClickBtn="handleClickBtn"></discont-item>
-                        <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
-                            v-show="skeleton && list.length == 0" v-for="i in 5" :key="i"></div>
+                        <div class="skeleton d w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
+                            :class="listSkeleton && list.length == 0" v-show="listSkeleton && list.length == 0"
+                            v-for="i in 5" :key="i"></div>
                         <empty v-if="list.length == 0 && !skeleton" :noTips="true"></empty>
                         <LoadMore :status="listStatus" @load-more="loadMore" />
                     </div>
-                </van-tab>
-                <van-tab :title="t('Order List')">
+                </div>
+                <div v-if="active === 1" class="tab-content">
                     <div class="discont-list flex flex-col pb-40">
                         <discont-item :item="item" v-for="(item, index) in orderList" :key="index"
                             @handleClickBtn="handleClickBtn" :item-type="'order'"></discont-item>
-                        <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
-                            v-show="skeleton && orderList.length == 0" v-for="i in 5" :key="i">
+                        <div class="skeleton o w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
+                            :class="orderSkeleton && orderList.length == 0"
+                            v-show="orderSkeleton && orderList.length == 0" v-for="i in 5" :key="i">
                         </div>
-                        <empty v-if="orderList.length == 0 && !skeleton" :noTips="true"></empty>
+                        <empty v-if="orderList.length == 0 && !orderSkeleton" :noTips="true"></empty>
                         <LoadMore :status="orderLoadStatus" @load-more="loadMore" />
                     </div>
-                </van-tab>
-            </van-tabs>
+                </div>
+            </div>
         </template>
         <template v-else>
             <div class="discont-list flex flex-col pb-40">
                 <discont-item :item="item" v-for="(item, index) in orderList" :key="index"
                     @handleClickBtn="handleClickBtn" :item-type="'order'"></discont-item>
-                <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
-                    v-show="skeleton && orderList.length == 0" v-for="i in 5" :key="i">
+                <div class="skeleton else w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
+                    v-show="orderSkeleton && orderList.length == 0" v-for="i in 5" :key="i">
                 </div>
-                <empty v-if="orderList.length == 0 && !skeleton" :noTips="true"></empty>
+                <empty v-if="orderList.length == 0 && !orderSkeleton" :noTips="true"></empty>
                 <LoadMore :status="orderLoadStatus" @load-more="loadMore" />
             </div>
         </template>
@@ -76,11 +102,13 @@ const categoryId = ref<any>('')
 const orderList = ref([])
 
 watch(() => props.categoryId, (newV) => {
-
     if (newV && categoryId.value != newV && categoryId.value != '') {
         categoryId.value = newV
         orderList.value = []
-        getOrderList()
+        // 只有在onlyShowOrder模式下才调用getOrderList
+        if (props.onlyShowOrder) {
+            getOrderList()
+        }
         return
     }
     categoryId.value = newV
@@ -91,6 +119,8 @@ const active = ref(0)
 const list = ref([])
 const popType = ref('buy') // buy:购买  sell:出售
 const skeleton = ref(false)
+const listSkeleton = ref(false)
+const orderSkeleton = ref(false)
 const page = reactive({
     pageIndex: 1,
     pageSize: 4
@@ -102,17 +132,22 @@ const orderLoadStatus = ref(1) // 1:加载中 2:加载完成 3:没有更多数�
 const resetPage = () => {
     page.pageIndex = 1
 }
+
+
 const bottomPopRef = ref()
 const getDisountList = async () => {
     // resetPage()
     listStatus.value = 1
+    if (page.pageIndex == 1) {
+        listSkeleton.value = true
+    }
     discountList({
         ...page,
         categoryId: categoryId.value
     }).then(res => {
         if (!res.data.rows) {
             listStatus.value = 3;
-            skeleton.value = false;
+            listSkeleton.value = false;
 
             return
         }
@@ -139,7 +174,7 @@ const getDisountList = async () => {
         }
         if (res.data.total <= list.value.length) {
             listStatus.value = 3
-            skeleton.value = false;
+            listSkeleton.value = false;
             return
         }
         // list.value = res.data.rows.map((e) => {
@@ -152,7 +187,7 @@ const getDisountList = async () => {
         //         ).toFixed(2)
         //     }
         // }) || []
-        skeleton.value = false;
+        listSkeleton.value = false;
         listStatus.value = 2
 
 
@@ -160,14 +195,14 @@ const getDisountList = async () => {
 }
 const getOrderList = async () => {
     orderLoadStatus.value = 1
-    skeleton.value = true
+    orderSkeleton.value = true
     discountOrderList({
         ...page,
         categoryId: categoryId.value
     }).then(res => {
         if (!res.data.rows) {
             orderLoadStatus.value = 3;
-            skeleton.value = false;
+            orderSkeleton.value = false;
             return
         }
         if (page.pageIndex == 1) {
@@ -219,15 +254,15 @@ const getOrderList = async () => {
         }
         if (res.data.total <= orderList.value.length) {
             orderLoadStatus.value = 3
-            skeleton.value = false;
+            orderSkeleton.value = false;
             return
         }
-        skeleton.value = false;
+        orderSkeleton.value = false;
         orderLoadStatus.value = 2
     })
 }
 const store = useStore()
-watch(() => store.getklineList, (newV) => {
+watch(() => store.klineList, (newV) => {
     if (newV && list.value.length) {
         list.value.forEach(el => {
             let listItem = newV.find((item: any) => {
@@ -263,12 +298,14 @@ watch(() => store.getklineList, (newV) => {
 })
 const changeActive = (val: any) => {
     resetPage()
-    skeleton.value = true
+    active.value = val
     if (val) {
         orderList.value = []
+        listSkeleton.value = false // 隐藏列表骨架屏
         getOrderList()
     } else {
         list.value = []
+        orderSkeleton.value = false // 隐藏订单骨架屏
         getDisountList()
     }
 }
@@ -351,6 +388,11 @@ function onBack() {
 const route = useRoute()
 
 onMounted(() => {
+    // 确保skeleton初始状态为false
+    skeleton.value = false
+    listSkeleton.value = false
+    orderSkeleton.value = false
+
     if (route.query.categoryId) {
         categoryId.value = route.query.categoryId
     }
@@ -391,6 +433,56 @@ onUnmounted(() => {
 
     100% {
         opacity: 0.7;
+    }
+}
+
+// 自定义Tab样式
+.custom-tabs {
+    .tab-container {
+        display: flex;
+        background: #F8F9FD;
+        border-radius: 8px;
+        padding: 4px;
+        margin: 16px 0;
+        gap: 4px;
+    }
+
+    .tab-item {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background: transparent;
+        color: #94A3B8;
+
+        .tab-icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        .tab-text {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        &:hover {
+            background: rgba(107, 57, 244, 0.1);
+        }
+
+        &.active {
+            background: white;
+            color: #1F2937;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+    }
+
+    .tab-content {
+        margin-top: 16px;
     }
 }
 </style>

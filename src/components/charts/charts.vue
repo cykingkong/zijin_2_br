@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <div class="time-select" style="color: white">
-      <div class="my-12">
-        <div v-for="(item, index) in times" :key="index" class="font-size-12" @click="setKline(item, index)"
+  <div class="chart-container">
+    <div class="time-select">
+      <div class="time-buttons">
+        <div v-for="(item, index) in times" :key="index" class="time-btn" @click="setKline(item, index)"
           :class="{ active: timesIndex === index }">
           {{ item.text }}
         </div>
@@ -38,16 +38,11 @@ const props = defineProps({
   // },
 });
 const times = ref([
-  { text: "Time", id: 0, key: "area" },
-  // { text: '1M', id: 1, key: 'candle_solid' },
-  // { text: '5m', id: 2, key: 'candle_solid' },
-  // { text: '15m', id: 3, key: 'candle_solid' },
-  // { text: '30m', id: 4, key: 'candle_solid' },
-  // { text: '60m', id: 5, key: 'candle_solid' },
-  // { text: '4h', id: 6, key: 'candle_solid' },
-  { text: "1D", id: 7, key: "candle_solid" },
-  { text: "1W", id: 6, key: "candle_solid" },
-  { text: "1MO", id: 7, key: "candle_solid" },
+  { text: "24H", id: 0, key: "area" },
+  { text: "1W", id: 1, key: "candle_solid" },
+  { text: "1M", id: 2, key: "candle_solid" },
+  { text: "1Y", id: 3, key: "candle_solid" },
+  { text: "ALL", id: 4, key: "candle_solid" },
 ]);
 const mainIndicators = ref([
   { text: "MA", id: "candle_pane", type: "ma" },
@@ -60,15 +55,10 @@ const mainIndicators = ref([
 ]);
 const time = ref([
   "1min",
-  // '1min',
-  // "5min",
-  // '15min',
-  // '30min',
-  // '60min',
-  // '4hour',
-  "1day",
   "1week",
   "1mon",
+  "1year",
+  "all",
 ]);
 const timesIndex = ref(0);
 const klineType = ref([]);
@@ -85,7 +75,7 @@ const initChart = () => {
   chart.value = init("k-line-chart");
   chart.value.setPriceVolumePrecision(4);
   marketkline();
-  chart.value.setStyles(theme("link"));
+  chart.value.setStyles(theme("light"));
   chart.value.setStyles({
     candle: {
       type: times.value[timesIndex.value].key,
@@ -205,39 +195,49 @@ onMounted(() => {
 </script>
 
 <style lang="less" scoped>
+.chart-container {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+}
+
 .time-select {
   width: 100%;
-  white-space: nowrap;
-  display: -webkit-box;
-  overflow-x: scroll;
-  -webkit-overflow-scrolling: touch;
-  padding: 20rpx 0;
+  margin-bottom: 16px;
 
-  >div {
+  .time-buttons {
     display: flex;
-    align-items: center;
+    gap: 8px;
+    justify-content: center;
 
-    .active {
-      background: var(--btn-bg);
-      color: white;
-    }
+    .time-btn {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      color: #666;
+      background: transparent;
+      border: 1px solid #ddd;
+      cursor: pointer;
+      transition: all 0.2s ease;
 
-    >div {
-      margin: 0 10px;
-      padding: 4px 10px;
-      border-radius: 10px;
-      color: var(--text-color);
+      &:hover {
+        background: rgba(107, 57, 244, 0.1);
+        border-color: #6B39F4;
+      }
+
+      &.active {
+        background: #6B39F4;
+        border-color: #6B39F4;
+        color: white;
+      }
     }
   }
 }
 
-.time-select::-webkit-scrollbar {
-  display: none;
-}
-
 .content {
   width: 100%;
-  height: 450px;
+  height: 400px;
+  border-radius: 4px;
 }
 
 .k-line-btn {
