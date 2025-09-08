@@ -5,16 +5,19 @@
       v-if="form.type == 'email'">
     </inputCom>
 
-    <inputCom :label="t('input.Phone')" :placeholder="t('input.PleaseEnter')" v-model:value="form.username" :tips="''"
-      v-if="form.type == 'phone'">
-      <template #picker>
-        <div class="picker-box pr-8 mr-6  h-full flex items-center gap-8" @click="hanleClickAreaPick">
-          <!-- <img :src="icon1" alt="" class="w16 h16"> -->
-          <div class="iti-flag mr-10" :class="areaInfo?.code" style="transform: scale(1.2)"></div>
-          <div class="num">+{{ areaInfo?.dialCode }}</div>
-        </div>
-      </template>
-    </inputCom>
+
+    <div class="phone-input flex items-center gap-12px" v-if="form.type == 'phone'">
+      <div class="picker flex-shrink-0 h-56px bg-#F8F9FD rounded-12px flex items-center justify-center px-16"
+        @click="hanleClickAreaPick">
+        <div class="iti-flag mr-10 rounded-full" :class="areaInfo?.code" style="transform: scale(1.5)"></div>
+        <div class="num">+{{ areaInfo?.dialCode }}</div>
+      </div>
+      <inputCom :label="t('input.Phone')" :placeholder="t('input.PleaseEnter')" v-model:value="form.phone" :tips="''"
+        class="flex-1 w-full">
+      </inputCom>
+    </div>
+
+
     <inputCom :label="t('input.NewPassword')" v-model:value="form.password" :placeholder="t('input.PleaseEnter')">
     </inputCom>
     <inputCom :label="t('input.ConfirmPassword')" v-model:value="form.passwordConfirmation"
@@ -43,7 +46,7 @@ import { forgetPassword, sendCode } from "@/api/user"
 import loginTab from "@/components/tab.vue";
 const { t } = useI18n()
 const form = reactive({
-  passwordType: 3,
+
   password: '',
   passwordConfirmation: '',
   type: 'phone',
@@ -143,9 +146,10 @@ const onSubmit = async () => {
 const getName = (val: any) => {
   areaInfo.value = val
 }
-onMounted(() => {
-  if (route.query.forgotType) {
-    form.passwordType = Number(route.query.forgotType)
+onMounted(async () => {
+  if (route.query.type) {
+    form.type = route.query.type as string
+    await userStore.info()
   }
 })
 </script>
@@ -164,5 +168,33 @@ onMounted(() => {
   padding: 8px;
   border-radius: 10px;
   border: 1px solid #868c9a;
+}
+
+.link {
+  color: #1678ff;
+}
+
+.steps-item,
+.line {
+  background: #868c9a;
+}
+
+.picker-box {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 16px;
+    background: #868c9a;
+  }
+}
+
+.green {
+  background: #06cda5;
 }
 </style>

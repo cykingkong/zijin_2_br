@@ -2,21 +2,22 @@
     <div class="discont-content px-12 w-full ">
         <VanNavBar title="" :fixed="true" clickable :left-arrow="true" @click-left="onBack" z-index="999">
             <template #title>
-                <div class="flex flex-items-center gap-6 font-size-18px font-bold">Buy {{
-                    info?.tradingInfo?.baseAssetInfo?.symbol || ''
-                }}</div>
+                <div class="flex flex-items-center gap-6 font-size-18px font-bold">{{ type == '0' ? t('Buy') : t('Sell')
+                    }} {{
+                        info?.name || ''
+                    }}</div>
             </template>
         </VanNavBar>
-        <div class="info mt-32" v-if="info && info.tradingInfo">
+        <div class="info mt-32" v-if="info && info">
             <div class="mid-content flex items-center mx-auto items-center justify-center gap-8px">
 
-                <img :src="info.tradingInfo?.baseAssetInfo?.logo" class="block w-45 h-45 rounded-full" alt="" />
-                <div class="name font-size-18px"> 1 {{ info?.tradingInfo?.baseAssetInfo?.symbol || '' }} = </div>
+                <img :src="info.logo" class="block w-45 h-45 rounded-full" alt="" />
+                <div class="name font-size-18px"> 1 {{ info?.name || '' }} = </div>
                 <div class="price">
-                    <div class="price-1 font-size-16px text-#0F172A ">{{ info?.tradingInfo?.baseAssetInfo.unit || '' }}
+                    <div class="price-1 font-size-16px text-#0F172A ">{{ info?.close_unit || 'MX$' }}
                         {{
-                            addCommasToNumber(info?.discountPrice) || '' }}</div>
-                    <div class="price-1 font-size-14px text-#00000033 ">≈ $123</div>
+                            buyType == 'stock' ? addCommasToNumber(info?.close) : addCommasToNumber(info?.price) || '' }}
+                    </div>
                 </div>
             </div>
             <div class="min-count text-#0F172A font-size-40px mx-a text-center mt-57px overflow-y-auto">
@@ -25,10 +26,14 @@
             <div class="balance flex items-start  justify-center gap-8px text-#64748B mt-8">
                 <div class="label text-14px ">Balance</div>
                 <div class="value">
-                    <div class="v1 text-14px">{{ info?.unit }} 12312312</div>
-                    <div class="v1 text-12px text-#00000033">≈{{ info?.unit }} 1231231</div>
+                    <div class="v1 text-14px">MX$ {{ addCommasToNumber(userInfo.user_balance) || 0 }}</div>
                 </div>
             </div>
+            <div class="tips text-#64748B text-12px text-center" v-if="info.min">{{ t('Minimum purchase amount is ') +
+                info.min
+            }}
+            </div>
+
         </div>
         <div class="input-box px-12 mt-111px">
             <div class="keypad">
@@ -60,19 +65,27 @@
                 </div>
             </div>
         </div>
-        <van-button type="primary" class="h-56px" color="#6B39F4" block>
-            Buy {{ info?.unit }}{{ addCommasToNumber(count * info?.discountPrice) }}
+        <van-button type="primary" class="h-56px" color="#6B39F4" block @click="handleClickBtn">
+            {{ type == '0' ? t('Buy') : t('Sell')
+            }} {{ info?.unit || 'MX$ ' }}{{ buyType == 'stock' ? addCommasToNumber(count * info?.close) :
+                addCommasToNumber(count * info?.price) }}
         </van-button>
     </div>
 </template>
 <script setup lang="ts">
 import { addCommasToNumber } from "@/utils/tool";
 import { ref, onMounted, watch } from "vue";
+import { assetsDetail, buySell } from '@/api/stock'
+import { discountOrderBuy } from '@/api/bond'
 import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores";
+const { t } = useI18n();
 
 const info = ref<any>();
 const count = ref(0)
 const displayValue = ref('');
+const userStore = useUserStore();
+const userInfo = computed(() => userStore.userInfo);
 
 // 数字键盘布局数据
 const keypadRows = [
@@ -94,12 +107,49 @@ const appendNumber = (num: string) => {
 };
 
 const deleteLastChar = () => {
+    console.log(count.value, displayValue.value)
     if (displayValue.value.length > 0) {
         displayValue.value = displayValue.value.slice(0, -1);
         count.value = parseFloat(displayValue.value) || 0;
+        console.log(count.value, displayValue.value)
+
     }
 };
-
+const handleClickBtn = async () => {
+    if (buyType.value == 'stock') {
+        const { data, code } = await buySell({
+            "type": type.value == 0 ? "buy" : "sell",
+            "symbol": info.value.symbol,
+            "number": count.value
+        })
+        if (code == 200) {
+            router.push({
+                path: '/buy/success',
+                query: {
+                    buyType: 'stock',
+                    transaction: data.transaction
+                }
+            })
+        }
+        return
+    }
+    if (buyType.value == 'discount') {
+        const { data, code } = await discountOrderBuy({
+            id: info.value.id,
+            number: count.value
+        })
+        if (code == 200) {
+            localStorage.setItem('successInfo', JSON.stringify(data))
+            router.push({
+                path: '/buy/success',
+                query: {
+                    buyType: 'discount'
+                }
+            })
+        }
+    }
+}
+const buyType = ref()
 // 更新info的函数
 const updateInfo = () => {
     const dataInfo = localStorage.getItem("dataInfo");
@@ -114,15 +164,37 @@ const updateInfo = () => {
     } else {
         info.value = null;
     }
+    count.value = info.value.min || '0'
+    displayValue.value = info.value.min || '0'
+    console.log(count.value, displayValue.value, info.value)
 };
-
-onMounted(() => {
+const route = useRoute();
+const getDetail = async (params) => {
+    const { data, code } = await assetsDetail(params)
+    if (code == 200) {
+        info.value = data
+        count.value = 1
+        displayValue.value = '1'
+    }
+}
+const type = ref()
+onMounted(async () => {
     // 初始获取localStorage中的dataInfo
-    updateInfo();
 
+    if (route.query.buyType == 'stock') {
+        getDetail({ symbol: route.query.symbol })
+        type.value = route.query.type
+    }
+    if (route.query.buyType == 'discount') {
+        updateInfo();
+        type.value = 0
+    }
+    buyType.value = route.query.buyType
+
+    await userStore.info()
     // 监听localStorage变化
     window.addEventListener('storage', (e) => {
-        if (e.key === 'dataInfo') {
+        if (e.key === 'dataInfo' && route.query.buyType == 'discount') {
             updateInfo();
         }
     });

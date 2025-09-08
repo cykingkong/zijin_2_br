@@ -19,5 +19,14 @@ export function assetsList(params): Promise<any> {
     return request.get('/app-api/market/assetsList', { params })
 }
 export function getCategoryPosition(params): Promise<any> {
-    return request.get('/app-api/gameplay/swap_api/getCategoryPosition', { params })
+    return request.get('/api/stock/orderList', { params })
+}
+export function userOrderList(params, showLoading = true): Promise<any> {
+    return request.get('/api/stock/userOrderList', {
+        params,
+        showLoading
+    })
+}
+export function assetsSearch(params): Promise<any> {
+    return request.get('/api/stock/assetsSearch', { params })
 }

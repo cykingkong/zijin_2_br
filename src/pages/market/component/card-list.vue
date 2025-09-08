@@ -15,46 +15,12 @@
         <!-- 股票卡片容器 -->
         <div class="cards-container flex gap-16px overflow-x-auto" ref="cardsContainer" @scroll="handleScroll">
             <!-- 股票卡片 1 -->
-            <div class="stock-card min-w-212px bg-white border-1px border-#E2E8F0 border-solid rounded-16px p-20px border border-#E5E7EB"
-                v-for="item in 5" :key="item">
-                <div class="card-header flex items-start justify-between mb-16px">
-                    <div class="left flex items-center gap-12px">
-                        <!-- S&P Logo -->
-                        <div
-                            class="logo w-40px h-40px rounded-full bg-#DC2626 flex items-center justify-center flex-shrink-0">
-                            <div class="text-white font-700 text-14px leading-1">
-                                <div>S</div>
-                                <div class="w-full h-1px bg-white my-1px"></div>
-                                <div>P</div>
-                            </div>
-                        </div>
-                        <!-- 指数信息 -->
-                        <div class="index-info">
-                            <div class="symbol text-14px font-700 color-#374151">SNP500</div>
-                            <div class="name text-10px color-#6B7280">S&P 500 Index</div>
-                        </div>
-                    </div>
+            <div class="stock-card min-w-270px bg-white   h-165px border border-#E5E7EB overflow-hidden"
+                v-for="(item, index) in props.list" :key="index" @click-="handleClickCard(item)">
 
-                </div>
-                <div class="flex ">
-                    <div class="price-info">
-                        <div class="current-price text-14px font-700 color-#374151 mb-4px">$37,31</div>
-                        <div class="change flex items-center gap-4px">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <path d="M8 4L12 8L8 12" stroke="#10B981" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                                <path d="M12 8H4" stroke="#10B981" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg>
-                            <span class="text-14px font-500 color-#10B981">1.55%</span>
-                        </div>
-                    </div>
-                    <!-- 价格图表 -->
+                <miniChart :symbol="item.tradingview_name" :chartId="index + ''"></miniChart>
 
-                    <div class="chart">
 
-                    </div>
-                </div>
                 <!-- 价格信息 -->
 
             </div>
@@ -67,7 +33,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, nextTick } from "vue"
 const { proxy } = getCurrentInstance()!
-
+import miniChart from "@/components/miniChart.vue"
 // 响应式数据
 const stockData = ref([
     {
@@ -78,7 +44,13 @@ const stockData = ref([
         isPositive: true
     }
 ])
-
+const props = defineProps({
+    list: {
+        type: Array<any>,
+        default: () => []
+    }
+})
+const router = useRouter()
 // 滚动条相关
 const cardsContainer = ref<HTMLElement>()
 const scrollbarTrack = ref<HTMLElement>()
@@ -132,7 +104,14 @@ const handleScroll = () => {
     const maxThumbPosition = trackWidth - thumbWidth
     thumbPosition.value = scrollRatio * maxThumbPosition
 }
-
+const handleClickCard = (item: any) => {
+    router.push({
+        path: '/quotes/detail',
+        query: {
+            symbol: item.symbol
+        }
+    })
+}
 // 组件挂载后初始化
 onMounted(() => {
     nextTick(() => {

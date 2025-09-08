@@ -170,7 +170,6 @@ const setKline = (item, index) => {
   childInte();
 };
 const close = () => {
-  console.log(ws, ws && JSON.stringify(listData), 'chasclose()')
   if (ws) {
     ws.send({
       action: "UnSubscribe",

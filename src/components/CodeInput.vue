@@ -165,15 +165,15 @@ defineExpose({
 
 .code-input-wrapper {
     display: flex;
-    gap: 12px;
-    justify-content: center;
+    gap: 8px;
+    justify-content: justify-between;
     align-items: center;
     position: relative;
 }
 
 .code-input-item {
-    width: 56px;
-    height: 56px;
+    width: 48px;
+    height: 48px;
     border: 1px solid #E2E8F0;
     border-radius: 8px;
     display: flex;
@@ -250,21 +250,5 @@ defineExpose({
     border-color: #CBD5E1;
     cursor: not-allowed;
     opacity: 0.6;
-}
-
-/* 响应式设计 */
-@media (max-width: 480px) {
-    .code-input-wrapper {
-        gap: 8px;
-    }
-
-    .code-input-item {
-        width: 56px;
-        height: 56px;
-    }
-
-    .code-text {
-        font-size: 16px;
-    }
 }
 </style>

@@ -6,15 +6,11 @@ import grid2 from '@/assets/grid/grid2.jpg'
 import grid3 from '@/assets/grid/grid3.jpg'
 import grid4 from '@/assets/grid/grid4.jpg'
 import Indicator from "@/pages/deal/components/indicator.vue";
+import boxBg from '@/assets/image/box-bg.png'
 
-import tabItem from './quotes/component/tab-item.vue'
-import Banner from './quotes/component/banner.vue'
-import Notice from './quotes/component/notice.vue'
 import Grid from '@/components/grid.vue'
+import axios from 'axios'
 
-import hotmap from './quotes/component/hotmap.vue'
-import TopStories from './quotes/component/topStories.vue'
-import StockMarketWidget from './quotes/component/stockMarketWidget.vue'
 import { useUserStore } from '@/stores'
 import { navTitleStore } from '@/stores/index'
 
@@ -23,6 +19,7 @@ import { appCharts, indexInfo, market } from '@/api/market'
 import { getKfUrl } from '@/api/user'
 import local from '@/utils/local'
 import { closeToast, showLoadingToast } from 'vant'
+import { addCommasToNumber } from '@/utils/tool'
 
 const { t } = useI18n()
 const activeName = ref('')
@@ -30,7 +27,17 @@ const navStore = navTitleStore()
 
 const store = useStore()
 const requestCount = ref(0)
+const getStockData = async () => {
+  try {
+    const response = await axios.get('https://stockanalysis.com/api/charts/a/bvmf-vale3/stream/c?chartiq=true&start=2025-08-13&end=2025-08-14&interval=1min')
 
+    console.log('股票数据:', response.data)
+    return response.data
+  } catch (error) {
+    console.error('请求失败:', error)
+  }
+}
+getStockData()
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
 const marketData = ref<any>([])
@@ -121,27 +128,28 @@ async function getChartsDesc(type) {
   }
 }
 function init() {
-  indexInfo().then((res) => {
-    indexInfoData.value = res.data
-    if (res.data.notice) {
-      indexInfoData.value.noticeContent = getContent(indexInfoData.value.notice)
-      const readedNotice = local.getlocal('readedNotice')
-      if (!readedNotice) {
-        local.setlocal('readedNotice', '0')
-        showDatePicker.value = true
-      }
-      else {
-        if (readedNotice === '0') {
-          showDatePicker.value = true
-        }
-      }
-    }
-  })
-  getMarketInfo({})
-  getChartsDesc(1)
-  getMarketIndex({
-    categoryId: 500,
-  })
+  userStore.info()
+  // indexInfo().then((res) => {
+  //   indexInfoData.value = res.data
+  //   if (res.data.notice) {
+  //     indexInfoData.value.noticeContent = getContent(indexInfoData.value.notice)
+  //     const readedNotice = local.getlocal('readedNotice')
+  //     if (!readedNotice) {
+  //       local.setlocal('readedNotice', '0')
+  //       showDatePicker.value = true
+  //     }
+  //     else {
+  //       if (readedNotice === '0') {
+  //         showDatePicker.value = true
+  //       }
+  //     }
+  //   }
+  // })
+  // getMarketInfo({})
+  // getChartsDesc(1)
+  // getMarketIndex({
+  //   categoryId: 500,
+  // })
   // initKfUrl();
 }
 const page = reactive({
@@ -330,10 +338,39 @@ onMounted(() => {
           stroke="#94A3B8" stroke-width="1.5" stroke-miterlimit="10" />
       </svg>
     </header>
-    <div class="w-full px-24px mt-8">
-      <img src="@/assets/bannerCard.jpg" class="w-full" alt="">
+    <div class="w-full px-24px">
+      <div class="w-full px-24px mt-8 h-177px relative bg-#0F172A rounded-12px overflow-hidden p-20px">
+        <img :src="boxBg" alt="" class="w-486 h-468px absolute top-[-167px] left-[-55px]">
+        <div class="info z-80">
+          <div class="title text-14px color-#94A3B8">总资产</div>
+          <div class="price text-32px color-#fff font-bold mt-8px text-nowrap overflow-y-auto">MX$ {{
+            addCommasToNumber(userInfo.user_balance) }}
+          </div>
+          <div class="bottom-li mt-24px flex items-center justify-between">
+            <div class="left">
+              <div class="title text-10px color-#94A3B8 line-height-170%">利润</div>
+              <div class="title text-14px color-#fff line-height-140%">MX$ {{ addCommasToNumber(userInfo.total_profit)
+              }}</div>
+            </div>
+            <div
+              class="right p4 h-24px rounded-24px color-#fff flex text-12px items-center justify-center gap-8px min-w-80px"
+              :class="userInfo.total_profit_rate > 0 ? 'bg-#1DCE5C' : 'bg-#F14437'"><svg width="16" height="16"
+                viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z"
+                  stroke="white" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M8.00001 5.33337L5.33334 8.00004M8.00001 5.33337V10.6667M10.6667 8.00004L8.00001 5.33337"
+                  stroke="white" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              {{ addCommasToNumber(userInfo.total_profit_rate) || 0 }} %
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
     <Grid @handleClickGrid="handleClickGrid" />
+    <div class="indicator-title px-24 font-bold text-16px mt-12">持有资产</div>
     <Indicator :activeName="activeName" />
 
     <div class="kf-fixed fixed bottom-120px right-0 h-auto w-40 overflow-hidden rounded-12px" @click="initKfUrl">

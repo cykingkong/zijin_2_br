@@ -6,7 +6,7 @@ export const routeWhiteList: readonly string[] = [
   'optional',
   'news',
   'deal',
-  'IPO',
+  // 'IPO',
   'portfolio',
   'wallet',
   'Market'
@@ -31,5 +31,10 @@ export const navWhiteList: readonly string[] = [
   'register',
   '/buy/success',
   'wallet',
+  'orderDetail',
+  'fundOrderDetail',
+  'searchStock',
+  'wallet/exchange/deposit-success',
+  'wallet/exchange/withdraw-success',
   'Market'
 ]

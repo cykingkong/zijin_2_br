@@ -65,6 +65,7 @@ const cellList = [
         text: 'Identify Verification',
         tips: 'Your verification status',
         icon: cell1,
+        url: '/register?step=4'
       },
       {
         text: 'Bank Account',
@@ -87,6 +88,8 @@ const cellList = [
         text: 'Languange',
         tips: 'English (USA)',
         icon: cell4,
+        url: '/profile/languange'
+
       },
     ]
   },
@@ -115,6 +118,9 @@ const cellList = [
 const handleClickCell = (item: any) => {
 
   if (item && item.url) {
+    if (item.text == 'Identify Verification' && userInfo.value.kyc_status == 2) {
+      return
+    }
     router.push(item.url)
   }
 
@@ -157,9 +163,9 @@ onMounted(async () => {
         </svg>
       </div>
       <div class="info flex flex-col items-center justify-center">
-        <div class="mid w-88 h-88 rounded-full overflow-hidden bg-#fff"></div>
-        <div class="id text-20px text-#fff mt-16px">UID:{{ userInfo.userId }}</div>
-        <div class="name text-14px text-#B59CFA mt-16px ">{{ userInfo.username }}</div>
+        <div class="mid w-88 h-88 rounded-full overflow-hidden  bg-#fff"></div>
+        <div class="id text-20px text-#fff mt-16px">UID:{{ userInfo.user_id }}</div>
+        <div class="name text-14px text-#B59CFA mt-16px ">{{ userInfo.account }}</div>
       </div>
     </div>
     <div class="setting-list p-24px">

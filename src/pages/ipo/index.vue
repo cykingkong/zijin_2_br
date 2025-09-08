@@ -1,6 +1,6 @@
 <template>
   <!-- <VanNavBar :title="'身上'" :fixed="true" clickable placeholder :left-arrow="true" @click-left="onBack" /> -->
-  <div class="discont-content px-12 w-full">
+  <div class="discont-content px-24 w-full">
     <template v-if="!onlyShowOrder">
       <van-tabs v-model:active="active" @change="changeActive">
         <van-tab :title="t('IPO List')">
@@ -90,8 +90,8 @@ const page = reactive({
   pageSize: 10,
 });
 const activeItem = ref({});
-const listStatus = ref(1); // 1:加载中 2:加载完成 3:没有更多数据
-const orderLoadStatus = ref(1); // 1:加载中 2:加载完成 3:没有更多数据
+const listStatus = ref(3); // 1:加载中 2:加载完成 3:没有更多数据
+const orderLoadStatus = ref(3); // 1:加载中 2:加载完成 3:没有更多数据
 const resetPage = () => {
   page.pageIndex = 1;
 };
@@ -222,14 +222,14 @@ const loadMore = () => {
   }
 };
 const changeActive = (val: any) => {
-  skeleton.value = true;
+  // skeleton.value = true;
   resetPage();
   if (val) {
     orderList.value = [];
-    getOrderList();
+    // getOrderList();
   } else {
     list.value = [];
-    getDisountList();
+    // getDisountList();
   }
 };
 
@@ -290,14 +290,14 @@ const onConfirm = proxy!.$throttle(onConfirmOriginal, 1000, {
 });
 
 onMounted(() => {
-  if (props.onlyShowOrder) {
-    getOrderList();
-  } else {
-    getDisountList();
-  }
-  allowMultipleToast()
-  navStore.setNavTitle("IPO");
-  route.meta.title = "IPO"; // 设置你需要的标题
+  // if (props.onlyShowOrder) {
+  //   getOrderList();
+  // } else {
+  //   getDisountList();
+  // }
+  // allowMultipleToast()
+  // navStore.setNavTitle("IPO");
+  // route.meta.title = "IPO"; // 设置你需要的标题
 });
 onUnmounted(() => {
   navStore.setNavTitle("");

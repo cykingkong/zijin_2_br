@@ -17,7 +17,7 @@ export interface UserState {
 }
 
 export function login(data: any): Promise<any> {
-  return request.post<LoginRes>('/app-api/user/login', data)
+  return request.post<LoginRes>('/api/auth/login', data)
 }
 
 export function logout() {
@@ -25,28 +25,33 @@ export function logout() {
 }
 
 export function getUserInfo() {
-  return request<UserState>('/app-api/user/info')
+  return request<UserState>('/api/user/info')
 }
 
 export function getEmailCode(): Promise<any> {
   return request.get('/user/email-code')
 }
 
-
+export function totalAsset(): Promise<any> {
+  return request.get('/api/user/totalAsset',)
+}
+export function walletLogs(params): Promise<any> {
+  return request.get('/api/user/walletLogs', { params })
+}
 export function forgetPassword(data): Promise<any> {
-  return request.post('/app-api/user/forgetPassword', data)
+  return request.post('/api/auth/resetPassword', data)
 }
 export function updatePassword(data): Promise<any> {
   return request.post('/app-api/user/updatePassword', data)
 }
 export function register(data): Promise<any> {
-  return request.post('/app-api/user/register', data)
+  return request.post('/api/auth/register', data)
 }
 export function getCaptchaSlide(): Promise<any> {
   return request.post('/app-api/user/getCaptchaSlide')
 }
-export function sendCode(params): Promise<any> {
-  return request.get('/app-api/user/sendCode', { params })
+export function sendCode(data): Promise<any> {
+  return request.post('/api/auth/sendCode', data)
 }
 // 银行卡
 export function UserCardGrid(params): Promise<any> {
@@ -62,7 +67,7 @@ export function UserCardUpdate(data): Promise<any> {
   return request.post('/app-api/user/UserCardUpdate', data)
 }
 export function kyc(data): Promise<any> {
-  return request.post('/app-api/user/kyc', data)
+  return request.post('/api/user/kyc', data)
 }
 export function getKfUrl(params): Promise<any> {
   return request.get('/app-api/user/getKfUrl', { params })
@@ -85,4 +90,7 @@ export function dataAssets(): Promise<any> {
 }
 export function bindPhone(data): Promise<any> {
   return request.post('/app-api/user/bindPhone', data)
+}
+export function bankList(params): Promise<any> {
+  return request.get('/api/bank_list', { params })
 }

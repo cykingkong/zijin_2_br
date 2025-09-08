@@ -4,6 +4,9 @@ import { loadEnv } from 'vite'
 import type { ConfigEnv, UserConfig } from 'vite'
 import { createVitePlugins } from './build/vite'
 import { exclude, include } from './build/vite/optimize'
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import { resolve } from 'path'
 
 
 export default ({ mode }: ConfigEnv): UserConfig => {
@@ -19,7 +22,8 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       port: 3323,
       proxy: {
         '/api': {
-          target: `http://152.53.166.120:18399`, // 代理接口
+          // target: `https://api.oam007.icu`, // 代理接口
+          target: `http://192.168.31.153`, // 代理接口
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, ''),
           ws: false,

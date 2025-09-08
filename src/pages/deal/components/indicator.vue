@@ -2,14 +2,17 @@
 import ipo from '../../ipo/index.vue'
 import discount from '../../discount/index.vue'
 import fund from '../../fund/index.vue'
-import dividend from '../../dividend/index.vue'
 import { addCommasToNumber } from '@/utils/tool'
+
+// 获取数字的绝对值
+function getAbsoluteValue(num) {
+  return Math.abs(num);
+}
 import { useUserStore } from '@/stores'
 import { assetsLogsGrid, getPosition, swapOrderAdd, swapOrderCancel, orderList as swapOrderList } from '@/api/swap'
 import { useStore } from "@/stores/modules/index";
-import { getCategoryPosition } from '@/api/market'
+import { getCategoryPosition, userOrderList } from '@/api/market'
 import { useI18n } from 'vue-i18n'
-import EntrustItem from '@/pages/quotes/component/openTradeCom/EntrustItem.vue'
 
 const props = defineProps({
   activeName: {
@@ -58,6 +61,7 @@ const tabList = ref([
 )
 
 const activeIndex = ref(0)
+let refreshTimer = null // 定时器变量
 
 function getUserInfoByObjKey(value) {
   for (const key in assetsData.value) {
@@ -70,11 +74,39 @@ function getUserInfoByObjKey(value) {
 function changeTab(index) {
   // userStore.getAssetsData()
 
-  if (index == 0 || index == 4) {
+  // 清除之前的定时器
+  clearRefreshTimer()
+
+  if (index == 0) {
     getCategoryPositionData()
+    // 启动定时器，每30秒刷新一次
+    startRefreshTimer()
   }
   activeIndex.value = index
 }
+
+// 启动定时器
+function startRefreshTimer() {
+  refreshTimer = setInterval(() => {
+    getCategoryPositionData({}, false) // 定时刷新时不显示loading
+  }, 30000) // 30秒 = 30000毫秒
+}
+
+// 清除定时器
+function clearRefreshTimer() {
+  if (refreshTimer) {
+    clearInterval(refreshTimer)
+    refreshTimer = null
+  }
+}
+onMounted(() => {
+  changeTab(0)
+})
+
+// 组件卸载时清除定时器
+onBeforeUnmount(() => {
+  clearRefreshTimer()
+})
 
 const page = reactive({
   pageIndex: 1,
@@ -82,10 +114,11 @@ const page = reactive({
 })
 const orderList = ref([])
 const categoryPositionData = ref([])
-async function getCategoryPositionData(params = {}) {
-  const { data, code } = await getCategoryPosition({
-    categoryId: props.activeName == '1' ? '200' : '201',
-  })
+async function getCategoryPositionData(params = {}, showLoading = true) {
+  const { data, code } = await userOrderList({
+    page: 1,
+    size: 100
+  }, showLoading)
   if (code === 200) {
     categoryPositionData.value = data || []
   }
@@ -188,8 +221,8 @@ function confirm() {
 </script>
 
 <template>
-  <div class="indicator-content pb-12px">
-    <div class="tab-box flex gap-8px px-12 py-12">
+  <div class="indicator-content pb-24px">
+    <div class="tab-box flex gap-8px px-24 py-24">
       <div v-for="(item, index) in tabList" :key="index"
         class="tab-item flex flex-1 items-center justify-center rounded-4 text-align-center line-height-24 px-10px"
         :class="{ active: index === activeIndex }" @click="changeTab(index)">
@@ -198,19 +231,19 @@ function confirm() {
     </div>
 
 
-    <div v-if="activeIndex === 0" class="indicator-td flex flex-col px-12">
+    <div v-if="activeIndex === 0" class="indicator-td flex flex-col px-24 gap-16">
       <div v-for="(item, index) in categoryPositionData" :key="index"
-        class="w-full  px-16 py-9px bg-#F3F4F6 rounded-12px ">
+        class="w-full  px-16 pt-9px pb-20px bg-#F3F4F6 rounded-12px ">
         <div class="li flex items-center justify-between">
           <div class="left label flex gap-16">
-            <img :src="item.symbolLogo" alt="" class="block h-40 w-40 rounded-full">
-            <div class="info h-40">
+            <img :src="item.logo" alt="" class="block h-40 w-40 rounded-full">
+            <div class="info h-40 flex items-center">
               <div class="name">{{ item.symbol }}</div>
-              <div class="name color-#6B7280 text-12px">{{ item.symbolId }}</div>
+              <!-- <div class="name color-#6B7280 text-12px">{{ item.symbolId }}</div> -->
             </div>
           </div>
           <div class="right  flex-shrink-0  gap-12px text-align-right h-40">
-            <div class="num up text-14px">+ {{ item.userAssetsAmount }}</div>
+            <div class="num up text-14px">+ {{ item.number }}</div>
             <div class="num  color-#6B7280 text-12px">数量</div>
           </div>
         </div>
@@ -218,25 +251,27 @@ function confirm() {
         <div class="li flex items-center justify-between">
           <div class="left label flex-1 flex gap-4px flex-col">
             <div class="label text-#6B7280 text-12px">资产价值</div>
-            <div class="value text-#111827 text-16px">{{ item.currency }} {{ addCommasToNumber(item.close *
-              item.userAssetsAmount) }} </div>
+            <div class="value text-#111827 text-16px">MX$ {{ addCommasToNumber(item.buy_price) }} </div>
           </div>
           <div class="right flex-1 flex gap-4px flex-col flex-shrink-0  gap-12px text-align-right">
             <div class="label text-#6B7280 text-12px">盈利</div>
-            <div class="value text-#111827 text-16px">{{ item.currency }} {{ addCommasToNumber(item.close *
-              item.userAssetsAmount) }} </div>
+            <div class="value text-#111827 text-16px" v-if="item.profit > 0">MX$ {{ addCommasToNumber(item.profit) }}
+            </div>
+            <div class="value text-#111827 text-16px" v-else>-MX$ {{ addCommasToNumber(getAbsoluteValue(item.profit)) }}
+            </div>
+
           </div>
         </div>
 
-        <div class="btn-box w-full flex justify-end mt-6px">
+        <!-- <div class="btn-box w-full flex justify-end mt-6px">
           <van-button size="small" class="font-size-14!" @click="handleClickSubmit(item)">
             {{ t('Sell') }}
           </van-button>
-        </div>
+        </div> -->
       </div>
       <empty v-if="categoryPositionData && categoryPositionData.length === 0" />
     </div>
-    <div v-if="activeIndex === 1" class="indicator-td flex">
+    <div v-if="activeIndex === 1" class="indicator-td flex ">
       <discount :only-show-order="true" :category-id="activeName == '1' ? '200' : '201'" />
     </div>
     <div v-if="activeIndex === 2" class="indicator-td flex">

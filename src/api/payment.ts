@@ -1,12 +1,16 @@
 import request from '@/utils/request'
-export function userCardGrid(params): Promise<any> {
-    return request.get<any>('/app-api/user/userCardGrid', { params })
+export function bank_list(params): Promise<any> {
+    return request.get<any>('/api/user/bank_list', { params })
 }
-export function userCardAdd(data): Promise<any> {
-    return request.post<any>('/app-api/user/userCardAdd', data)
+
+export function bank_info(params): Promise<any> {
+    return request.get<any>('/api/user/get_bank', { params })
+}
+export function create_bank(data): Promise<any> {
+    return request.post<any>('/api/user/create_bank', data)
 }
 export function userCardUpdate(data): Promise<any> {
-    return request.post<any>('/app-api/user/userCardUpdate', data)
+    return request.post<any>('/api/user/edit_bank', data)
 }
 export function userCardDel(data): Promise<any> {
     return request.post<any>('/app-api/user/userCardDel', data)

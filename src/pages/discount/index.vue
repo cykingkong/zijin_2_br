@@ -1,5 +1,5 @@
 <template>
-    <div class="discont-content px-12 w-full">
+    <div class="discont-content px-24 w-full">
         <VanNavBar title="" :fixed="true" clickable :left-arrow="true" @click-left="onBack" v-if="!onlyShowOrder"
             z-index="999">
             <template #title>
@@ -12,22 +12,31 @@
             <div class="custom-tabs">
                 <div class="tab-container">
                     <div class="tab-item" :class="{ active: active === 0 }" @click="changeActive(0)">
-                        <svg class="tab-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M2 2H6V6H2V2Z" fill="currentColor" />
-                            <path d="M10 2H14V6H10V2Z" fill="currentColor" />
-                            <path d="M2 10H6V14H2V10Z" fill="currentColor" />
-                            <path d="M10 10H14V14H10V10Z" fill="currentColor" />
+                        <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M6.25 2.6665H3.58333C3.21514 2.6665 2.91666 2.96498 2.91666 3.33317V5.99984C2.91666 6.36803 3.21514 6.6665 3.58333 6.6665H6.25C6.61819 6.6665 6.91666 6.36803 6.91666 5.99984V3.33317C6.91666 2.96498 6.61819 2.6665 6.25 2.6665Z"
+                                stroke="#0F172A" stroke-linecap="round" stroke-linejoin="round" />
+                            <path
+                                d="M12.9167 2.6665H10.25C9.88181 2.6665 9.58333 2.96498 9.58333 3.33317V5.99984C9.58333 6.36803 9.88181 6.6665 10.25 6.6665H12.9167C13.2849 6.6665 13.5833 6.36803 13.5833 5.99984V3.33317C13.5833 2.96498 13.2849 2.6665 12.9167 2.6665Z"
+                                stroke="#0F172A" stroke-linecap="round" stroke-linejoin="round" />
+                            <path
+                                d="M6.25 9.33301H3.58333C3.21514 9.33301 2.91666 9.63148 2.91666 9.99967V12.6663C2.91666 13.0345 3.21514 13.333 3.58333 13.333H6.25C6.61819 13.333 6.91666 13.0345 6.91666 12.6663V9.99967C6.91666 9.63148 6.61819 9.33301 6.25 9.33301Z"
+                                stroke="#0F172A" stroke-linecap="round" stroke-linejoin="round" />
+                            <path
+                                d="M12.9167 9.33301H10.25C9.88181 9.33301 9.58333 9.63148 9.58333 9.99967V12.6663C9.58333 13.0345 9.88181 13.333 10.25 13.333H12.9167C13.2849 13.333 13.5833 13.0345 13.5833 12.6663V9.99967C13.5833 9.63148 13.2849 9.33301 12.9167 9.33301Z"
+                                stroke="#0F172A" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
+
                         <span class="tab-text">{{ t('discount list') }}</span>
                     </div>
                     <div class="tab-item" :class="{ active: active === 1 }" @click="changeActive(1)">
-                        <svg class="tab-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M2 12L6 8L10 10L14 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2.75 11.3332L6.75 7.33317L9.41667 9.99984L14.75 4.6665" stroke="#94A3B8"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M10.0833 4.6665H14.75V9.33317" stroke="#94A3B8" stroke-linecap="round"
                                 stroke-linejoin="round" />
-                            <path d="M14 6L12 4L10 6L14 6Z" fill="currentColor" />
                         </svg>
+
                         <span class="tab-text">{{ t('Order List') }}</span>
                     </div>
                 </div>
@@ -78,6 +87,7 @@ import { ref, reactive } from "vue";
 import { useRoute } from 'vue-router';
 import { discountList, discountOrderList, discountOrderBuy, discountOrderSell } from '@/api/bond'
 import { showToast, showSuccessToast, allowMultipleToast } from 'vant';
+
 import { useStore } from '@/stores/modules/index';
 import discontItem from "./component/discont-item.vue"
 import bottomPop from "./component/bottom-pop.vue";
@@ -122,8 +132,8 @@ const skeleton = ref(false)
 const listSkeleton = ref(false)
 const orderSkeleton = ref(false)
 const page = reactive({
-    pageIndex: 1,
-    pageSize: 4
+    page: 1,
+    size: 4
 })
 const { t } = useI18n()
 const activeItem = ref({})
@@ -145,14 +155,14 @@ const getDisountList = async () => {
         ...page,
         categoryId: categoryId.value
     }).then(res => {
-        if (!res.data.rows) {
+        if (!res.data.list) {
             listStatus.value = 3;
             listSkeleton.value = false;
-
             return
         }
+
         if (page.pageIndex == 1) {
-            list.value = res.data.rows.map((e) => {
+            list.value = res.data.list.map((e) => {
                 return {
                     ...e,
                     percentage: (
@@ -161,7 +171,7 @@ const getDisountList = async () => {
                 }
             }) || []
         } else {
-            let result = res.data.rows.map((e) => {
+            let result = res.data.list.map((e) => {
                 return {
                     ...e,
                     percentage: (
@@ -170,27 +180,17 @@ const getDisountList = async () => {
                 }
             })
             list.value = list.value.concat(result)
-
         }
-        if (res.data.total <= list.value.length) {
+
+        // 根据新的分页格式判断是否还有更多数据
+        if (!res.data.pagination.has_more) {
             listStatus.value = 3
             listSkeleton.value = false;
             return
         }
-        // list.value = res.data.rows.map((e) => {
-        //     return {
-        //         ...e,
-        //         percentage: (
-        //             ((e.totalQuantity - e.availableQuantity) /
-        //                 e.totalQuantity) *
-        //             100
-        //         ).toFixed(2)
-        //     }
-        // }) || []
+
         listSkeleton.value = false;
         listStatus.value = 2
-
-
     })
 }
 const getOrderList = async () => {
@@ -200,13 +200,13 @@ const getOrderList = async () => {
         ...page,
         categoryId: categoryId.value
     }).then(res => {
-        if (!res.data.rows) {
+        if (!res.data.list) {
             orderLoadStatus.value = 3;
             orderSkeleton.value = false;
             return
         }
         if (page.pageIndex == 1) {
-            orderList.value = res.data.rows.map((e) => {
+            orderList.value = res.data.list.map((e) => {
                 if (e.status == 1) {
                     return {
                         ...e,
@@ -229,7 +229,7 @@ const getOrderList = async () => {
 
             }) || []
         } else {
-            let result = res.data.rows ? res.data.rows.map((e) => {
+            let result = res.data.list ? res.data.list.map((e) => {
                 if (e.status == 1) {
                     return {
                         ...e,
@@ -252,7 +252,7 @@ const getOrderList = async () => {
             }) : []
             orderList.value = orderList.value.concat(result)
         }
-        if (res.data.total <= orderList.value.length) {
+        if (!res.data.pagination.has_more) {
             orderLoadStatus.value = 3
             orderSkeleton.value = false;
             return

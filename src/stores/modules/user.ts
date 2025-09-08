@@ -11,6 +11,7 @@ import {
   login as userLogin,
   logout as userLogout,
   register as userRegister,
+  totalAsset
 } from '@/api/user'
 
 const InitUserInfo = {
@@ -51,10 +52,10 @@ export const useUserStore = defineStore('user', () => {
   const info = async () => {
     try {
       const { data } = await getUserInfo()
-      const { data: ff2 } = await getBalance()
-      const { data: ff3 } = await dataAssets()
+      // const { data: ff2 } = await getBalance()
+      const { data: ff3 } = await totalAsset()
       setInfo(data)
-      setInfo(ff2)
+      // setInfo(ff2)
       setInfo(ff3)
     }
     catch (error) {

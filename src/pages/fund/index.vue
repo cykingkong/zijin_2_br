@@ -1,5 +1,5 @@
 <template>
-  <div class="discont-content px-12 w-full">
+  <div class="discont-content px-24 w-full">
     <template v-if="!onlyShowOrder">
       <van-tabs v-model:active="active" @change="changeActive">
         <van-tab :title="t('fund')" class="mt-24px">
@@ -53,8 +53,8 @@ import { ref, reactive } from "vue";
 import {
   fundProductList,
   fundOrderList,
-  orderReserve,
-  orderPay,
+  fundSubscribe,
+  fundOperate,
   orderReNew,
   orderRedeem,
 } from "@/api/bond";
@@ -99,17 +99,17 @@ const getDisountList = async () => {
     assetId: categoryId.value,
     ...page,
   }).then((res) => {
-    if (!res.data.rows) {
+    if (!res.data.list) {
       skeleton.value = false;
       listStatus.value = 3;
       return;
     }
     if (page.pageIndex == 1) {
-      list.value = res.data.rows || [];
+      list.value = res.data.list || [];
     } else {
-      list.value = list.value.concat(res.data.rows || []);
+      list.value = list.value.concat(res.data.list || []);
     }
-    if (res.data.total <= list.value.length) {
+    if (!res.data.pagination.has_more) {
       listStatus.value = 3;
       skeleton.value = false;
       return;
@@ -126,17 +126,17 @@ const getOrderList = async () => {
     assetId: categoryId.value,
     ...page,
   }).then((res) => {
-    if (!res.data.rows) {
+    if (!res.data.list) {
       orderLoadStatus.value = 3;
       skeleton.value = false;
       return;
     }
     if (page.pageIndex == 1) {
-      orderList.value = res.data.rows || [];
+      orderList.value = res.data.list || [];
     } else {
-      orderList.value = orderList.value.concat(res.data.rows || []);
+      orderList.value = orderList.value.concat(res.data.list || []);
     }
-    if (res.data.total <= orderList.value.length) {
+    if (!res.data.pagination.has_more) {
       orderLoadStatus.value = 3;
       skeleton.value = false;
       return;
@@ -177,13 +177,17 @@ const handleClickOrder = async (val: any) => {
     let resCode = 0;
     if (val.status == 7) {
       if (val.type == 1) {
-        const { data, code } = await orderRedeem({
-          orderId: val.id,
+        // 续期
+        const { data, code } = await fundOperate({
+          id: val.id,
+          type: 'renew'
         });
         resCode = code;
       } else {
-        const { data, code } = await orderReNew({
-          orderId: val.id,
+        // 赎回
+        const { data, code } = await fundOperate({
+          id: val.id,
+          type: 'redeem'
         });
         resCode = code;
       }
@@ -202,7 +206,7 @@ const handleClickOrder = async (val: any) => {
 const onConfirmOriginal = async (val: any) => {
   try {
     if (val.type == "fund") {
-      const { data, code } = await orderReserve({
+      const { data, code } = await fundSubscribe({
         ...val,
       });
       if (code == 200) {
@@ -219,10 +223,12 @@ const onConfirmOriginal = async (val: any) => {
         // getDisountList();
       }
     } else {
+
       if (val.status == 1) {
         // 购买基金
-        const { data, code } = await orderPay({
-          orderId: val.fundId,
+        const { data, code } = await fundOperate({
+          id: val.id,
+          type: 'pay'
         });
         if (code == 200) {
           bottomPopRef.value.show(false);

@@ -30,7 +30,7 @@ function errorHandler(error: RequestError): Promise<any> {
   // 确保在错误处理时关闭loading
   closeToast(true)
   if (error.response) {
-    const { data = {}, status, statusText } = error.response
+    const { data = {}, status, statusText, message } = error.response
     console.log(error.response, 'err')
     // 403 无权限
     if (status === 403) {
@@ -51,6 +51,13 @@ function errorHandler(error: RequestError): Promise<any> {
         router.replace('/login')  // 使用Vue Router的replace方法进行跳转
       }
     }
+    if (status !== 200) {
+      showNotify({
+        type: 'danger',
+        message: (data && data.message) || statusText,
+        zIndex: 99999
+      })
+    }
   }
   return Promise.reject(error)
 }
@@ -59,16 +66,20 @@ function errorHandler(error: RequestError): Promise<any> {
 declare module 'axios' {
   interface InternalAxiosRequestConfig {
     loadingToast?: ReturnType<typeof showLoadingToast>
+    showLoading?: boolean
   }
 }
 
 // 请求拦截器
 function requestHandler(config: InternalAxiosRequestConfig): InternalAxiosRequestConfig | Promise<InternalAxiosRequestConfig> {
-  showLoadingToast({
-    duration: 0,
-    forbidClick: true,
-    message: ''
-  })
+  // 只有当 showLoading 不为 false 时才显示 loading
+  if (config.showLoading !== false) {
+    showLoadingToast({
+      duration: 0,
+      forbidClick: true,
+      message: ''
+    })
+  }
   // const toast = showLoadingToast({
   //   duration: 0,
   //   forbidClick: true,

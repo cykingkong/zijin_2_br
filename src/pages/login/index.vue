@@ -5,7 +5,8 @@ import { useUserStore } from "@/stores";
 import inputCom from "@/components/inputCom.vue";
 import nationalityList from "@/components/nationality-list/nationalityList.vue";
 import { languageColumns, locale } from "@/utils/i18n";
-
+import Apple from '@/assets/image/Apple.svg'
+import Google from '@/assets/image/Google.svg'
 import loginTab from "@/components/tab.vue";
 import vw from "@/utils/inline-px-to-vw";
 
@@ -65,7 +66,7 @@ const toLogin = (type: number) => {
 const toForget = () => {
   try {
     // router.push("/forgot-password?forgotType=3");
-    router.push("/selectLoginType");
+    router.push("/register");
   } catch (e) {
     console.log(e);
   }
@@ -106,25 +107,42 @@ async function login(values: any) {
 </script>
 
 <template>
-  <div class="m-x-a w-full max-h-100vh">
+  <div class="m-x-a w-full min-h-100vh pb-[calc(env(safe-area-inset-bottom)+24px)]">
     <div class="top-image w-full min-h-366px bg-#D3C4FC">
-
+      <img src="@/assets/image/login-bg.png" alt="" class="block w-full h-full">
     </div>
     <div class="btn-box w-7xl m-x-a">
       <van-button type="primary" color="#6b39f4" class="login-btn" block @click="toLogin(1)">{{
-        t("邮箱登陆")
-        }}</van-button>
-      <van-button type="primary" color="#6b39f4" class="login-btn" block @click="toLogin(2)">{{
         t("手机登陆")
-        }}</van-button>
-      <van-button type="primary" plain color="#6b39f4" class="login-btn" block @click="login({})">{{
-        t("Continue with Apple")
-        }}</van-button>
-      <van-button type="primary" plain color="#6b39f4" class="login-btn" block @click="login({})">{{
-        t("Continue with Google")
-        }}</van-button>
+      }}</van-button>
+      <van-button type="primary" color="#6b39f4" class="login-btn" block @click="toLogin(2)">{{
+        t("邮箱登陆")
+      }}</van-button>
+
+      <van-button type="primary" plain color="#6b39f4" class="login-btn items-center" block @click="login({})">
+        <template #default>
+          <div class="flex items-center justify-center gap-8 color-#0F172A font-bold">
+            <img :src="Apple" alt="" class="w-24px h-24px block">
+
+            {{
+              t("Continue with Apple")
+            }}
+          </div>
+        </template>
+      </van-button>
+      <van-button type="primary" plain color="#6b39f4" class="login-btn items-center" block @click="login({})">
+        <template #default>
+          <div class="flex items-center justify-center gap-8 color-#0F172A font-bold">
+            <img :src="Google" alt="" class="w-24px h-24px block">
+            {{
+              t("Continue with Google")
+            }}
+          </div>
+        </template>
+      </van-button>
 
       <div class="flex items-center mt-36px justify-center">
+
         Don’t have an account? <span @click="toForget()" class="ml-4px color-#6b39f4">
           {{ $t("Sign Up") }}
         </span>

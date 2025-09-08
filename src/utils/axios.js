@@ -41,7 +41,7 @@ service.interceptors.response.use(
       // isRefreshing = true;
       // local.clear()
       // store.commit('setLoginShow');
-      // router.replace("/login");
+      router.replace("/login");
       return Promise.reject(response)
     }
     else if (response.status == 422) {

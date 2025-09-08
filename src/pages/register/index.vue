@@ -8,19 +8,31 @@ import {
 } from "vant";
 import { ref, onUnmounted } from "vue";
 import { useUserStore } from "@/stores";
+import { useLoadingStore } from "@/stores/modules/loading";
 import { sendCode, register, kyc } from "@/api/user";
 import { clearToken, setToken } from "@/utils/auth";
 import inputCom from "@/components/inputCom.vue";
 import slidePop from "@/components/slidePop.vue";
 import CodeInput from "@/components/CodeInput.vue";
+import dayjs from 'dayjs'
+import passport from '@/assets/image/passport-icon.svg'
+import idCard from '@/assets/image/idCard-icon.svg'
+const { proxy } = getCurrentInstance()!
+const loadingStore = useLoadingStore();
 
-import icon1 from "@/assets/image/icon/icon1.png";
+// import icon1 from "@/assets/image/icon/icon1.png";
 import nationalityList from "@/components/nationality-list/nationalityList.vue";
 import { uploadFile } from "@/api/tool";
 const countdown = ref(0);
 const router = useRouter();
 const step = ref(1);
 const { t } = useI18n();
+const showDatePicker = ref(false);
+const currentDate = ref([dayjs().format("MM"),
+dayjs().format("DD"),
+dayjs().format("YYYY"),]);
+const minDate = ref(new Date(1870, 0, 1));
+const maxDate = ref(new Date(2025, 10, 1));
 const agree = ref(false);
 const timer = ref<NodeJS.Timeout>();
 const userStore = useUserStore();
@@ -48,18 +60,23 @@ const uploadTypeList = ref([
   {
     label: `${t("身份证验证")}`,
     value: "idCardFront",
+    img: idCard,
   },
   {
     label: `${t("护照验证")}`,
     value: "idCardBack",
+    img: passport,
+
   }
 ])
 const uploadType = ref("idCardFront");
 const kycForm = reactive({
   name: "",
+  birth: "", birthdayDesc: '',
   nationality: "",
   idCard: "",
   idCardFront: "",
+  card_front: "",
   idCardBack: "",
   idCardHand: "",
 });
@@ -89,75 +106,104 @@ const handleClickAgree = () => {
   agree.value = !agree.value;
 
 }
-const handleClickRegister = async () => {
-  if (agree.value == false) {
-    showToast(t("input.PleaseEnter"));
-    return;
+const handleClickDatePop = () => {
+  if (kycForm.birth && !kycForm.birth.length) {
+    // 获取当天日期 并且填入form.birthday,格式同 currentDate
+    currentDate.value = [
+      dayjs().format("MM"),
+      dayjs().format("DD"),
+      dayjs().format("YYYY"),
+
+    ];
   }
+  showDatePicker.value = true;
+};
+const onDateConfirm = ({ selectedValues }) => {
+  kycForm.birth = selectedValues;
+  kycForm.birthdayDesc = `${selectedValues[0]}/${selectedValues[1]}/${selectedValues[2]}`
+  showDatePicker.value = false;
+};
+const handleClickRegisterOriginal = async () => {
+
   // if (form.inviteCode == "") {
   //   showToast(t("input.PleaseEnter"));
   //   return;
   // }
   try {
     let area = areaInfo.value?.dialCode;
-
+    let account = form.type == "phone" ? area + form.phone : form.email;
     let params = {
-      phone: area + form.phone,
-      email: form.email,
+      account,
       type: form.type,
       password: form.password,
-      code: form.code,
-      inviteCode: form.inviteCode,
+      captcha: verificationCode.value,
+      code: form.inviteCode,
     };
-    step.value = 2;
-    return
+
     const { data, code } = await register(params);
     if (code == 200) {
-      step.value = 2;
+      step.value = 4;
       setToken(data.token);
       showSuccessToast("");
       await userStore.info();
     }
   } catch (e) { }
 };
+const handleClickOnback = () => {
+  router.push("/");
+}
+const handleClickRegister = proxy!.$throttle(handleClickRegisterOriginal, 1000, {
+  onStart: () => loadingStore.show(),
+  onEnd: () => loadingStore.hide(),
+});
 const handleClickSubmit = async () => {
   try {
     let params = {
+      type: "identity",
       name: kycForm.name,
-      nationality: areaInfo.value.dialCode,
-      idCard: kycForm.idCard,
-      idCardFront: kycForm.idCardFront,
-      idCardBack: kycForm.idCardBack,
+      birth: kycForm.birthdayDesc,
+      id_card: kycForm.idCard,
+      card_front: kycForm.card_front,
+
       // idCardHand: kycForm.idCardHand,
     };
     const { data, code } = await kyc(params);
     if (code == 200) {
       showSuccessToast("");
-      router.push("/");
+      step.value++;
       return;
     }
   } catch (e) { }
 };
 const getCode = async () => {
+
   if (countdown.value > 0) return;
   if (!form.phone && form.type == "phone") {
-    showToast(t("input.PleaseEnter"));
+    showToast(t("请先输入手机号"));
     return;
   }
   if (!form.email && form.type == "email") {
-    showToast(t("input.PleaseEnter"));
+    showToast(t("请先输入邮箱"));
     return;
+  }
+  if (agree.value == false) {
+    showToast('请先阅读并同意用户协议');
+    return;
+
   }
   try {
     let area = areaInfo.value?.dialCode;
+    let account = form.type == "phone" ? area + form.phone : form.email;
     let params = {
-      phone: area + form.phone,
-      email: form.email,
+
+      account: account,
       type: form.type,
     };
     const { data, code } = await sendCode(params);
     if (code == 200) {
       // showToast('验证码已发送，请注意查收')
+      step.value++
+
     }
     startCountdown();
   } catch (e) {
@@ -192,20 +238,17 @@ const queryUploadFile = async (file: any, type: any) => {
   file.status = "uploading"; // 显示上传状态
   // 创建 FormData 对象
   const formData = new FormData();
-  formData.append("file", file.file);
+  formData.append("image", file.file);
   // 发起上传请求
   try {
     const { data, code } = await uploadFile(formData);
     if (code == 200) {
+
       if (type == 1) {
-        kycForm.idCardFront = data.url;
+        kycForm.card_front = data.url;
         list1.value = [{ url: data.url }];
-      } else if (type == 2) {
-        kycForm.idCardBack = data.url;
-        list2.value = [{ url: data.url }];
-      } else if (type == 3) {
-        kycForm.idCardHand = data.url;
-        list3.value = [{ url: data.url }];
+        console.log(data.url, 'dataUrl', type, list1.value)
+
       }
 
 
@@ -232,6 +275,9 @@ onMounted(() => {
     // 如果路由带有邀请码则自动填充，并且只读
     form.inviteCode = router.currentRoute.value.query.inviteCode as string;
     inviteCodeOnlyRead.value = true;
+  }
+  if (router.currentRoute.value.query && router.currentRoute.value.query.step) {
+    step.value = Number(router.currentRoute.value.query.step);
   }
 });
 onUnmounted(() => {
@@ -268,26 +314,12 @@ const resendCode = async () => {
   }
 };
 
-const verifyCode = async () => {
-  if (verificationCode.value.length !== 6) {
-    showToast('请输入完整的验证码');
-    return;
-  }
 
-  try {
-    // 这里调用验证验证码的API
-    // const response = await verifyCodeAPI(verificationCode.value);
-
-    // 模拟验证成功
-    showSuccessToast('验证成功');
-    step.value = 3; // 进入下一步
-  } catch (error) {
-    codeError.value = true;
-    codeErrorMessage.value = '验证码错误，请重新输入';
-    showFailToast('验证码错误');
-  }
-};
 function onBack() {
+  if ([2, 4, 5].includes(step.value)) {
+    step.value--;
+    return
+  }
   if (window.history.state.back) history.back();
   else router.replace("/");
 }
@@ -350,23 +382,23 @@ function onBack() {
         :only-read="inviteCodeOnlyRead" v-model:value="form.inviteCode">
       </inputCom>
 
-      <div class="flex-col gap-12 flex">
-        <van-button type="primary" block color="#6B39F4" @click="handleClickRegister">{{
-          t("menus.register")
-          }}</van-button>
-        <!-- <van-button type="primary" block @click="handleClickRegister">登陆</van-button> -->
-      </div>
+
       <div class="protocol wfull flex gap-8 font-size-12 mb-12 mt-8">
         <div class="flex justify-between items-start mt-16px mb-24px gap-8px">
           <div class="left flex font-size-14px font-500 flex-shrink-0 ">
             <div class="radio w-16px h-16px rounded-4px border-1px " @click.stop="handleClickAgree"
               :class="agree ? 'agreeRadio' : ''"></div>
-
           </div>
           <div class="right">
             I certify that I’m 18 years of age or older, and I agree to the User Agreement and Privacy Policy.
           </div>
         </div>
+      </div>
+      <div class="flex-col gap-12 flex">
+        <van-button type="primary" block color="#6B39F4" @click="getCode">{{
+          t("menus.register")
+          }}</van-button>
+        <!-- <van-button type="primary" block @click="handleClickRegister">登陆</van-button> -->
       </div>
       <div class="flex items-center mt-36px justify-center">
         Don’t have an account? <span class="ml-4px color-#6b39f4">
@@ -381,22 +413,29 @@ function onBack() {
     <block v-if="step == 2">
       <div class="top-title">
         <div class="t1 font-size-24px font-700 color-#0F172A">Authentication Code</div>
-        <div class="t2 color-#64748B mt-8 font-400 font-size-16px">Enter 6-digit code we just texted to your phone
+        <div class="t2 color-#64748B mt-8 font-400 font-size-16px" v-if="form.type == 'phone'">Enter 6-digit code we
+          just
+          texted to your phone
           number,
-          +1 8976889043</div>
+          +{{ areaInfo?.dialCode }} {{ form.phone }}</div>
+        <div class="t2 color-#64748B mt-8 font-400 font-size-16px" v-if="form.type == 'email'">Enter 6-digit code we
+          just
+          sent to your email,
+          {{ form.email }}</div>
       </div>
 
       <div class="verification-section mt-32px">
-        <CodeInput v-model="verificationCode" :length="5" :auto-focus="true" :has-error="codeError"
+        <CodeInput v-model="verificationCode" :length="6" :auto-focus="true" :has-error="codeError"
           :error-message="codeErrorMessage" @complete="handleCodeComplete" @change="handleCodeChange" />
 
 
         <div class="btn-box mt-81px flex flex-col gap-16px">
-          <van-button type="primary" color="#6B39F4" block :disabled="verificationCode.length !== 5" @click="step = 3">
+          <van-button type="primary" color="#6B39F4" block :disabled="verificationCode.length !== 6"
+            @click="handleClickRegister">
             下一步
           </van-button>
-          <van-button type="primary" color="#F8F5FF" block class="resend-btn" @click="verifyCode">
-            重新发送验证码
+          <van-button type="primary" color="#F8F5FF" block class="resend-btn" @click="getCode">
+            {{ countdown > 0 ? `${countdown}s` : '重新发送验证码' }}
           </van-button>
         </div>
 
@@ -414,7 +453,7 @@ function onBack() {
           v-for="(item, index) in uploadTypeList" :key="index" @click="uploadType = item.value"
           :class="uploadType == item.value ? 'bg-#F8F5FF!' : ''">
           <div class="left flex gap-12px items-center">
-            <div class="icon w-40px h-40px "></div>
+            <div class="icon w-40px h-40px "> <img :src="item.img" alt="" class="w-full h-full"></div>
             {{ item.label }}
           </div>
           <div class="upload-radio border-solid border-1px border-#D1D5DB rounded-full w-16px h-16px relative"
@@ -430,7 +469,9 @@ function onBack() {
     </block>
     <block v-if="step == 4">
       <div class="mt-112px">
-        <div class="image-box w-120px h-120px bg-#F8F9FD rounded-full m-x-a mb-40px"></div>
+        <!-- <div class="image-box w-120px h-120px bg-#F8F9FD rounded-full m-x-a mb-40px"> -->
+        <img src="@/assets/image/Illustration.png " class="w-140px h-120px block flex-shrink-0 m-x-a mb-40px" alt="">
+        <!-- </div> -->
         <div class="top-title text-center">
           <div class="t1 font-size-24px font-700 color-#0F172A">Verify Your Identity</div>
           <div class="t2 color-#64748B mt-8 font-400 font-size-16px">To help protect you from fraud and identity theft,
@@ -459,34 +500,57 @@ function onBack() {
       <inputCom :label="t('input.True Name')" :placeholder="t('input.PleaseEnter')" v-model:value="kycForm.name"
         :type="'text'">
       </inputCom>
-      <inputCom :label="t('input.True Name')" :placeholder="t('出生日期')" v-model:value="kycForm.name" :type="'text'">
+      <!-- <inputCom :label="t('input.True Name')" :placeholder="t('出生日期')" v-model:value="kycForm.birth" :type="'text'">
+      </inputCom> -->
+
+      <inputCom :label="t('input.birthday')" :placeholder="t('')" v-model:value="kycForm.birth" :inputType="'picker'"
+        require>
+        <template #picker>
+          <div class="w-full flex items-center justify-between" @click="handleClickDatePop">
+            <div class="" :class="kycForm.birthdayDesc ? 'text-black' : 'text-gray'">
+              {{ kycForm.birthdayDesc ? kycForm.birthdayDesc : t("出生日期") }}
+            </div>
+          </div>
+        </template>
+        <template #sendCode>
+          <van-icon name="arrow" class="rotate-90deg" size="20" color="#999999" />
+        </template>
       </inputCom>
       <div class="upload-label font-size-14px font-400 mb-10px mt-38px">
         Photo ID Card
       </div>
-      <van-uploader accept="image/*" preview-image multiple :max-count="1" v-model="list2"
+      <van-uploader accept="image/*" preview-image multiple :max-count="1" v-model="list1"
         :after-read="(file) => handleAfterRead(file, 1)" class="w-full">
         <div
           class="upload-box w-327px rounded-12px h-168px   border-1px flex items-center justify-center flex-col text-center">
-          <div class="icon w-24px h-24px"></div>
+          <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M17.5 9.00195C19.675 9.01406 20.8529 9.11051 21.6213 9.8789C22.5 10.7576 22.5 12.1718 22.5 15.0002V16.0002C22.5 18.8286 22.5 20.2429 21.6213 21.1215C20.7426 22.0002 19.3284 22.0002 16.5 22.0002H8.5C5.67157 22.0002 4.25736 22.0002 3.37868 21.1215C2.5 20.2429 2.5 18.8286 2.5 16.0002L2.5 15.0002C2.5 12.1718 2.5 10.7576 3.37868 9.87889C4.14706 9.11051 5.32497 9.01406 7.5 9.00195"
+              stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" />
+            <path d="M12.5 15L12.5 2M12.5 2L15.5 5.5M12.5 2L9.5 5.5" stroke="#1C274C" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+
           <div class="t w-263px mt-24px mb-8px">Choose a file</div>
           <div class="tips font-size-12px font-400 color-#676F74 w-263px">Ensure your ID is in PNG, JPG with a maximum
             file size of 5MB.</div>
         </div>
       </van-uploader>
       <div class="box mt-54px">
-        <van-button type="primary" class="" color="#6B39F4" block @click="step = 6">
+        <van-button type="primary" class="" color="#6B39F4" block @click="handleClickSubmit">
           下一步
         </van-button>
       </div>
     </block>
     <block v-if="step == 6">
-      <div class="mid-image w-120px h-120px mx-auto"></div>
+      <img src="@/assets/image/Illustration-success.png "
+        class="w-140px h-120px block flex-shrink-0 m-x-a mb-40px mt-122px" alt="">
+
       <div class="text-center font-size-24px font-600 color-#1A2029 mt-20px">感谢您提交身份认证</div>
       <div class="text-center font-size-14px font-400 color-#676F74 mt-12px w-290px mx-a">我们现在就可以审核，稍等片刻，我们会尽快核实。</div>
       <div class="box mt-54px">
-        <van-button type="primary" class="" color="#6B39F4" block @click="step = 6">
-          前往登录
+        <van-button type="primary" class="" color="#6B39F4" block @click="handleClickOnback">
+          Continue
         </van-button>
       </div>
     </block>
@@ -496,7 +560,7 @@ function onBack() {
         <inputCom :label="t('input.Nationality')" :placeholder="t('input.PleaseEnter')"
           v-model:value="kycForm.nationality" :type="'picker'">
           <div class="picker pr-8 mr-6 h-full flex items-center gap-8" @click="hanleClickAreaPick">
-            <img :src="icon1" alt="" class="w16 h16" />
+            <!-- <img :src="icon1" alt="" class="w16 h16" /> -->
             <div class="num">{{ areaInfo?.name }}</div>
           </div>
         </inputCom>
@@ -531,6 +595,10 @@ function onBack() {
       </div>
     </block>
     <slidePop ref="slidePopRef" />
+    <van-popup v-model:show="showDatePicker" position="bottom">
+      <van-date-picker v-model="currentDate" :title="t('input.PleaseSelect')" :min-date="minDate"
+        :columns-type="['month', 'day', 'year']" :max-date="maxDate" @confirm="onDateConfirm" />
+    </van-popup>
     <!-- <areaPop ref="areaPopRef" :country_id="25" @popOnOk="popOnOk" /> -->
   </div>
 </template>

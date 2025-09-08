@@ -5,14 +5,14 @@
             <div class="left flex items-center gap-12px">
                 <!-- 亚马逊Logo -->
                 <div class="logo w-40px h-40px rounded-full bg-#FF9900 flex items-center justify-center flex-shrink-0">
-                    <img :src="item.tradingInfo.logo" alt="" class="w-40px h-40px rounded-full">
+                    <img :src="item.logo" alt="" class="w-40px h-40px rounded-full">
                 </div>
 
                 <!-- 股票信息 -->
                 <div class="stock-info h-40 flex flex-col justify-between">
-                    <div class="symbol text-16px font-700 color-#374151">{{ item?.tradingInfo?.baseAssetInfo?.name }}
+                    <div class="symbol text-16px font-700 color-#374151">{{ item.type }}{{ item?.full_name }}
                     </div>
-                    <div class="company-name text-12px color-#6B7280">{{ item?.tradingInfo?.baseAssetInfo?.expName }}
+                    <div class="company-name text-12px color-#6B7280">{{ item?.time }}
                     </div>
                 </div>
             </div>
@@ -20,14 +20,10 @@
             <!-- 右侧：价格信息 -->
             <div class="right text-right">
                 <div class="current-price text-16px font-bold color-#374151 mb-2px">
-                    {{ item?.tradingInfo?.baseAssetInfo?.unit }}{{ item.lastPrice }}</div>
-                <div class="price-change flex items-center justify-end gap-4px">
-                    <!-- 下跌箭头 -->
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                        <path d="M6 2L6 10M6 10L9 7M6 10L3 7" stroke="#DC3232" stroke-width="1.5" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                    </svg>
-                    <span class="text-12px font-500 color-#DC3232">{{ item.dayIncrease }}%</span>
+                    + {{ item.quantity }}</div>
+                <div class="price-change flex items-center justify-end gap-4px color-#64748B text-12px">
+                    MX$ {{ item.price }}
+
                 </div>
             </div>
         </div>

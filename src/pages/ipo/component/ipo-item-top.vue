@@ -1,6 +1,6 @@
 <template>
     <div class="li flex w-full items-center gap-20">
-        <div class="logo w-50 h-50 rounded-full overflow-hidden bg-white">
+        <div class="logo w-50 h-50 rounded-full overflow-hidden bg-white flex-shrink-0">
             <img :src="item.logo" alt="" v-if="item && item.logo" class="w-full h-full">
             <img :src="item.ipoInfo.logo" alt="" v-if="item.ipoInfo" class="w-full h-full">
 

@@ -4,8 +4,10 @@ import type { RouteMap } from "vue-router";
 import { useUserStore } from "@/stores";
 import inputCom from "@/components/inputCom.vue";
 import nationalityList from "@/components/nationality-list/nationalityList.vue";
+import CloseButton from "@/components/CloseButton.vue";
 import { languageColumns, locale } from "@/utils/i18n";
-
+import Apple from '@/assets/image/Apple.svg'
+import Google from '@/assets/image/Google.svg'
 import loginTab from "@/components/tab.vue";
 import vw from "@/utils/inline-px-to-vw";
 
@@ -16,6 +18,10 @@ const userStore = useUserStore();
 const loading = ref(false);
 const type = ref('')
 const remember = ref(false);
+function onBack() {
+  if (window.history.state.back) history.back();
+  else router.replace("/");
+}
 onMounted(() => {
   if (route.query.type) {
     type.value = route.query.type;
@@ -30,7 +36,7 @@ onMounted(() => {
       remember.value = true;
       postData.account = parsedInfo.account || '';
       postData.password = parsedInfo.password || '';
-      postData.type = parsedInfo.type || 'phone';
+      // postData.type = parsedInfo.type || 'phone';
     } catch (error) {
       console.error('解析保存的登录信息失败:', error);
       localStorage.removeItem('remember');
@@ -53,7 +59,10 @@ const areaInfo = ref({
   key: "br",
   name: "",
 });
-
+const inputType = ref('password')
+const changeInputType = () => {
+  inputType.value = inputType.value == 'password' ? 'text' : 'password'
+}
 
 const postData = reactive({
   account: "",
@@ -83,7 +92,14 @@ const toRegister = () => {
     console.log(e);
   }
 };
+const toForgotPassword = () => {
+  try {
+    router.push("/forgot-password?type=" + postData.type);
 
+  } catch (e) {
+    console.log(e);
+  }
+};
 const toForget = () => {
   try {
     router.push("/register");
@@ -137,7 +153,7 @@ async function login() {
 <template>
   <div class="m-x-a w-full max-h-100vh">
     <div class="top-image w-full min-h-235px bg-#0F172A">
-      <div class="close h-56px w-full"></div>
+      <CloseButton @close="onBack" />
       <div class="mid-logo w-64px h-64px m-x-a">
         <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -165,30 +181,56 @@ async function login() {
     </div>
 
     <div class="login-form p-24">
-      <inputCom v-model:value="postData.account" :placeholder="type == '1' ? 'Username' : 'Email'" :onlyRead="false"
+      <inputCom v-model:value="postData.account" :placeholder="type == '1' ? 'Phone' : 'Email'" :onlyRead="false"
         :type="'text'"></inputCom>
-      <inputCom v-model:value="postData.password" :placeholder="'Password'" :onlyRead="false" :type="'text'"></inputCom>
+      <inputCom v-model:value="postData.password" :placeholder="'Password'" :onlyRead="false" :inputType="inputType">
+        <template #sendCode>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+            @click="changeInputType" v-if="inputType == 'text'">
+            <path d="M3 3L21 21" stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+              d="M10.584 10.587C10.2087 10.962 9.99775 11.4708 9.99756 12.0013C9.99737 12.5318 10.2079 13.0407 10.583 13.416C10.958 13.7913 11.4667 14.0022 11.9973 14.0024C12.5278 14.0026 13.0367 13.792 13.412 13.417"
+              stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+              d="M9.363 5.365C10.2204 5.11972 11.1082 4.99684 12 5C16 5 19.333 7.333 22 12C21.222 13.361 20.388 14.524 19.497 15.488M17.357 17.349C15.726 18.449 13.942 19 12 19C8 19 4.667 16.667 2 12C3.369 9.605 4.913 7.825 6.632 6.659"
+              stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+            v-if="inputType == 'password'" @click="changeInputType">
+            <path
+              d="M12 14C13.1046 14 14 13.1046 14 12C14 10.8954 13.1046 10 12 10C10.8954 10 10 10.8954 10 12C10 13.1046 10.8954 14 12 14Z"
+              stroke="#0F172A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+              d="M22 12C19.333 16.667 16 19 12 19C8 19 4.667 16.667 2 12C4.667 7.333 8 5 12 5C16 5 19.333 7.333 22 12Z"
+              stroke="#0F172A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </template>
+      </inputCom>
       <div class="flex justify-between items-center mt-16px mb-24px">
         <div class="left flex font-size-14px font-500 flex-shrink-0 gap-12px">
           <div class="radio w-16px h-16px rounded-4px border-1px " :class="remember ? 'radio-active' : ''"
             @click="remember = !remember"></div>
           Remember me
         </div>
-        <div class="right color-#6B39F4 font-size-14px font-700 cursor-pointer"> Forgot Password?</div>
+        <div class="right color-#6B39F4 font-size-14px font-700 cursor-pointer" @click="toForgotPassword()"> Forgot
+          Password
+        </div>
       </div>
       <van-button type="primary" r color="#6b39f4" class="login-btn" block @click="login()">{{
         t("登陆")
-      }}</van-button>
+        }}</van-button>
       <div class="tips my-24px">Or sign in with</div>
       <div class="flex gap-16px ">
         <div
-          class="plain-btn w-full flex-1 border-1px border-solid h-56px border-#E2E8F0 rounded-12px color-#0F172A flex items-center justify-center">
-          {{
+          class="plain-btn w-full flex-1 border-1px border-solid h-56px border-#E2E8F0 rounded-12px color-#0F172A flex items-center justify-center gap-8px">
+          <img :src="Apple" alt="" class="w-24px h-24px"> {{
             t("Apple")
           }}
         </div>
         <div
-          class="plain-btn w-full flex-1 border-1px border-solid h-56px border-#E2E8F0 rounded-12px color-#0F172A flex items-center justify-center">
+          class="plain-btn w-full flex-1 border-1px border-solid h-56px border-#E2E8F0 rounded-12px color-#0F172A flex items-center justify-center gap-8px">
+
+          <img :src="Google" alt="" class="w-24px h-24px">
           {{
             t("Google")
           }}
@@ -218,6 +260,8 @@ async function login() {
 </style>
 <style scoped>
 @import "@/components/nationality-list/intl.css";
+
+
 
 .radio {
   border: 1px solid #CBD5E1;

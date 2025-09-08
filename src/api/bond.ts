@@ -51,34 +51,42 @@ export function dividendPlaceOrderPay(data): Promise<any> {
 // 折扣股玩法
 // 获取订单详情
 export function discountOrderList(params): Promise<any> {
-    return request.get<any>('/app-api/gameplay/discount/orderList', { params })
+    return request.get<any>('/api/discount/discountOrderList', { params })
 }
 //获取产品列表
 export function discountList(params): Promise<any> {
-    return request.get<any>('/app-api/gameplay/discount/discountList', { params })
+    return request.get<any>('/api/discount/discountList', { params })
 }
 export function discountOrderBuy(data): Promise<any> {
-    return request.post<any>('/app-api/gameplay/discount/discountOrderBuy', data)
+    return request.post<any>('/api/discount/discountBuy', data)
 }
 export function discountOrderSell(data): Promise<any> {
-    return request.post<any>('/app-api/gameplay/discount/discountOrderSell', data)
+    return request.post<any>('/api/discount/discountSell', data)
 }
 // 基金
 // 列表
 export function fundProductList(params): Promise<any> {
-    return request.get<any>('/app-api/gameplay/fund/fundProductList', { params })
+    return request.get<any>('/api/fund/fundList', { params })
 }
 // 订单列表
 export function fundOrderList(params): Promise<any> {
-    return request.get<any>('/app-api/gameplay/fund/orderList', { params })
+    return request.get<any>('/api/fund/fundOrderList', { params })
 }
 // 详情
 export function fundProductInfo(params): Promise<any> {
-    return request.get<any>('/app-api/gameplay/fund/fundProductInfo', { params })
+    return request.get<any>('/api/fund/fundDetail', { params })
+}
+// 详情
+export function fundOrderDetail(params): Promise<any> {
+    return request.get<any>('/api/fund/fundOrderDetail', { params })
 }
 // 赎回
 export function orderRedeem(data): Promise<any> {
     return request.post<any>('/app-api/gameplay/fund/orderRedeem', data)
+}
+// 操作
+export function fundOperate(data): Promise<any> {
+    return request.post<any>('/api/fund/fundOperate', data)
 }
 // 购买
 export function orderPay(data): Promise<any> {
@@ -89,8 +97,8 @@ export function orderReNew(data): Promise<any> {
     return request.post<any>('/app-api/gameplay/fund/orderReNew', data)
 }
 // 预约
-export function orderReserve(data): Promise<any> {
-    return request.post<any>('/app-api/gameplay/fund/orderReserve', data)
+export function fundSubscribe(data): Promise<any> {
+    return request.post<any>('/api/fund/fundSubscribe', data)
 }
 // 领取收益
 export function orderGetProfit(data): Promise<any> {

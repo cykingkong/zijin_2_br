@@ -1,34 +1,38 @@
 <template>
-    <div class="cashier-center-content px-12 w-full ">
+    <div class="cashier-center-content px-12 w-full">
         <VanNavBar title="" :fixed="true" clickable :left-arrow="true" @click-left="onBack" z-index="999">
             <template #title>
-                <div class="flex flex-items-center gap-6 font-size-18px font-bold">Deposit</div>
+                <div class="text-16px font-bold color-#0F172A">收银台</div>
             </template>
         </VanNavBar>
-        <div class="info mt-32" v-if="info && info.tradingInfo">
+        <div class="info mt-32" v-if="info">
 
             <div class="min-count text-#0F172A font-size-40px mx-a text-center mt-57px font-700 overflow-y-auto">
                 MX${{ count }}
             </div>
-            <div class="balance flex items-start  justify-center gap-8px text-#64748B mt-8">
+            <div class="mt-30px">
                 <item class="mt-62px">
                     <template #left>
                         <div class="left h-46px flex items-center gap-16px">
-                            <div class="img rounded-full w-40px h-40px overflow-hidden bg-#F8F9FD"></div>
+                            <div class="img rounded-full w-40px h-40px overflow-hidden bg-#F8F9FD">
+                                <img :src="info.logo" alt="" class="w-full h-full ">
+
+                            </div>
                             <div class="info h-46px flex flex-col justify-between ">
-                                <div class="name text-#0F172A text-14px font-bold">通道1</div>
-                                <div class="name2 text-#64748B text-12px">金额范围: 100 ~ 100000</div>
+                                <div class="name text-#0F172A text-14px font-bold">{{ info.name }}</div>
+                                <div class="name2 text-#64748B text-12px">金额范围: MX${{ info.min_amount }} ~ MX${{
+                                    info.max_amount
+                                }}</div>
                             </div>
                         </div>
                     </template>
                     <template #right>
-                        <div class=" color-#6B39F4 text-14px font-bold" @click="onSelect">选择更多</div>
+                        <div class=" color-#6B39F4 text-14px font-bold text-nowrap" @click="onSelect">选择更多</div>
                     </template>
                 </item>
             </div>
         </div>
         <div class="input-box px-12 mt-111px">
-
             <div class="keypad">
                 <div class="keypad-row flex gap-8px mb-8px" v-for="row in keypadRows" :key="row.join('')">
                     <div v-for="key in row" :key="key" @click="handleKeyClick(key)"
@@ -56,19 +60,23 @@
                 </div>
             </div>
         </div>
-        <BottomButton :button-text="`Buy ${info?.unit}${addCommasToNumber(count * info?.discountPrice)}`"
-            @click="handleBuyClick" />
+        <BottomButton :button-text="`Deposit Preview`" @click="onConfirm" />
     </div>
 </template>
 <script setup lang="ts">
-import { addCommasToNumber } from "@/utils/tool";
-import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
-import item from '../component/item.vue'
+import { useLoadingStore } from "@/stores/modules/loading";
+
+
+import { deposit } from '@/api/billing'
+import item from '../../../components/item.vue'
 import BottomButton from '../component/bottom-button.vue'
 const info = ref<any>();
 const count = ref(0)
 const displayValue = ref('');
+
+const { proxy } = getCurrentInstance()!
+const loadingStore = useLoadingStore();
 
 // 数字键盘布局数据
 const keypadRows = [
@@ -89,16 +97,39 @@ const handleKeyClick = (key: string) => {
     }
 };
 const onSelect = () => {
-    router.push('/wallet/exchange/channel-in')
+    router.push('/wallet/exchange/channel-out')
 }
 
-const handleBuyClick = () => {
+const handleBuyClickOriginal = async () => {
     // 处理购买逻辑
     console.log('购买金额:', count.value)
     console.log('购买信息:', info.value)
     // 这里可以添加购买确认、API调用等逻辑
-}
+    const { data, code } = await deposit({ amount: count.value, id: info.value.id })
+    if (code === 200) {
+        if (data.type == 'bank') {
+            setTimeout(() => {
+                window.location.href = data.url
+            }, 40)
+        }
+        if (data.type == 'crypto') {
+            let cInfo = {
+                ...data,
+                amount: count.value
+            }
+            localStorage.setItem('cryptoInfo', JSON.stringify(cInfo))
+            setTimeout(() => {
+                router.push('/wallet/exchange/deposit-preview')
+            }, 40)
 
+
+        }
+    }
+}
+const onConfirm = proxy!.$throttle(handleBuyClickOriginal, 1000, {
+    onStart: () => loadingStore.show(),
+    onEnd: () => loadingStore.hide(),
+});
 // 数字键盘相关方法
 const appendNumber = (num: string) => {
     if (displayValue.value === '0' && num !== '.') {
@@ -138,7 +169,7 @@ const deleteLastChar = () => {
 
 // 更新info的函数
 const updateInfo = () => {
-    const dataInfo = localStorage.getItem("dataInfo");
+    const dataInfo = localStorage.getItem("payType");
     if (dataInfo) {
         try {
             // 如果dataInfo是JSON字符串，则解析为对象
@@ -162,6 +193,11 @@ onMounted(() => {
             updateInfo();
         }
     });
+});
+
+// 页面离开时清空payType
+onBeforeUnmount(() => {
+    localStorage.removeItem('payType');
 });
 
 // 使用watch监听info的变化（可选，用于调试）

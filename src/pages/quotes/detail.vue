@@ -1,10 +1,19 @@
 <template>
-  <div class="detail px-12 pb-120 pt-12">
-    <VanNavBar :title="listtext" :fixed="true" clickable placeholder :left-arrow="true" @click-left="onBack" />
+  <div class="detail  pb-120 ">
+    <VanNavBar :title="listtext" :fixed="true" clickable placeholder :left-arrow="true" @click-left="onBack">
+      <template #title>
+        <div class="flex items-center color-#000 gap-8px" @click="handleClickPop">
+          {{ listtext }}
+
+          <van-icon name="arrow" color="#000" />
+
+        </div>
+      </template>
+    </VanNavBar>
 
     <!-- <userBalance :data="userBalanceInfo"></userBalance> -->
 
-    <div class="flex">
+    <!-- <div class="flex px-24">
       <div class="l flex flex-1 flex-col gap-12">
         <div class="picker flex items-center" @click="handleClickPop">
           {{ listtext }}
@@ -45,29 +54,35 @@
           <div>{{ addCommasToNumber(klineData.close) }}</div>
         </div>
       </div>
+    </div> -->
+    <div class="h-600 " v-if="routeItem">
+      <klineDetailWidget :symbol="routeItem.tradingview_name"></klineDetailWidget>
     </div>
-    <div class="h-500">
+    <!-- <div class="h-500 fixed right-[-1000px]">
       <charts v-if="tradingPairsId" ref="EhartsDataRef" :trading_pair_id="Number(tradingPairsId)"></charts>
-    </div>
-    <div class="w-full mt-12">
-      <div class="flex th gap-12 mb-6 text-blueGray-400 font-size-12">
-        <div class="l flex-1">{{ t("Buy") }}</div>
-        <div class="l flex-1">{{ t("Sell") }}</div>
-      </div>
-      <div class="flex td gap-12 font-size-14">
-        <div class="l flex-1">
-          <div class="w-full flex mb-6" v-for="(item, index) in asks" :key="index">
-            <div class="l flex-1">{{ addCommasToNumber(item[0]) }}</div>
-            <div class="l flex-1 text-right up">{{ item[1] }}</div>
-          </div>
+    </div> -->
+    <div class="MarketStatistics px-24 py-24" v-if="false">
+      <div class="title text-20px font-700 flex items-center gap-8px">Market Statistics <img
+          src="@/assets/image/question.svg" alt="" class="w-16 h-16 "></div>
+      <div class="options-h flex-1 font-size-12 flex line-height-25 gap-20">
+        <div class="flex-1 flex options-h-item justify-between items-center h-44px">
+          <div class="text-blueGray-400">{{ t("Highest price") }}</div>
+          <div>{{ addCommasToNumber(klineData.high) }}</div>
         </div>
-        <div class="l flex-1">
-          <div class="w-full flex mb-6" v-for="(item, index) in bids" :key="index">
-            <div class="l flex-1 down">{{ item[1] }}</div>
-            <div class="l flex-1 text-right">
-              {{ addCommasToNumber(item[0]) }}
-            </div>
-          </div>
+        <div class="flex-1 flex options-h-item justify-between items-center h-44px">
+          <div class="text-blueGray-400">{{ t("Lowest price") }}</div>
+          <div>{{ addCommasToNumber(klineData.low) }}</div>
+        </div>
+      </div>
+      <div class="options-h flex-1 font-size-12 flex line-height-25 gap-20">
+
+        <div class="flex-1 flex options-h-item justify-between items-center h-44px">
+          <div class="text-blueGray-400">{{ t("Open price") }}</div>
+          <div>{{ addCommasToNumber(klineData.open) }}</div>
+        </div>
+        <div class="flex-1 flex options-h-item justify-between items-center h-44px">
+          <div class="text-blueGray-400">{{ t("Close price") }}</div>
+          <div>{{ addCommasToNumber(klineData.close) }}</div>
         </div>
       </div>
     </div>
@@ -91,13 +106,14 @@
 import { ref, reactive, onBeforeUnmount } from "vue";
 import { getBalancePair } from "@/api/user";
 import { depth, kline } from "@/api/market";
+import { assetsDetail } from "@/api/stock";
 import { useStore } from "@/stores/modules/index";
 import { addCommasToNumber } from "@/utils/tool";
 import Socket from "@/utils/Socket.js";
 import local from "@/utils/local";
 import charts from "@/components/charts/charts.vue";
-import { market } from "@/api/market";
-
+import { assetsList } from "@/api/stock";
+import klineDetailWidget from "./component/klineDetailWidget.vue";
 const tradingPairsId = ref();
 
 const categoryId = ref();
@@ -106,7 +122,7 @@ const store = useStore();
 const EhartsDataRef = ref(null);
 const router = useRouter();
 const listtext = ref("");
-const routeItem = ref("");
+const routeItem = ref(null);
 const columns = ref([]);
 function onBack() {
   if (window.history.state.back) history.back();
@@ -123,45 +139,31 @@ const handleClickPop = () => {
 const canPick = ref(false);
 
 const getMarketList = async () => {
-  const { data, code } = await market({
-    pageIndex: 1,
-    pageSize: 500,
-    categoryId: categoryId.value,
+  const { data, code } = await assetsList({
+    page: 1,
+    size: 500,
+    type: '0'
   });
   if (code == 200) {
     columns.value = data.list.map((e) => {
       return {
         ...e,
         text:
-          e.tradingInfo.baseAssetInfo.name +
-          "/" +
-          e.tradingInfo.quoteAssetInfo.name,
-        value: e.tradingPairsId,
+          e.name,
+
+        value: e.asset_id,
       };
     });
     canPick.value = true;
   }
 };
 const onConfirm = async ({ selectedOptions }) => {
-  await closews();
-  if (selectedOptions[0].tradingPairsId != tradingPairsId.value) {
-    EhartsDataRef.value.childInte();
-  }
-  const item = selectedOptions[0];
-  listtext.value =
-    item.tradingInfo.baseAssetInfo.name +
-    "/" +
-    item.tradingInfo.quoteAssetInfo.name;
-  tradingPairsId.value = item.tradingPairsId;
-  router.replace({
-    query: {
-      ...route.query,
-      id: item.tradingPairsId,
-    },
-  });
-  local.setlocal("rankInfo", selectedOptions[0]);
+  await getStockDetail({
+    symbol: selectedOptions[0].symbol
+  })
+
   showPicker.value = false;
-  SocketWs();
+
 };
 const klineData = computed(() => {
   console.log(store.getlistData, "klineData");
@@ -225,36 +227,53 @@ const SocketWs = () => {
 const handelClickBtn = (inputType) => {
   // 参数名建议修改以避免与 query 中的 'type' 混淆
   router.push({
-    path: "/quotes/openTrade",
+    path: "/buy",
     query: {
       type: inputType, // 根据 inputType 决定 query.type 的值
-      id: tradingPairsId.value,
-      categoryId: categoryId.value,
+      symbol: routeItem.value.symbol,
+      buyType: 'stock'
     },
   });
 };
+const getStockDetail = async (params) => {
+  const { data, code } = await assetsDetail(params);
+  if (code == 200) {
+    console.log(data);
+    routeItem.value = data;
+    listtext.value = data.name
+  }
 
+}
 onMounted(async () => {
-  if (route.query.categoryId) {
-    categoryId.value = route.query.categoryId;
-  }
-  if (route.query.id) {
-    tradingPairsId.value = route.query.id;
-    routeItem.value = local.getlocal("rankInfo");
-    listtext.value =
-      routeItem.value.tradingInfo.baseAssetInfo.name +
-      "/" +
-      routeItem.value.tradingInfo.quoteAssetInfo.name;
-    await getMarketList();
-    await getDepth();
-    await getBalance();
-    SocketWs();
-  }
+  await getStockDetail({
+    symbol: route.query.symbol
+  })
+  await getMarketList();
+
+  // if (route.query.categoryId) {
+  //   categoryId.value = route.query.categoryId;
+  // }
+  // if (route.query.id) {
+  //   tradingPairsId.value = route.query.id;
+
+  //   // routeItem.value = local.getlocal("rankInfo");
+
+  //   // listtext.value =
+  //   //   routeItem.value.tradingInfo.baseAssetInfo.name +
+  //   //   "/" +
+  //   //   routeItem.value.tradingInfo.quoteAssetInfo.name;
+  //   await getStockDetail({
+  //     symbol: route.query.symbol
+  //   })
+  //   // await getDepth();
+  //   // await getBalance();
+  //   // SocketWs();
+  // }
 });
 
 onBeforeUnmount(() => {
   console.log("onBeforeUnmount", EhartsDataRef.value, tradingPairsId.value);
-  EhartsDataRef.value.close();
+  // EhartsDataRef.value.close();
   closews();
 });
 </script>
@@ -263,5 +282,9 @@ onBeforeUnmount(() => {
   padding-top: 12px;
   background: white;
   padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
+}
+
+.options-h-item {
+  border-bottom: 1px solid #E2E8F0;
 }
 </style>

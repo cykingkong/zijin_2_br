@@ -12,7 +12,6 @@
       </div>
     </inputCom>
     <div class="label font-700 text-16px color-#64748B">提币地址</div>
-
     <inputCom :label="t('bankCardName')" :placeholder="t('input.PleaseEnter')" v-model:value="form.bankName" :tips="''"
       require>
     </inputCom>
@@ -190,3 +189,12 @@ onMounted(() => {
   padding: 8px 24px 0;
 }
 </style>
+<route lang="json5">
+  {
+    name: 'add',
+    meta: {
+      title: 'add',
+      i18n: 'add'
+    },
+  }
+  </route>
