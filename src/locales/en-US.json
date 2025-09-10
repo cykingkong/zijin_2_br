@@ -369,6 +369,7 @@
     "pleaseEnterPassword": "Please enter password",
     "pleaseEnterConfirmPassword": "Please enter password again",
     "passwordsDoNotMatch": "Passwords do not match",
+    "passwordMinLength": "Password must be at least 8 characters",
     "confirm": "Confirm",
     "backToLogin": "Back to login",
     "getCode": "Get code",

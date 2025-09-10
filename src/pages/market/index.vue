@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import router from '@/router';
-import { useStore } from '@/stores/modules/index'
 import Grid from '@/components/grid.vue'
 import usStockIndexDetail from '../quotes/usStockIndexDetail.vue';
 import { assetsList } from '@/api/stock'
@@ -25,7 +24,6 @@ const tabList = ref([
     }
 ])
 const categoryId = ref('200');
-const store = useStore();
 const getStockList = async () => {
     if (page.page == 1) {
         stockSkeleton.value = true
@@ -39,7 +37,7 @@ const getStockList = async () => {
         if (stockSkeleton.value) {
             setTimeout(() => {
                 stockSkeleton.value = false;
-            }, 50000)
+            }, 3000) // 修改为3秒
         }
         if (!data.list) {
             listStatus.value = 3;
@@ -69,8 +67,11 @@ const tabChange = (index: number) => {
     } else {
         categoryId.value = '201'
     }
+    // 重置分页和状态
+    page.page = 1;
+    stockList.value = [];
+    listStatus.value = 1;
     getStockList()
-
 }
 const handleClickStock = (item: any) => {
     router.push(`/quotes/detail?symbol=${item.symbol}`)
@@ -164,12 +165,20 @@ onMounted(() => {
                 <div class="label text-16px text-#0F172A font-700 mb-16px">
                     All Stocks
                 </div>
+                <div class="list-content min-h-600 relative">
 
-                <!-- <div class="list-skeleton bg-coolgray skeleton-animation w-full h-150 rounded-12px mb-16px"
-                    v-show="stockSkeleton" v-for="i in 5" :key="i"></div> -->
-                <miniChartList :stockList="stockList" @itemClick="handleClickStock" itemClass="stock-item relative" />
-                <empty v-if="stockList.length == 0" :no-tips="true" />
-                <LoadMore :status="listStatus" @load-more="loadMore"></LoadMore>
+                    <div class="skeleton-list bg-#fff z-99  w-full h-full absolute top-0 left-0" v-if="stockSkeleton">
+                        <div class="list-skeleton bg-coolgray skeleton-animation w-full h-130 rounded-12px mb-16px"
+                            v-for="i in 5" :key="i"></div>
+                    </div>
+
+
+                    <miniChartList :stockList="stockList" @itemClick="handleClickStock"
+                        itemClass="stock-item relative" />
+                    <empty v-if="!stockSkeleton && stockList.length == 0" :no-tips="true" />
+                    <LoadMore v-if="!stockSkeleton" :status="listStatus" @load-more="loadMore"></LoadMore>
+                </div>
+
             </div>
             <usStockIndexDetail></usStockIndexDetail>
 

@@ -60,7 +60,7 @@ onMounted(() => {
   // setTimeout(() => {
   //   localStorage.setItem("vueuse-color-scheme", "dark");
   // }, 80);
-  SocketWs();
+  // SocketWs();
 });
 </script>
 

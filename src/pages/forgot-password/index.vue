@@ -1,18 +1,14 @@
 <template>
   <div class="changePassword-content flex flex-col gap-24 p-12">
-    <loginTab :list="typeArr" @change="changeActive" class="mb-0"></loginTab>
-    <inputCom :label="t('login.email')" v-model:value="form.username" :placeholder="t('input.PleaseEnter')"
+    <!-- <loginTab :list="typeArr" @change="changeActive" class="mb-0"></loginTab> -->
+    <inputCom :label="t('login.email')" v-model:value="form.account" :placeholder="t('input.PleaseEnter')"
       v-if="form.type == 'email'">
     </inputCom>
 
 
     <div class="phone-input flex items-center gap-12px" v-if="form.type == 'phone'">
-      <div class="picker flex-shrink-0 h-56px bg-#F8F9FD rounded-12px flex items-center justify-center px-16"
-        @click="hanleClickAreaPick">
-        <div class="iti-flag mr-10 rounded-full" :class="areaInfo?.code" style="transform: scale(1.5)"></div>
-        <div class="num">+{{ areaInfo?.dialCode }}</div>
-      </div>
-      <inputCom :label="t('input.Phone')" :placeholder="t('input.PleaseEnter')" v-model:value="form.phone" :tips="''"
+
+      <inputCom :label="t('input.Phone')" :placeholder="t('input.PleaseEnter')" v-model:value="form.account" :tips="''"
         class="flex-1 w-full">
       </inputCom>
     </div>
@@ -20,18 +16,17 @@
 
     <inputCom :label="t('input.NewPassword')" v-model:value="form.password" :placeholder="t('input.PleaseEnter')">
     </inputCom>
-    <inputCom :label="t('input.ConfirmPassword')" v-model:value="form.passwordConfirmation"
-      :placeholder="t('input.PleaseEnter')"></inputCom>
-    <inputCom :label="t('input.VerificationCode')" :placeholder="t('input.PleaseEnter')" v-model:value="form.code"
+    <!-- <inputCom :label="t('input.ConfirmPassword')" v-model:value="form.passwordConfirmation"
+      :placeholder="t('input.PleaseEnter')"></inputCom> -->
+    <inputCom :label="t('input.VerificationCode')" :placeholder="t('input.PleaseEnter')" v-model:value="form.captcha"
       :tips="''">
       <template #sendCode>
-        <div class="absolute right-0 font-size-12 sendCode" :class="countdown > 0 ? 'text-gray-400' : 'text-white'"
-          @click="getCode">
+        <div class="absolute right-0 font-size-12 sendCode text-#000 " @click="getCode">
           {{ countdown > 0 ? `${countdown}s` : t("input.SendCode") }}
         </div>
       </template>
     </inputCom>
-    <van-button type="primary" block @click="onSubmit">{{ t('confirm') }}</van-button>
+    <van-button type="primary" class="h-56px" color="#6b39f4" block @click="onSubmit">{{ t('confirm') }}</van-button>
     <nationalityList ref="controlChildRef" :title="t('pick')" @getName="getName"></nationalityList>
 
   </div>
@@ -51,7 +46,7 @@ const form = reactive({
   passwordConfirmation: '',
   type: 'phone',
   username: "",
-  code: "",
+  captcha: "",
 
 })
 const forgotType = ref(0) // 1 忘记登录密码  2 忘记支付密码
@@ -64,36 +59,40 @@ const typeArr = [{
 
   value: 'email'
 }]
-const areaInfo = ref({
-  code: "br",
-  dialCode: 55,
-  key: "br",
-  name: ""
-})
+
 const active = ref(0)
 const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
+watch(() => userInfo.value, () => {
+  if (userInfo.value?.phone) {
+    form.type = 'phone'
+    form.account = userInfo.value?.phone
+
+  }
+  if (userInfo.value?.email) {
+    form.type = 'email';
+    form.account = userInfo.value?.email
+  }
+}, {
+  immediate: true
+})
 const countdown = ref(0)
 const timer = ref()
 const getCode = async () => {
   if (countdown.value > 0) return
-  if (!form.username) {
+  if (!form.account) {
     showToast(t('input.PleaseEnter'))
     return
   }
   try {
     let params = {
       type: form.type,
-      phone: '',
-      email: ''
+      account: form.account,
+
     }
-    if (params.type == 'phone') {
-      params.phone = `${areaInfo.value.dialCode}${form.username}`
-    } else if (params.type == 'email') {
-      params.email = form.username
-    }
+
 
     await sendCode(params)
     startCountdown()
@@ -123,18 +122,13 @@ const hanleClickAreaPick = () => {
   // areaPopRef.value.popShow()
 }
 const onSubmit = async () => {
-  const { password, passwordConfirmation } = form
-  if (password !== passwordConfirmation) {
-    return
-  }
+
+
   let params = {
     ...form,
+  }
+  params.captcha = params.captcha.trim()
 
-  }
-  params.code = params.code.trim()
-  if (params.type == 'phone') {
-    params.username = `${areaInfo.value.dialCode}${params.username}`
-  }
 
   const res = await forgetPassword(params)
   if (res.code === 200) {
@@ -143,9 +137,7 @@ const onSubmit = async () => {
   }
 }
 
-const getName = (val: any) => {
-  areaInfo.value = val
-}
+
 onMounted(async () => {
   if (route.query.type) {
     form.type = route.query.type as string

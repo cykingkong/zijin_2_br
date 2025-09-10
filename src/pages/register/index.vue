@@ -37,10 +37,10 @@ const agree = ref(false);
 const timer = ref<NodeJS.Timeout>();
 const userStore = useUserStore();
 const areaInfo = ref({
-  code: "br",
-  dialCode: 55,
-  key: "br",
-  name: "",
+  code: "mx",
+  dialCode: 52,
+  key: "mx",
+  name: "Mexico",
 });
 const inviteCodeOnlyRead = ref(false);
 const typeArr = [
@@ -91,6 +91,34 @@ const form = reactive({
   inviteCode: "", // 邀请码
 });
 
+// 密码验证相关
+const passwordError = ref(false);
+const passwordErrorMessage = ref('');
+
+// 密码验证函数
+const validatePassword = (password) => {
+  if (!password) {
+    passwordError.value = false;
+    passwordErrorMessage.value = '';
+    return true;
+  }
+
+  if (password.length < 8) {
+    passwordError.value = true;
+    passwordErrorMessage.value = t('register.passwordMinLength');
+    return false;
+  }
+
+  passwordError.value = false;
+  passwordErrorMessage.value = '';
+  return true;
+};
+
+// 监听密码变化
+watch(() => form.password, (newPassword) => {
+  validatePassword(newPassword);
+});
+
 const list1 = ref([]);
 const list2 = ref([]);
 const list3 = ref([]);
@@ -136,7 +164,7 @@ const handleClickRegisterOriginal = async () => {
       account,
       type: form.type,
       password: form.password,
-      captcha: verificationCode.value,
+      captcha: Number(verificationCode.value),
       code: form.inviteCode,
     };
 
@@ -201,8 +229,8 @@ const getCode = async () => {
     };
     const { data, code } = await sendCode(params);
     if (code == 200) {
-      // showToast('验证码已发送，请注意查收')
-      step.value++
+      showToast('验证码已发送，请注意查收')
+      // step.value++
 
     }
     startCountdown();
@@ -364,8 +392,8 @@ function onBack() {
       <inputCom :label="t('register.email')" :placeholder="t('register.email')" v-model:value="form.email" :tips="''"
         v-if="form.type == 'email'">
       </inputCom>
-      <inputCom :label="t('login.password')" :placeholder="t('login.password')" v-model:value="form.password" :tips="''"
-        :inputType="'password'">
+      <inputCom :label="t('login.password')" :placeholder="t('login.password')" v-model:value="form.password"
+        :tips="passwordErrorMessage" :inputType="'password'">
       </inputCom>
       <inputCom :label="t('input.ConfirmPassword')" :placeholder="t('input.ConfirmPassword')"
         v-model:value="form.passwordConfirmation" :tips="''" :inputType="'password'">
@@ -395,9 +423,9 @@ function onBack() {
         </div>
       </div>
       <div class="flex-col gap-12 flex">
-        <van-button type="primary" block color="#6B39F4" @click="getCode">{{
+        <van-button type="primary" block color="#6B39F4" @click="getCode; step = 2">{{
           t("menus.register")
-          }}</van-button>
+        }}</van-button>
         <!-- <van-button type="primary" block @click="handleClickRegister">登陆</van-button> -->
       </div>
       <div class="flex items-center mt-36px justify-center">
@@ -591,7 +619,7 @@ function onBack() {
         </inputCom>
         <van-button type="primary" block @click="handleClickSubmit">{{
           t("submit")
-          }}</van-button>
+        }}</van-button>
       </div>
     </block>
     <slidePop ref="slidePopRef" />

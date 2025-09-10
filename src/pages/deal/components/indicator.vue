@@ -117,10 +117,10 @@ const categoryPositionData = ref([])
 async function getCategoryPositionData(params = {}, showLoading = true) {
   const { data, code } = await userOrderList({
     page: 1,
-    size: 100
+    size: 10
   }, showLoading)
   if (code === 200) {
-    categoryPositionData.value = data || []
+    categoryPositionData.value = data.list || []
   }
 }
 const store = useStore();

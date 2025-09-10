@@ -50,7 +50,7 @@ let val = ref('')
 let list = ref([])
 let countriesFind = ref({})
 const countries = ref(countriesinit)
-let selectIndex = ref(1)
+let selectIndex = ref('mx')
 let countryCodeList = ref(['93', '355', '213', '684', '376', '244',
     '1264', '1268', '54', '374', '297', '61', '43', '994', '1242',
     '973', '880', '1246', '375', '32',
@@ -184,13 +184,13 @@ onMounted(() => {
         getData();
         return;
     }
-    const brazilKey = Object.keys(originalCountries).find(key =>
-        originalCountries[key].name === '巴西' ||
-        originalCountries[key].name === 'Brazil'
+    const mexicoKey = Object.keys(originalCountries).find(key =>
+        originalCountries[key].name === '墨西哥' ||
+        originalCountries[key].name === 'Mexico'
     );
-    if (brazilKey) {
-        const { [brazilKey]: brazil, ...rest } = originalCountries;
-        countriesFind.value = { [brazilKey]: brazil, ...rest };
+    if (mexicoKey) {
+        const { [mexicoKey]: mexico, ...rest } = originalCountries;
+        countriesFind.value = { [mexicoKey]: mexico, ...rest };
     } else {
         countriesFind.value = originalCountries;
     }
@@ -203,7 +203,7 @@ const open = () => {
 const getData = () => {
     console.log(countries.value)
 
-    let us = countries.value[locale.value] ? countries.value[locale.value]['br'] : countries.value['en-US']['br'];
+    let us = countries.value[locale.value] ? countries.value[locale.value]['mx'] : countries.value['en-US']['mx'];
     $emit('getName', us);
 }
 //选择国家

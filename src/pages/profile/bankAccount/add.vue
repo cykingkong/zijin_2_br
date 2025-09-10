@@ -20,7 +20,7 @@
     <div class="w-full flex flex-col gap-12 bottom-btn fixed left-0">
       <van-button type="primary" block @click="handleClickSubmit" color="#6B39F4">{{
         t("submit")
-      }}</van-button>
+      }}123</van-button>
       <!-- <van-button type="danger" block @click="handleClickDel" v-if="isEdit">{{
         t("delete")
       }}</van-button> -->
@@ -37,7 +37,7 @@
 import { ref, reactive } from "vue";
 import setPageTitle from "@/utils/set-page-title";
 import inputCom from "@/components/inputCom.vue";
-import { userCardAdd, userCardUpdate, userCardDel } from "@/api/payment";
+import { userCardUpdate, userCardDel } from "@/api/payment";
 import { useStore } from "@/stores/modules/index";
 import { showToast } from "vant";
 
@@ -144,7 +144,7 @@ const handleClickSubmit = () => {
     return;
   }
   // 提交
-  userCardAdd(params).then((res) => {
+  userCardDel(params).then((res) => {
     if (res.code == 200) {
       // showToast("添加成功");
       // 跳转

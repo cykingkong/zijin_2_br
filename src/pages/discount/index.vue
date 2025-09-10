@@ -83,10 +83,10 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive } from "vue";
-import { useRoute } from 'vue-router';
+import { ref, reactive, watch, onMounted, onUnmounted, getCurrentInstance } from "vue";
+import { useRoute, useRouter } from 'vue-router';
 import { discountList, discountOrderList, discountOrderBuy, discountOrderSell } from '@/api/bond'
-import { showToast, showSuccessToast, allowMultipleToast } from 'vant';
+import { showToast, allowMultipleToast } from 'vant';
 
 import { useStore } from '@/stores/modules/index';
 import discontItem from "./component/discont-item.vue"

@@ -94,3 +94,6 @@ export function bindPhone(data): Promise<any> {
 export function bankList(params): Promise<any> {
   return request.get('/api/bank_list', { params })
 }
+export function resetPassword(data): Promise<any> {
+  return request.post('/api/auth/resetPassword', data)
+}

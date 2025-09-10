@@ -31,7 +31,7 @@
             <slot></slot>
 
         </div>
-        <div class="tips font-size-12 text-blueGray mt-10"> {{ tips }}</div>
+        <div class="tips font-size-12 text-#000 mt-10"> {{ tips }}</div>
     </div>
 </template>
 <script setup lang="ts">

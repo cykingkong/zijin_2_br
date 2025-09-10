@@ -373,9 +373,9 @@ onMounted(() => {
     <div class="indicator-title px-24 font-bold text-16px mt-12">持有资产</div>
     <Indicator :activeName="activeName" />
 
-    <div class="kf-fixed fixed bottom-120px right-0 h-auto w-40 overflow-hidden rounded-12px" @click="initKfUrl">
+    <!-- <div class="kf-fixed fixed bottom-120px right-0 h-auto w-40 overflow-hidden rounded-12px" @click="initKfUrl">
       <img src="@/assets/kf.png" class="block h-full w-full scale-[1.1] bg-white" alt="">
-    </div>
+    </div> -->
     <van-popup v-model:show="showDatePicker" position="center" round="true">
       <div class="h-auto max-h-500 overflow-y-auto p-12">
         <div class="div" v-html="indexInfoData.notice" />

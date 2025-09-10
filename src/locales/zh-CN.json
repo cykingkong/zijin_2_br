@@ -375,6 +375,7 @@
     "nickname": "昵称",
     "password": "密码",
     "comfirmPassword": "再次输入密码",
+    "passwordMinLength": "密码不能少于8位",
     "pleaseEnterEmail": "请输入邮箱",
     "pleaseEnterCode": "请输入验证码",
     "pleaseEnterNickname": "请输入昵称",

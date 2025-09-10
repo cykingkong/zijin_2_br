@@ -2,14 +2,14 @@
 import router from "@/router";
 import { useStore } from "@/stores/modules/index";
 
-import tabItem from "./component/tab-item.vue";
-import Banner from "./component/banner.vue";
-import Notice from "./component/notice.vue";
-import Grid from "./component/grid.vue";
-import Rank from "./component/rank.vue";
-import TopStories from "./component/topStories.vue";
-import StockMarketWidget from "./component/stockMarketWidget.vue";
-import hotmap from "./component/hotmap.vue";
+// import tabItem from "./component/tab-item.vue";
+// import Banner from "./component/banner.vue";
+// import Notice from "./component/notice.vue";
+// import Grid from "./component/grid.vue";
+// import Rank from "./component/rank.vue";
+// import TopStories from "./component/topStories.vue";
+// import StockMarketWidget from "./component/stockMarketWidget.vue";
+// import hotmap from "./component/hotmap.vue";
 
 import { indexInfo, depth, market } from "@/api/market";
 import local from "@/utils/local";
@@ -26,9 +26,9 @@ const handleClickGrid = (val: any) => {
     local.setlocal("rankInfo", marketData.value.list[0]);
     router.push(
       "/quotes/openTrade?id=" +
-        marketData.value.list[0].tradingPairsId +
-        "&categoryId=" +
-        categoryId.value
+      marketData.value.list[0].tradingPairsId +
+      "&categoryId=" +
+      categoryId.value
     );
   }
   if (val == 1) {
@@ -138,9 +138,9 @@ const handleClickIndicator = (val) => {
   local.setlocal("rankInfo", val);
   router.push(
     "/quotes/detail?id=" +
-      val.tradingPairsId +
-      "&categoryId=" +
-      categoryId.value
+    val.tradingPairsId +
+    "&categoryId=" +
+    categoryId.value
   );
 };
 const clickNotice = () => {
@@ -176,37 +176,22 @@ onMounted(() => {
       </div> -->
     </header>
     <van-tabs v-model:active="activeName" shrink @change="handleClickTabs">
-      <van-tab
-        class="flex flex-col gap-12 pt-12"
-        :title="item.name"
-        :name="item.category_id"
-        v-for="item in marketData.category"
-        :key="item.category_id"
-      >
+      <van-tab class="flex flex-col gap-12 pt-12" :title="item.name" :name="item.category_id"
+        v-for="item in marketData.category" :key="item.category_id">
         <Banner :banner="indexInfoData.banners" />
         <tabItem :categoryId="item.category_id" :item="indexData"> </tabItem>
         <div class="top relative">
-          <div
-            class="z-index-999 absolute top-0 left-0 w-full h-full"
-            @click="toDetail"
-          ></div>
+          <div class="z-index-999 absolute top-0 left-0 w-full h-full" @click="toDetail"></div>
           <TopStories v-if="item.category_id == 200" />
         </div>
         <!-- <Indicator :list="marketData.list" v-if="item.category_id == 200" @handle-click="handleClickIndicator" /> -->
         <!-- 金刚区 -->
-        <Grid
-          @handleClickGrid="handleClickGrid"
-          :categoryId="item.category_id"
-        />
+        <Grid @handleClickGrid="handleClickGrid" :categoryId="item.category_id" />
         <!-- 公告 -->
         <Notice @clickNotice="clickNotice" :data="indexInfoData" />
         <!-- 排行 -->
-        <Rank
-          :rankList="marketData.list"
-          :categoryId="item.category_id"
-          @loadMore="loadMore"
-          :rankListStatus="rankListStatus"
-        />
+        <Rank :rankList="marketData.list" :categoryId="item.category_id" @loadMore="loadMore"
+          :rankListStatus="rankListStatus" />
 
         <hotmap></hotmap>
       </van-tab>
@@ -255,8 +240,7 @@ onMounted(() => {
 }
 
 :deep(.van-tabs__line) {
-  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADxSURBVHgBnVHLDYJAEJ1ZjJ+LoQTsQDtA48GjJXj1YNQKKIGDIR4pQY8eTLQD7EBKIIZIBGEEiQSR5eNLNrs7efP27RsEDiZbR3J9OEXnrtce7Ndo5fEYT8D1cRluUrTslqPweFjw+jVdawrQO8w7ZiUHbkBqtub5oOdxfwRGmjMDwmm2TgDyeOPIpQIhk/vfAEGfqiRyBUbaI2qWgA/p1riv0oUkxHdwTzIAUYRCoNUUaPAJNHHgBaH10uYIJHoBql8OZM3uMxIMqAFGMDwuOmcWX4Qd1ARhHDbGY8ufcQWZNSsaWzmYwsIQTPgTCHR5AaMKT03qmstiAAAAAElFTkSuQmCC)
-    no-repeat center;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADxSURBVHgBnVHLDYJAEJ1ZjJ+LoQTsQDtA48GjJXj1YNQKKIGDIR4pQY8eTLQD7EBKIIZIBGEEiQSR5eNLNrs7efP27RsEDiZbR3J9OEXnrtce7Ndo5fEYT8D1cRluUrTslqPweFjw+jVdawrQO8w7ZiUHbkBqtub5oOdxfwRGmjMDwmm2TgDyeOPIpQIhk/vfAEGfqiRyBUbaI2qWgA/p1riv0oUkxHdwTzIAUYRCoNUUaPAJNHHgBaH10uYIJHoBql8OZM3uMxIMqAFGMDwuOmcWX4Qd1ARhHDbGY8ufcQWZNSsaWzmYwsIQTPgTCHR5AaMKT03qmstiAAAAAElFTkSuQmCC) no-repeat center;
   width: 9px;
   height: 8px;
   background-size: 100% 100%;

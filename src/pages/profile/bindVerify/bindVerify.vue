@@ -13,8 +13,7 @@
     </inputCom>
     <inputCom :label="t('VerificationCode')" :placeholder="t('input.PleaseEnter')" v-model:value="form.code" :tips="''">
       <template #sendCode>
-        <div class="absolute right-0 font-size-12 sendCode" :class="countdown > 0 ? 'text-gray-400' : 'text-white'"
-          @click="getCode">
+        <div class="absolute right-0 font-size-12 sendCode text-#000" @click="getCode">
           {{ countdown > 0 ? `${countdown}s` : t("input.SendCode") }}
         </div>
       </template>

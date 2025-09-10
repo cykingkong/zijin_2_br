@@ -20,7 +20,7 @@
       <div class="tab-item px-18 h-40px rounded-40 flex flex-items-center flex-justify-center gap-12 font-size-14"
         v-for="(item, index) in tabList" :key="index" :class="{ active: tabAcitve === index, t1: index == 0 }"
         @click="changeTab(index)">
-        <img src="@/assets/image/icon-success.png" alt="" class="w-20 h-20" />
+        <!-- <img src="@/assets/image/icon-success.png" alt="" class="w-20 h-20" /> -->
         {{ item }}
       </div>
     </div>
@@ -41,7 +41,7 @@
         <van-icon name="underway-o" /> {{ t("Review time: 3 days") }}
       </div>
       <van-button type="primary" block @click="toKyc" v-if="userInfo.kycStatus == 0">{{ t("Certification")
-        }}</van-button>
+      }}</van-button>
     </div>
 
     <div class="fixed fixed-status" :class="{

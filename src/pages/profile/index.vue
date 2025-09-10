@@ -8,7 +8,7 @@ import defaultAvatar from "@/assets/images/default-avatar.svg";
 import { clearToken, isLogin } from "@/utils/auth";
 import { getKfUrl } from "@/api/user";
 
-import UserInfo from "../../components/user-info.vue";
+
 import cell1 from '@/assets/cell/cell1.svg';
 import cell2 from '@/assets/cell/cell2.svg';
 import cell3 from '@/assets/cell/cell3.svg';
@@ -64,6 +64,7 @@ const cellList = [
       {
         text: 'Identify Verification',
         tips: 'Your verification status',
+        iconType: 'img',
         icon: cell1,
         url: '/register?step=4'
       },
@@ -71,9 +72,16 @@ const cellList = [
         text: 'Bank Account',
         tips: 'Manage your bank account',
         icon: cell2,
+        iconType: 'img',
         url: '/profile/bankAccount'
       },
+      {
+        text: 'Bind Phone',
+        tips: 'Manage your phone number',
+        iconType: 'svg',
 
+        url: '/profile/bankAccount'
+      },
     ]
   },
   {
@@ -82,37 +90,44 @@ const cellList = [
       {
         text: 'Push Notifications',
         tips: 'Notification preferences',
+        iconType: 'img',
         icon: cell3,
       },
       {
         text: 'Languange',
         tips: 'English (USA)',
+        iconType: 'img',
         icon: cell4,
         url: '/profile/languange'
 
       },
     ]
   },
-  {
-    label: 'Others',
-    cell: [
-      {
-        text: 'Help Center',
-        tips: 'Get supports',
-        icon: cell5,
-      },
-      {
-        text: 'Terms & Conditions',
-        tips: 'Our terms & conditions',
-        icon: cell6,
-      },
-      {
-        text: 'Privacy Policy',
-        tips: 'Our privacy policy',
-        icon: cell7,
-      },
-    ]
-  },
+  // {
+  //   label: 'Others',
+  //   cell: [
+  //     {
+  //       text: 'Help Center',
+  //       tips: 'Get supports',
+  //       iconType: 'img',
+  //       icon: cell5,
+  //       url: '/helpCenter'
+
+  //     },
+  //     {
+  //       text: 'Terms & Conditions',
+  //       tips: 'Our terms & conditions',
+  //       iconType: 'img',
+  //       icon: cell6,
+  //     },
+  //     {
+  //       text: 'Privacy Policy',
+  //       tips: 'Our privacy policy',
+  //       iconType: 'img',
+  //       icon: cell7,
+  //     },
+  //   ]
+  // },
 
 ]
 const handleClickCell = (item: any) => {
@@ -152,18 +167,17 @@ onMounted(async () => {
     <div class="h-265px w-full top-info">
       <div class="w-full h-56px mb-4px flex items-center justify-between px-24px">
         <div></div>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg @click="handleLogout" t="1757512018074" class="icon" viewBox="0 0 1024 1024" version="1.1"
+          xmlns="http://www.w3.org/2000/svg" p-id="5907" width="20" height="20">
           <path
-            d="M13.26 3.60022L5.05 12.2902C4.74 12.6202 4.44 13.2702 4.38 13.7202L4.01 16.9602C3.88 18.1302 4.72 18.9302 5.88 18.7302L9.1 18.1802C9.55 18.1002 10.18 17.7702 10.49 17.4302L18.7 8.74022C20.12 7.24022 20.76 5.53022 18.55 3.44022C16.35 1.37022 14.68 2.10022 13.26 3.60022Z"
-            stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M11.89 5.0498C12.32 7.8098 14.56 9.9198 17.34 10.1998" stroke="white" stroke-width="1.5"
-            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M3 22H21" stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-            stroke-linejoin="round" />
+            d="M533.333333 64a21.333333 21.333333 0 0 1 21.333334 21.333333v42.666667a21.333333 21.333333 0 0 1-21.333334 21.333333H170.666667v725.333334h362.666666a21.333333 21.333333 0 0 1 21.333334 21.333333v42.666667a21.333333 21.333333 0 0 1-21.333334 21.333333H170.666667a85.333333 85.333333 0 0 1-85.226667-81.066667L85.333333 874.666667V149.333333a85.333333 85.333333 0 0 1 81.066667-85.226666L170.666667 64h362.666666z m194.581334 219.584l183.168 183.168a64 64 0 0 1 2.88 87.424l-2.88 3.072-183.168 183.168a21.333333 21.333333 0 0 1-30.165334 0l-30.165333-30.165333a21.333333 21.333333 0 0 1 0-30.165334L792.96 554.666667H362.666667a21.333333 21.333333 0 0 1-21.333334-21.333334v-42.666666a21.333333 21.333333 0 0 1 21.333334-21.333334h430.293333l-125.376-125.418666a21.333333 21.333333 0 0 1 0-30.165334l30.165333-30.165333a21.333333 21.333333 0 0 1 30.165334 0z"
+            fill="#FFF" p-id="5908"></path>
         </svg>
       </div>
       <div class="info flex flex-col items-center justify-center">
-        <div class="mid w-88 h-88 rounded-full overflow-hidden  bg-#fff"></div>
+        <div class="mid w-88 h-88 rounded-full overflow-hidden flex items-center justify-center p-12 bg-#fff">
+          <img src="@/assets/image/icon.svg" alt="" class="w-full h-full block">
+        </div>
         <div class="id text-20px text-#fff mt-16px">UID:{{ userInfo.user_id }}</div>
         <div class="name text-14px text-#B59CFA mt-16px ">{{ userInfo.account }}</div>
       </div>
@@ -175,7 +189,19 @@ onMounted(async () => {
           class="cell-item px-12px w-full rounded-12px border-1px border-#E2E8F0 border-solid h-72px flex items-center justify-between mb-16px"
           v-for="(cell, k) in item.cell" :key="k" @click="handleClickCell(cell)">
           <div class="left flex items-center h-40 gap-12px">
-            <img :src="cell.icon" class="w-40 h-40 flex-shrink-0 block" alt="">
+            <img :src="cell.icon" class="w-40 h-40 flex-shrink-0 block" alt="" v-if="cell.iconType == 'img'">
+            <div class="svg flex items-center justify-center w-40 h-40 bg-#F8F9FD rounded-full"
+              v-if="cell.iconType == 'svg'">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M16 3H8C6.89543 3 6 3.89543 6 5V19C6 20.1046 6.89543 21 8 21H16C17.1046 21 18 20.1046 18 19V5C18 3.89543 17.1046 3 16 3Z"
+                  stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M12 17V17.01M11 4H13H11Z" stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+
+            </div>
+
             <div class="info h-full flex flex-col justify-between">
               <div class="t">{{ cell.text }}</div>
               <div class="t2 text-#64748B text-10px">{{ cell.tips }}</div>
@@ -183,11 +209,16 @@ onMounted(async () => {
           </div>
           <div class="r flex items-center">
             <img :src="right" alt="" class="block w-20 h-20">
-
           </div>
         </div>
       </div>
+
+      <van-button type="primary" block color="#6B39F4" class="mt-24px h-56px" @click="handleLogout">{{
+        '退出登录'
+        }}</van-button>
     </div>
+
+
     <!-- <section class="myself flex flex-col">
       <UserInfo :userInfo="userInfo" />
       <van-cell-group :title="t('profile.Quick Access')" />
