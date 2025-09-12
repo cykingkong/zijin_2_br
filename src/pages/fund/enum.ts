@@ -14,11 +14,11 @@ export const orderStatusEnum = {
         *当status = 5 和 status = 6 的时候,订单页面显示已结束按钮(不可点击)
         *当status = 7 的时候,订单页面显示 续期 或 赎回 按钮
      */
-    1: '支付',
-    2: '等待',
-    3: '进行中',
-    4: '已完成',
-    5: '已结束',
-    6: '已结束',
-    7: '已结束'
+    1: 'Pay',
+    2: 'Waiting',
+    3: 'In Progress',
+    4: 'Completed',
+    5: 'Ended',
+    6: 'Ended',
+    7: 'Ended'
 } as const;

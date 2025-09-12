@@ -11,6 +11,9 @@ export function assetsDetail(params): Promise<any> {
 export function orderList(params): Promise<any> {
     return request.get<any>('/api/stock/orderList', { params })
 }
+export function orderLists(params): Promise<any> {
+    return request.get<any>('/api/stock/orderLists', { params })
+}
 export function orderDetail(params): Promise<any> {
     return request.get<any>('/api/stock/orderDetail', { params })
 }

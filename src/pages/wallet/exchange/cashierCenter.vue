@@ -22,7 +22,7 @@
                                 <div class="name text-#0F172A text-14px font-bold">{{ info.name }}</div>
                                 <div class="name2 text-#64748B text-12px">金额范围: MX${{ info.min_amount }} ~ MX${{
                                     info.max_amount
-                                }}</div>
+                                    }}</div>
                             </div>
                         </div>
                     </template>
@@ -83,21 +83,19 @@ const keypadRows = [
     ['1', '2', '3'],
     ['4', '5', '6'],
     ['7', '8', '9'],
-    ['.', '0', 'delete']
+    ['0', 'delete']
 ];
 
 // 统一的按键处理方法
 const handleKeyClick = (key: string) => {
     if (key === 'delete') {
         deleteLastChar();
-    } else if (key === '.') {
-        appendDecimal();
     } else {
         appendNumber(key);
     }
 };
 const onSelect = () => {
-    router.push('/wallet/exchange/channel-out')
+    router.replace('/wallet/exchange/channel-out')
 }
 
 const handleBuyClickOriginal = async () => {
@@ -132,38 +130,21 @@ const onConfirm = proxy!.$throttle(handleBuyClickOriginal, 1000, {
 });
 // 数字键盘相关方法
 const appendNumber = (num: string) => {
-    if (displayValue.value === '0' && num !== '.') {
+    if (displayValue.value === '0') {
         displayValue.value = num;
     } else {
         displayValue.value += num;
     }
     // 更新count值
-    count.value = displayValue.value === '' ? 0 : parseFloat(displayValue.value);
+    count.value = displayValue.value === '' ? 0 : parseInt(displayValue.value);
 };
 
-// 添加小数点方法
-const appendDecimal = () => {
-    // 如果已经包含小数点，则不允许再添加
-    if (displayValue.value.includes('.')) {
-        return;
-    }
-
-    // 如果当前值为空或0，则添加0.
-    if (displayValue.value === '' || displayValue.value === '0') {
-        displayValue.value = '0.';
-    } else {
-        displayValue.value += '.';
-    }
-
-    // 更新count值
-    count.value = displayValue.value === '' ? 0 : parseFloat(displayValue.value);
-};
 
 const deleteLastChar = () => {
     if (displayValue.value.length > 0) {
         displayValue.value = displayValue.value.slice(0, -1);
         // 如果删除后为空，则count为0，否则解析数值
-        count.value = displayValue.value === '' ? 0 : parseFloat(displayValue.value);
+        count.value = displayValue.value === '' ? 0 : parseInt(displayValue.value);
     }
 };
 

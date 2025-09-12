@@ -1,7 +1,13 @@
 <template>
-  <div class="add-content p-24 flex flex-col ">
+  <div class="add-content p-24 flex flex-col">
     <div class="label font-700 text-16px color-#64748B">选择币种/链名称</div>
-    <inputCom :label="t('bankCardType')" :placeholder="''" v-model:value="bankCardType" :type="'picker'" require>
+    <inputCom
+      :label="t('bankCardType')"
+      :placeholder="''"
+      v-model:value="bankCardType"
+      :type="'picker'"
+      require
+    >
       <div class="w-full flex justify-between">
         <div class="l flex-1 font-size-14" @click="showPicker = true">
           {{ form.bankType ? form.bankType : t("input.PleaseSelect") }}
@@ -12,23 +18,41 @@
       </div>
     </inputCom>
     <div class="label font-700 text-16px color-#64748B">提币地址</div>
-    <inputCom :label="t('bankCardName')" :placeholder="t('input.PleaseEnter')" v-model:value="form.bankName" :tips="''"
-      require>
+    <inputCom
+      :label="t('bankCardName')"
+      :placeholder="t('input.PleaseEnter')"
+      v-model:value="form.bankName"
+      :tips="''"
+      require
+    >
     </inputCom>
 
     <!-- <div class="t2 font-size-12 color-blueGray-400">溫馨提示：當您出售數字貨幣時，您選擇的收款方式將向買方展示，請確認信息填寫準確無誤。</div> -->
     <div class="w-full flex flex-col gap-12 bottom-btn fixed left-0">
-      <van-button type="primary" block @click="handleClickSubmit" color="#6B39F4">{{
-        t("submit")
-      }}123</van-button>
+      <van-button
+        type="primary"
+        block
+        @click="handleClickSubmit"
+        color="#6B39F4"
+        >{{ t("submit") }}</van-button
+      >
       <!-- <van-button type="danger" block @click="handleClickDel" v-if="isEdit">{{
         t("delete")
       }}</van-button> -->
     </div>
-    <nationalityList ref="controlChildRef" :title="t('pick')" @getName="getName"></nationalityList>
+    <nationalityList
+      ref="controlChildRef"
+      :title="t('Pick')"
+      @getName="getName"
+    ></nationalityList>
 
     <van-popup v-model:show="showPicker" destroy-on-close position="bottom">
-      <van-picker :columns="columns" :model-value="[form.bankType]" @confirm="onConfirm" @cancel="showPicker = false" />
+      <van-picker
+        :columns="columns"
+        :model-value="[form.bankType]"
+        @confirm="onConfirm"
+        @cancel="showPicker = false"
+      />
     </van-popup>
   </div>
 </template>
@@ -81,10 +105,10 @@ const onConfirm = ({ selectedValues, selectedOptions }) => {
   showPicker.value = false;
 };
 const areaInfo = ref({
-  code: "br",
-  dialCode: 55,
-  key: "br",
-  name: "",
+  code: "mx",
+  dialCode: 52,
+  key: "mx",
+  name: "Mexico",
 });
 const getName = (val: any) => {
   areaInfo.value = val;
@@ -98,13 +122,14 @@ const hanleClickAreaPick = () => {
 const handleClickDel = () => {
   userCardDel({ id: form.id }).then((res) => {
     if (res.code == 200) {
-      showToast(t("Successfully deleted"));
+      showSuccessToast();
       setTimeout(() => {
         router.push("/profile/payMentMethod/list");
       }, 500);
     }
   });
 };
+
 const handleClickSubmit = () => {
   // 校验必填
   if (!form.bankName) {
@@ -135,7 +160,7 @@ const handleClickSubmit = () => {
       if (res.code == 200) {
         // showToast("修改成功");
         setTimeout(() => {
-          router.push("/profile/payMentMethod/list");
+          router.replace("/profile/payMentMethod/list");
         }, 500);
         // 跳转
         return;
@@ -149,7 +174,7 @@ const handleClickSubmit = () => {
       // showToast("添加成功");
       // 跳转
       setTimeout(() => {
-        router.push("/profile/payMentMethod/list");
+        router.replace("/profile/payMentMethod/list");
       }, 500);
     }
   });
@@ -183,7 +208,6 @@ onMounted(() => {
 @import "@/components/nationality-list/intl.css";
 
 .bottom-btn {
-
   bottom: calc(env(safe-area-inset-bottom) + 8px);
   box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.1);
   padding: 8px 24px 0;

@@ -50,12 +50,18 @@ export function dividendPlaceOrderPay(data): Promise<any> {
 }
 // 折扣股玩法
 // 获取订单详情
-export function discountOrderList(params): Promise<any> {
-    return request.get<any>('/api/discount/discountOrderList', { params })
+export function discountOrderList(params, options?: { showLoading?: boolean }): Promise<any> {
+    return request.get<any>('/api/discount/discountOrderList', {
+        params,
+        showLoading: options?.showLoading
+    })
 }
 //获取产品列表
-export function discountList(params): Promise<any> {
-    return request.get<any>('/api/discount/discountList', { params })
+export function discountList(params, options?: { showLoading?: boolean }): Promise<any> {
+    return request.get<any>('/api/discount/discountList', {
+        params,
+        showLoading: options?.showLoading
+    })
 }
 export function discountOrderBuy(data): Promise<any> {
     return request.post<any>('/api/discount/discountBuy', data)

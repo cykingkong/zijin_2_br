@@ -32,7 +32,6 @@ declare module 'vue' {
     SlidePop: typeof import('./../components/slidePop.vue')['default']
     Tab: typeof import('./../components/tab.vue')['default']
     TabBar: typeof import('./../components/TabBar.vue')['default']
-    UserInfo: typeof import('./../components/user-info.vue')['default']
     VanActionSheet: typeof import('vant/es')['ActionSheet']
     VanButton: typeof import('vant/es')['Button']
     VanCell: typeof import('vant/es')['Cell']

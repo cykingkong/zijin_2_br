@@ -1,43 +1,86 @@
 <template>
-  <div class="add-content p-24 flex flex-col ">
-    <div class="label font-700 text-16px color-#64748B">Name(收款方名)</div>
-    <inputCom :label="t('name')" :placeholder="t('input.PleaseEnter')" v-model:value="form.name" :tips="''" require>
+  <div class="add-content p-24 flex flex-col">
+    <div class="label font-700 text-16px color-#64748B">
+      {{ t("Name") }}
+    </div>
+    <inputCom
+      :label="t('name')"
+      :placeholder="t('PleaseEnter')"
+      v-model:value="form.name"
+      :tips="''"
+      require
+    >
     </inputCom>
 
-    <div class="label font-700 text-16px color-#64748B">Last Name(收款方姓)</div>
-    <inputCom :label="t('lastname')" :placeholder="t('input.PleaseEnter')" v-model:value="form.lastname" :tips="''"
-      require>
+    <div class="label font-700 text-16px color-#64748B">
+      {{ t("Last Name") }}
+    </div>
+    <inputCom
+      :label="t('lastname')"
+      :placeholder="t('PleaseEnter')"
+      v-model:value="form.lastname"
+      :tips="''"
+      require
+    >
     </inputCom>
 
-
-    <div class="label font-700 text-16px color-#64748B">Bank(银行卡选择)</div>
-    <inputCom :label="t('bankCardType')" :placeholder="''" v-model:value="bankCardType" :type="'picker'" require>
+    <div class="label font-700 text-16px color-#64748B">
+      {{ t("Bank") }}
+    </div>
+    <inputCom
+      :label="t('bankCardType')"
+      :placeholder="''"
+      v-model:value="bankCardType"
+      :type="'picker'"
+      require
+    >
       <div class="w-full flex justify-between">
-        <div class="l flex-1 font-size-14" :class="form.bank_name ? '' : 'color-#9CA3AF'" @click="showPicker = true">
-          {{ form.bank_name ? form.bank_name : t("input.PleaseSelect") }}
+        <div
+          class="l flex-1 font-size-14"
+          :class="form.bank_name ? '' : 'color-#9CA3AF'"
+          @click="showPicker = true"
+        >
+          {{ form.bank_name ? form.bank_name : t("PleaseSelect") }}
         </div>
         <div class="r flex-shrink-0">
           <van-icon name="arrow" class="rotate-90" />
         </div>
       </div>
     </inputCom>
-    <div class="label font-700 text-16px color-#64748B">Account(账号)</div>
-    <inputCom :label="t('account')" :placeholder="t('input.PleaseEnter')" v-model:value="form.account" :tips="''"
-      require>
+    <div class="label font-700 text-16px color-#64748B">
+      {{ t("Account") }}
+    </div>
+    <inputCom
+      :label="t('account')"
+      :placeholder="t('PleaseEnter')"
+      v-model:value="form.account"
+      :tips="''"
+      require
+    >
     </inputCom>
 
-
     <div class="w-full flex flex-col gap-12 bottom-btn fixed left-0">
-      <van-button type="primary" block @click="handleClickSubmit" color="#6B39F4">{{
-        t("submit")
-        }}</van-button>
-
+      <van-button
+        type="primary"
+        block
+        @click="handleClickSubmit"
+        color="#6B39F4"
+        >{{ t("Submit") }}</van-button
+      >
     </div>
-    <nationalityList ref="controlChildRef" :title="t('pick')" @getName="getName"></nationalityList>
+    <nationalityList
+      ref="controlChildRef"
+      :title="t('Pick')"
+      @getName="getName"
+    ></nationalityList>
 
     <van-popup v-model:show="showPicker" destroy-on-close position="bottom">
-      <van-picker :columns="columns" :model-value="[form.bank_code]" @confirm="onConfirm"
-        @cancel="showPicker = false" />
+      <van-picker
+        :columns="columns"
+        :model-value="[form.bank_code]"
+        @confirm="onConfirm"
+        @cancel="showPicker = false"
+      />
     </van-popup>
   </div>
 </template>
@@ -46,10 +89,16 @@
 import { ref, reactive } from "vue";
 import setPageTitle from "@/utils/set-page-title";
 import inputCom from "@/components/inputCom.vue";
-import { create_bank, userCardUpdate, userCardDel, bank_info } from "@/api/payment";
+import {
+  create_bank,
+  userCardUpdate,
+  userCardDel,
+  bank_info,
+} from "@/api/payment";
 import { useStore } from "@/stores/modules/index";
-import { showToast } from "vant";
-import { bankList } from '@/api/user'
+import { showToast, showSuccessToast, allowMultipleToast } from "vant";
+
+import { bankList } from "@/api/user";
 
 import nationalityList from "@/components/nationality-list/nationalityList.vue";
 import { useI18n } from "vue-i18n";
@@ -61,30 +110,30 @@ const result = ref("");
 const store = useStore();
 const isEdit = ref(false);
 const pickerValue = ref([]);
-const columns = ref([])
+const columns = ref([]);
 const getBankList = async () => {
-  const { data, code } = await bankList({})
+  const { data, code } = await bankList({});
   if (code == 200) {
-
-    columns.value = data && data.length ? data.map((item: any) => {
-      return {
-        text: item.bank_name,
-        value: item.bank_code
-      }
-    }) : []
+    columns.value =
+      data && data.length
+        ? data.map((item: any) => {
+            return {
+              text: item.bank_name,
+              value: item.bank_code,
+            };
+          })
+        : [];
   }
-
-
-}
+};
 const bankCardType = ref("");
 const form = reactive({
-  "wallet_type": "bank",
-  "name": "",
-  "lastname": "",
-  "account": "",
-  "bank_code": "",
-  "bank_name": "",
-  id: ''
+  wallet_type: "bank",
+  name: "",
+  lastname: "",
+  account: "",
+  bank_code: "",
+  bank_name: "",
+  id: "",
 });
 const route = useRoute();
 const router = useRouter();
@@ -114,10 +163,9 @@ const getCardInfo = (id: any) => {
       form.bank_name = res.data.bank_name;
       form.bank_code = res.data.bank_code;
       form.id = res.data.id;
-
     }
   });
-}
+};
 const controlChildRef = ref();
 const hanleClickAreaPick = () => {
   controlChildRef.value.open();
@@ -149,18 +197,16 @@ const handleClickSubmit = () => {
     return;
   }
 
-
   let params = {
     ...form,
   };
-  params.bank_code = params.bank_code + ''
+  params.bank_code = params.bank_code + "";
   if (route.query.edit == "1") {
     userCardUpdate(params).then((res) => {
       if (res.code == 200) {
-        // showToast("修改成功");
+        showSuccessToast("");
         setTimeout(() => {
-          router.push("/profile/bankAccount");
-
+          router.replace("/profile/bankAccount");
         }, 500);
         // 跳转
         return;
@@ -171,10 +217,11 @@ const handleClickSubmit = () => {
   // 提交
   create_bank(params).then((res) => {
     if (res.code == 200) {
+      showSuccessToast("");
       // showToast("添加成功");
       // 跳转
       setTimeout(() => {
-        router.push("/profile/bankAccount");
+        router.replace("/profile/bankAccount");
       }, 500);
     }
   });
@@ -188,12 +235,11 @@ onMounted(() => {
   router.currentRoute.value.meta.title = newTitle;
   // form.type = route.query.type == "1" ? "bank_card" : "crypto";
   form.typeDesc = typeDesc[Number(route.query.type)];
-  getBankList()
+  getBankList();
   if (route.query.edit == "1") {
     isEdit.value = true;
     getCardInfo(route.query.id);
     form.id = route.query.id;
-
 
     console.log(form, 23123);
   }
@@ -203,7 +249,6 @@ onMounted(() => {
 @import "@/components/nationality-list/intl.css";
 
 .bottom-btn {
-
   bottom: calc(env(safe-area-inset-bottom) + 8px);
   box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.1);
   padding: 8px 24px 0;

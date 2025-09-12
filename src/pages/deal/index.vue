@@ -2,36 +2,32 @@
 import { useUserStore } from "@/stores";
 import { useI18n } from "vue-i18n";
 
-import UserInfo from "@/components/user-info.vue";
 import Quickly from "./components/quickly.vue";
 import Indicator from "./components/indicator.vue";
-import grid1 from "@/assets/grid/grid5-quotes.png";
-import grid2 from "@/assets/grid/grid6-quotes.png";
-import grid3 from "@/assets/grid/grid4-quotes.png";
-import grid4 from "@/assets/grid/grid8-quotes.png";
+
 const { t } = useI18n();
 
 const userStore = useUserStore();
 const activeName = ref("1");
 const router = useRouter();
-const gridList = [
-  {
-    icon: grid1,
-    text: t("deal.fund"),
-  },
-  {
-    icon: grid2,
-    text: t("deal.discount"),
-  },
-  {
-    icon: grid3,
-    text: t("deal.IPO"),
-  },
-  {
-    icon: grid4,
-    text: t("deal.dividend"),
-  },
-];
+// const gridList = [
+//   {
+//     icon: grid1,
+//     text: t("deal.fund"),
+//   },
+//   {
+//     icon: grid2,
+//     text: t("deal.discount"),
+//   },
+//   {
+//     icon: grid3,
+//     text: t("deal.IPO"),
+//   },
+//   {
+//     icon: grid4,
+//     text: t("deal.dividend"),
+//   },
+// ];
 // watch(() => isLogin(), (val) => {
 //   console.log(val, 'isLogin')
 //   if (!val) {
@@ -45,7 +41,8 @@ const handleClickTab = (index: any) => {
     case 0:
       // 基金特殊处理 查assetId
       router.push({
-        path: "/fund", query: {
+        path: "/fund",
+        query: {
           categoryId: activeName.value == "1" ? "202" : "198",
         },
       });
@@ -92,12 +89,16 @@ onMounted(async () => {
       <div class="tab-content flex flex-col">
         <UserInfo :show-asset="true" :activeName="activeName" />
         <van-grid :border="false" column-num="4">
-          <van-grid-item v-for="(i, k) in gridList" :key="k" @click="handleClickTab(k)">
+          <van-grid-item
+            v-for="(i, k) in gridList"
+            :key="k"
+            @click="handleClickTab(k)"
+          >
             <div class="flex flex-col items-center">
               <img :src="i.icon" class="w-48 h-48" />
               <span class="text-12 mt-8 text-align-center h-32px">{{
                 i.text
-                }}</span>
+              }}</span>
             </div>
           </van-grid-item>
         </van-grid>

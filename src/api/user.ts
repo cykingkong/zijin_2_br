@@ -89,7 +89,7 @@ export function dataAssets(): Promise<any> {
   return request.get('/app-api/user/dataAssets', {})
 }
 export function bindPhone(data): Promise<any> {
-  return request.post('/app-api/user/bindPhone', data)
+  return request.post('/api/user/bindPhone', data)
 }
 export function bankList(params): Promise<any> {
   return request.get('/api/bank_list', { params })

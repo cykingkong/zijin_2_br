@@ -1,7 +1,8 @@
 <template>
     <div class="mini-chart-list">
         <div v-for="(item, index) in stockList" :key="`chart-${index}-${item.symbol || item.tradingview_name}`"
-            class="chart-item mb-12px border" :class="itemClass" @click="handleItemClick(item, index)">
+            class="chart-item mb-12px border relative" :class="itemClass">
+            <div class="mark absolute top-0 left-0 w-full h-full " @click.stop="handleItemClick(item, index)"></div>
             <div :id="`tradingview-widget-${index}`" class="tradingview-widget-container">
                 <div :id="`tradingview-widget-${index}-inner`" class="tradingview-widget-container__widget"></div>
             </div>

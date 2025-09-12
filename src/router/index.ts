@@ -35,7 +35,8 @@ router.beforeEach(async (to: EnhancedRouteLocation) => {
   // setPageTitle(to.meta.title)
   // Safely check user info
   // console.log(isLogin() && !userStore.userInfo?.uid, 'isLogin() && !userStore.userInfo?.uid', from)
-  if (!isLogin() && to.path !== '/login' && to.path !== '/login/login' && to.path !== '/' && to.path != '/register' && to.path != '/forgot-password') {
+  console.log(to.path, 'to.path')
+  if (!isLogin() && to.path !== '/login' && to.path !== '/login/login' && to.path !== '/' && to.path != '/register' && to.path != '/forgot-password' && to.path != '/profile/languange') {
     return '/login'
   }
 

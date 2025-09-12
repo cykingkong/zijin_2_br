@@ -50,7 +50,7 @@
       </div>
 
     </div>
-    <div class="list w-full px-14px mt-90px">
+    <!-- <div class="list w-full px-14px mt-90px">
       <div class="list-title  flex  items-center h-40px justify-between">
         <div class="text-#0F172A text-16px font-700">收益发放记录</div>
 
@@ -59,10 +59,8 @@
       <div class="li-item h-50px flex items-center justify-between rounded-12px px-12px">
         <div class="label color-#64748B text-14px">day</div>
         <div class="value  flex  justify-between h-40px items-center gap-12px">
-          <div class="text-#0F172A text-14px font-bold color-#693CFF">+ MX$ 1000</div>
-          <!-- <div class="radio border-solid border-1px border-#D1D5DB rounded-full w-20px h-20px relative flex-shrink-0"
-            >
-          </div> -->
+          <div class="text-#0F172A text-14px font-bold color-#693CFF">+ MX$ {{  }}</div>
+        
           <svg class="w-20px h-20px " :class="radioList.includes(1) ? 'radio-active' : ''" viewBox="0 0 20 20"
             fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -75,7 +73,7 @@
       </div>
 
 
-    </div>
+    </div> -->
 
 
   </div>

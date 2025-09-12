@@ -22,7 +22,7 @@
       <div
         class="input w-full rounded-12px bg-#F8F9FD text-align-center font-bold  items-center text-16px h-58px flex px-24px gap-8px "
         :class="{ 'border-1px border-#E11D48': isInvalidAmount || isInvalidFormat }" v-if="popType == 'fund'">
-        <div class="unit  text-16px">R$</div>
+        <div class="unit  text-16px">MX$</div>
         <input type="text" placeholder="" v-model="form.amount" @input="handleAmountInput" @blur="handleAmountBlur"
           class="w-full h-full text-16px text-align-left input"
           :class="{ 'color-#E11D48': isInvalidAmount || isInvalidFormat }">
@@ -39,7 +39,7 @@
         <div class="btn-box flex-1">
           <van-button type="primary" color="#6B39F4" class="h-56px! rounded-12px" block @click="confirm">{{
             t(btnText)
-          }}</van-button>
+            }}</van-button>
         </div>
       </div>
     </div>

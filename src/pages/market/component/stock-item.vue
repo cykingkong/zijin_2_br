@@ -10,7 +10,8 @@
 
                 <!-- 股票信息 -->
                 <div class="stock-info h-40 flex flex-col justify-between">
-                    <div class="symbol text-16px font-700 color-#374151">{{ item.type }}{{ item?.full_name }}
+                    <div class="symbol text-16px font-700 color-#374151">{{ capitalize(item.type) }}-{{ item?.name
+                        }}
                     </div>
                     <div class="company-name text-12px color-#6B7280">{{ item?.time }}
                     </div>
@@ -18,10 +19,10 @@
             </div>
 
             <!-- 右侧：价格信息 -->
-            <div class="right text-right">
-                <div class="current-price text-16px font-bold color-#374151 mb-2px">
-                    + {{ item.quantity }}</div>
-                <div class="price-change flex items-center justify-end gap-4px color-#64748B text-12px">
+            <div class="right text-right ">
+                <div class="current-price text-nowrap text-16px font-bold color-#374151 mb-2px">
+                    {{ item.type == 'buy' ? '+' : '-' }} {{ item.quantity }}</div>
+                <div class="price-change text-nowrap flex items-center justify-end gap-4px color-#64748B text-12px">
                     MX$ {{ item.price }}
 
                 </div>
@@ -40,7 +41,10 @@ const props = defineProps({
         default: () => ({})
     }
 })
-
+// 字符串 字母首大写
+function capitalize(str: string) {
+    return str.charAt(0).toUpperCase() + str.slice(1)
+}
 </script>
 
 <style lang="less" scoped>

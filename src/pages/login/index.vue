@@ -5,8 +5,8 @@ import { useUserStore } from "@/stores";
 import inputCom from "@/components/inputCom.vue";
 import nationalityList from "@/components/nationality-list/nationalityList.vue";
 import { languageColumns, locale } from "@/utils/i18n";
-import Apple from '@/assets/image/Apple.svg'
-import Google from '@/assets/image/Google.svg'
+import Apple from "@/assets/image/Apple.svg";
+import Google from "@/assets/image/Google.svg";
 import loginTab from "@/components/tab.vue";
 import vw from "@/utils/inline-px-to-vw";
 
@@ -25,12 +25,11 @@ const typeArr = [
   },
 ];
 const areaInfo = ref({
-  code: "br",
-  dialCode: 55,
-  key: "br",
-  name: "",
+  code: "mx",
+  dialCode: 52,
+  key: "mx",
+  name: "Mexico",
 });
-
 
 const postData = reactive({
   account: "",
@@ -62,7 +61,7 @@ const toRegister = () => {
 };
 const toLogin = (type: number) => {
   router.push({ name: "login", query: { type: type.toString() } });
-}
+};
 const toForget = () => {
   try {
     // router.push("/forgot-password?forgotType=3");
@@ -77,7 +76,7 @@ const getName = (val: any) => {
 
 async function login(values: any) {
   if (!postData.password) {
-    showToast("input.PleaseEnter");
+    showToast("PleaseEnter");
     return;
   }
   try {
@@ -107,19 +106,35 @@ async function login(values: any) {
 </script>
 
 <template>
-  <div class="m-x-a w-full min-h-100vh pb-[calc(env(safe-area-inset-bottom)+24px)]">
+  <div
+    class="m-x-a w-full min-h-100vh pb-[calc(env(safe-area-inset-bottom)+24px)]"
+  >
     <div class="top-image w-full min-h-366px bg-#D3C4FC">
-      <img src="@/assets/image/login-bg.png" alt="" class="block w-full h-full">
+      <img
+        src="@/assets/image/login-bg.png"
+        alt=""
+        class="block w-full h-full"
+      />
     </div>
     <div class="btn-box w-7xl m-x-a">
-      <van-button type="primary" color="#6b39f4" class="login-btn" block @click="toLogin(1)">{{
-        t("手机登陆")
-      }}</van-button>
-      <van-button type="primary" color="#6b39f4" class="login-btn" block @click="toLogin(2)">{{
-        t("邮箱登陆")
-      }}</van-button>
+      <van-button
+        type="primary"
+        color="#6b39f4"
+        class="login-btn"
+        block
+        @click="toLogin(1)"
+        >{{ t("Phone Number Login") }}</van-button
+      >
+      <van-button
+        type="primary"
+        color="#6b39f4"
+        class="login-btn"
+        block
+        @click="toLogin(2)"
+        >{{ t("Email Account Login") }}</van-button
+      >
 
-      <van-button type="primary" plain color="#6b39f4" class="login-btn items-center" block @click="login({})">
+      <!-- <van-button type="primary" plain color="#6b39f4" class="login-btn items-center" block @click="login({})">
         <template #default>
           <div class="flex items-center justify-center gap-8 color-#0F172A font-bold">
             <img :src="Apple" alt="" class="w-24px h-24px block">
@@ -129,9 +144,9 @@ async function login(values: any) {
             }}
           </div>
         </template>
-      </van-button>
-      <van-button type="primary" plain color="#6b39f4" class="login-btn items-center" block @click="login({})">
-        <template #default>
+</van-button>
+<van-button type="primary" plain color="#6b39f4" class="login-btn items-center" block @click="login({})">
+  <template #default>
           <div class="flex items-center justify-center gap-8 color-#0F172A font-bold">
             <img :src="Google" alt="" class="w-24px h-24px block">
             {{
@@ -139,17 +154,15 @@ async function login(values: any) {
             }}
           </div>
         </template>
-      </van-button>
+</van-button> -->
 
-      <div class="flex items-center mt-36px justify-center">
-
-        Don’t have an account? <span @click="toForget()" class="ml-4px color-#6b39f4">
+      <div class="mt-36px justify-center text-center">
+        {{ t("Don't have an account?") }}
+        <span @click="toForget()" class="ml-4px color-#6b39f4">
           {{ $t("Sign Up") }}
         </span>
       </div>
     </div>
-
-
   </div>
 </template>
 

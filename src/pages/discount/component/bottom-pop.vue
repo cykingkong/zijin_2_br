@@ -1,33 +1,47 @@
 <template>
-  <van-popup v-model:show="showPicker" destroy-on-close round :position="'bottom'" :safe-area-inset-bottom="true"
-    z-index="10000">
+  <van-popup
+    v-model:show="showPicker"
+    destroy-on-close
+    round
+    :position="'bottom'"
+    :safe-area-inset-bottom="true"
+    z-index="10000"
+  >
     <div class="w-full p-12 flex flex-col gap-12">
       <div class="l flex flex-[2] flex-shrink-0 items-center gap-6">
         <div class="logo w-25 h-25 rounded-full overflow-hidden">
-          <img :src="item.tradingInfo.baseAssetInfo.logo" alt=""
-            v-if="item.tradingInfo && item.tradingInfo.baseAssetInfo" class="w-full h-full" />
+          <img :src="item.logo" alt="" class="w-full h-full" />
         </div>
         <div class="name font-size-14">
-          {{
-            item.tradingInfo.baseAssetInfo
-              ? item.tradingInfo.baseAssetInfo.symbol
-              : "-"
-          }}
+          {{ item.symbol }}
         </div>
       </div>
-      <inputCom :label="popType == 'discount' ? t('BuyShare') : t('SellShare')" :tips="tips" :placeholder="t('input.PleaseEnter')
-        " v-model:value="form.number" v-if="popType == 'discount'">
+      <inputCom
+        :label="popType == 'discount' ? t('BuyShare') : t('SellShare')"
+        :tips="tips"
+        :placeholder="t('input.PleaseEnter')"
+        v-model:value="form.number"
+        v-if="popType == 'discount'"
+      >
       </inputCom>
       <div class="sell-tips font-size-18 font-500" v-if="popType == 'order'">
-        {{ t('Discounted stocks will be sold, please confirm!') }}
+        {{ t("Discounted stocks will be sold, please confirm!") }}
       </div>
       <div class="w-full flex gap-12">
         <div class="btn-box flex-1">
-          <van-button type="default" class="h-40!" plain block @click="showPicker = false">{{ t("cancel")
-            }}</van-button>
+          <van-button
+            type="default"
+            class="h-40!"
+            plain
+            block
+            @click="showPicker = false"
+            >{{ t("cancel") }}</van-button
+          >
         </div>
         <div class="btn-box flex-1">
-          <van-button type="primary" class="h-40!" block @click="confirm">{{ t('confirm') }}</van-button>
+          <van-button type="primary" class="h-40!" block @click="confirm">{{
+            t("confirm")
+          }}</van-button>
         </div>
       </div>
     </div>
@@ -39,7 +53,7 @@ import inputCom from "@/components/inputCom.vue";
 const props = defineProps({
   item: {
     type: Object,
-    default: () => { },
+    default: () => {},
   },
   popType: {
     type: String,
@@ -62,7 +76,7 @@ watch(
   () => props.item,
   (newVal) => {
     if (newVal) {
-      tips.value = `${t('MinBuyShare')}:${newVal.min}`;
+      tips.value = `${t("MinBuyShare")}:${newVal.min}`;
     }
   },
   {
@@ -71,7 +85,7 @@ watch(
 );
 const confirm = () => {
   if (form.number == "" && props.popType == "discount") {
-    showToast(t('input.PleaseEnter'));
+    showToast(t("PleaseEnter"));
     return;
   }
   form.id = props.item.id;
