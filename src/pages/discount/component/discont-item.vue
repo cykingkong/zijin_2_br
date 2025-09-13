@@ -274,7 +274,13 @@
         </div>
 
         <div class="li-r">
-          {{ _item.unit || "MX$" }} {{ addCommasToNumber(_item.income_price) }}
+          {{ _item.unit || "MX$" }}
+          <span
+            :class="
+              item.income_price >= 0 ? ' color-#32B464!' : ' color-#DC3232!'
+            "
+            >{{ addCommasToNumber(_item.income_price) }}</span
+          >
         </div>
       </div>
       <div class="li flex justify-end">

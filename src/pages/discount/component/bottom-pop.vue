@@ -35,12 +35,12 @@
             plain
             block
             @click="showPicker = false"
-            >{{ t("cancel") }}</van-button
+            >{{ t("Cancel") }}</van-button
           >
         </div>
         <div class="btn-box flex-1">
           <van-button type="primary" class="h-40!" block @click="confirm">{{
-            t("confirm")
+            t("Confirm")
           }}</van-button>
         </div>
       </div>

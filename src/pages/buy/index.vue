@@ -50,13 +50,13 @@
         class="balance flex items-start justify-center gap-8px text-#64748B mt-8"
         v-if="type == '1'"
       >
-        <div class="label text-14px">{{ t("可出售数量") }}:</div>
+        <div class="label text-14px">{{ t("Sellable quantity") }}:</div>
         <div class="value">
           <div class="v1 text-14px">{{ info.available_quantity || 0 }}</div>
         </div>
       </div>
       <div class="tips text-#64748B text-12px text-center" v-if="info.min">
-        {{ t("Minimum purchase amount is ") + info.min }}
+        {{ t("Minimum purchase amount is ") + info.min }} {{ info?.name || "" }}
       </div>
     </div>
     <div class="input-box px-12 mt-111px">

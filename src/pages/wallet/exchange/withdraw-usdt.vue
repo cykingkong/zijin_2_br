@@ -145,7 +145,7 @@
           {{ t("2. Withdrawal orders cannot be canceled once created.") }}
         </div>
         <van-button type="primary" block @click="handleClickSubmit()">{{
-          t("confirm")
+          t("Confirm")
         }}</van-button>
       </div>
     </van-popup>

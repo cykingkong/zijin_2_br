@@ -94,7 +94,7 @@
         block
         @click="handleClickConfirm"
       >
-        Confirm
+        {{ bankListData.length == 0 ? t("Add Bank Account") : t("Confirm") }}
       </van-button>
     </div>
   </div>

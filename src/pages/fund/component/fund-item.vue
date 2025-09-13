@@ -67,7 +67,7 @@
         </div>
         <div class="li-r flex-1 font-size-14 text-align-right flex-shrink-0">
           <div class="l">{{ t("C.D") }}</div>
-          <div class="v">{{ _item.cycle }}{{ t("Day") }}</div>
+          <div class="v">{{ _item.cycle }} D</div>
         </div>
       </div>
 

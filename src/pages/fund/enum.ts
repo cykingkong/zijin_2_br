@@ -7,18 +7,13 @@ export const statusEnum = {
 } as const;
 export const orderStatusEnum = {
     /**
-        *当status = 1 的时候,订单页面显示支付按钮
-        *当status = 2 的时候,订单页面显示等待按钮(不可点击)
-        *当status = 3 的时候,订单页面显示进行中按钮(不可点击)
-        *当status = 4 的时候,订单页面显示已完成按钮(不可点击)
-        *当status = 5 和 status = 6 的时候,订单页面显示已结束按钮(不可点击)
-        *当status = 7 的时候,订单页面显示 续期 或 赎回 按钮
+       状态 1 = 已预约 2 = 已支付 3 = 已激活 4 = 已完成 5 = 未支付/失败 6 = 已赎回 7 = 等待赎回/续期
      */
-    1: 'Pay',
-    2: 'Waiting',
-    3: 'In Progress',
+    1: 'Reserved',
+    2: 'Paid',
+    3: 'Activated',
     4: 'Completed',
-    5: 'Ended',
-    6: 'Ended',
-    7: 'Ended'
+    5: 'Unpaid/Failed',
+    6: 'Redeemed',
+    7: 'Waiting for redemption/renewal'
 } as const;

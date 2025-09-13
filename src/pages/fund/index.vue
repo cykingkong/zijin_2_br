@@ -197,15 +197,16 @@ const orderList = ref([]);
 const popType = ref("reserve"); // Reserve:预约  Redeem:赎回 Pay:支付 ReNew:续费
 const skeleton = ref(false);
 const page = reactive({
-  pageIndex: 1,
-  pageSize: 20,
+  page: 1,
+
+  size: 20,
 });
 const { t } = useI18n();
 const activeItem = ref({});
 const listStatus = ref(1); // 1:加载中 2:加载完成 3:没有更多数据
 const orderLoadStatus = ref(1); // 1:加载中 2:加载完成 3:没有更多数据
 const resetPage = () => {
-  page.pageIndex = 1;
+  page.page = 1;
 };
 const bottomPopRef = ref();
 const getDisountList = async () => {

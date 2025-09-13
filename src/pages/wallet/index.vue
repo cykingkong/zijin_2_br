@@ -84,7 +84,9 @@
             :key="k"
             :item="el"
           >
-            <div class="left h-46px flex items-center gap-16px">
+            <div
+              class="left h-46px flex items-center gap-16px w-220px flex-shrink-0"
+            >
               <div
                 class="img rounded-full w-40px h-40px overflow-hidden flex items-center justify-center bg-#F8F5FF"
               >
@@ -139,9 +141,10 @@
             </div>
 
             <div
-              class="right h-46px flex items-center gap-16px w-90px text-right"
+              class="right h-46px text-right flex flex-col justify-between gap-4px w-full text-right"
             >
-              {{ el.type == "income" ? "" : "-" }} MX$ {{ el.amount }}
+              <div class="unit">{{ el.type == "income" ? "" : "-" }} MX$</div>
+              {{ el.amount }}
             </div>
           </div>
         </div>

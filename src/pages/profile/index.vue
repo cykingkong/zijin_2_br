@@ -58,7 +58,7 @@ const toKfUrl = async () => {
 //  首字母转大写
 const toUpperCase = (str: string) => {
   try {
-    return str.charAt(0).toUpperCase() + str.slice(1);
+    return str.toUpperCase();
   } catch {
     return str;
   }
@@ -72,7 +72,7 @@ const cellList = [
         tips: "",
         iconType: "img",
         icon: cell1,
-        url: "/register?step=4",
+        url: "/register?step=3",
         type: "Identify",
       },
       {

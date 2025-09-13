@@ -45,7 +45,7 @@
               {{ listItem.name }}
             </div>
             <div class="name2 text-#64748B text-12px">
-              金额范围: MX${{ listItem.min_amount }} ~ MX${{
+              {{ t("Amount range") }}: MX${{ listItem.min_amount }} ~ MX${{
                 listItem.max_amount
               }}
             </div>
