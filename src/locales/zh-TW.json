@@ -188,5 +188,18 @@
     "Completed": "完成",
     "Unpaid/Failed": "失敗",
     "Redeemed": "贖回",
-    "Waiting for redemption/renewal": "等待"
+    "Waiting for redemption/renewal": "等待",
+    "Deposit Arrived": "充值到賬",
+    "Network Confirmation": "網絡確認",
+    "times": "次",
+    "Notice": "注意",
+    "Do not deposit any non-": "請勿向當前地址進行任何非",
+    " deposits, otherwise assets will not arrive and cannot be recovered.": "的充值,否則資產將不會到賬且無法找回。",
+    "Please provide your correct wallet address to ensure successful deposit.": "請務必提供您的正確錢包地址,以確保充值成功。",
+    "This asset currently does not support smart contract deposits! Do not use smart contract deposits, otherwise assets will not arrive and cannot be recovered.": "該資產當前暫不支持智能合約充值!請勿使用智能合約充值,否則資產將不會到賬且無法找回。",
+    "Copy wallet address for payment": "複製錢包地址進行支付",
+    "Deposit preview": "充值預覽",
+    "Wallet address": "錢包地址",
+    "Withdraw Preview": "提現預覽",
+    "Deposit Preview": "充值預覽"
 }

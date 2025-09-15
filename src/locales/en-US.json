@@ -187,5 +187,18 @@
   "Completed": "Completed",
   "Unpaid/Failed": "Unpaid/Failed",
   "Redeemed": "Redeemed",
-  "Waiting for redemption/renewal": "Waiting for redemption/renewal"
+  "Waiting for redemption/renewal": "Waiting for redemption/renewal",
+  "Deposit Arrived": "Deposit Arrived",
+  "Network Confirmation": "Network Confirmation",
+  "times": "times",
+  "Notice": "Notice",
+  "Do not deposit any non-": "Do not deposit any non-",
+  " deposits, otherwise assets will not arrive and cannot be recovered.": " deposits, otherwise assets will not arrive and cannot be recovered.",
+  "Please provide your correct wallet address to ensure successful deposit.": "Please provide your correct wallet address to ensure successful deposit.",
+  "This asset currently does not support smart contract deposits! Do not use smart contract deposits, otherwise assets will not arrive and cannot be recovered.": "This asset currently does not support smart contract deposits! Do not use smart contract deposits, otherwise assets will not arrive and cannot be recovered.",
+  "Copy wallet address for payment": "Copy wallet address for payment",
+  "Deposit preview": "Deposit preview",
+  "Wallet address": "Wallet address",
+  "Withdraw Preview": "Withdraw Preview",
+  "Deposit Preview": "Deposit Preview"
 }

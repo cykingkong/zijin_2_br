@@ -5,6 +5,7 @@ import { useUserStore } from "@/stores";
 import inputCom from "@/components/inputCom.vue";
 import nationalityList from "@/components/nationality-list/nationalityList.vue";
 import { languageColumns, locale } from "@/utils/i18n";
+import { getKfUrlNew } from "@/api/user";
 import Apple from "@/assets/image/Apple.svg";
 import Google from "@/assets/image/Google.svg";
 import loginTab from "@/components/tab.vue";
@@ -46,11 +47,15 @@ const rules = reactive({
 });
 
 const controlChildRef = ref();
-const hanleClickAreaPick = () => {
-  controlChildRef.value.open();
-
-  // areaPopRef.value.popShow()
-};
+async function initKfUrl() {
+  const { data, code } = await getKfUrlNew();
+  if (code == 200 && data) {
+    setTimeout(() => {
+      // window.open(kfUrl.value,'_blank');
+      window.location.href = data.kf_url;
+    }, 40);
+  }
+}
 const toRegister = () => {
   console.log("toRegister");
   try {
@@ -155,7 +160,16 @@ async function login(values: any) {
           </div>
         </template>
 </van-button> -->
-
+      <div
+        class="kf-fixed fixed bottom-120px right-0 h-auto w-40 overflow-hidden rounded-12px"
+        @click="initKfUrl"
+      >
+        <img
+          src="@/assets/kf.png"
+          class="block h-full w-full scale-[1.1] bg-white"
+          alt=""
+        />
+      </div>
       <div class="mt-36px justify-center text-center">
         {{ t("Don't have an account?") }}
         <span @click="toForget()" class="ml-4px color-#6b39f4">

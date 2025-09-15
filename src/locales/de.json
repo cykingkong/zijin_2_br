@@ -187,5 +187,18 @@
     "Completed": "Abschließen",
     "Unpaid/Failed": "Fehlschlagen",
     "Redeemed": "Einlösen",
-    "Waiting for redemption/renewal": "Warten"
+    "Waiting for redemption/renewal": "Warten",
+    "Deposit Arrived": "Einzahlung Eingegangen",
+    "Network Confirmation": "Netzwerk-Bestätigung",
+    "times": "mal",
+    "Notice": "Hinweis",
+    "Do not deposit any non-": "Zahlen Sie keine Nicht-",
+    " deposits, otherwise assets will not arrive and cannot be recovered.": " Einzahlungen an die aktuelle Adresse, sonst werden die Vermögenswerte nicht ankommen und können nicht wiederhergestellt werden.",
+    "Please provide your correct wallet address to ensure successful deposit.": "Bitte geben Sie Ihre korrekte Wallet-Adresse an, um eine erfolgreiche Einzahlung zu gewährleisten.",
+    "This asset currently does not support smart contract deposits! Do not use smart contract deposits, otherwise assets will not arrive and cannot be recovered.": "Dieser Vermögenswert unterstützt derzeit keine Smart-Contract-Einzahlungen! Verwenden Sie keine Smart-Contract-Einzahlungen, sonst werden die Vermögenswerte nicht ankommen und können nicht wiederhergestellt werden.",
+    "Copy wallet address for payment": "Wallet-Adresse für Zahlung kopieren",
+    "Deposit preview": "Einzahlungsvorschau",
+    "Wallet address": "Wallet-Adresse",
+    "Withdraw Preview": "Auszahlungsvorschau",
+    "Deposit Preview": "Einzahlungsvorschau"
 }

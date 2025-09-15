@@ -9,7 +9,9 @@
       z-index="999"
     >
       <template #title>
-        <div class="text-16px font-bold color-#0F172A">收银台</div>
+        <div class="text-16px font-bold color-#0F172A">
+          {{ t("Checkout counter") }}
+        </div>
       </template>
     </VanNavBar>
     <div class="info mt-32" v-if="info">
@@ -104,7 +106,7 @@
         </div>
       </div>
     </div>
-    <BottomButton :button-text="`Deposit Preview`" @click="onConfirm" />
+    <BottomButton :button-text="t(`Deposit Preview`)" @click="onConfirm" />
   </div>
 </template>
 <script setup lang="ts">
@@ -163,8 +165,11 @@ const handleBuyClickOriginal = async () => {
       };
       localStorage.setItem("cryptoInfo", JSON.stringify(cInfo));
       setTimeout(() => {
-        router.push("/wallet/exchange/deposit-preview");
-      }, 40);
+        router.push({
+          path: "/wallet/exchange/deposit-preview",
+          replace: true,
+        });
+      }, 400);
     }
   }
 };
@@ -219,10 +224,10 @@ onMounted(() => {
   });
 });
 
-// 页面离开时清空payType
-onBeforeUnmount(() => {
-  localStorage.removeItem("payType");
-});
+// // 页面离开时清空payType
+// onBeforeUnmount(() => {
+//   localStorage.removeItem("payType");
+// });
 
 // 使用watch监听info的变化（可选，用于调试）
 watch(

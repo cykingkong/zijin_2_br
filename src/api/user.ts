@@ -97,3 +97,7 @@ export function bankList(params): Promise<any> {
 export function resetPassword(data): Promise<any> {
   return request.post('/api/auth/resetPassword', data)
 }
+// 获取客服链接
+export function getKfUrlNew(): Promise<any> {
+  return request.get('/api/auth/kf_url',)
+}

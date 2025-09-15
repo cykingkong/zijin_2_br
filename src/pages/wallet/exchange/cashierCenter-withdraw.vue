@@ -161,7 +161,7 @@
         </div>
       </div>
     </div>
-    <BottomButton :button-text="`Deposit Preview`" @click="onConfirm" />
+    <BottomButton :button-text="t(`Withdraw Preview`)" @click="onConfirm" />
   </div>
 </template>
 <script setup lang="ts">

@@ -88,16 +88,17 @@ const chartsDesc = ref([]);
 
 const kfUrl = ref("");
 async function initKfUrl() {
-  const { data, code } = await getKfUrl({
-    userId: userInfo.value.userId ? userInfo.value.userId : null,
-  });
-  if (code == 200) {
-    kfUrl.value = data.kfUrl || "";
-    setTimeout(() => {
-      // window.open(kfUrl.value,'_blank');
-      window.location.href = kfUrl.value;
-    }, 40);
-  }
+  // const { data, code } = await getKfUrl({
+  //   userId: userInfo.value.userId ? userInfo.value.userId : null,
+  // });
+  // if (code == 200) {
+  //   kfUrl.value = data.kfUrl || "";
+  if (!userInfo.value.kf_url) return;
+  setTimeout(() => {
+    // window.open(kfUrl.value,'_blank');
+    window.location.href = userInfo.value.kf_url;
+  }, 40);
+  // }
 }
 function toKfUrl() {}
 async function getChartsDesc(type) {
@@ -407,9 +408,16 @@ onMounted(() => {
     </div>
     <Indicator :activeName="activeName" />
 
-    <!-- <div class="kf-fixed fixed bottom-120px right-0 h-auto w-40 overflow-hidden rounded-12px" @click="initKfUrl">
-      <img src="@/assets/kf.png" class="block h-full w-full scale-[1.1] bg-white" alt="">
-    </div> -->
+    <div
+      class="kf-fixed fixed bottom-120px right-0 h-auto w-40 overflow-hidden rounded-12px"
+      @click="initKfUrl"
+    >
+      <img
+        src="@/assets/kf.png"
+        class="block h-full w-full scale-[1.1] bg-white"
+        alt=""
+      />
+    </div>
     <van-popup v-model:show="showDatePicker" position="center" round="true">
       <div class="h-auto max-h-500 overflow-y-auto p-12">
         <div class="div" v-html="indexInfoData.notice" />
