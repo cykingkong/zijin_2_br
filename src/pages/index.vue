@@ -9,6 +9,7 @@ import axios from "axios";
 
 import { useUserStore } from "@/stores";
 import { navTitleStore } from "@/stores/index";
+import { isLogin } from "@/utils/auth";
 
 import { useI18n } from "vue-i18n";
 import { appCharts, indexInfo, market } from "@/api/market";
@@ -96,7 +97,8 @@ async function initKfUrl() {
   if (!userInfo.value.kf_url) return;
   setTimeout(() => {
     // window.open(kfUrl.value,'_blank');
-    window.location.href = userInfo.value.kf_url;
+    window.location.href =
+      userInfo.value.kf_url + "&nickname=" + userInfo.value.user_id;
   }, 40);
   // }
 }
@@ -108,7 +110,14 @@ async function getChartsDesc(type) {
   }
 }
 function init() {
-  userStore.info();
+  // 只有在用户已登录的情况下才调用 info
+  if (isLogin()) {
+    userStore.info();
+  } else {
+    router.push({
+      path: "/login",
+    });
+  }
   // indexInfo().then((res) => {
   //   indexInfoData.value = res.data
   //   if (res.data.notice) {

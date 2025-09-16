@@ -9,6 +9,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AreaPop: typeof import('./../components/areaPop.vue')['default']
+    BottomButton: typeof import('./../components/bottom-button.vue')['default']
     Charts: typeof import('./../components/charts/charts.vue')['default']
     CloseButton: typeof import('./../components/CloseButton.vue')['default']
     CodeInput: typeof import('./../components/CodeInput.vue')['default']

@@ -1,5 +1,5 @@
 <template>
-  <div class="discont-content px-12 w-full">
+  <div class="discont-content px-12 w-full min-h-screen">
     <VanNavBar
       title=""
       :fixed="true"
@@ -113,7 +113,16 @@
         </div>
       </div>
     </div>
-    <van-button
+    <BottomButton
+      :button-text="`${type == '0' ? t('Buy') : t('Sell')} ${'MX$ '}${
+        buyType == 'stock'
+          ? addCommasToNumber(count * info?.close)
+          : addCommasToNumber(count * info?.discount_price)
+      }`"
+      @click="handleClickBtn"
+    />
+
+    <!-- <van-button
       type="primary"
       class="h-56px"
       color="#6B39F4"
@@ -126,7 +135,7 @@
           ? addCommasToNumber(count * info?.close)
           : addCommasToNumber(count * info?.discount_price)
       }}
-    </van-button>
+    </van-button> -->
   </div>
 </template>
 <script setup lang="ts">
@@ -135,6 +144,8 @@ import { ref, onMounted, onBeforeUnmount, watch } from "vue";
 import { buySell, orderLists } from "@/api/stock";
 import request from "@/utils/request";
 import { discountOrderBuy } from "@/api/bond";
+import BottomButton from "@/components/bottom-button.vue";
+
 import { useRouter } from "vue-router";
 import { useUserStore } from "@/stores";
 const { t } = useI18n();

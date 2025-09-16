@@ -3,6 +3,7 @@ import ipo from "../../ipo/index.vue";
 import discount from "../../discount/index.vue";
 import fund from "../../fund/index.vue";
 import { addCommasToNumber } from "@/utils/tool";
+import { isLogin } from "@/utils/auth";
 
 // 获取数字的绝对值
 function getAbsoluteValue(num) {
@@ -105,7 +106,9 @@ function clearRefreshTimer() {
   }
 }
 onMounted(() => {
-  changeTab(0);
+  if (isLogin()) {
+    changeTab(0);
+  }
 });
 
 // 组件卸载时清除定时器

@@ -59,7 +59,7 @@
       </div>
     </div>
 
-    <BottomButton :button-text="`Confirm`" @click="handleBuyClick" />
+    <BottomButton :button-text="t(`Confirm`)" @click="handleBuyClick" />
   </div>
 </template>
 <script setup lang="ts">

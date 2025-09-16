@@ -8,8 +8,7 @@ import type { EnhancedRouteLocation } from './types'
 import useRouteCacheStore from '@/stores/modules/routeCache'
 import { useUserStore } from '@/stores'
 
-import { isLogin, getToken } from '@/utils/auth'
-import setPageTitle from '@/utils/set-page-title'
+import { isLogin } from '@/utils/auth'
 
 NProgress.configure({ showSpinner: true, parent: '#app' })
 
@@ -22,9 +21,18 @@ const router = createRouter({
 if (import.meta.hot)
   handleHotUpdate(router)
 
+// 定义不需要登录的公开页面
+const publicRoutes = [
+  '/',
+  '/login',
+  '/login/login',
+  '/register',
+  '/forgot-password',
+  '/profile/languange'
+]
+
 router.beforeEach(async (to: EnhancedRouteLocation) => {
   // NProgress.start()
-  // console.log(to, 'to', next)
   const routeCacheStore = useRouteCacheStore()
   const userStore = useUserStore()
 
@@ -33,14 +41,21 @@ router.beforeEach(async (to: EnhancedRouteLocation) => {
 
   // Set page title
   // setPageTitle(to.meta.title)
-  // Safely check user info
-  // console.log(isLogin() && !userStore.userInfo?.uid, 'isLogin() && !userStore.userInfo?.uid', from)
+
   console.log(to.path, 'to.path')
-  if (!isLogin() && to.path !== '/login' && to.path !== '/login/login' && to.path !== '/' && to.path != '/register' && to.path != '/forgot-password' && to.path != '/profile/languange') {
+
+  // 检查是否需要登录
+  const isPublicRoute = publicRoutes.includes(to.path)
+  const isUserLoggedIn = isLogin()
+
+  // 如果用户未登录且访问的不是公开页面，则跳转到登录页
+  if (!isUserLoggedIn && !isPublicRoute) {
+    console.log('用户未登录，跳转到登录页')
     return '/login'
   }
 
-  if (isLogin() && !userStore.userInfo?.uid) {
+  // 如果用户已登录但没有用户信息，尝试获取用户信息
+  if (isUserLoggedIn && !userStore.userInfo?.uid) {
     try {
       // await userStore.info()
     } catch (error) {
