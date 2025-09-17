@@ -15,8 +15,10 @@
       </template>
     </VanNavBar>
     <div class="info mt-32" v-if="info && info">
+      <div v-if="buyType == 'discount' && type == '1'"></div>
       <div
         class="mid-content flex items-center mx-auto items-center justify-center gap-8px"
+        v-else
       >
         <img :src="info.logo" class="block w-45 h-45 rounded-full" alt="" />
         <div class="name font-size-18px">1 {{ info?.name || "" }} =</div>
@@ -36,23 +38,30 @@
       >
         {{ count }}
       </div>
+      <div v-if="buyType == 'discount' && type == '1'"></div>
+
       <div
         class="balance flex items-start justify-center gap-8px text-#64748B mt-8"
+        v-else
       >
         <div class="label text-14px">{{ t("Balance") }}</div>
         <div class="value">
           <div class="v1 text-14px">
-            MX$ {{ addCommasToNumber(userInfo.user_balance) || 0 }}
+            MX$
+            {{ addCommasToNumber(userInfo.user_balance) || 0 }}
           </div>
         </div>
       </div>
+
       <div
         class="balance flex items-start justify-center gap-8px text-#64748B mt-8"
         v-if="type == '1'"
       >
         <div class="label text-14px">{{ t("Sellable quantity") }}:</div>
         <div class="value">
-          <div class="v1 text-14px">{{ info.available_quantity || 0 }}</div>
+          <div class="v1 text-14px">
+            {{ info.available_quantity || info.quantity || 0 }}
+          </div>
         </div>
       </div>
       <div class="tips text-#64748B text-12px text-center" v-if="info.min">
@@ -114,13 +123,29 @@
       </div>
     </div>
     <BottomButton
-      :button-text="`${type == '0' ? t('Buy') : t('Sell')} ${'MX$ '}${
+      :button-text="`${type == '0' ? t('Buy') : t('Sell')} ${
+        type == '1' && buyType == 'stock' ? 'MX$ ' : ''
+      }${
         buyType == 'stock'
           ? addCommasToNumber(count * info?.close)
-          : addCommasToNumber(count * info?.discount_price)
+          : type != 1
+          ? addCommasToNumber(count * info?.discount_price)
+          : count
       }`"
       @click="handleClickBtn"
-    />
+    >
+      <!-- <template #btn v-if="buyType == 'discount' && type != 1">
+        <van-button
+          type="primary"
+          class="h-56px"
+          color="#6B39F4"
+          block
+          @click="handleClickSub"
+        >
+          预约
+        </van-button>
+      </template> -->
+    </BottomButton>
 
     <!-- <van-button
       type="primary"
@@ -143,9 +168,8 @@ import { addCommasToNumber } from "@/utils/tool";
 import { ref, onMounted, onBeforeUnmount, watch } from "vue";
 import { buySell, orderLists } from "@/api/stock";
 import request from "@/utils/request";
-import { discountOrderBuy } from "@/api/bond";
+import { discountOrderBuy, subDiscount, discountOrderSell } from "@/api/bond";
 import BottomButton from "@/components/bottom-button.vue";
-
 import { useRouter } from "vue-router";
 import { useUserStore } from "@/stores";
 const { t } = useI18n();
@@ -185,6 +209,25 @@ const deleteLastChar = () => {
     console.log(count.value, displayValue.value);
   }
 };
+const handleClickSub = async () => {
+  try {
+    const { data, code } = await subDiscount({
+      id: info.value.id,
+      number: count.value,
+    });
+    if (code == 200) {
+      router.push({
+        path: "/discount",
+        query: {
+          tab: "1",
+        },
+        replace: true,
+      });
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
 const handleClickBtn = async () => {
   if (buyType.value == "stock") {
     const { data, code } = await buySell({
@@ -204,6 +247,23 @@ const handleClickBtn = async () => {
     return;
   }
   if (buyType.value == "discount") {
+    if (type.value == 1) {
+      const { data, code } = await discountOrderSell({
+        id: info.value.id,
+        number: count.value,
+      });
+      if (code == 200) {
+        localStorage.setItem("successInfo", JSON.stringify(data));
+        router.push({
+          path: "/discount",
+          query: {
+            tab: "1",
+          },
+          replace: true,
+        });
+      }
+      return;
+    }
     const { data, code } = await discountOrderBuy({
       id: info.value.id,
       number: count.value,
@@ -235,8 +295,8 @@ const updateInfo = () => {
   } else {
     info.value = null;
   }
-  count.value = info.value.min || "0";
-  displayValue.value = info.value.min + "" || "0";
+  count.value = info.value.min ? info.value.min : 0 || "0";
+  displayValue.value = info.value.min ? info.value.min + "" : "0";
   console.log(count.value, displayValue.value, info.value);
 };
 const route = useRoute();
@@ -285,12 +345,11 @@ onMounted(async () => {
     getDetail({ symbol: route.query.symbol });
     getUserStock({ symbol: route.query.symbol });
     startStockUpdate(); // 启动定时更新
-
     type.value = route.query.type;
   }
   if (route.query.buyType == "discount") {
     updateInfo();
-    type.value = 0;
+    type.value = route.query.type || 0;
   }
   buyType.value = route.query.buyType;
 

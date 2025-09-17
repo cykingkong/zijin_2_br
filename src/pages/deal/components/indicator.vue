@@ -291,7 +291,7 @@ function confirm() {
             class="right flex-1 flex gap-4px flex-col flex-shrink-0 gap-12px text-align-right"
           >
             <div class="label text-#6B7280 text-12px">{{ t("Profit") }}</div>
-            <div class="value text-#111827 text-16px" v-if="item.profit > 0">
+            <div class="value text-#111827 text-16px" v-if="item.profit >= 0">
               MX$ {{ addCommasToNumber(item.profit) }}
             </div>
             <div class="value text-#111827 text-16px" v-else>

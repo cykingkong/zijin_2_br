@@ -103,7 +103,7 @@
       class="order-item-content bg-#F9FAFB w-full px-12 py-24 font-size-16 flex flex-col gap-12px rounded-12px border-#E2E8F0 border-solid border-1px mb-29px"
       v-if="props.itemType == 'order'"
     >
-      <div class="top-li flex items-center">
+      <div class="top-li gap-30 flex items-center">
         <div class="l flex flex-[2] flex-shrink-0 items-center gap-16 h-40">
           <div class="logo w-40 h-40 rounded-full overflow-hidden">
             <img
@@ -335,13 +335,15 @@ const handleClickSubmit = () => {
     return;
   }
   if (props.itemType == "order" && _item.value.status != 1) {
+    emits("handleClickBtn", _item.value);
+
     return;
   }
   let data = {
     item: props.item,
     itemType: props.itemType,
   };
-  emits("handleClickBtn", data);
+  emits("handleClickBtn", _item.value);
 };
 </script>
 <style lang="less" scoped>

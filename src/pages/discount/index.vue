@@ -189,7 +189,6 @@ import { useLoadingStore } from "@/stores/modules/loading";
 import { navTitleStore } from "@/stores/index";
 const navStore = navTitleStore();
 const loadingStore = useLoadingStore();
-
 const { proxy } = getCurrentInstance();
 const props = defineProps({
   onlyShowOrder: {
@@ -693,9 +692,19 @@ const loadMore = () => {
   }
 };
 const handleClickBtn = (val: any) => {
-  activeItem.value = val.item;
-  popType.value = val.itemType;
-  bottomPopRef.value.show(true);
+  // activeItem.value = val.item;
+  // popType.value = val.itemType;
+  // bottomPopRef.value.show(true);
+
+  localStorage.setItem("dataInfo", JSON.stringify(val));
+  router.push({
+    path: "/buy",
+    query: {
+      type: 1,
+      buyType: "discount",
+    },
+    replace: true,
+  });
 };
 const onConfirmOriginal = async (val: any) => {
   console.log(val);

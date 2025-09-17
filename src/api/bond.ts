@@ -66,6 +66,9 @@ export function discountList(params, options?: { showLoading?: boolean }): Promi
 export function discountOrderBuy(data): Promise<any> {
     return request.post<any>('/api/discount/discountBuy', data)
 }
+export function subDiscount(data): Promise<any> {
+    return request.post<any>('/api/discount/subDiscount', data)
+}
 export function discountOrderSell(data): Promise<any> {
     return request.post<any>('/api/discount/discountSell', data)
 }
