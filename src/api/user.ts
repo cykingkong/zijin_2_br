@@ -101,3 +101,6 @@ export function resetPassword(data): Promise<any> {
 export function getKfUrlNew(): Promise<any> {
   return request.get('/api/auth/kf_url',)
 }
+export function getArticleList(params): Promise<any> {
+  return request.get('/api/article_list', { params })
+}
