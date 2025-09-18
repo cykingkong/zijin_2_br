@@ -103,6 +103,12 @@ const handleBuyClick = () => {
     item.list.find((listItem) => listItem.id == payType.value)
   );
   let payTypeItem = item.list.find((listItem) => listItem.id == payType.value);
+  if (payType.value == 99) {
+    setTimeout(() => {
+      window.location.href = payTypeItem.entrance;
+    }, 40);
+    return;
+  }
   localStorage.setItem("payType", JSON.stringify(payTypeItem));
   router.push(`/wallet/exchange/cashierCenter?payType=${payType.value}`);
 };
