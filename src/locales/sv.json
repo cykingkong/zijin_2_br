@@ -404,5 +404,8 @@
     "Confirm to cancel this order?": "Bekräfta avbokning av denna order?",
     "Stock name": "Aktienamn",
     "Total price": "Totalt pris",
-    "Stock": "Aktie"
+    "Stock": "Aktie",
+    "AboutUs": "Om Oss",
+    "Notify": "Aviseringar",
+    "No Notify": "Inga Aviseringar"
 }

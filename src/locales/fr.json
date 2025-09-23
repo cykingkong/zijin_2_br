@@ -431,5 +431,7 @@
     "Stock name": "Nom de l'action",
     "Total price": "Prix total",
     "Stock": "Action",
-    "AboutUs": "À Propos de Nous"
+    "AboutUs": "À Propos de Nous",
+    "Notify": "Notifications",
+    "No Notify": "Aucune Notification"
 }

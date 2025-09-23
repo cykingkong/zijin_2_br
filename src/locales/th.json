@@ -404,5 +404,8 @@
     "Confirm to cancel this order?": "ยืนยันการยกเลิกคำสั่งซื้อนี้ใช่ไหม?",
     "Stock name": "ชื่อหุ้น",
     "Total price": "ราคารวม",
-    "Stock": "หุ้น"
+    "Stock": "หุ้น",
+    "AboutUs": "เกี่ยวกับเรา",
+    "Notify": "การแจ้งเตือน",
+    "No Notify": "ไม่มีการแจ้งเตือน"
 }

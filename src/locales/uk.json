@@ -404,5 +404,8 @@
     "Confirm to cancel this order?": "Підтвердити скасування цього замовлення?",
     "Stock name": "Назва акції",
     "Total price": "Загальна ціна",
-    "Stock": "Акція"
+    "Stock": "Акція",
+    "AboutUs": "Про Нас",
+    "Notify": "Сповіщення",
+    "No Notify": "Немає Сповіщень"
 }

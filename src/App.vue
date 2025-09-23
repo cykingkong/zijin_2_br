@@ -11,7 +11,7 @@ const loadingStore = useLoadingStore();
 const store: any = useStore();
 let ws = null;
 useHead({
-  title: "WTT excellent",
+  title: "WTTexcellent",
   meta: [
     {
       name: "description",

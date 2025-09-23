@@ -60,6 +60,7 @@ declare module 'vue-router/auto-routes' {
     '/market/component/card-list': RouteRecordInfo<'/market/component/card-list', '/market/component/card-list', Record<never, never>, Record<never, never>>,
     '/market/component/stock-item': RouteRecordInfo<'/market/component/stock-item', '/market/component/stock-item', Record<never, never>, Record<never, never>>,
     '/market/search': RouteRecordInfo<'/market/search', '/market/search', Record<never, never>, Record<never, never>>,
+    'Notify': RouteRecordInfo<'Notify', '/notify', Record<never, never>, Record<never, never>>,
     'profile': RouteRecordInfo<'profile', '/profile', Record<never, never>, Record<never, never>>,
     'bankAccount': RouteRecordInfo<'bankAccount', '/profile/bankAccount', Record<never, never>, Record<never, never>>,
     'add': RouteRecordInfo<'add', '/profile/bankAccount/add', Record<never, never>, Record<never, never>>,
