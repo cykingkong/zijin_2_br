@@ -10,7 +10,7 @@ import Apple from "@/assets/image/Apple.svg";
 import Google from "@/assets/image/Google.svg";
 import loginTab from "@/components/tab.vue";
 import vw from "@/utils/inline-px-to-vw";
-
+import CryptoJS from "crypto-js";
 const { t } = useI18n();
 const router = useRouter();
 const userStore = useUserStore();
@@ -52,7 +52,9 @@ async function initKfUrl() {
   if (code == 200 && data) {
     setTimeout(() => {
       // window.open(kfUrl.value,'_blank');
-      window.location.href = data.kf_url;
+      // 使用MD5加密生成游客UUid 时间戳 + 固定字符串
+      let ykUUid = CryptoJS.MD5(`${Date.now()}+WTTexcellent`).toString();
+      window.location.href = data.kf_url + `&uuid=${ykUUid}`;
     }, 40);
   }
 }

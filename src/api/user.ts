@@ -104,3 +104,6 @@ export function getKfUrlNew(): Promise<any> {
 export function getArticleList(params): Promise<any> {
   return request.get('/api/article_list', { params })
 }
+export function notify_list(params): Promise<any> {
+  return request.get('/api/user/notify_list', { params })
+}
