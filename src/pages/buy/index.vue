@@ -1,6 +1,13 @@
 <template>
   <div class="discont-content px-12 w-full min-h-screen pb-120">
-    <VanNavBar title="" :fixed="true" clickable :left-arrow="true" @click-left="onBack" z-index="999">
+    <VanNavBar
+      title=""
+      :fixed="true"
+      clickable
+      :left-arrow="true"
+      @click-left="onBack"
+      z-index="999"
+    >
       <template #title>
         <div class="flex flex-items-center gap-6 font-size-18px font-bold">
           {{ type == "0" ? t("Buy") : t("Sell") }} {{ info?.name || "" }}
@@ -9,7 +16,10 @@
     </VanNavBar>
     <div class="info mt-32" v-if="info && info">
       <div v-if="buyType == 'discount' && type == '1'"></div>
-      <div class="mid-content flex items-center mx-auto items-center justify-center gap-8px" v-else>
+      <div
+        class="mid-content flex items-center mx-auto items-center justify-center gap-8px"
+        v-else
+      >
         <img :src="info.logo" class="block w-45 h-45 rounded-full" alt="" />
         <div class="name font-size-18px">1 {{ info?.name || "" }} =</div>
         <div class="price">
@@ -23,12 +33,17 @@
           </div>
         </div>
       </div>
-      <div class="min-count text-#0F172A font-size-40px mx-a text-center mt-57px overflow-y-auto">
+      <div
+        class="min-count text-#0F172A font-size-40px mx-a text-center mt-57px overflow-y-auto"
+      >
         {{ count }}
       </div>
       <div v-if="buyType == 'discount' && type == '1'"></div>
 
-      <div class="balance flex items-start justify-center gap-8px text-#64748B mt-8" v-else>
+      <div
+        class="balance flex items-start justify-center gap-8px text-#64748B mt-8"
+        v-else
+      >
         <div class="label text-14px">{{ t("Balance") }}</div>
         <div class="value">
           <div class="v1 text-14px">
@@ -38,7 +53,10 @@
         </div>
       </div>
 
-      <div class="balance flex items-start justify-center gap-8px text-#64748B mt-8" v-if="type == '1'">
+      <div
+        class="balance flex items-start justify-center gap-8px text-#64748B mt-8"
+        v-if="type == '1'"
+      >
         <div class="label text-14px">{{ t("Sellable quantity") }}:</div>
         <div class="value">
           <div class="v1 text-14px">
@@ -52,21 +70,49 @@
     </div>
     <div class="input-box px-12 mt-111px">
       <div class="keypad">
-        <div class="keypad-row flex gap-8px mb-8px" v-for="row in keypadRows" :key="row.join('')">
-          <div v-for="key in row" :key="key" @click="key === 'delete' ? deleteLastChar() : appendNumber(key)"
-            class="keypad-btn flex-1 h-56px bg-#FFFFFF border border-#E2E8F0 rounded-8px text-20px font-medium text-#0F172A hover:bg-#F1F5F9 flex items-center justify-center">
-            <svg width="29" v-if="key === 'delete'" height="28" viewBox="0 0 29 28" fill="none"
-              xmlns="http://www.w3.org/2000/svg">
+        <div
+          class="keypad-row flex gap-8px mb-8px"
+          v-for="row in keypadRows"
+          :key="row.join('')"
+        >
+          <div
+            v-for="key in row"
+            :key="key"
+            @click="key === 'delete' ? deleteLastChar() : appendNumber(key)"
+            class="keypad-btn flex-1 h-56px bg-#FFFFFF border border-#E2E8F0 rounded-8px text-20px font-medium text-#0F172A hover:bg-#F1F5F9 flex items-center justify-center"
+          >
+            <svg
+              width="29"
+              v-if="key === 'delete'"
+              height="28"
+              viewBox="0 0 29 28"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <g clip-path="url(#clip0_94_1671)">
                 <path
                   d="M23.5832 7C23.8927 7 24.1894 7.12292 24.4082 7.34171C24.627 7.5605 24.7499 7.85725 24.7499 8.16667V19.8333C24.7499 20.1428 24.627 20.4395 24.4082 20.6583C24.1894 20.8771 23.8927 21 23.5832 21H10.7499L4.91657 15.1667C4.6296 14.8458 4.47095 14.4305 4.47095 14C4.47095 13.5695 4.6296 13.1542 4.91657 12.8333L10.7499 7H23.5832Z"
-                  stroke="#0F172A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M18.9167 11.6667L14.25 16.3334M14.25 11.6667L18.9167 16.3334L14.25 11.6667Z" stroke="#0F172A"
-                  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  stroke="#0F172A"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M18.9167 11.6667L14.25 16.3334M14.25 11.6667L18.9167 16.3334L14.25 11.6667Z"
+                  stroke="#0F172A"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
               </g>
               <defs>
                 <clipPath id="clip0_94_1671">
-                  <rect width="28" height="28" fill="white" transform="translate(0.25)" />
+                  <rect
+                    width="28"
+                    height="28"
+                    fill="white"
+                    transform="translate(0.25)"
+                  />
                 </clipPath>
               </defs>
             </svg>
@@ -76,13 +122,18 @@
         </div>
       </div>
     </div>
-    <BottomButton :button-text="`${type == '0' ? t('Buy') : t('Sell')} ${type == '1' && buyType == 'stock' ? 'MX$ ' : ''
-      }${buyType == 'stock'
-        ? addCommasToNumber(count * info?.close)
-        : type != 1
+    <BottomButton
+      :button-text="`${type == '0' ? t('Buy') : t('Sell')} ${
+        buyType == 'discount' && type == '1' ? ' ' : 'MX$ '
+      }${
+        buyType == 'stock'
+          ? addCommasToNumber(count * info?.close)
+          : type != 1
           ? addCommasToNumber(count * info?.discount_price)
           : count
-      }`" @click="handleClickBtn">
+      }`"
+      @click="handleClickBtn"
+    >
       <!-- <template #btn v-if="buyType == 'discount' && type != 1">
         <van-button
           type="primary"

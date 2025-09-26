@@ -239,7 +239,7 @@ let discountUpdateTimer = ref<NodeJS.Timeout | null>(null);
 let orderUpdateTimer = ref<NodeJS.Timeout | null>(null);
 
 const resetPage = () => {
-  page.pageIndex = 1;
+  page.page = 1;
 };
 
 // 定时更新折扣列表价格（不显示loading）
@@ -469,7 +469,7 @@ const getDisountList = async () => {
   // resetPage()
   console.log(123123123);
   listStatus.value = 1;
-  if (page.pageIndex == 1) {
+  if (page.page == 1) {
     listSkeleton.value = true;
   }
   discountList({
@@ -482,7 +482,7 @@ const getDisountList = async () => {
       return;
     }
 
-    if (page.pageIndex == 1) {
+    if (page.page == 1) {
       list.value =
         res.data.list.map((e) => {
           return {
@@ -534,7 +534,7 @@ const getOrderList = async () => {
       orderSkeleton.value = false;
       return;
     }
-    if (page.pageIndex == 1) {
+    if (page.page == 1) {
       orderList.value =
         res.data.list.map((e) => {
           if (e.status == 1) {
