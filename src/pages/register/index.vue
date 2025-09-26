@@ -825,7 +825,6 @@ function onBack() {
       <van-uploader
         accept="image/*"
         preview-image
-        multiple
         :max-count="1"
         v-model="list1"
         :after-read="(file) => handleAfterRead(file, 1)"

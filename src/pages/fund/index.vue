@@ -276,7 +276,7 @@ const changeActive = (val: any) => {
   }
 };
 const loadMore = () => {
-  page.pageIndex += 1; // 统一先递增页码
+  page.page += 1; // 统一先递增页码
   props.onlyShowOrder
     ? getOrderList()
     : active.value === 0

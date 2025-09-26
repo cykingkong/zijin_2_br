@@ -665,29 +665,13 @@ const changeActive = (val: any) => {
 };
 const loadMore = () => {
   // 确保每次点击都递增页码
-  const originalPageIndex = page.pageIndex;
-  page.pageIndex += 1;
-
-  // 调试日志
-  console.log(
-    "Loading more. New pageIndex:",
-    page.pageIndex,
-    "Original:",
-    originalPageIndex,
-    "Mode:",
-    props.onlyShowOrder ? "OrderOnly" : "Normal"
-  );
+  const originalPageIndex = page.page;
+  page.page += 1;
 
   if (props.onlyShowOrder) {
     console.log("Fetching order list with page:", page);
     getOrderList();
   } else {
-    console.log(
-      "Fetching",
-      active.value === 0 ? "discount" : "order",
-      "list with page:",
-      page
-    );
     active.value === 0 ? getDisountList() : getOrderList();
   }
 };
