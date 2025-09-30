@@ -206,5 +206,6 @@
     "Ensure your ID is in PNG, JPG format with a maximum file size of 5MB.": "신분증이 PNG, JPG 형식이며 최대 파일 크기가 5MB인지 확인해주세요.",
     "AboutUs": "회사 소개",
     "Notify": "알림",
-    "No Notify": "알림이 없습니다"
+    "No Notify": "알림이 없습니다",
+    "Enter amount": "금액을 입력해주세요"
 }

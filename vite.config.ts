@@ -23,6 +23,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       proxy: {
         '/api': {
           target: `https://api.wttqc.com`, // 代理接口
+          // target: `https://api.oam007.icu`, // 代理接口
           // target: `http://192.168.31.153`, // 代理接口
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, ''),

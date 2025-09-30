@@ -206,5 +206,6 @@
     "Ensure your ID is in PNG, JPG format with a maximum file size of 5MB.": "身分証明書がPNG、JPG形式で、最大ファイルサイズ5MBであることを確認してください。",
     "AboutUs": "私たちについて",
     "Notify": "通知",
-    "No Notify": "通知はありません"
+    "No Notify": "通知はありません",
+    "Enter amount": "金額を入力してください"
 }

@@ -10,6 +10,6 @@ export const orderStatusEnum = {
     0: 'Not for sale',
     1: 'Sell',
     2: 'Not for sale',
-    3: 'Pending',
+    3: 'Paid',
     4: 'Rejected'
 } as const;

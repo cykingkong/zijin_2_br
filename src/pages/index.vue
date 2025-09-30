@@ -88,24 +88,35 @@ const indexData = ref({});
 const chartsDesc = ref([]);
 
 const kfUrl = ref("");
+function jumptoSearchUrl(data, url) {
+  for (var key in data) {
+    if (data[key]) {
+      url += '&' + key + '=' + data[key];
+    }
+  }
+  // window.location.href=encodeURI(url);
+  window.open(encodeURI(url), "_blank");
+}
 async function initKfUrl() {
-  // const { data, code } = await getKfUrl({
-  //   userId: userInfo.value.userId ? userInfo.value.userId : null,
-  // });
-  // if (code == 200) {
-  //   kfUrl.value = data.kfUrl || "";
+  await userStore.info()
   if (!userInfo.value.kf_url) return;
   setTimeout(() => {
-    // window.open(kfUrl.value,'_blank');
     // 使用MD5加密生成wttUUid
     let wttUUid = CryptoJS.MD5(
       `${userInfo.value.user_id}+WTTexcellent`
     ).toString();
-    window.location.href =
-      userInfo.value.kf_url +
-      "&nickname=" +
-      userInfo.value.user_id +
-      `&uuid=${wttUUid}`;
+    const selData = {
+      uuid: wttUUid,
+      nickname: userInfo.value.user_id || userInfo.value.account || userInfo.value.email || userInfo.value.phone || 'User',
+    }
+    jumptoSearchUrl(selData, userInfo.value.kf_url)
+
+    console.log(wttUUid, userInfo.value);
+    // window.location.href =
+    //   userInfo.value.kf_url +
+    //   "&nickname=" +
+    //   userInfo.value.user_id +
+    //   `&uuid=${wttUUid}`;
   }, 40);
   // }
 }
@@ -310,57 +321,28 @@ onMounted(() => {
         WTTexcellent
       </div>
       <div class="icon w-24 h-24 relative" @click="toUrl('/notify')">
-        <div
-          class="dot w-4 h-4 rounded-full bg-#F14437 absolute top-0 right-0"
-          v-if="userInfo.notify_start"
-        ></div>
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
+        <div class="dot w-4 h-4 rounded-full bg-#F14437 absolute top-0 right-0" v-if="userInfo.notify_start"></div>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M12.02 2.91003C8.71 2.91003 6.02 5.60003 6.02 8.91003V11.8C6.02 12.41 5.76 13.34 5.45 13.86L4.3 15.77C3.59 16.95 4.08 18.26 5.38 18.7C9.69 20.14 14.34 20.14 18.65 18.7C19.86 18.3 20.39 16.87 19.73 15.77L18.58 13.86C18.28 13.34 18.02 12.41 18.02 11.8V8.91003C18.02 5.61003 15.32 2.91003 12.02 2.91003Z"
-            stroke="#94A3B8"
-            stroke-width="1.5"
-            stroke-miterlimit="10"
-            stroke-linecap="round"
-          />
+            stroke="#94A3B8" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" />
           <path
             d="M13.87 3.19994C13.56 3.10994 13.24 3.03994 12.91 2.99994C11.95 2.87994 11.03 2.94994 10.17 3.19994C10.46 2.45994 11.18 1.93994 12.02 1.93994C12.86 1.93994 13.58 2.45994 13.87 3.19994Z"
-            stroke="#94A3B8"
-            stroke-width="1.5"
-            stroke-miterlimit="10"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
+            stroke="#94A3B8" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
           <path
             d="M15.02 19.0601C15.02 20.7101 13.67 22.0601 12.02 22.0601C11.2 22.0601 10.44 21.7201 9.89999 21.1801C9.35999 20.6401 9.01999 19.8801 9.01999 19.0601"
-            stroke="#94A3B8"
-            stroke-width="1.5"
-            stroke-miterlimit="10"
-          />
+            stroke="#94A3B8" stroke-width="1.5" stroke-miterlimit="10" />
         </svg>
       </div>
     </header>
     <div class="w-full px-24px">
-      <div
-        class="w-full px-24px mt-8 h-177px relative bg-#0F172A rounded-12px overflow-hidden p-20px"
-      >
-        <img
-          :src="boxBg"
-          alt=""
-          class="w-486 h-468px absolute top-[-167px] left-[-55px]"
-        />
+      <div class="w-full px-24px mt-8 h-177px relative bg-#0F172A rounded-12px overflow-hidden p-20px">
+        <img :src="boxBg" alt="" class="w-486 h-468px absolute top-[-167px] left-[-55px]" />
         <div class="info z-80">
           <div class="title text-14px color-#94A3B8">
             {{ t("Total assets") }}
           </div>
-          <div
-            class="price text-32px color-#fff font-bold mt-8px text-nowrap overflow-y-auto"
-          >
+          <div class="price text-32px color-#fff font-bold mt-8px text-nowrap overflow-y-auto">
             MX$ {{ addCommasToNumber(userInfo.user_balance) }}
           </div>
           <div class="bottom-li mt-24px flex items-center justify-between">
@@ -374,29 +356,14 @@ onMounted(() => {
             </div>
             <div
               class="right p4 h-24px rounded-24px color-#fff flex text-12px items-center justify-center gap-8px min-w-80px"
-              :class="
-                userInfo.total_profit_rate > 0 ? 'bg-#1DCE5C' : 'bg-#F14437'
-              "
-            >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+              :class="userInfo.total_profit_rate > 0 ? 'bg-#1DCE5C' : 'bg-#F14437'
+                ">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z"
-                  stroke="white"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M8.00001 5.33337L5.33334 8.00004M8.00001 5.33337V10.6667M10.6667 8.00004L8.00001 5.33337"
-                  stroke="white"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
+                  stroke="white" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M8.00001 5.33337L5.33334 8.00004M8.00001 5.33337V10.6667M10.6667 8.00004L8.00001 5.33337"
+                  stroke="white" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
               {{ addCommasToNumber(userInfo.total_profit_rate) || 0 }} %
             </div>
@@ -411,15 +378,8 @@ onMounted(() => {
     </div>
     <Indicator :activeName="activeName" />
 
-    <div
-      class="kf-fixed fixed bottom-120px right-0 h-auto w-40 overflow-hidden rounded-12px"
-      @click="initKfUrl"
-    >
-      <img
-        src="@/assets/kf.png"
-        class="block h-full w-full scale-[1.1] bg-white"
-        alt=""
-      />
+    <div class="kf-fixed fixed bottom-120px right-0 h-auto w-40 overflow-hidden rounded-12px" @click="initKfUrl">
+      <img src="@/assets/kf.png" class="block h-full w-full scale-[1.1] bg-white" alt="" />
     </div>
     <van-popup v-model:show="showDatePicker" position="center" round="true">
       <div class="h-auto max-h-500 overflow-y-auto p-12">
@@ -427,13 +387,7 @@ onMounted(() => {
       </div>
       <div class="w-full flex gap-12 px-12 pb-12">
         <div class="btn-box flex-1">
-          <van-button
-            type="default"
-            class="h-40!"
-            plain
-            block
-            @click="cancelNotice"
-          >
+          <van-button type="default" class="h-40!" plain block @click="cancelNotice">
             {{ t("Cancel") }}
           </van-button>
         </div>
@@ -499,8 +453,7 @@ onMounted(() => {
 }
 
 :deep(.van-tabs__line) {
-  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADxSURBVHgBnVHLDYJAEJ1ZjJ+LoQTsQDtA48GjJXj1YNQKKIGDIR4pQY8eTLQD7EBKIIZIBGEEiQSR5eNLNrs7efP27RsEDiZbR3J9OEXnrtce7Ndo5fEYT8D1cRluUrTslqPweFjw+jVdawrQO8w7ZiUHbkBqtub5oOdxfwRGmjMDwmm2TgDyeOPIpQIhk/vfAEGfqiRyBUbaI2qWgA/p1riv0oUkxHdwTzIAUYRCoNUUaPAJNHHgBaH10uYIJHoBql8OZM3uMxIMqAFGMDwuOmcWX4Qd1ARhHDbGY8ufcQWZNSsaWzmYwsIQTPgTCHR5AaMKT03qmstiAAAAAElFTkSuQmCC)
-    no-repeat center;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADxSURBVHgBnVHLDYJAEJ1ZjJ+LoQTsQDtA48GjJXj1YNQKKIGDIR4pQY8eTLQD7EBKIIZIBGEEiQSR5eNLNrs7efP27RsEDiZbR3J9OEXnrtce7Ndo5fEYT8D1cRluUrTslqPweFjw+jVdawrQO8w7ZiUHbkBqtub5oOdxfwRGmjMDwmm2TgDyeOPIpQIhk/vfAEGfqiRyBUbaI2qWgA/p1riv0oUkxHdwTzIAUYRCoNUUaPAJNHHgBaH10uYIJHoBql8OZM3uMxIMqAFGMDwuOmcWX4Qd1ARhHDbGY8ufcQWZNSsaWzmYwsIQTPgTCHR5AaMKT03qmstiAAAAAElFTkSuQmCC) no-repeat center;
   width: 9px;
   height: 8px;
   background-size: 100% 100%;

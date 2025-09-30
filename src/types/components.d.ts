@@ -26,6 +26,8 @@ declare module 'vue' {
     MiniChartList: typeof import('./../components/miniChartList.vue')['default']
     NationalityList: typeof import('./../components/nationality-list/nationalityList.vue')['default']
     NavBar: typeof import('./../components/NavBar.vue')['default']
+    PayKey: typeof import('./../components/payKey.vue')['default']
+    PayKeypad: typeof import('./../components/payKeypad.vue')['default']
     PhoneInput: typeof import('./../components/PhoneInput.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
