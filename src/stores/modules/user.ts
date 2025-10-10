@@ -19,10 +19,10 @@ const InitUserInfo = {
 }
 
 export const useUserStore = defineStore('user', () => {
-  const userInfo = ref<UserState>({ ...InitUserInfo })
+  const userInfo = ref<any>({ ...InitUserInfo })
 
   // Set user's information
-  const setInfo = (partial: Partial<UserState>) => {
+  const setInfo = (partial: Partial<any>) => {
     userInfo.value = { ...userInfo.value, ...partial }
   }
 

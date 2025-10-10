@@ -100,6 +100,13 @@ function jumptoSearchUrl(data, url) {
 async function initKfUrl() {
   await userStore.info()
   if (!userInfo.value.kf_url) return;
+  router.push({
+    path: '/webview',
+    query: {
+      islogin: 'true',
+    }
+  })
+  return
   setTimeout(() => {
     // 使用MD5加密生成wttUUid
     let wttUUid = CryptoJS.MD5(

@@ -89,5 +89,7 @@ declare module 'vue-router/auto-routes' {
     '/wallet/exchange/withdraw-preview': RouteRecordInfo<'/wallet/exchange/withdraw-preview', '/wallet/exchange/withdraw-preview', Record<never, never>, Record<never, never>>,
     '/wallet/exchange/withdraw-success': RouteRecordInfo<'/wallet/exchange/withdraw-success', '/wallet/exchange/withdraw-success', Record<never, never>, Record<never, never>>,
     '/wallet/exchange/withdraw-usdt': RouteRecordInfo<'/wallet/exchange/withdraw-usdt', '/wallet/exchange/withdraw-usdt', Record<never, never>, Record<never, never>>,
+    'webview': RouteRecordInfo<'webview', '/webview', Record<never, never>, Record<never, never>>,
+    '/webview/webview': RouteRecordInfo<'/webview/webview', '/webview/webview', Record<never, never>, Record<never, never>>,
   }
 }

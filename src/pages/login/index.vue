@@ -50,12 +50,14 @@ const controlChildRef = ref();
 async function initKfUrl() {
   const { data, code } = await getKfUrlNew();
   if (code == 200 && data) {
+    localStorage.setItem("kf_url", data.kf_url);
+    router.push({ name: "webview", query: { islogin: "false" } });
+
     setTimeout(() => {
-      // window.open(kfUrl.value,'_blank');
-      // 使用MD5加密生成游客UUid 时间戳 + 固定字符串
-      let ykUUid = CryptoJS.MD5(`${Date.now()}+WTTexcellent`).toString();
-      window.location.href = data.kf_url + `&uuid=${ykUUid}`;
-    }, 40);
+      //   // 使用MD5加密生成游客UUid 时间戳 + 固定字符串
+      //   let ykUUid = CryptoJS.MD5(`${Date.now()}+WTTexcellent`).toString();
+      //   window.location.href = data.kf_url + `&uuid=${ykUUid}`;
+    }, 100);
   }
 }
 const toRegister = () => {
@@ -113,33 +115,15 @@ async function login(values: any) {
 </script>
 
 <template>
-  <div
-    class="m-x-a w-full min-h-100vh pb-[calc(env(safe-area-inset-bottom)+24px)]"
-  >
+  <div class="m-x-a w-full min-h-100vh pb-[calc(env(safe-area-inset-bottom)+24px)]">
     <div class="top-image w-full min-h-366px bg-#D3C4FC">
-      <img
-        src="@/assets/image/login-bg.png"
-        alt=""
-        class="block w-full h-full"
-      />
+      <img src="@/assets/image/login-bg.png" alt="" class="block w-full h-full" />
     </div>
     <div class="btn-box w-7xl m-x-a">
-      <van-button
-        type="primary"
-        color="#6b39f4"
-        class="login-btn"
-        block
-        @click="toLogin(1)"
-        >{{ t("Phone Number Login") }}</van-button
-      >
-      <van-button
-        type="primary"
-        color="#6b39f4"
-        class="login-btn"
-        block
-        @click="toLogin(2)"
-        >{{ t("Email Account Login") }}</van-button
-      >
+      <van-button type="primary" color="#6b39f4" class="login-btn" block @click="toLogin(1)">{{ t("Phone Number Login")
+      }}</van-button>
+      <van-button type="primary" color="#6b39f4" class="login-btn" block @click="toLogin(2)">{{ t("Email Account Login")
+      }}</van-button>
 
       <!-- <van-button type="primary" plain color="#6b39f4" class="login-btn items-center" block @click="login({})">
         <template #default>
@@ -162,15 +146,8 @@ async function login(values: any) {
           </div>
         </template>
 </van-button> -->
-      <div
-        class="kf-fixed fixed bottom-120px right-0 h-auto w-40 overflow-hidden rounded-12px"
-        @click="initKfUrl"
-      >
-        <img
-          src="@/assets/kf.png"
-          class="block h-full w-full scale-[1.1] bg-white"
-          alt=""
-        />
+      <div class="kf-fixed fixed bottom-120px right-0 h-auto w-40 overflow-hidden rounded-12px" @click="initKfUrl">
+        <img src="@/assets/kf.png" class="block h-full w-full scale-[1.1] bg-white" alt="" />
       </div>
       <div class="mt-36px justify-center text-center">
         {{ t("Don't have an account?") }}

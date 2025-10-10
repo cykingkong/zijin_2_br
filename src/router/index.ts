@@ -28,7 +28,8 @@ const publicRoutes = [
   '/login/login',
   '/register',
   '/forgot-password',
-  '/profile/languange'
+  '/profile/languange',
+  '/webview',
 ]
 
 router.beforeEach(async (to: EnhancedRouteLocation) => {

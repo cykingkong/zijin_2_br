@@ -14,7 +14,7 @@
         'border-1px border-#E11D48': isInvalidAmount || isInvalidFormat,
       }">
       <div class="unit text-16px">MX$</div>
-      <input type="text" placeholder="" v-model="amount" disabled @input="handleAmountInput" @blur="handleAmountBlur"
+      <input type="text" placeholder="" v-model="amount" @input="handleAmountInput" @blur="handleAmountBlur"
         class="w-full h-full text-16px text-align-left input"
         :class="{ 'color-#E11D48': isInvalidAmount || isInvalidFormat }" />
     </div>
@@ -31,7 +31,7 @@
     <div v-if="isInvalidFormat" class="error-tip text-12px color-#E11D48 mt-8px text-center">
       {{ t("Please enter a valid positive integer amount.") }}
     </div>
-    <Keypad v-model="amount" />
+    <!-- <Keypad v-model="amount" /> -->
     <bottom-button :buttonText="t('Reserve') + ' ' + info.name" @click="handleReserveConfirm" />
 
     <!-- 预约弹窗 -->

@@ -26,13 +26,13 @@
         <div class="unit text-16px">MX$</div>
         <input type="text" placeholder="" v-model="form.amount" @input="handleAmountInput" @blur="handleAmountBlur"
           class="w-full h-full text-16px text-align-left input"
-          :class="{ 'color-#E11D48': isInvalidAmount || isInvalidFormat }" disabled />
+          :class="{ 'color-#E11D48': isInvalidAmount || isInvalidFormat }" />
       </div>
 
       <div class="sell-tips font-size-18 font-500" v-if="popType == 'order'">
         {{ t("You need to pay") }} MX$ {{ addCommasToNumber(item.amount) }}
       </div>
-      <Keypad v-model="form.amount" />
+      <!-- <Keypad v-model="form.amount" /> -->
       <div class="w-full flex gap-12">
         <!-- <div class="btn-box flex-1">
           <van-button type="default" class="h-40!" plain block @click="showPicker = false">{{ t("cancel")
