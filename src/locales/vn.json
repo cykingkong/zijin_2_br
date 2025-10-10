@@ -405,5 +405,8 @@
     "Stock name": "Tên cổ phiếu",
     "Total price": "Tổng giá",
     "Stock": "Cổ phiếu",
-    "Enter amount": "Nhập số lượng"
+    "Enter amount": "Nhập số lượng",
+  "fetchNewOrderForDeposit": "Vui lòng lấy đơn hàng mới cho mỗi lần nạp tiền",
+  "avoidRepeatedDeposits": "Không nạp tiền lặp lại với cùng một tài khoản. Mọi tổn thất tài chính sẽ do bạn tự chịu trách nhiệm",
+  "contactSupportForDepositIssues": "Nếu gặp bất kỳ vấn đề nạp tiền nào, vui lòng liên hệ dịch vụ khách hàng trực tuyến"
 }

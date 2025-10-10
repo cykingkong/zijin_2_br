@@ -409,5 +409,8 @@
     "AboutUs": "O Nas",
     "Notify": "Powiadomienia",
     "No Notify": "Brak Powiadomień",
-    "Enter amount": "Wprowadź kwotę"
+    "Enter amount": "Wprowadź kwotę",
+  "fetchNewOrderForDeposit": "Prosimy o pobranie nowego zamówienia dla każdej wpłaty",
+  "avoidRepeatedDeposits": "Nie dokonuj powtarzających się wpłat z tego samego konta. Wszelkie straty finansowe będą Twoją odpowiedzialnością",
+  "contactSupportForDepositIssues": "W przypadku problemów z wpłatą, skontaktuj się z obsługą klienta online"
 }

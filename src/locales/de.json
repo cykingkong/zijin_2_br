@@ -205,5 +205,8 @@
     "AboutUs": "Über Uns",
     "Notify": "Benachrichtigungen",
     "No Notify": "Keine Benachrichtigungen",
-    "Enter amount": "Geben Sie die Menge ein"
+    "Enter amount": "Geben Sie die Menge ein",
+  "fetchNewOrderForDeposit": "Bitte holen Sie für jede Einzahlung eine neue Bestellung ein",
+  "avoidRepeatedDeposits": "Tätigen Sie keine wiederholten Einzahlungen mit demselben Konto. Finanzielle Verluste gehen zu Ihren Lasten",
+  "contactSupportForDepositIssues": "Bei Problemen mit der Einzahlung wenden Sie sich bitte an den Online-Kundenservice"
 }

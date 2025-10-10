@@ -207,5 +207,8 @@
     "AboutUs": "私たちについて",
     "Notify": "通知",
     "No Notify": "通知はありません",
-    "Enter amount": "金額を入力してください"
+    "Enter amount": "金額を入力してください",
+  "fetchNewOrderForDeposit": "入金の度に新しい注文を取得してください",
+  "avoidRepeatedDeposits": "同じアカウントでの重複入金はお控えください。資金の損失は自己責任となります",
+  "contactSupportForDepositIssues": "入金に関する問題が発生した場合は、オンラインカスタマーサービスにお問い合わせください"
 }

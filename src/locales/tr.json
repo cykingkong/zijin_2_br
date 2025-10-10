@@ -408,5 +408,8 @@
     "AboutUs": "Hakkımızda",
     "Notify": "Bildirimler",
     "No Notify": "Bildirim Yok",
-    "Enter amount": "Miktar girin"
+    "Enter amount": "Miktar girin",
+  "fetchNewOrderForDeposit": "Lütfen her yatırım için yeni bir sipariş alın",
+  "avoidRepeatedDeposits": "Aynı hesapla tekrarlanan yatırımlar yapmayın. Herhangi bir finansal kayıp sizin sorumluluğunuzda olacaktır",
+  "contactSupportForDepositIssues": "Yatırım ile ilgili herhangi bir sorun yaşarsanız, lütfen çevrimiçi müşteri hizmetleri ile iletişime geçin"
 }

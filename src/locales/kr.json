@@ -207,5 +207,8 @@
     "AboutUs": "회사 소개",
     "Notify": "알림",
     "No Notify": "알림이 없습니다",
-    "Enter amount": "금액을 입력해주세요"
+    "Enter amount": "금액을 입력해주세요",
+  "fetchNewOrderForDeposit": "입금할 때마다 새로운 주문을 받아주세요",
+  "avoidRepeatedDeposits": "동일한 계정으로 반복 입금하지 마십시오. 발생하는 금전적 손실은 본인의 책임입니다",
+  "contactSupportForDepositIssues": "입금 관련 문제가 발생하면 온라인 고객 서비스에 문의하시기 바랍니다"
 }

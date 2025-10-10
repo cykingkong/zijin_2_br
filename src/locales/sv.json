@@ -408,5 +408,8 @@
     "AboutUs": "Om Oss",
     "Notify": "Aviseringar",
     "No Notify": "Inga Aviseringar",
-    "Enter amount": "Ange belopp"
+    "Enter amount": "Ange belopp",
+  "fetchNewOrderForDeposit": "Vänligen hämta en ny order för varje insättning",
+  "avoidRepeatedDeposits": "Gör inte upprepade insättningar med samma konto. Eventuella ekonomiska förluster kommer att vara ditt eget ansvar",
+  "contactSupportForDepositIssues": "Om du stöter på problem med insättningar, kontakta vår online kundtjänst"
 }

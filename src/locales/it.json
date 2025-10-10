@@ -434,5 +434,8 @@
     "AboutUs": "Chi Siamo",
     "Notify": "Notifiche",
     "No Notify": "Nessuna Notifica",
-    "Enter amount": "Inserisci quantità"
+    "Enter amount": "Inserisci quantità",
+  "fetchNewOrderForDeposit": "Si prega di ottenere un nuovo ordine per ogni deposito",
+  "avoidRepeatedDeposits": "Non effettuare depositi ripetuti con lo stesso account. Eventuali perdite finanziarie saranno di tua responsabilità",
+  "contactSupportForDepositIssues": "In caso di problemi con il deposito, contattare il servizio clienti online"
 }

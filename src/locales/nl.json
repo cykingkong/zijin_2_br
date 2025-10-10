@@ -434,5 +434,8 @@
     "AboutUs": "Over Ons",
     "Notify": "Meldingen",
     "No Notify": "Geen Meldingen",
-    "Enter amount": "Voer bedrag in"
+    "Enter amount": "Voer bedrag in",
+  "fetchNewOrderForDeposit": "Vraag voor elke storting een nieuwe order aan",
+  "avoidRepeatedDeposits": "Doe geen herhaalde stortingen met hetzelfde account. Eventuele financiële verliezen zijn uw eigen verantwoordelijkheid",
+  "contactSupportForDepositIssues": "Als u problemen ondervindt met de storting, neem dan contact op met de online klantenservice"
 }

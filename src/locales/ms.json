@@ -405,5 +405,8 @@
     "Stock name": "Nama saham",
     "Total price": "Jumlah harga",
     "Stock": "Saham",
-    "Enter amount": "Masukkan jumlah"
+    "Enter amount": "Masukkan jumlah",
+  "fetchNewOrderForDeposit": "Sila dapatkan pesanan baharu untuk setiap deposit",
+  "avoidRepeatedDeposits": "Jangan buat deposit berulang dengan akaun yang sama. Sebarang kerugian kewangan akan menjadi tanggungjawab anda sendiri",
+  "contactSupportForDepositIssues": "Jika anda menghadapi sebarang masalah deposit, sila hubungi khidmat pelanggan dalam talian"
 }

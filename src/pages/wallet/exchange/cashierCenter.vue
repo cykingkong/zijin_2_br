@@ -1,28 +1,170 @@
+<script setup lang="ts">
+import { useRouter } from 'vue-router'
+import { useLoadingStore } from '@/stores/modules/loading'
+
+import { deposit } from '@/api/billing'
+import item from '../../../components/item.vue'
+import BottomButton from '../component/bottom-button.vue'
+
+const info = ref<any>()
+const count = ref(0)
+const displayValue = ref('')
+const { t } = useI18n()
+const { proxy } = getCurrentInstance()!
+const loadingStore = useLoadingStore()
+
+// 数字键盘布局数据
+const keypadRows = [
+  ['1', '2', '3'],
+  ['4', '5', '6'],
+  ['7', '8', '9'],
+  ['0', 'delete'],
+]
+
+// 统一的按键处理方法
+function handleKeyClick(key: string) {
+  if (key === 'delete') {
+    deleteLastChar()
+  }
+  else {
+    appendNumber(key)
+  }
+}
+function onSelect() {
+  router.replace('/wallet/exchange/channel-out')
+}
+
+async function handleBuyClickOriginal() {
+  // 处理购买逻辑
+  console.log('购买金额:', count.value)
+  console.log('购买信息:', info.value)
+  // 这里可以添加购买确认、API调用等逻辑
+  const { data, code } = await deposit({
+    amount: count.value,
+    id: info.value.id,
+  })
+  if (code === 200) {
+    if (data.type == 'bank') {
+      setTimeout(() => {
+        window.location.href = data.url
+      }, 40)
+    }
+    if (data.type == 'crypto') {
+      let cInfo = {
+        ...data,
+        amount: count.value,
+      }
+      localStorage.setItem('cryptoInfo', JSON.stringify(cInfo))
+      setTimeout(() => {
+        router.push({
+          path: '/wallet/exchange/deposit-preview',
+          replace: true,
+        })
+      }, 400)
+    }
+  }
+}
+const onConfirm = proxy!.$throttle(handleBuyClickOriginal, 1000, {
+  onStart: () => loadingStore.show(),
+  onEnd: () => loadingStore.hide(),
+})
+// 数字键盘相关方法
+function appendNumber(num: string) {
+  if (displayValue.value === '0') {
+    displayValue.value = num
+  }
+  else {
+    displayValue.value += num
+  }
+  // 更新count值
+  count.value = displayValue.value === '' ? 0 : Number.parseInt(displayValue.value)
+}
+
+function deleteLastChar() {
+  if (displayValue.value.length > 0) {
+    displayValue.value = displayValue.value.slice(0, -1)
+    // 如果删除后为空，则count为0，否则解析数值
+    count.value = displayValue.value === '' ? 0 : Number.parseInt(displayValue.value)
+  }
+}
+
+// 更新info的函数
+function updateInfo() {
+  const dataInfo = localStorage.getItem('payType')
+  if (dataInfo) {
+    try {
+      // 如果dataInfo是JSON字符串，则解析为对象
+      info.value = JSON.parse(dataInfo)
+    }
+    catch (error) {
+      // 如果不是JSON格式，直接赋值字符串
+      info.value = dataInfo
+    }
+  }
+  else {
+    info.value = null
+  }
+}
+
+onMounted(() => {
+  // 初始获取localStorage中的dataInfo
+  updateInfo()
+
+  // 监听localStorage变化
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'dataInfo') {
+      updateInfo()
+    }
+  })
+})
+
+// // 页面离开时清空payType
+// onBeforeUnmount(() => {
+//   localStorage.removeItem("payType");
+// });
+
+// 使用watch监听info的变化（可选，用于调试）
+watch(
+  info,
+  (newValue) => {
+    console.log('info已更新:', newValue)
+  },
+  { deep: true },
+)
+
+const router = useRouter()
+function onBack() {
+  if (window.history.state.back)
+    history.back()
+  else router.replace('/')
+}
+</script>
+
 <template>
-  <div class="cashier-center-content px-12 w-full pb-120">
-    <VanNavBar title="" :fixed="true" clickable :left-arrow="true" @click-left="onBack" z-index="999">
+  <div class="cashier-center-content w-full px-12 pb-120">
+    <VanNavBar title="" :fixed="true" clickable :left-arrow="true" z-index="999" @click-left="onBack">
       <template #title>
-        <div class="text-16px font-bold color-#0F172A">
+        <div class="text-16px color-#0F172A font-bold">
           {{ t("Checkout counter") }}
         </div>
       </template>
     </VanNavBar>
-    <div class="info mt-32" v-if="info">
-      <div class="min-count text-#0F172A font-size-40px mx-a text-center mt-57px font-700 overflow-y-auto">
+    <div v-if="info" class="info mt-32">
+      <div class="min-count mx-a mt-57px overflow-y-auto text-center font-size-40px text-#0F172A font-700">
         MX${{ count }}
       </div>
       <div class="mt-30px">
         <item class="mt-62px">
           <template #left>
             <div class="left h-46px flex items-center gap-16px">
-              <div class="img rounded-full w-40px h-40px overflow-hidden bg-#F8F9FD">
-                <img :src="info.logo" alt="" class="w-full h-full" />
+              <div class="img h-40px w-40px overflow-hidden rounded-full bg-#F8F9FD">
+                <img :src="info.logo" alt="" class="h-full w-full">
               </div>
               <div class="info h-46px flex flex-col justify-between">
-                <div class="name text-#0F172A text-14px font-bold">
+                <div class="name text-14px text-#0F172A font-bold">
                   {{ info.name }}
                 </div>
-                <div class="name2 text-#64748B text-12px">
+                <div class="name2 text-12px text-#64748B">
                   {{ t("Amount range") }}: MX${{ info.min_amount }} ~ MX${{
                     info.max_amount
                   }}
@@ -31,19 +173,37 @@
             </div>
           </template>
           <template #right>
-            <div class="color-#6B39F4 text-14px font-bold text-nowrap" @click="onSelect">
+            <div class="text-nowrap text-14px color-#6B39F4 font-bold" @click="onSelect">
               {{ t("Picker") }}
             </div>
           </template>
         </item>
       </div>
     </div>
-    <div class="input-box px-12 mt-111px">
+    <div class="tips mt-45px">
+      <div class="t-title mb-12px text-18px color-#FF383C80 font-bold">
+        {{ t("Pay attention") }}
+      </div>
+      <div class="l flex items-start gap-8px pl-6px text-14px color-#64748B">
+        <div class="dot h-4 w-4 rounded-full bg-#64748B" />
+        {{ t("fetchNewOrderForDeposit") }}
+      </div>
+      <div class="l flex items-start gap-8px pl-6px text-14px color-#64748B">
+        <div class="dot h-4 w-4 rounded-full bg-#64748B" />
+        {{ t("avoidRepeatedDeposits") }}
+      </div>
+      <div class="l flex items-start gap-8px pl-6px text-14px color-#64748B">
+        <div class="dot h-4 w-4 rounded-full bg-#64748B" />
+        {{ t("contactSupportForDepositIssues") }}
+      </div>
+    </div>
+    <div class="input-box mt-41px px-12">
       <div class="keypad">
-        <div class="keypad-row flex gap-8px mb-8px" v-for="row in keypadRows" :key="row.join('')">
-          <div v-for="key in row" :key="key" @click="handleKeyClick(key)"
-            class="keypad-btn flex-1 h-56px bg-#FFFFFF border border-#E2E8F0 rounded-8px text-20px font-medium text-#0F172A hover:bg-#F1F5F9 flex items-center justify-center">
-            <svg width="29" v-if="key === 'delete'" height="28" viewBox="0 0 29 28" fill="none"
+        <div v-for="row in keypadRows" :key="row.join('')" class="keypad-row mb-8px flex gap-8px">
+          <div v-for="key in row" :key="key"
+            class="keypad-btn h-56px flex flex-1 items-center justify-center border border-#E2E8F0 rounded-8px bg-#FFFFFF text-20px text-#0F172A font-medium hover:bg-#F1F5F9"
+            @click="handleKeyClick(key)">
+            <svg v-if="key === 'delete'" width="29" height="28" viewBox="0 0 29 28" fill="none"
               xmlns="http://www.w3.org/2000/svg">
               <g clip-path="url(#clip0_94_1671)">
                 <path
@@ -67,144 +227,15 @@
     <BottomButton :button-text="t(`Deposit Preview`)" @click="onConfirm" />
   </div>
 </template>
-<script setup lang="ts">
-import { useRouter } from "vue-router";
-import { useLoadingStore } from "@/stores/modules/loading";
-
-import { deposit } from "@/api/billing";
-import item from "../../../components/item.vue";
-import BottomButton from "../component/bottom-button.vue";
-const info = ref<any>();
-const count = ref(0);
-const displayValue = ref("");
-const { t } = useI18n();
-const { proxy } = getCurrentInstance()!;
-const loadingStore = useLoadingStore();
-
-// 数字键盘布局数据
-const keypadRows = [
-  ["1", "2", "3"],
-  ["4", "5", "6"],
-  ["7", "8", "9"],
-  ["0", "delete"],
-];
-
-// 统一的按键处理方法
-const handleKeyClick = (key: string) => {
-  if (key === "delete") {
-    deleteLastChar();
-  } else {
-    appendNumber(key);
-  }
-};
-const onSelect = () => {
-  router.replace("/wallet/exchange/channel-out");
-};
-
-const handleBuyClickOriginal = async () => {
-  // 处理购买逻辑
-  console.log("购买金额:", count.value);
-  console.log("购买信息:", info.value);
-  // 这里可以添加购买确认、API调用等逻辑
-  const { data, code } = await deposit({
-    amount: count.value,
-    id: info.value.id,
-  });
-  if (code === 200) {
-    if (data.type == "bank") {
-      setTimeout(() => {
-        window.location.href = data.url;
-      }, 40);
-    }
-    if (data.type == "crypto") {
-      let cInfo = {
-        ...data,
-        amount: count.value,
-      };
-      localStorage.setItem("cryptoInfo", JSON.stringify(cInfo));
-      setTimeout(() => {
-        router.push({
-          path: "/wallet/exchange/deposit-preview",
-          replace: true,
-        });
-      }, 400);
-    }
-  }
-};
-const onConfirm = proxy!.$throttle(handleBuyClickOriginal, 1000, {
-  onStart: () => loadingStore.show(),
-  onEnd: () => loadingStore.hide(),
-});
-// 数字键盘相关方法
-const appendNumber = (num: string) => {
-  if (displayValue.value === "0") {
-    displayValue.value = num;
-  } else {
-    displayValue.value += num;
-  }
-  // 更新count值
-  count.value = displayValue.value === "" ? 0 : parseInt(displayValue.value);
-};
-
-const deleteLastChar = () => {
-  if (displayValue.value.length > 0) {
-    displayValue.value = displayValue.value.slice(0, -1);
-    // 如果删除后为空，则count为0，否则解析数值
-    count.value = displayValue.value === "" ? 0 : parseInt(displayValue.value);
-  }
-};
-
-// 更新info的函数
-const updateInfo = () => {
-  const dataInfo = localStorage.getItem("payType");
-  if (dataInfo) {
-    try {
-      // 如果dataInfo是JSON字符串，则解析为对象
-      info.value = JSON.parse(dataInfo);
-    } catch (error) {
-      // 如果不是JSON格式，直接赋值字符串
-      info.value = dataInfo;
-    }
-  } else {
-    info.value = null;
-  }
-};
-
-onMounted(() => {
-  // 初始获取localStorage中的dataInfo
-  updateInfo();
-
-  // 监听localStorage变化
-  window.addEventListener("storage", (e) => {
-    if (e.key === "dataInfo") {
-      updateInfo();
-    }
-  });
-});
-
-// // 页面离开时清空payType
-// onBeforeUnmount(() => {
-//   localStorage.removeItem("payType");
-// });
-
-// 使用watch监听info的变化（可选，用于调试）
-watch(
-  info,
-  (newValue) => {
-    console.log("info已更新:", newValue);
-  },
-  { deep: true }
-);
-
-const router = useRouter();
-function onBack() {
-  if (window.history.state.back) history.back();
-  else router.replace("/");
-}
-</script>
 
 <style lang="less" scoped>
 .cashier-center-content {
   padding-bottom: calc(env(safe-area-inset-bottom) + 80px);
+}
+
+
+.dot {
+  flex-shrink: 0;
+  margin-top: 8px;
 }
 </style>

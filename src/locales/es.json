@@ -206,5 +206,8 @@
     "AboutUs": "Acerca de Nosotros",
     "Notify": "Notificaciones",
     "No Notify": "Sin Notificaciones",
-    "Enter amount": "Ingrese cantidad"
+    "Enter amount": "Ingrese cantidad",
+  "fetchNewOrderForDeposit": "Por favor, obtenga una nueva orden para cada depósito",
+  "avoidRepeatedDeposits": "No realice depósitos repetidos con la misma cuenta. Cualquier pérdida financiera será su responsabilidad",
+  "contactSupportForDepositIssues": "Si encuentra algún problema con el depósito, contacte al servicio al cliente en línea"
 }

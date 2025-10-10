@@ -205,5 +205,8 @@
   "AboutUs": "About Us",
   "Notify": "Notify",
   "No Notify": "No Notifications",
-  "Enter amount": "Enter amount"
+  "Enter amount": "Enter amount",
+  "fetchNewOrderForDeposit": "Please fetch a new order for each deposit",
+  "avoidRepeatedDeposits": "Do not make repeated deposits with the same account. Any financial loss will be your own responsibility",
+  "contactSupportForDepositIssues": "If you encounter any deposit issues, please contact online customer service"
 }
