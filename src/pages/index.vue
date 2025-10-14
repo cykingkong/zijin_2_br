@@ -320,14 +320,14 @@ onMounted(() => {
 
 <template>
   <div class="quotes">
-    <header class="header flex items-center justify-between">
+    <header class="header flex items-center justify-between" v-if="false">
       <div class="left flex items-center gap-16px">
         <!-- <div class="icon w-24 h-24">
           <img src="../assets/logo.svg" alt="">
         </div> -->
-        WTTexcellent
+        <!-- WTTexcellent -->
       </div>
-      <div class="icon w-24 h-24 relative" @click="toUrl('/notify')">
+      <!-- <div class="icon w-24 h-24 relative" @click="toUrl('/notify')">
         <div class="dot w-4 h-4 rounded-full bg-#F14437 absolute top-0 right-0" v-if="userInfo.notify_start"></div>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -340,12 +340,14 @@ onMounted(() => {
             d="M15.02 19.0601C15.02 20.7101 13.67 22.0601 12.02 22.0601C11.2 22.0601 10.44 21.7201 9.89999 21.1801C9.35999 20.6401 9.01999 19.8801 9.01999 19.0601"
             stroke="#94A3B8" stroke-width="1.5" stroke-miterlimit="10" />
         </svg>
-      </div>
+      </div> -->
     </header>
     <div class="w-full px-24px">
-      <div class="w-full px-24px mt-8 h-177px relative bg-#0F172A rounded-12px overflow-hidden p-20px">
-        <img :src="boxBg" alt="" class="w-486 h-468px absolute top-[-167px] left-[-55px]" />
-        <div class="info z-80">
+
+      <div class="w-full px-24px mt-24 h-177px relative bg-#154183 rounded-12px overflow-hidden p-20px card-box">
+        <div class="round w-300 h-300 rounded-full absolute top-[-45px] left-[-99px] bg-#0b2956 z-1"></div>
+        <!-- <img :src="boxBg" alt="" class="w-486 h-468px absolute top-[-167px] left-[-55px]" /> -->
+        <div class="info z-80 relative">
           <div class="title text-14px color-#94A3B8">
             {{ t("Total assets") }}
           </div>
@@ -365,7 +367,8 @@ onMounted(() => {
               class="right p4 h-24px rounded-24px color-#fff flex text-12px items-center justify-center gap-8px min-w-80px"
               :class="userInfo.total_profit_rate > 0 ? 'bg-#1DCE5C' : 'bg-#F14437'
                 ">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
+                :class="userInfo.total_profit_rate > 0 ? 'rotate-0' : 'rotate-180'">
                 <path
                   d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z"
                   stroke="white" stroke-linecap="round" stroke-linejoin="round" />

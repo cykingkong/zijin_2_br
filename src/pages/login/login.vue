@@ -188,7 +188,7 @@ async function login() {
           </svg>
         </template>
       </CloseButton>
-      <div class="mid-logo w-64px h-64px m-x-a">
+      <div class="mid-logo w-64px h-64px m-x-a rounded-12px overflow-hidden">
         <img src="@/assets/logo.png" alt="" class="w-full h-full">
       </div>
       <div class="text-center m-x-a mt-16px color-white">
@@ -249,7 +249,7 @@ async function login() {
         </div>
       </div>
       <van-button type="primary" r color="#6b39f4" class="login-btn" block @click="login()">{{ t("Login")
-        }}</van-button>
+      }}</van-button>
       <!--  <div class="tips my-24px">Or sign in with</div>
        <div class="flex gap-16px ">
         <div
