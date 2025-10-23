@@ -18,13 +18,16 @@ const keypadRows = [
   ['1', '2', '3'],
   ['4', '5', '6'],
   ['7', '8', '9'],
-  ['0', 'delete'],
+  [".", "0", "delete"],
+
 ]
 
 // 统一的按键处理方法
 function handleKeyClick(key: string) {
   if (key === 'delete') {
     deleteLastChar()
+  } else if (key === ".") {
+    appendDecimal();
   }
   else {
     appendNumber(key)
@@ -34,6 +37,23 @@ function onSelect() {
   router.replace('/wallet/exchange/channel-out')
 }
 
+// 添加小数点方法
+const appendDecimal = () => {
+  // 如果已经包含小数点，则不允许再添加
+  if (displayValue.value.includes(".")) {
+    return;
+  }
+
+  // 如果当前值为空或0，则添加0.
+  if (displayValue.value === "" || displayValue.value === "0") {
+    displayValue.value = "0.";
+  } else {
+    displayValue.value += ".";
+  }
+
+  // 更新count值
+  count.value = displayValue.value === "" ? 0 : parseFloat(displayValue.value);
+};
 async function handleBuyClickOriginal() {
   // 处理购买逻辑
   console.log('购买金额:', count.value)
@@ -70,14 +90,13 @@ const onConfirm = proxy!.$throttle(handleBuyClickOriginal, 1000, {
 })
 // 数字键盘相关方法
 function appendNumber(num: string) {
-  if (displayValue.value === '0') {
-    displayValue.value = num
-  }
-  else {
-    displayValue.value += num
+  if (displayValue.value === "0" && num !== ".") {
+    displayValue.value = num;
+  } else {
+    displayValue.value += num;
   }
   // 更新count值
-  count.value = displayValue.value === '' ? 0 : Number.parseInt(displayValue.value)
+  count.value = displayValue.value === "" ? 0 : parseFloat(displayValue.value);
 }
 
 function deleteLastChar() {

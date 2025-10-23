@@ -107,24 +107,24 @@ async function initKfUrl() {
     }
   })
   return
-  setTimeout(() => {
-    // 使用MD5加密生成wttUUid
-    let wttUUid = CryptoJS.MD5(
-      `${userInfo.value.user_id}+WTTexcellent`
-    ).toString();
-    const selData = {
-      uuid: wttUUid,
-      nickname: userInfo.value.user_id || userInfo.value.account || userInfo.value.email || userInfo.value.phone || 'User',
-    }
-    jumptoSearchUrl(selData, userInfo.value.kf_url)
+  // setTimeout(() => {
+  //   // 使用MD5加密生成wttUUid
+  //   let wttUUid = CryptoJS.MD5(
+  //     `${userInfo.value.user_id}+WTTexcellent`
+  //   ).toString();
+  //   const selData = {
+  //     uuid: wttUUid,
+  //     nickname: userInfo.value.user_id || userInfo.value.account || userInfo.value.email || userInfo.value.phone || 'User',
+  //   }
+  //   jumptoSearchUrl(selData, userInfo.value.kf_url)
 
-    console.log(wttUUid, userInfo.value);
-    // window.location.href =
-    //   userInfo.value.kf_url +
-    //   "&nickname=" +
-    //   userInfo.value.user_id +
-    //   `&uuid=${wttUUid}`;
-  }, 40);
+  //   console.log(wttUUid, userInfo.value);
+  //   // window.location.href =
+  //   //   userInfo.value.kf_url +
+  //   //   "&nickname=" +
+  //   //   userInfo.value.user_id +
+  //   //   `&uuid=${wttUUid}`;
+  // }, 40);
   // }
 }
 function toUrl(path) {
