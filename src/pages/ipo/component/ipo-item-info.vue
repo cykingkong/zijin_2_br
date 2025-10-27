@@ -1,43 +1,23 @@
 <template>
-  <div class="info flex flex-col gap-12">
-    <infoIteLi
-      :item="item"
-      :label="t('Increase (share)')"
-      :value="`${item.assetInfo.unit || ''} ${item.productPrice || ''}`"
-      v-if="item.assetInfo"
-    />
-    <infoIteLi
-      :item="item"
-      :label="t('Market price (share)')"
-      :value="`${item.assetInfo.unit}${item.listPriceBegin || ''} ~ ${
-        item.assetInfo.unit || ''
-      }${item.listPriceEnd || ''}`"
-      v-if="item.assetInfo"
-    />
-    <infoIteLi
-      :item="item"
-      :label="t('Total Sales (Share)')"
-      :value="`${item.totalNum || ''}`"
-    />
-    <infoIteLi
-      :item="item"
-      :label="t('Subscription time')"
-      :value="`${item.formatSubTimeBegin || ''} ~ ${
-        item.formatSubTimeEnd || ''
-      }`"
-    />
-    <infoIteLi
-      :item="item"
-      :label="t('Delivery time')"
-      :value="`${item.formatWonTimeBegin || ''} ~ ${
-        item.formatWonTimeEnd || ''
-      }`"
-    />
-    <infoIteLi
-      :item="item"
-      :label="t('Sales period')"
-      :value="`${item.formatMarketTime || ''}`"
-    />
+  <div class="info flex p-8  gap-0 w-full rounded-6px bg-#F8F9FD ">
+    <slot name="left">
+      <div class="flex-1">
+        <div class="label color-#64748B font-size-18px ">发行价</div>
+        <div class="price color-#6B39F4 font-bold font-size-16px">$1.5</div>
+      </div>
+    </slot>
+    <slot name="center">
+      <div class="flex-1 text-center">
+        <div class="label color-#64748B font-size-18px text-center">上市价</div>
+        <div class="price color-#6B39F4 font-bold font-size-16px">$1.5</div>
+      </div>
+    </slot>
+    <slot name="right">
+      <div class="flex-1 text-right">
+        <div class="label color-#64748B font-size-18px ">上市时间</div>
+        <div class="price color-#0F172A font-bold font-size-16px">$1.5</div>
+      </div>
+    </slot>
   </div>
 </template>
 <script setup lang="ts">
@@ -51,6 +31,7 @@ const props = defineProps({
 });
 </script>
 <style lang="less" scoped>
-.li {
+.price {
+  margin-top: 4px;
 }
 </style>

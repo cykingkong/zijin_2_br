@@ -173,6 +173,7 @@
   "The entered amount cannot be less than the minimum investment amount.": "输入金额不能少于最低投资金额。",
   "Please enter a valid positive integer amount.": "请输入有效的正整数金额。",
   "Reserve": "预约",
+  "Introduction": "简介",
   "NewPassword": "新密码",
   "VerificationCode": "验证码",
   "Add bank card": "添加银行卡",
@@ -207,5 +208,10 @@
   "Enter amount": "输入金额",
   "fetchNewOrderForDeposit": "每次充值请重新获取订单",
   "avoidRepeatedDeposits": "请勿重复使用相同账号充值，造成的资金损失将由您自行承担",
-  "contactSupportForDepositIssues": "如遇充值问题，请联系在线客服"
+  "contactSupportForDepositIssues": "如遇充值问题，请联系在线客服",
+  "wating": "等待中签",
+  "needPay": "需支付",
+  "sell": "出售",
+  "Scheduled time": "预约时间",
+  "Draw time": "抽签时间"
 }

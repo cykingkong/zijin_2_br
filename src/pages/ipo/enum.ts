@@ -6,8 +6,8 @@ export const statusEnum = {
     3: 'Completed'
 } as const;
 export const orderStatusEnum = {
-    //  1 = 未卖出 2 = 已卖出
-    0: 'Not for sale',
-    1: 'Sell',
-    2: 'Not for sale',
+    //  0 = 等待中签 1 = 需支付 2 = 出售
+    0: 'wating',
+    1: 'needPay',
+    2: 'sell',
 } as const;

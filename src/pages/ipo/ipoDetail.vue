@@ -15,7 +15,9 @@ import dayjs from "dayjs";
 import { ipoProductInfo } from "@/api/ipo";
 import { navTitleStore } from "@/stores";
 const navStore = navTitleStore()
-const ipoInfo = ref({})
+const ipoInfo = ref({
+    name: "IPO"
+})
 const getIpoInfo = async (id) => {
     const res = await ipoProductInfo({ ipoId: id })
     // navStore.setNavTitle(res.data.name || '')
@@ -36,7 +38,7 @@ const getIpoInfo = async (id) => {
 const route = useRoute()
 onMounted(() => {
     if (route.query.id) {
-        getIpoInfo(route.query.id)
+        // getIpoInfo(route.query.id)
     }
 })
 

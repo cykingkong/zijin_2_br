@@ -14,8 +14,7 @@
           @click="handleClickBtn(1)"
         >
           <svg
-            width="17"
-            height="16"
+          class="w-17 h-16"
             viewBox="0 0 17 16"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -35,8 +34,7 @@
           @click="handleClickBtn(2)"
         >
           <svg
-            width="16"
-            height="16"
+         class="w-17 h-16"
             viewBox="0 0 16 16"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"

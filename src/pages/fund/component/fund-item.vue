@@ -11,8 +11,7 @@
           <div class="name font-size-16 font-700 text-#0F172A">
             {{ item.name }}
             <svg
-              width="14"
-              height="14"
+              class="w-14 h-14"
               viewBox="0 0 12 12"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"

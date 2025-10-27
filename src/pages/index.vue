@@ -344,7 +344,7 @@ onMounted(() => {
     </header>
     <div class="w-full px-24px">
 
-      <div class="w-full px-24px mt-24 h-177px relative bg-#154183 rounded-12px overflow-hidden p-20px card-box">
+      <div class="w-full px-24px mt-24 min-h-177px relative bg-#154183 rounded-12px overflow-hidden p-20px card-box">
         <div class="round w-300 h-300 rounded-full absolute top-[-45px] left-[-99px] bg-#0b2956 z-1"></div>
         <!-- <img :src="boxBg" alt="" class="w-486 h-468px absolute top-[-167px] left-[-55px]" /> -->
         <div class="info z-80 relative">
@@ -367,7 +367,7 @@ onMounted(() => {
               class="right p4 h-24px rounded-24px color-#fff flex text-12px items-center justify-center gap-8px min-w-80px"
               :class="userInfo.total_profit_rate > 0 ? 'bg-#1DCE5C' : 'bg-#F14437'
                 ">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
+              <svg class="w-17 h-16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
                 :class="userInfo.total_profit_rate > 0 ? 'rotate-0' : 'rotate-180'">
                 <path
                   d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z"
