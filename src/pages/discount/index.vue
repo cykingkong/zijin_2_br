@@ -276,18 +276,19 @@ const updateOrderListPrices = async () => {
     if (res.data && res.data.list) {
       console.log(
         "开始更新订单列表项，当前列表长度:",
-        orderList.value.length,
+        orderList.value,
         "新数据长度:",
-        res.data.list.length
+        res.data.list
       );
+     
       // 更新现有订单列表中的价格和收益信息
       orderList.value.forEach((currentItem, index) => {
+        console.log(currentItem,'currentItem')
         const newItem = res.data.list.find(
           (item: any) =>
-            item.id === currentItem.id ||
-            item.tradingId === currentItem.tradingId
+            item.id === currentItem.id 
         );
-        if (newItem) {
+        if (newItem  && newItem.id === currentItem.id) {
           console.log(`更新订单第${index}项:`, {
             old: {
               close: currentItem.close,
@@ -303,7 +304,7 @@ const updateOrderListPrices = async () => {
               salePrice: newItem.salePrice,
               status: newItem.status,
             },
-          });
+          },currentItem,newItem);
           // 更新价格相关字段
           currentItem.close = newItem.close;
           currentItem.discountPrice = newItem.discountPrice;

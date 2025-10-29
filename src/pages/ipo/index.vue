@@ -105,12 +105,8 @@ const props = defineProps({
 
 import dayjs from "dayjs";
 const active = ref(0);
-const list = ref([{
-  name: 'IPO'
-}]);
-const orderList = ref([{
-  name: 'IPO Order'
-}]);
+const list = ref([]);
+const orderList = ref([]);
 const popType = ref("buy"); // buy:购买  sell:出售
 const skeleton = ref(false);
 const router = useRouter();
@@ -260,14 +256,10 @@ const changeActive = (val: any) => {
   // skeleton.value = true;
   resetPage();
   if (val) {
-    orderList.value = [{
-      name: 'IPO Order'
-    }];
+    orderList.value = [];
     // getOrderList();
   } else {
-    list.value = [{
-      name: 'IPO Order'
-    }];
+    list.value = [];
     // getDisountList();
   }
 };
