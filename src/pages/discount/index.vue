@@ -289,22 +289,22 @@ const updateOrderListPrices = async () => {
             item.id === currentItem.id 
         );
         if (newItem  && newItem.id === currentItem.id) {
-          console.log(`更新订单第${index}项:`, {
-            old: {
-              close: currentItem.close,
-              discountPrice: currentItem.discountPrice,
-              earnings: currentItem.earnings,
-              earningRate: currentItem.earningRate,
-              income: currentItem.income,
-              income_price: currentItem.income_price,
-            },
-            new: {
-              close: newItem.close,
-              discountPrice: newItem.discountPrice,
-              salePrice: newItem.salePrice,
-              status: newItem.status,
-            },
-          },currentItem,newItem);
+          //* console.log(`更新订单第${index}项:`, {
+          //   old: {
+          //     close: currentItem.close,
+          //     discountPrice: currentItem.discountPrice,
+          //     earnings: currentItem.earnings,
+          //     earningRate: currentItem.earningRate,
+          //     income: currentItem.income,
+          //     income_price: currentItem.income_price,
+          //   },
+          //   new: {
+          //     close: newItem.close,
+          //     discountPrice: newItem.discountPrice,
+          //     salePrice: newItem.salePrice,
+          //     status: newItem.status,
+          //   },
+          // },currentItem,newItem);
           // 更新价格相关字段
           currentItem.close = newItem.close;
           currentItem.discountPrice = newItem.discountPrice;
@@ -366,10 +366,10 @@ const startOrderUpdate = () => {
   }
   console.log("启动订单列表定时更新");
   orderUpdateTimer.value = setInterval(() => {
-    console.log("订单列表定时器触发", {
-      active: active.value,
-      onlyShowOrder: props.onlyShowOrder,
-    });
+    // console.log("订单列表定时器触发", {
+    //   active: active.value,
+    //   onlyShowOrder: props.onlyShowOrder,
+    // });
     if ((active.value === 1 && !props.onlyShowOrder) || props.onlyShowOrder) {
       console.log("开始更新订单列表价格");
       updateOrderListPrices();

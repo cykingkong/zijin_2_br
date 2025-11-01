@@ -191,7 +191,7 @@ const getWalletLogs = async () => {
       return;
     }
 
-    if (page.pageIndex == 1) {
+    if (page.page == 1) {
       list.value = data.list || [];
     } else {
       let result = data.list;

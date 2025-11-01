@@ -8,7 +8,6 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AreaPop: typeof import('./../components/areaPop.vue')['default']
     BottomButton: typeof import('./../components/bottom-button.vue')['default']
     Charts: typeof import('./../components/charts/charts.vue')['default']
     CloseButton: typeof import('./../components/CloseButton.vue')['default']
@@ -28,7 +27,6 @@ declare module 'vue' {
     NationalityList: typeof import('./../components/nationality-list/nationalityList.vue')['default']
     NavBar: typeof import('./../components/NavBar.vue')['default']
     PayKeypad: typeof import('./../components/payKeypad.vue')['default']
-    PhoneInput: typeof import('./../components/PhoneInput.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SingleTicker: typeof import('./../components/singleTicker.vue')['default']

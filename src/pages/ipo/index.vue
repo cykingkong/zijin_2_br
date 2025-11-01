@@ -39,7 +39,7 @@
             @handleClickBtn="handleClickBtn"></discont-item>
 
           <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
-            v-show="skeleton && list.length == 0" v-for="i in 5" :key="i"></div>
+            v-if="skeleton && list.length == 0" v-for="i in 5" :key="i"></div>
           <empty v-if="list.length == 0 && !skeleton" :noTips="true"></empty>
 
           <LoadMore :status="listStatus" @load-more="loadMore" />
@@ -49,7 +49,7 @@
           <discont-item :item="item" v-for="(item, index) in orderList" :key="index" @handleClickBtn="handleClickBtn"
             :item-type="'order'" @reloadList="getOrderList" />
           <div class="skeleton w-full h-170 rounded-10px bg-coolgray skeleton-animation mt-12"
-            v-show="skeleton && orderList.length == 0" v-for="i in 5" :key="i"></div>
+            v-if="skeleton && orderList.length == 0" v-for="i in 5" :key="i"></div>
           <empty v-if="orderList.length == 0 && !skeleton" :noTips="true"></empty>
 
           <LoadMore :status="orderLoadStatus" @load-more="loadMore" />
@@ -82,6 +82,7 @@ import {
   orderSubscribe,
   orderPay,
   ipoOrderSell,
+  ipoSub,
 } from "@/api/ipo";
 import discontItem from "./component/discont-item.vue";
 import LoadMore from "@/components/LoadMore.vue";
@@ -104,6 +105,7 @@ const props = defineProps({
 });
 
 import dayjs from "dayjs";
+import { number } from "echarts";
 const active = ref(0);
 const list = ref([]);
 const orderList = ref([]);
@@ -139,14 +141,14 @@ const getDisountList = async () => {
   ipoProductList({
     ...page,
   }).then((res) => {
-    if (!res.data.rows) {
+    if (!res.data.list) {
       listStatus.value = 3;
       skeleton.value = false;
       return;
     }
     if (page.page == 1) {
       list.value =
-        res.data.rows.map((e) => {
+        res.data.list.map((e) => {
           return {
             ...e,
             percentage: (
@@ -156,34 +158,25 @@ const getDisountList = async () => {
               ((e.totalNum - e.subscribedNum) / e.totalNum) *
               100
             ),
-            formatSubTimeBegin: dayjs(e.subTimeBegin).format("DD/MM/YYYY "),
-            formatSubTimeEnd: dayjs(e.subTimeEnd).format("DD/MM/YYYY "),
-            formatWonTimeBegin: dayjs(e.wonTimeBegin).format("DD/MM/YYYY "),
-            formatWonTimeEnd: dayjs(e.wonTimeEnd).format("DD/MM/YYYY "),
-            formatMarketTime: dayjs(e.marketTime).format("DD/MM/YYYY "),
+       
           };
         }) || [];
     } else {
       list.value = [
         ...list.value,
-        ...(res.data.rows.map((e) => {
+        ...(res.data.list.map((e) => {
           return {
             ...e,
             percentage: (
               ((e.totalNum - e.subscribedNum) / e.totalNum) *
               100
             ).toFixed(2),
-            formatSubTimeBegin: dayjs(e.subTimeBegin).format("DD/MM/YYYY "),
-            formatSubTimeEnd: dayjs(e.subTimeEnd).format("DD/MM/YYYY "),
-            formatWonTimeBegin: dayjs(e.wonTimeBegin).format("DD/MM/YYYY "),
-            formatWonTimeEnd: dayjs(e.wonTimeEnd).format("DD/MM/YYYY "),
-            formatMarketTime: dayjs(e.marketTime).format("DD/MM/YYYY "),
+           
           };
         }) || []),
       ];
     }
-
-    if (res.data.total <= list.value.length) {
+    if (!res.data.pagination.has_more) {
       listStatus.value = 3;
       skeleton.value = false;
       return;
@@ -201,37 +194,21 @@ const getOrderList = async () => {
   ipoOrderList({
     ...page,
   }).then((res) => {
-    if (!res.data.rows) {
+    if (!res.data.list) {
       orderLoadStatus.value = 3;
       skeleton.value = false;
       return;
     }
     if (page.page == 1) {
       orderList.value =
-        res.data.rows.map((e) => {
-          return {
-            ...e,
-            percentage: (
-              ((e.totalQuantity - e.availableQuantity) / e.totalQuantity) *
-              100
-            ).toFixed(2),
-          };
-        }) || [];
+        res.data.list || [];
     } else {
       orderList.value = [
         ...orderList.value,
-        ...(res.data.rows.map((e) => {
-          return {
-            ...e,
-            percentage: (
-              ((e.totalQuantity - e.availableQuantity) / e.totalQuantity) *
-              100
-            ).toFixed(2),
-          };
-        }) || []),
+        ...(res.data.list || []),
       ];
     }
-    if (res.data.total <= orderList.value.length) {
+    if (!res.data.pagination.has_more) {
       orderLoadStatus.value = 3;
       skeleton.value = false;
       return;
@@ -252,22 +229,36 @@ const loadMore = () => {
 };
 const changeActive = (val: any) => {
   active.value = val;
-
   // skeleton.value = true;
   resetPage();
   if (val) {
     orderList.value = [];
-    // getOrderList();
+    getOrderList();
   } else {
     list.value = [];
-    // getDisountList();
+    getDisountList();
   }
 };
 
-const handleClickBtn = (val: any) => {
+const handleClickBtn = async(val: any) => {
   activeItem.value = val.item;
   popType.value = val.itemType;
-  bottomPopRef.value.show(true);
+  console.log(val)
+  if(val.itemType == 'ipo'){
+     const {data,code} = await ipoSub({
+    type:1,
+    number:0,
+    'ipo_id':val.item.id
+  })
+  if(code == 200){
+    showSuccessToast({
+      message:t('Subscription successful')
+    })
+    changeActive(1)
+  }
+  }
+ 
+  // bottomPopRef.value.show(true);
 };
 const onConfirmOriginal = async (val: any) => {
   try {
@@ -321,12 +312,15 @@ const onConfirm = proxy!.$throttle(onConfirmOriginal, 1000, {
 });
 
 onMounted(() => {
-  // if (props.onlyShowOrder) {
-  //   getOrderList();
-  // } else {
-  //   getDisountList();
-  // }
-  // allowMultipleToast()
+   if (route.query.tab === "1") {
+    active.value = 1;
+    getOrderList();
+  } else if (props.onlyShowOrder) {
+    getOrderList();
+  } else {
+    getDisountList();
+  }
+  allowMultipleToast()
   // navStore.setNavTitle("IPO");
   // route.meta.title = "IPO"; // 设置你需要的标题
 });
@@ -412,6 +406,9 @@ onUnmounted(() => {
 
   .tab-content {
     margin-top: 16px;
+    flex-direction: column;
+    display: flex;
+    gap: 16px;
   }
 }
 </style>

@@ -164,9 +164,9 @@ const handleClickCell = (item: any) => {
     router.push(item.url);
   }
 };
-const handleClickGrid = (index: any) => {
-  router.push(gridList[index].url);
-};
+// const handleClickGrid = (index: any) => {
+//   router.push(gridList[index].url);
+// };
 function onLanguageConfirm(event: { selectedOptions: PickerColumn }) {
   locale.value = event.selectedOptions[0].value as string;
   showLanguagePicker.value = false;
@@ -223,7 +223,10 @@ onMounted(async () => {
         <div class="id text-20px text-#fff mt-16px">
           UID:{{ userInfo.user_id }}
         </div>
-        <div class="name text-14px text-#B59CFA mt-16px">
+            <div class="credit_score_content mt-8px text-#FFA500 text-18px">
+          CRS : {{ userInfo.credit_score }}
+        </div>
+        <div class="name text-14px text-#B59CFA mt-8px">
           {{ userInfo.account }}
         </div>
       </div>

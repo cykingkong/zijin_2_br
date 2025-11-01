@@ -215,5 +215,17 @@
   "needPay": "需支付",
   "sell": "出售",
   "Scheduled time": "預約時間",
-  "Draw time": "抽籤時間"
+  "Draw time": "抽籤時間",
+  "Allotment Date": "中籤時間",
+  "Subscription Quantity": "申购数量",
+  "Need Pay": "需支付{money}",
+  "Waiting": "等待中签",
+  "Can Sell": "可出售",
+  "Paided": "已支付",
+  "Subscription successful": "申購成功",
+  "Subscription Period": "申購時間",
+  "Issue Price": "发行价",
+  "Listing Price": "上市价",
+  "Listing Date": "上市时间",
+  "Time": "时间"
 }

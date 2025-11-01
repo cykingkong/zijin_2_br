@@ -6,7 +6,7 @@
     <van-button
       type="primary"
       class="h-56px"
-      color="#6B39F4"
+      :color="color"
       block
       @click="handleClick"
       :loading="loading"
@@ -26,6 +26,7 @@ interface Props {
   loading?: boolean;
   disabled?: boolean;
   bgColor?: string;
+  color?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -33,6 +34,7 @@ const props = withDefaults(defineProps<Props>(), {
   loading: false,
   disabled: false,
   bgColor: "white",
+  color: "#6B39F4",
 });
 
 const emit = defineEmits<{

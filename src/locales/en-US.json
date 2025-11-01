@@ -208,5 +208,17 @@
   "Enter amount": "Enter amount",
   "fetchNewOrderForDeposit": "Please fetch a new order for each deposit",
   "avoidRepeatedDeposits": "Do not make repeated deposits with the same account. Any financial loss will be your own responsibility",
-  "contactSupportForDepositIssues": "If you encounter any deposit issues, please contact online customer service"
+  "contactSupportForDepositIssues": "If you encounter any deposit issues, please contact online customer service",
+  "Subscription Quantity": "Subscription Quantity",
+  "Need Pay": "Need Pay{money}",
+  "Waiting": "Waiting",
+  "Can Sell": "Can Sell",
+  "Subscription successful": "Subscription Successful",
+  "Issue Price": "Issue Price",
+  "Listing Price": "Listing Price",
+  "Listing Date": "Listing Date",
+  "Subscription Period": "Subscription Period",
+  "Allotment Date": "Allotment Date",
+  "Paided": "Paided",
+  "Time": "Time"
 }

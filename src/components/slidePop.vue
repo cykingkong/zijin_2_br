@@ -43,8 +43,11 @@ import { ref, reactive } from "vue";
 import { getCaptchaSlide, sendCode } from "@/api/user";
 const show = ref(false)
 const thumbLeft = ref(0)
-const slideData = ref({
-    "dots": {},
+const slideData = ref<any>({
+    "dots": {
+        x:'',
+        y:''
+    },
     "imageBase64": "",
     "thumbBase64": "",
     "key": '',
@@ -58,6 +61,7 @@ const getSlide = async () => {
 
     }
 }
+const onChange = ()=>{}
 const popShow = async () => {
     await getSlide()
 
@@ -72,9 +76,7 @@ const submit = async () => {
         phone: '',
         key: slideData.value.key,
         type: 'phone'
-
     })
-
 }
 defineExpose({
     popShow

@@ -22,7 +22,7 @@ const { t } = useI18n();
 const activeName = ref("");
 const navStore = navTitleStore();
 
-const store = useStore();
+const store:any = useStore();
 const requestCount = ref(0);
 const getStockData = async () => {
   try {
@@ -213,7 +213,7 @@ function getMarketInfo(params) {
         ...res.data,
         list: result,
       };
-      store.setMarketList(result || []);
+      store?.setMarketList(result || []);
       if (data.total <= marketData.value.list.length) {
         rankListStatus.value = 3;
       }
@@ -391,7 +391,7 @@ onMounted(() => {
     <div class="kf-fixed fixed bottom-120px right-0 h-auto w-40 overflow-hidden rounded-12px" @click="initKfUrl">
       <img src="@/assets/kf.png" class="block h-full w-full scale-[1.1] bg-white" alt="" />
     </div>
-    <van-popup v-model:show="showDatePicker" position="center" round="true">
+    <van-popup v-model:show="showDatePicker" position="center" :round="true">
       <div class="h-auto max-h-500 overflow-y-auto p-12">
         <div class="div" v-html="indexInfoData.notice" />
       </div>

@@ -7,14 +7,18 @@
 </template>
 <script setup lang="ts">
 import { ref, reactive } from "vue"
+interface listItem {
+    label:String,
+}
+
 const props = defineProps({
     list: {
-        type: Array,
+        type: Array<listItem>,
         default: () => []
     }
 })
 const emits = defineEmits(['change'])
-const activeIndex = ref(0)
+const activeIndex = ref<Number>(0)
 const handleClickItem = (index: any) => {
     activeIndex.value = index
     emits('change', index)

@@ -234,7 +234,7 @@ const handleClickOrder = async (val: any) => {
       }
     }
     if (resCode == 200) {
-      showSuccessToast();
+      showSuccessToast({});
       resetPage();
       getOrderList();
     }

@@ -11,12 +11,7 @@
       <div class="l flex flex-[2] flex-shrink-0 items-center gap-6">
         <div class="logo w-25 h-25 rounded-full overflow-hidden">
           <img :src="item.logo" alt="" v-if="item.logo" class="w-full h-full" />
-          <img
-            :src="item.ipoInfo.logo"
-            alt=""
-            v-if="item.ipoInfo"
-            class="w-full h-full"
-          />
+        
         </div>
         <div class="name font-size-14">
           {{ item.name ? item.name : item.ipoInfo ? item.ipoInfo.name : "" }}
@@ -26,7 +21,7 @@
         :label="
           popType == 'ipo' ? t('Subscription number') : t('Quantity sold')
         "
-        :placeholder="t('input.PleaseEnter')"
+        :placeholder="t('Subscription Quantity')"
         v-model:value="form.number"
         v-if="popType == 'ipo'"
       >
@@ -35,27 +30,22 @@
         {{ t("All IPO shares will be sold out, please confirm!") }}
       </div>
       <div class="w-full flex gap-12">
-        <div class="btn-box flex-1">
-          <van-button
-            type="default"
-            class="h-40!"
-            plain
-            block
-            @click="showPicker = false"
-            v-if="popType == 'order'"
-            >{{ t("cancel") }}</van-button
-          >
+        
+        <div class="btn-box flex-1" v-if="popType == 'ipo'">
+          
           <van-button
             type="default"
             class="h-40!"
             plain
             block
             @click="confirm"
-            v-else
-            >{{ t("subscription") }}</van-button
+
+            >{{ t("申购") }}</van-button
           >
         </div>
-        <div class="btn-box flex-1">
+        <div class="btn-box flex-1" 
+            v-if="popType == 'order'"
+        >
           <van-button
             type="primary"
             class="h-40!"
@@ -64,14 +54,7 @@
             v-if="popType == 'order'"
             >{{ t("Confirm") }}</van-button
           >
-          <van-button
-            type="primary"
-            class="h-40!"
-            block
-            @click="confirmAll"
-            v-else
-            >{{ t("subscription all") }}</van-button
-          >
+          
         </div>
       </div>
     </div>
@@ -103,7 +86,7 @@ const show = (val: boolean) => {
 };
 
 const confirm = () => {
-  form.ipoId = props.item.ipoId;
+  form.id = props.item.id;
   let params = {
     ...form,
     type: props.popType,

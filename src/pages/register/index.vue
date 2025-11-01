@@ -920,7 +920,7 @@ function onBack() {
         @confirm="onDateConfirm"
       />
     </van-popup>
-    <!-- <areaPop ref="areaPopRef" :country_id="25" @popOnOk="popOnOk" /> -->
+
   </div>
 </template>
 

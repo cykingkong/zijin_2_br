@@ -100,10 +100,22 @@ import { forgetPassword, sendCode } from "@/api/user";
 import loginTab from "@/components/tab.vue";
 const { t } = useI18n();
 const hasLogin = ref(false);
-const form = reactive({
+interface formDataInter {
+  password: string,
+  passwordConfirmation:string,
+  type: string,
+  username: string,
+  captcha: string,
+  phone:string,
+  account:string
+
+}
+const form = reactive<formDataInter>({
   password: "",
+  account:'',
   passwordConfirmation: "",
   type: "phone",
+  phone:'',
   username: "",
   captcha: "",
 });

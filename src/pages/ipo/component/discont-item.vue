@@ -23,7 +23,7 @@
       </div> -->
       <div class="flex-1 flex justify-center">
         <van-button type="primary" block @click="handleClickSubmit" class="h-35px! w-130px! rounded-16px!"
-          :color="item.status == 1 ? '#007aff' : '#007aff'">
+          :color="item.status == 1 ? '#007aff' : '#ccc'">
           {{ t("Reserve") }}</van-button>
       </div>
     </div>
@@ -31,31 +31,37 @@
   <div class="order-item-content w-full px-12 py-24 font-size-12 flex flex-col gap-18px"
     v-if="props.itemType == 'order'">
     <ipoItemTop :item="_item" :item-type="'order'"></ipoItemTop>
-    <ipoItemInfo :item="_item"></ipoItemInfo>
-    <ipoItemInfo :item="_item">
-      <template #left>
-        <div class="flex-1">
+    <div class="info flex flex-col p-8  gap-12 w-full rounded-6px bg-#F8F9FD ">
+        <div class="flex-1 flex justify-between items-center">
+          <div class="label color-#64748B font-size-18px ">{{ t('Issue Price') }}</div>
+            <div class="price color-#6B39F4 font-bold font-size-16px">${{ item.price }}</div>
+
+        </div>
+      <!-- <div class="flex-1">
+          <div class="label color-#64748B font-size-18px ">中签率</div>
+            <div class="price color-#6B39F4 font-bold font-size-16px">${{ item.product_price }}</div>
+        </div> -->
+        <div class="flex-1  flex justify-between items-center">
+          <div class="label color-#64748B font-size-18px ">{{ t('Listing time') }}</div>
+          <div class="price color-#000 font-bold font-size-16px">{{ item.market_time }}</div>
+        </div>
+  <div class="flex-1  flex justify-between items-center" v-if="false">
           <div class="label color-#64748B font-size-18px ">预计获得</div>
           <div class="price color-#6B39F4 font-bold font-size-16px">$1.5</div>
         </div>
-      </template>
-      <template #center>
-        <div></div>
-      </template>
-      <template #right>
-        <div class="flex-1 text-right">
-          <div class="label color-#64748B font-size-18px ">已支付</div>
-          <div class="price color-#000 font-bold font-size-16px">$1.5</div>
+ <div class="flex-1  flex justify-between items-center" v-if="[1,2].includes(item.status)">
+          <div class="label color-#64748B font-size-18px ">{{item.status == 2?t('Paided'):t('Need Pay')}}</div>
+          <div class="price color-#000 font-bold font-size-16px">MX$ {{ item.total_price }}</div>
         </div>
-      </template>
-    </ipoItemInfo>
+    </div>
+
 
     <!-- <ipoOrderItemInfo :item="_item"></ipoOrderItemInfo> -->
     <div class="flex gap-12">
 
       <div class="flex-1">
         <van-button type="primary" class="h-35px! rounded-16px!" block @click="handleClickSubmit"
-          :color="item.status == 1 ? '#007aff' : '#007aff'">{{
+          :color="[1,3].includes(item.status) ? '#007aff' : '#ccc'">{{
             orderBtnText }}</van-button>
       </div>
     </div>
@@ -87,24 +93,9 @@ const props = defineProps({
 });
 const router = useRouter();
 const orderBtnText = computed(() => {
-  let text = "";
-  switch (props.item.status) {
-    case 0:
-      text = "Applied";
-      break;
-    case 1:
-      text = `Pay ${props.item.assetInfo.unit} ${props.item.totalPrice}`;
-      break;
-
-    case 2:
-      text = "Sell";
-      break;
-    case 3:
-      text = "Finish";
-      break;
-    default:
-      text = "Fail";
-      break;
+  let text =  orderStatusEnum[props.item.status]
+  if(props.item.status == 1){
+    return t('Need Pay',{money:'MX$ '+props.item.total_price})
   }
   return text;
 });
@@ -121,16 +112,16 @@ const handleClickCreditPage = () => {
   );
 };
 const handleClickDetail = () => {
-  router.push(`/ipo/ipoDetail?id=${_item.value.ipoId}`);
+  router.push(`/ipo/ipoDetail?id=${_item.value.id}`);
 };
 const handleClickSubmit = () => {
   if (props.itemType == "ipo" && props.item.status != 1) {
     return;
   }
   if (props.itemType == "order" && props.item.status == 1) {
-    // 补交
+    // 支付
     orderPay({
-      orderId: props.item.ipoId,
+      id: props.item.id,
     }).then((res) => {
       if (res.code == 200) {
         showToast(t("Successfully submitted late"));

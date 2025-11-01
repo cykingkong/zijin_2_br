@@ -1,21 +1,21 @@
 <template>
-  <div class="info flex p-8  gap-0 w-full rounded-6px bg-#F8F9FD ">
+  <div class="info flex flex-col p-8  gap-12 w-full rounded-6px bg-#F8F9FD ">
     <slot name="left">
       <div class="flex-1">
-        <div class="label color-#64748B font-size-18px ">发行价</div>
-        <div class="price color-#6B39F4 font-bold font-size-16px">$1.5</div>
+        <div class="label color-#64748B font-size-18px ">{{ t("Issue Price") }}</div>
+        <div class="price color-#6B39F4 font-bold font-size-16px">${{ item.product_price }}</div>
       </div>
     </slot>
     <slot name="center">
-      <div class="flex-1 text-center">
-        <div class="label color-#64748B font-size-18px text-center">上市价</div>
-        <div class="price color-#6B39F4 font-bold font-size-16px">$1.5</div>
+      <div class="flex-1 ">
+        <div class="label color-#64748B font-size-18px ">{{ t("Listing Price") }}</div>
+        <div class="price color-#6B39F4 font-bold font-size-16px">${{ item.list_price_begin }} ~ ${{ item.list_price_end}}</div>
       </div>
     </slot>
     <slot name="right">
-      <div class="flex-1 text-right">
-        <div class="label color-#64748B font-size-18px ">上市时间</div>
-        <div class="price color-#0F172A font-bold font-size-16px">$1.5</div>
+      <div class="flex-1 ">
+        <div class="label color-#64748B font-size-18px ">{{ t("Listing Date") }}</div>
+        <div class="price color-#0F172A font-bold font-size-16px">{{ item.market_time }}</div>
       </div>
     </slot>
   </div>
