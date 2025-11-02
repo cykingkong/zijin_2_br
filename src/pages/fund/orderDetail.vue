@@ -64,7 +64,7 @@
       </div>
 
       <div
-        class="li-item h-50px flex items-center justify-between rounded-12px px-12px"
+        class="li-item h-50px flex items-center justify-between rounded-12px px-12px mb-12px"
         v-for="(i, e) in info.logs"
         :key="e"
       >
