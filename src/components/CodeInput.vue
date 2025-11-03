@@ -33,7 +33,7 @@ const props = withDefaults(defineProps<Props>(), {
     length: 6,
     inputMode: 'numeric',
     pattern: '[0-9]*',
-    errorMessage: '验证码错误',
+    errorMessage: 'error',
     hasError: false,
     autoFocus: false,
     disabled: false

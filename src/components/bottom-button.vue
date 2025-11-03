@@ -30,7 +30,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  buttonText: "确认",
+  buttonText: "Confirm",
   loading: false,
   disabled: false,
   bgColor: "white",

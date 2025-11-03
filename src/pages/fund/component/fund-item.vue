@@ -153,7 +153,7 @@
           @click="handleClickOrder(1)"
           size="small"
           class="font-size-12! flex-1 h-36px!"
-          >{{ "Renewal" }}</van-button
+          >{{ t("Renewal") }}</van-button
         >
         <van-button
           type="primary"
