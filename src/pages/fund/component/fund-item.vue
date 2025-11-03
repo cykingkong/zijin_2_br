@@ -153,7 +153,7 @@
           @click="handleClickOrder(1)"
           size="small"
           class="font-size-12! flex-1 h-36px!"
-          >{{ "续期" }}</van-button
+          >{{ "Renewal" }}</van-button
         >
         <van-button
           type="primary"
@@ -162,7 +162,7 @@
           @click="handleClickOrder(2)"
           size="small"
           class="font-size-12! flex-1 h-36px!"
-          >{{ t("赎回") }}</van-button
+          >{{ t("Redeem") }}</van-button
         >
       </div>
     </div>
