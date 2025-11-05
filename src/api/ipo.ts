@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 export function ipoOrderSell(data): Promise<any> {
-    return request.post<any>('/app-api/gameplay/ipo/ipoOrderSell', data)
+    return request.post<any>('/api/ipo/ipo_sell', data)
 }
 export function orderPay(data): Promise<any> {
     return request.post<any>('/api/ipo/ipo_buy', data)

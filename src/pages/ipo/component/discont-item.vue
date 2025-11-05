@@ -69,7 +69,7 @@
 </template>
 <script setup lang="ts">
 import { statusEnum, orderStatusEnum } from "../enum";
-import { orderPay } from "@/api/ipo";
+import { orderPay,ipoOrderSell } from "@/api/ipo";
 import ipoItemTop from "./ipo-item-top.vue";
 import ipoItemCenter from "./ipo-item-center.vue";
 import ipoItemInfo from "./ipo-item-info.vue";
@@ -125,6 +125,17 @@ const handleClickSubmit = () => {
     }).then((res) => {
       if (res.code == 200) {
         showToast(t("Successfully submitted late"));
+        emits("reloadList");
+      }
+    });
+    return;
+  } else if (props.itemType == "order" && props.item.status == 3) {
+    // 出售
+    ipoOrderSell({ 
+      id: props.item.id,
+    }).then((res) => {
+      if (res.code == 200) {
+        showSuccessToast({});
         emits("reloadList");
       }
     });

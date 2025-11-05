@@ -32,7 +32,7 @@
       {{ t("Please enter a valid positive integer amount.") }}
     </div>
     <!-- <Keypad v-model="amount" /> -->
-    <bottom-button :buttonText="t('Reserve') + ' ' + info.name" @click="handleReserveConfirm" />
+    <bottom-button :buttonText="t('Reserve') + ' ' + info.name" :color="info.status == 1 ? '#6B39F4' : '#CCC'" @click="handleReserveConfirm" />
 
     <!-- 预约弹窗 -->
     <bottom-pop ref="bottomPopRef" :item="reserveItem" pop-type="fund" @onConfirm="handleReserveConfirm" />
@@ -81,6 +81,9 @@ const reserveItem = ref({
 const routerr = useRouter();
 // 处理预约确认
 const handleReserveConfirm = async () => {
+  if(info.value.status != 1){
+    return;
+  }
   try {
     const reserveData = {
       id: info.value.id,
