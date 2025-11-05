@@ -74,6 +74,7 @@ import ipoItemTop from "./ipo-item-top.vue";
 import ipoItemCenter from "./ipo-item-center.vue";
 import ipoItemInfo from "./ipo-item-info.vue";
 import ipoOrderItemInfo from "./ipo-order-item-info.vue";
+import {  showSuccessToast,  } from "vant";
 
 import dayjs from "dayjs";
 import vw from "@/utils/inline-px-to-vw";
@@ -124,7 +125,7 @@ const handleClickSubmit = () => {
       id: props.item.id,
     }).then((res) => {
       if (res.code == 200) {
-        showToast(t("Successfully submitted late"));
+        showSuccessToast({});
         emits("reloadList");
       }
     });
