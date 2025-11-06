@@ -1,5 +1,5 @@
 <template>
-    <div class="px-12 pt-12 ipoDetail">
+    <div class="px-12 pt-12 ipoDetail h-100vh">
         <div class="ipoName font-bold text-24">{{ ipoInfo.name }}</div>
         <div v-html="ipoInfo.content" v-if="ipoInfo.content" class="h-400px overflow-y-auto"></div>
 
