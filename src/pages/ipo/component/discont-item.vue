@@ -62,7 +62,7 @@
       <div class="flex-1">
         <van-button type="primary" class="h-35px! rounded-16px!" block @click="handleClickSubmit"
           :color="[1,3].includes(item.status) ? '#007aff' : '#ccc'">{{
-            t(orderBtnText) }}</van-button>
+            orderBtnText }}</van-button>
       </div>
     </div>
   </div>
@@ -98,7 +98,7 @@ const orderBtnText = computed(() => {
   if(props.item.status == 1){
     return t('Need Pay',{money:'MX$ '+props.item.total_price})
   }
-  return text;
+  return t(text);
 });
 const _item = computed(() => {
   return props.item;
