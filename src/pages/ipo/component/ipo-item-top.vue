@@ -9,7 +9,7 @@
                     fill="#1BC256" />
             </svg>
         </div>
-        <div class="right flex items-center gap-4px color-#FF5F57 text-nowrap">
+        <div class="right flex items-center gap-4px color-#FF5F57 text-nowrap font-size-14">
             <svg class="w-18 h-18 stroke-width-1" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M11.6667 4.6665H2.33333C2.01117 4.6665 1.75 4.92767 1.75 5.24984V6.4165C1.75 6.73867 2.01117 6.99984 2.33333 6.99984H11.6667C11.9888 6.99984 12.25 6.73867 12.25 6.4165V5.24984C12.25 4.92767 11.9888 4.6665 11.6667 4.6665Z"
