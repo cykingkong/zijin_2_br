@@ -51,7 +51,7 @@
         </div>
  <div class="flex-1  flex justify-between items-center" v-if="[1,2].includes(item.status)">
           <div class="label color-#64748B font-size-18px ">{{item.status == 2?t('Paided'):t('Need Pay')}}</div>
-          <div class="price color-#000 font-bold font-size-16px">MX$ {{ item.total_price }}</div>
+          <div class="price color-#000 font-bold font-size-16px">MX$ {{ item.lock_amount }}</div>
         </div>
     </div>
 
