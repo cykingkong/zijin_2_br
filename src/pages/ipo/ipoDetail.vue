@@ -1,5 +1,5 @@
 <template>
-    <div class="px-12 pt-12 ipoDetail h-100vh">
+    <div class="px-12 pt-12 ipoDetail min-h-100vh">
         <div class="ipoName font-bold text-24">{{ ipoInfo.name }}</div>
         <div v-html="ipoInfo.content" v-if="ipoInfo.content" class="h-400px overflow-y-auto"></div>
 
@@ -7,16 +7,16 @@
             <div class="title color-#0F172A mb-8px font-bold">
                 {{ t('Time') }}
             </div>
-            <div class="li h-48px w-full flex items-center justify-between">
+            <div class="li h-48px w-full flex items-center justify-between gap-12px">
                 <div class="label color-#64748B">{{ t('Subscription Period') }}</div>
                 <div class="value color-#0F172A">{{ipoInfo.sub_time_begin}} ~ {{ ipoInfo.sub_time_end }}</div>
             </div> 
-             <div class="li h-48px w-full flex items-center justify-between">
+             <div class="li h-48px w-full flex items-center justify-between gap-12px">
                 <div class="label color-#64748B">{{ t('Allotment Date') }}</div>
                              <div class="value color-#0F172A">{{ipoInfo.won_time_begin}} ~ {{ ipoInfo.won_time_end }}</div>
 
             </div>
-              <div class="li h-48px w-full flex items-center justify-between">
+              <div class="li h-48px w-full flex items-center justify-between gap-12px">
                 <div class="label color-#64748B">{{ t('Listing Date') }}</div>
                 <div class="value color-#0F172A">{{ ipoInfo.market_time }}</div>
             </div>
@@ -95,6 +95,9 @@ onMounted(() => {
 </route>
 <style lang="less" scoped>
 .ipoDetail {
-    padding-bottom: calc(env(safe-area-inset-bottom) + 20px);
+    padding-bottom: calc(env(safe-area-inset-bottom) + 120px);
+}
+.value{
+    text-align: right;
 }
 </style>
