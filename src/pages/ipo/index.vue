@@ -112,6 +112,7 @@ const orderList = ref([]);
 const popType = ref("buy"); // buy:购买  sell:出售
 const skeleton = ref(false);
 const router = useRouter();
+const ipoOrderUpdateTimer = ref(null);
 function onBack() {
   if (window.history.state.back) history.back();
   else router.replace("/");
@@ -187,6 +188,7 @@ const getDisountList = async () => {
     skeleton.value = false;
   });;
 };
+
 const getOrderList = async () => {
   skeleton.value = true;
   orderLoadStatus.value = 1;
@@ -211,6 +213,8 @@ const getOrderList = async () => {
     if (!res.data.pagination.has_more) {
       orderLoadStatus.value = 3;
       skeleton.value = false;
+      // 启动定时更新
+      startIpoOrderUpdate();
       return;
     }
     skeleton.value = false;
@@ -219,6 +223,41 @@ const getOrderList = async () => {
     skeleton.value = false;
   });
 };
+// 无感更新订单列表价格
+const updateOrderListPrice = async ()=>{
+  try{
+     const {code ,data} = await ipoOrderList(
+      {
+        page: 1,
+        size: orderList.value.length, // 获取当前订单列表长度的数据
+
+      },
+      { showLoading: false }
+    ); // 不显示loading
+    if(code == 200){
+        orderList.value = data.list || [];
+    }
+  }catch(err){
+    console.log(err)
+  }
+}
+const startIpoOrderUpdate = () => {
+  console.log(ipoOrderUpdateTimer.value, "ipoOrderUpdateTimer.value");
+  if (ipoOrderUpdateTimer.value) {
+    clearInterval(ipoOrderUpdateTimer.value);
+  }
+  console.log("启动定时更新");
+  ipoOrderUpdateTimer.value = setInterval(() => {
+    console.log("IPO订单列表定时器触发");
+    updateOrderListPrice();
+  }, 60000); // 1分钟更新一次
+};
+const stopOrderUpdate = () => {
+  if (ipoOrderUpdateTimer.value) {
+    clearInterval(ipoOrderUpdateTimer.value);
+    ipoOrderUpdateTimer.value = null;
+  }
+}
 const loadMore = () => {
   page.page++;
   if (active.value == 0) {
@@ -235,6 +274,7 @@ const changeActive = (val: any) => {
     orderList.value = [];
     getOrderList();
   } else {
+    stopOrderUpdate();
     list.value = [];
     getDisountList();
   }
@@ -325,6 +365,7 @@ onMounted(() => {
   // route.meta.title = "IPO"; // 设置你需要的标题
 });
 onUnmounted(() => {
+  stopOrderUpdate();
   navStore.setNavTitle("");
 });
 </script>

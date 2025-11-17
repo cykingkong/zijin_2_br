@@ -88,7 +88,7 @@ onMounted(async () => {
       </van-tabs>
       <div class="tab-content flex flex-col">
         <UserInfo :show-asset="true" :activeName="activeName" />
-        <van-grid :border="false" column-num="4">
+        <!-- <van-grid :border="false" column-num="4">
           <van-grid-item
             v-for="(i, k) in gridList"
             :key="k"
@@ -101,7 +101,7 @@ onMounted(async () => {
               }}</span>
             </div>
           </van-grid-item>
-        </van-grid>
+        </van-grid> -->
         <Quickly />
         <Indicator :activeName="activeName" />
       </div>

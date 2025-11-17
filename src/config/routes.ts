@@ -36,5 +36,8 @@ export const navWhiteList: readonly string[] = [
   'searchStock',
   'wallet/exchange/deposit-success',
   'wallet/exchange/withdraw-success',
-  'Market'
+  'Market',
+  'creditLoan',
+  '/creditLoan/creditPage',
+  '/creditLoan/loan'
 ]

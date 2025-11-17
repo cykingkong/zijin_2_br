@@ -16,7 +16,7 @@ const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
 const loading = ref(false);
-const type = ref("");
+const type = ref<any>("");
 const remember = ref(false);
 const areaInfo = ref({
   code: "mx",
@@ -249,7 +249,7 @@ async function login() {
         </div>
       </div>
       <van-button type="primary" r color="#6b39f4" class="login-btn" block @click="login()">{{ t("Login")
-      }}</van-button>
+        }}</van-button>
       <!--  <div class="tips my-24px">Or sign in with</div>
        <div class="flex gap-16px ">
         <div

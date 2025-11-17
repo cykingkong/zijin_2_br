@@ -32,36 +32,46 @@
     v-if="props.itemType == 'order'">
     <ipoItemTop :item="_item" :item-type="'order'"></ipoItemTop>
     <div class="info flex flex-col p-8  gap-12 w-full rounded-6px bg-#F8F9FD ">
-        <div class="flex-1 flex justify-between items-center">
-          <div class="label color-#64748B font-size-18px ">{{ t('Issue Price') }}</div>
-            <div class="price color-#6B39F4 font-bold font-size-16px">${{ item.price }}</div>
-
-        </div>
+      <div class="flex-1 flex justify-between items-center">
+        <div class="label color-#64748B font-size-18px ">{{ t('Issue Price') }}</div>
+        <div class="price color-#6B39F4 font-bold font-size-16px">${{ item.price }}</div>
+      </div>
       <!-- <div class="flex-1">
           <div class="label color-#64748B font-size-18px ">中签率</div>
             <div class="price color-#6B39F4 font-bold font-size-16px">${{ item.product_price }}</div>
         </div> -->
-        <div class="flex-1  flex justify-between items-center">
-          <div class="label color-#64748B font-size-18px ">{{ t('Listing time') }}</div>
-          <div class="price color-#000 font-bold font-size-16px">{{ item.market_time }}</div>
+      <div class="flex-1 flex justify-between items-center" v-if="item.status == 3">
+        <div class="label color-#64748B font-size-18px ">{{ t('Listing Price') }}</div>
+        <div class="price color-#6B39F4 font-bold font-size-16px">MX${{ addCommasToNumber(item.list_price || 0) }}
         </div>
-  <div class="flex-1  flex justify-between items-center" v-if="false">
-          <div class="label color-#64748B font-size-18px ">预计获得</div>
-          <div class="price color-#6B39F4 font-bold font-size-16px">$1.5</div>
-        </div>
- <div class="flex-1  flex justify-between items-center" v-if="[1,2].includes(item.status)">
-          <div class="label color-#64748B font-size-18px ">{{item.status == 2?t('Paided'):t('Need Pay')}}</div>
-          <div class="price color-#000 font-bold font-size-16px">MX$ {{ item.lock_amount }}</div>
-        </div>
+      </div>
+      <div class="flex-1  flex justify-between items-center">
+        <div class="label color-#64748B font-size-18px ">{{ t('Listing time') }}</div>
+        <div class="price color-#000 font-bold font-size-16px">{{ item.market_time }}</div>
+      </div>
+      <div class="flex-1  flex justify-between items-center" v-if="[1, 2].includes(item.status)">
+        <div class="label color-#64748B font-size-18px ">{{ item.status == 2 ? t('Paided') : t('Need Pay') }}</div>
+        <div class="price color-#000 font-bold font-size-16px">MX$ {{ addCommasToNumber(item.lock_amount) }}</div>
+      </div>
     </div>
-
+    <div class="info flex flex-col p-8  gap-12 w-full rounded-6px bg-#F8F9FD mt-12" v-if="item.status == 3">
+      <div class="flex-1 flex justify-between items-center">
+        <div class="label color-#64748B font-size-18px ">{{ t('Estimated Gain') }}</div>
+        <div class="price color-#6B39F4 font-bold font-size-16px">MX${{ addCommasToNumber(item.list_price *
+          item.win_num || 0) }}</div>
+      </div>
+      <div class="flex-1  flex justify-between items-center">
+        <div class="label color-#64748B font-size-18px ">{{ t('Paided') }}</div>
+        <div class="price color-#000 font-bold font-size-16px">MX$ {{ addCommasToNumber(item.lock_amount) }}</div>
+      </div>
+    </div>
 
     <!-- <ipoOrderItemInfo :item="_item"></ipoOrderItemInfo> -->
     <div class="flex gap-12">
 
       <div class="flex-1">
         <van-button type="primary" class="h-35px! rounded-16px!" block @click="handleClickSubmit"
-          :color="[1,3].includes(item.status) ? '#007aff' : '#ccc'">{{
+          :color="[1, 3].includes(item.status) ? '#007aff' : '#ccc'">{{
             orderBtnText }}</van-button>
       </div>
     </div>
@@ -69,15 +79,16 @@
 </template>
 <script setup lang="ts">
 import { statusEnum, orderStatusEnum } from "../enum";
-import { orderPay,ipoOrderSell } from "@/api/ipo";
+import { orderPay, ipoOrderSell } from "@/api/ipo";
 import ipoItemTop from "./ipo-item-top.vue";
 import ipoItemCenter from "./ipo-item-center.vue";
 import ipoItemInfo from "./ipo-item-info.vue";
 import ipoOrderItemInfo from "./ipo-order-item-info.vue";
-import {  showSuccessToast,  } from "vant";
+import { showSuccessToast, } from "vant";
 
 import dayjs from "dayjs";
 import vw from "@/utils/inline-px-to-vw";
+import { addCommasToNumber } from "@/utils/tool";
 const { t } = useI18n();
 const emits = defineEmits(["handleClickBtn", "reloadList"]);
 const props = defineProps({
@@ -94,9 +105,9 @@ const props = defineProps({
 });
 const router = useRouter();
 const orderBtnText = computed(() => {
-  let text =  orderStatusEnum[props.item.status]
-  if(props.item.status == 1){
-    return t('Need Pay',{money:'MX$ '+props.item.total_price})
+  let text = orderStatusEnum[props.item.status]
+  if (props.item.status == 1) {
+    return t('Need Pay', { money: 'MX$ ' + props.item.total_price })
   }
   return t(text);
 });
@@ -132,7 +143,7 @@ const handleClickSubmit = () => {
     return;
   } else if (props.itemType == "order" && props.item.status == 3) {
     // 出售
-    ipoOrderSell({ 
+    ipoOrderSell({
       id: props.item.id,
     }).then((res) => {
       if (res.code == 200) {

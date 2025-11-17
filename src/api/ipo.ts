@@ -15,8 +15,10 @@ export function orderSubscribe(data): Promise<any> {
 export function ipoProductList(params): Promise<any> {
     return request.get<any>('/api/ipo/ipo_list', { params: params })
 }
-export function ipoOrderList(params): Promise<any> {
-    return request.get<any>('/api/ipo/order_list', { params: params })
+export function ipoOrderList(params, options?: { showLoading?: boolean }): Promise<any> {
+    return request.get<any>('/api/ipo/order_list', { params: params, showLoading: options?.showLoading },
+
+    )
 }
 export function ipoProductInfo(params): Promise<any> {
     return request.get<any>('/api/ipo/ipo_detail', { params: params })

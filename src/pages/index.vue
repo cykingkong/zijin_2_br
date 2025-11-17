@@ -2,7 +2,8 @@
 import router from "@/router";
 import { useStore } from "@/stores/modules/index";
 
-import Indicator from "@/pages/deal/components/indicator.vue";
+
+import Indicator from "@/components/indicator.vue";
 
 import Grid from "@/components/grid.vue";
 import axios from "axios";

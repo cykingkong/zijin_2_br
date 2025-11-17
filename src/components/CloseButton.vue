@@ -1,10 +1,13 @@
 <template>
-  <div
-    class="close-button h-56px w-full flex items-center px-24px justify-between"
-    :class="[customClass, { disabled: disabled }]"
-  >
+  <div class="close-button h-56px w-full flex items-center px-24px justify-between"
+    :class="[customClass, { disabled: disabled }]">
     <div class="close-icon" :style="iconStyle" @click="handleClose"></div>
-    <slot name="right"></slot>
+    <div class="text-16px font-bold color-white">
+      <slot name="center">{{ title }}</slot>
+    </div>
+    <slot name="right">
+      <div></div>
+    </slot>
   </div>
 </template>
 
@@ -18,6 +21,8 @@ interface Props {
   iconStyle?: Record<string, string>;
   // 图标大小
   iconSize?: string;
+  // 标题
+  title?: string;
 }
 
 interface Emits {
@@ -29,6 +34,7 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   iconStyle: () => ({}),
   iconSize: "24px",
+  title: "",
 });
 
 const emit = defineEmits<Emits>();
