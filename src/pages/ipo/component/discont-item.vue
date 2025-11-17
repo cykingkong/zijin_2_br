@@ -33,8 +33,9 @@
     <ipoItemTop :item="_item" :item-type="'order'"></ipoItemTop>
     <div class="info flex flex-col p-8  gap-12 w-full rounded-6px bg-#F8F9FD ">
       <div class="flex-1 flex justify-between items-center">
-        <div class="label color-#64748B font-size-18px ">{{ t('Issue Price') }}</div>
-        <div class="price color-#6B39F4 font-bold font-size-16px">${{ item.price }}</div>
+        <div class="label color-#64748B font-size-18px ">{{ item.status == 4 ? t("Earnings"):t('Issue Price') }}</div>
+        <div class="price color-#6B39F4 font-bold font-size-16px" v-if="item.status == 4">MX$ {{ addCommasToNumber(item.sell_price * item.win_num) || 0 }}</div>
+        <div class="price color-#6B39F4 font-bold font-size-16px" v-else>$ {{ addCommasToNumber(item.price || 0) }}</div>
       </div>
       <!-- <div class="flex-1">
           <div class="label color-#64748B font-size-18px ">中签率</div>
@@ -42,7 +43,7 @@
         </div> -->
       <div class="flex-1 flex justify-between items-center" v-if="item.status == 3">
         <div class="label color-#64748B font-size-18px ">{{ t('Listing Price') }}</div>
-        <div class="price color-#6B39F4 font-bold font-size-16px">MX${{ addCommasToNumber(item.list_price || 0) }}
+        <div class="price color-#6B39F4 font-bold font-size-16px">$ {{ addCommasToNumber(item.list_price || 0) }}
         </div>
       </div>
       <div class="flex-1  flex justify-between items-center">
@@ -57,7 +58,7 @@
     <div class="info flex flex-col p-8  gap-12 w-full rounded-6px bg-#F8F9FD mt-12" v-if="item.status == 3">
       <div class="flex-1 flex justify-between items-center">
         <div class="label color-#64748B font-size-18px ">{{ t('Estimated Gain') }}</div>
-        <div class="price color-#6B39F4 font-bold font-size-16px">MX${{ addCommasToNumber(item.list_price *
+        <div class="price color-#6B39F4 font-bold font-size-16px">$ {{ addCommasToNumber(item.list_price *
           item.win_num || 0) }}</div>
       </div>
       <div class="flex-1  flex justify-between items-center">
