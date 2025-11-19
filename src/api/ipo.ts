@@ -26,12 +26,21 @@ export function ipoProductInfo(params): Promise<any> {
 export function ipoSub(data): Promise<any> {
     return request.post<any>('/api/ipo/ipo_sub', data)
 }
-// 申请配资
+// 申请配资 0 审核中 1 已审核 2 已领取 3 已还完
 export function creditApply(data): Promise<any> {
-    return request.post<any>('/app-api/gameplay/ipo/creditApply', data)
+    return request.post<any>('/api/loan/create', data)
 }
-export function creditApplyList(params): Promise<any> {
-    return request.get<any>('/app-api/gameplay/ipo/creditApplyList', { params: params })
+export function receive(data): Promise<any> {
+    return request.post<any>('/api/loan/receive', data)
+}
+export function repay(data): Promise<any> {
+    return request.post<any>('/api/loan/repay', data)
+}
+export function aplicar(params): Promise<any> {
+    return request.get<any>('/api/loan/aplicar', { params: params })
+}
+export function loanIndex(params): Promise<any> {
+    return request.get<any>('/api/loan/index', { params: params })
 }
 export function creditApplyInfo(params): Promise<any> {
     return request.get<any>('/app-api/gameplay/ipo/creditApplyInfo', { params: params })

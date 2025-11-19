@@ -5,35 +5,37 @@
     </VanNavBar>
 
     <div class="form-box p-24 flex flex-col gap-12 relative" :class="{ 'pt-60': isEdit }">
-      <div class="w-full h-40 flex items-center justify-center fixed status-top left-0"
+      <!-- <div class="w-full h-40 flex items-center justify-center fixed status-top left-0"
         :class="statusClass[creditInfo.status]" v-if="creditInfo && creditInfo.status">
         {{ t(creditInfo.statusDesc) }}
-      </div>
+      </div> -->
       <div class="input-box">
         <div class="label">{{ t('ID Card') }}</div>
-        <inputCom :label="t('input.name')" v-model:value="form.name" class- require :only-read="isEdit" />
+        <inputCom  v-model:value="form.id_card" class- require :only-read="isEdit" />
       </div>
       <div class="input-box">
         <div class="label">{{ t('Income range') }}</div>
-        <inputCom :label="t('input.name')" v-model:value="form.name" class- require :only-read="isEdit" />
+        <inputCom  v-model:value="form.income" class- require :only-read="isEdit" />
       </div>
       <div class="input-box">
         <div class="label">{{ t('Home address') }}</div>
-        <inputCom :label="t('input.name')" v-model:value="form.name" class- require :only-read="isEdit" />
+        <inputCom  v-model:value="form.address" class- require :only-read="isEdit" />
       </div>
       <div class="input-box">
         <div class="label">{{ t('Bank account') }}</div>
-        <inputCom :label="t('input.name')" v-model:value="form.name" class- require :only-read="isEdit" />
+        <inputCom  v-model:value="form.bank_account" class- require :only-read="isEdit" />
       </div>
       <div class="input-box">
         <div class="label">{{ t('Family Member 1') }}</div>
-        <inputCom :label="t('input.name')" v-model:value="form.name" class- require :only-read="isEdit" />
+        <inputCom  v-model:value="form.family_member_1" class- require :only-read="isEdit" />
       </div>
       <div class="input-box">
         <div class="label">{{ t('Family Member 2') }}</div>
-        <inputCom :label="t('input.name')" v-model:value="form.name" class- require :only-read="isEdit" />
+        <inputCom  v-model:value="form.family_member_2" class- require :only-read="isEdit" />
       </div>
-      <div class="radio-box">
+      <div class="radio-box" :class="{
+        ' Jitter': tips
+      }">
         <div class="left flex font-size-14px font-500 flex-shrink-0 gap-12px flex-shrink-0">
           <div class="radio w-16px h-16px rounded-4px border-1px flex-shrink-0" :class="remember ? 'radio-active' : ''"
             @click="remember = !remember"></div>
@@ -41,22 +43,14 @@
         </div>
       </div>
 
-      <div class="btn-box mt-23" v-if="!isEdit || (isEdit && creditInfo.status == 3)">
-        <van-button type="primary" block color="#6B39F4" class="h-72!" @click="submit">{{
-          isEdit ? t("Resubmit") : t("submit")
+      <div class="btn-box mt-23" >
+        <van-button type="primary" block color="#6B39F4" class="h-72!" @click="submit">{{ t("Submit")
           }}</van-button>
       </div>
     </div>
   </div>
 
-  <van-popup v-model:show="showDatePicker" position="bottom">
-    <van-date-picker v-model="currentDate" :title="t('input.PleaseSelect')" :min-date="minDate" :max-date="maxDate"
-      @confirm="onDateConfirm" />
-  </van-popup>
-  <van-popup v-model:show="showGenderPicker" position="bottom">
-    <van-picker :model-value="[form.gender]" :columns="columns" @cancel="showGenderPicker = false"
-      @confirm="onConfirm" />
-  </van-popup>
+ 
 </template>
 <script setup lang="ts">
 import { ref, reactive } from "vue";
@@ -96,72 +90,60 @@ const columns = [
 ];
 const showDatePicker = ref(false);
 const showGenderPicker = ref(false);
-const showPicker = ref(false);
+const tips = ref(false);
 const route = useRoute();
 const minDate = ref(new Date(1870, 0, 1));
 const maxDate = ref(new Date(2025, 10, 1));
 const emits = defineEmits(["onConfirm"]);
 const creditInfo = ref<any>({});
 const form = reactive({
-  ipoId: "",
-  assetId: "",
-  name: "",
-  gender: "",
-  genderDesc: "",
-  creditAmount: "",
-  address: "",
-  work: "",
-  birthday: [],
-  birthdayDesc: "",
-  taxNumber: "", //税号
-  income: "", //年收入
-  phone: "", //联系电话
-  idCard: "", // 身份证号码
+    "id_card":"",
+    "income":"",
+    "address":"",
+    "bank_account":"",
+    "family_member_1":"",
+    "family_member_2":""
 });
 const handleClickDatePop = () => {
-  if (form.birthday && !form.birthday.length) {
-    // 获取当天日期 并且填入form.birthday,格式同 currentDate
-    currentDate.value = [
-      dayjs().format("YYYY"),
-      dayjs().format("MM"),
-      dayjs().format("DD"),
-    ];
-  }
+  
   showDatePicker.value = true;
 };
 const onDateConfirm = ({ selectedValues }) => {
-  form.birthday = selectedValues;
-  form.birthdayDesc = selectedValues.join("-");
+ 
   showDatePicker.value = false;
 };
 const onConfirm = ({ selectedValues }) => {
-  form.gender = selectedValues[0];
-  form.genderDesc = selectedValues[0] === "male" ? "Male" : "Female";
+ 
   showGenderPicker.value = false;
 };
 const submitOriginal = async () => {
+  if(!remember.value){
+    tips.value = true;
+    setTimeout(() => {
+      tips.value = false;
+    }, 300);
+    return;
+  }
   if (!checkedFormRequired()) {
-    showToast(t("input.PleaseEnter"));
+    showToast(t("PleaseEnterAllInfo"));
     return;
   }
   let params = {
-    ipoId: form.ipoId,
-    assetId: form.assetId,
-    creditAmount: form.creditAmount,
-    creditInfo: "", // 申请信息
-  };
-  // 深克隆一个form对象
-  let creditInfo = JSON.parse(JSON.stringify(form));
-  delete creditInfo.assetId;
-  delete creditInfo.creditAmount;
-  params.creditInfo = JSON.stringify(creditInfo);
+    "id_card":form.id_card,
+    "income":form.income,
+    "address":form.address,
+    "bank_account":form.bank_account,
+    "family_member_1":form.family_member_1,
+    "family_member_2":form.family_member_2
+};
+ 
   console.log(params);
   const { code, message } = await creditApply({
     ...params,
   });
   if (code == 200) {
     setTimeout(() => {
-      router.push("/ipo");
+      router.push("/creditLoan");
     }, 800);
   }
 };
@@ -195,7 +177,7 @@ const getPageList = async () => {
     for (let key in cInfo) {
       form[key] = cInfo[key];
     }
-    form.creditAmount = data.creditAmount;
+
     data.statusDesc = data.status ? statusEnum[data.status] : "";
     creditInfo.value = data;
     console.log(creditInfo.value);
@@ -207,18 +189,8 @@ const submit = proxy!.$throttle(submitOriginal, 1000, {
 });
 
 onMounted(() => {
-  console.log(route.query);
-  if (route.query.ipoId) {
-    form.ipoId = route.query.ipoId as string;
-  }
-  if (route.query.assetId) {
-    form.assetId = route.query.assetId as string;
-    checkedApplyInfo();
-  }
-  if (route.query.edit == "1") {
-    isEdit.value = true;
-    getPageList();
-  }
+
+ 
   //     --van-primary-color: var(--van-blue);
   // /--van-success-color: var(--van-green);
   // --van-danger-color: var(--van-red);
@@ -292,7 +264,24 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
 }
-
+.Jitter{
+  animation: jitter 0.3s ease-in infinite;
+}
+@keyframes jitter {
+  // 抖动提示
+  10%, 90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+    20%, 80% {
+        transform: translate3d(2px, 0, 0);
+    }
+    30%, 50%, 70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+    40%, 60% {
+        transform: translate3d(4px, 0, 0);
+    }
+} 
 .radio:hover {
   // border-color: #6b39f4;
 }

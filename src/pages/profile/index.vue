@@ -7,7 +7,7 @@ import { useUserStore } from "@/stores";
 import defaultAvatar from "@/assets/images/default-avatar.svg";
 import { clearToken, isLogin } from "@/utils/auth";
 import { getKfUrl } from "@/api/user";
-
+import {loanIndex} from "@/api/ipo";
 import cell1 from "@/assets/cell/cell1.svg";
 import cell2 from "@/assets/cell/cell2.svg";
 import cell3 from "@/assets/cell/cell3.svg";
@@ -96,6 +96,13 @@ const cellList = [
         type: "stock",
         url: "/quotes/stockOrderList",
       },
+      {
+        text: t("Credit Loan"),
+        tips: t("Manage your credit loan"),
+        iconType: "svg",
+        type: "creditLoan",
+        url: "/creditLoan",
+      },
     ],
   },
   {
@@ -153,12 +160,24 @@ const cellList = [
   // },
 ];
 
-const handleClickCell = (item: any) => {
+const handleClickCell = async (item: any) => {
   if (item && item.url) {
     if (item.type == "Identify" && [1, 2].includes(userInfo.value.kyc_status)) {
       return;
     }
     if (item.type == "phone" && userInfo.value.phone) {
+      return;
+    }
+    if(item.type == "creditLoan"){
+      const {data,code } = await loanIndex({})
+      if(code == 200){
+        // 如果data 为空对象
+        if(JSON.stringify(data) == "{}"){
+          router.push('/creditLoan/creditPage');
+        }else {
+          router.push('/creditLoan');
+        }
+      }
       return;
     }
     router.push(item.url);
