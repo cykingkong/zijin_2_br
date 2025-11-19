@@ -96,13 +96,13 @@ const cellList = [
         type: "stock",
         url: "/quotes/stockOrderList",
       },
-      {
-        text: t("Credit Loan"),
-        tips: t("Manage your credit loan"),
-        iconType: "svg",
-        type: "creditLoan",
-        url: "/creditLoan",
-      },
+      // {
+      //   text: t("Credit Loan"),
+      //   tips: t("Manage your credit loan"),
+      //   iconType: "svg",
+      //   type: "creditLoan",
+      //   url: "/creditLoan",
+      // },
     ],
   },
   {
