@@ -2,11 +2,10 @@
   "name": "",
   "type": "module",
   "version": "3.8.0",
-  "packageManager": "pnpm@10.8.0",
   "description": "An mobile web apps template based on the Vue 3 ecosystem",
   "license": "MIT",
   "scripts": {
-    "dev": "cross-env MOCK_SERVER_PORT=8086 vite",
+    "dev": "cross-env MOCK_SERVER_PORT=8086  vite --open ",
     "build:dev": "vite build --mode development --outDir=devDist",
     "build:pro": "vite build --mode production",
     "build": "vite build --mode production",
