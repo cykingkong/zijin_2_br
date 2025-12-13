@@ -38,6 +38,9 @@ export function totalAsset(): Promise<any> {
 export function walletLogs(params): Promise<any> {
   return request.get('/api/user/walletLogs', { params })
 }
+export function walletInfo(params): Promise<any> {
+  return request.get('/user/walletInfo', { params })
+}
 export function forgetPassword(data): Promise<any> {
   return request.post('/api/auth/resetPassword', data)
 }

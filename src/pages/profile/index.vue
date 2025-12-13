@@ -14,6 +14,7 @@ import cell5 from "@/assets/cell/cell5.png";
 import cell6 from "@/assets/cell/cell6.png";
 import cell7 from "@/assets/cell/cell7.png";
 import cell8 from "@/assets/cell/cell8.png";
+import { addCommasToNumber } from "@/utils/tool";
 
 
 
@@ -173,6 +174,8 @@ const handleLogout = () => {
 };
 onMounted(async () => {
   await userStore.getInfo();
+  await userStore.getWalletInfo();
+
   indexInfo().then((res) => {
     indexInfoData.value = res.data
   })
@@ -213,40 +216,40 @@ onMounted(async () => {
       <div class="money-grid p-16 gap-8 flex flex-col">
         <div class="top-grid flex">
           <div class="grid-item flex-1">
-            <div class="money">₹{{ 123 }}</div>
-            <div class="label">{{ t('Available Balance') }}</div>
+            <div class="money">₹ {{ addCommasToNumber(userInfo.balance) || 0 }}</div>
+            <div class="label">{{ t('Wallet Balance') }}</div>
           </div>
           <div class="grid-item flex-1">
-            <div class="money">₹{{ 123 }}</div>
-            <div class="label">{{ t('Available Balance') }}</div>
-          </div>
-        </div>
-        <div class="grid-three flex">
-          <div class="grid-item flex-1">
-            <div class="money">₹{{ 123 }}</div>
-            <div class="label">{{ t('Available Balance') }}</div>
-          </div>
-          <div class="grid-item flex-1">
-            <div class="money">₹{{ 123 }}</div>
-            <div class="label">{{ t('Available Balance') }}</div>
-          </div>
-          <div class="grid-item flex-1">
-            <div class="money">₹{{ 123 }}</div>
-            <div class="label">{{ t('Available Balance') }}</div>
+            <div class="money text-nowrap">₹ {{ addCommasToNumber(userInfo.itemBalance) }}</div>
+            <div class="label">{{ t('Withdrawable Amount') }}</div>
           </div>
         </div>
         <div class="grid-three flex">
           <div class="grid-item flex-1">
-            <div class="money">₹{{ 123 }}</div>
-            <div class="label">{{ t('Available Balance') }}</div>
+            <div class="money">₹ {{ addCommasToNumber(userInfo.rechargePrice) || 0 }}</div>
+            <div class="label">{{ t('Total Top up') }}</div>
           </div>
           <div class="grid-item flex-1">
-            <div class="money">₹{{ 123 }}</div>
-            <div class="label">{{ t('Available Balance') }}</div>
+            <div class="money">₹ {{ addCommasToNumber(userInfo.withdrawPrice) || 0 }}</div>
+            <div class="label">{{ t('Total Withdrawal') }}</div>
           </div>
           <div class="grid-item flex-1">
-            <div class="money">₹{{ 123 }}</div>
-            <div class="label">{{ t('Available Balance') }}</div>
+            <div class="money">₹ {{ addCommasToNumber(userInfo.productPrice) || 0 }}</div>
+            <div class="label">{{ t('Product Total Value') }}</div>
+          </div>
+        </div>
+        <div class="grid-three flex">
+          <div class="grid-item flex-1">
+            <div class="money">₹ {{ addCommasToNumber(userInfo.todayProfit) || 0 }}</div>
+            <div class="label">{{ t(`Today's Earnings`) }}</div>
+          </div>
+          <div class="grid-item flex-1">
+            <div class="money">₹ {{ addCommasToNumber(userInfo.itemProfit) || 0 }}</div>
+            <div class="label">{{ t('Teams Earnings') }}</div>
+          </div>
+          <div class="grid-item flex-1">
+            <div class="money">₹ {{ addCommasToNumber(userInfo.allProfit) || 0 }}</div>
+            <div class="label">{{ t('Total Earnings') }}</div>
           </div>
         </div>
       </div>
@@ -368,6 +371,7 @@ onMounted(async () => {
   font-weight: 400;
   font-style: Regular;
   font-size: 18px;
+  white-space: nowrap;
   leading-trim: NONE;
   line-height: 150%;
   letter-spacing: 0px;
@@ -387,6 +391,7 @@ onMounted(async () => {
   text-align: center;
   vertical-align: middle;
   margin-top: 6px;
+  height: 50px;
 }
 
 .money-grid {

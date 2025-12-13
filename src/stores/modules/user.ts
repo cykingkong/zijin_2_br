@@ -11,7 +11,7 @@ import {
   login as userLogin,
   logout as userLogout,
   register as userRegister,
-  totalAsset
+  totalAsset, walletInfo
 } from '@/api/user'
 import { userCouponsList } from '@/api/product'
 const InitUserInfo = {
@@ -48,6 +48,15 @@ export const useUserStore = defineStore('user', () => {
     }
     catch (error) {
       clearToken()
+      throw error
+    }
+  }
+
+  const getWalletInfo = async () => {
+    try {
+      const { data } = await walletInfo({})
+      setInfo(data)
+    } catch (error) {
       throw error
     }
   }
@@ -135,7 +144,7 @@ export const useUserStore = defineStore('user', () => {
     getCode,
     register,
     getAssetsData,
-    getUserCouponList,
+    getUserCouponList, getWalletInfo
   }
 }, {
   persist: true,
