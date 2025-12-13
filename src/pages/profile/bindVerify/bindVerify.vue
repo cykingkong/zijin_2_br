@@ -80,10 +80,12 @@ const handleClickSubmitOriginal = async () => {
     console.log(err);
   }
 };
+
 const handleClickSubmit = proxy!.$throttle(handleClickSubmitOriginal, 1000, {
   onStart: () => loadingStore.show(),
   onEnd: () => loadingStore.hide(),
 });
+
 const getCode = async () => {
   if (countdown.value > 0) return;
   if (!form.phone && form.type == "phone") {
