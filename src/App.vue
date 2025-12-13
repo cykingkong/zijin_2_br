@@ -35,32 +35,9 @@ const keepAliveRouteNames = computed(() => {
   return useRouteCache().routeCaches as string[];
 });
 
-const SocketWs = () => {
-  ws = new Socket("/wss");
-  ws.on("open", () => {
-    ws.send({
-      action: "Subscribe",
-      params: {
-        tradingPairsId: 0,
-        period: "",
-      },
-    });
-  });
-  ws.on("message", (res) => {
-    if (res.code == 200 && JSON.stringify(res.data) != "{}" && res.msgType) {
-      if (res.data && res.data.length) {
-        store?.setklineList(res.data);
-      }
-    }
-  });
-  // tradingPairsId.value = props.trading_pair_id
-};
+
 
 onMounted(() => {
-  // setTimeout(() => {
-  //   localStorage.setItem("vueuse-color-scheme", "dark");
-  // }, 80);
-  // SocketWs();
 });
 </script>
 

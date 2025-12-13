@@ -1,19 +1,19 @@
 import request from '@/utils/request'
 export function bank_list(params): Promise<any> {
-    return request.get<any>('/api/user/bank_list', { params })
+    return request.get<any>('/user/userCardGrid', { params })
 }
 
 export function bank_info(params): Promise<any> {
     return request.get<any>('/api/user/get_bank', { params })
 }
 export function create_bank(data): Promise<any> {
-    return request.post<any>('/api/user/create_bank', data)
+    return request.post<any>('/user/userCardAdd', data)
 }
 export function userCardUpdate(data): Promise<any> {
-    return request.post<any>('/api/user/edit_bank', data)
+    return request.post<any>('/user/userCardUpdate', data)
 }
 export function userCardDel(data): Promise<any> {
-    return request.post<any>('/app-api/user/userCardDel', data)
+    return request.post<any>('/user/userCardDel', data)
 }
 //充值回调
 export function aupay_notify(data): Promise<any> {

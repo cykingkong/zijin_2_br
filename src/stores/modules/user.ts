@@ -13,9 +13,9 @@ import {
   register as userRegister,
   totalAsset
 } from '@/api/user'
-
+import { userCouponsList } from '@/api/product'
 const InitUserInfo = {
-
+  couponsList: [],
 }
 
 export const useUserStore = defineStore('user', () => {
@@ -25,11 +25,13 @@ export const useUserStore = defineStore('user', () => {
   const setInfo = (partial: Partial<any>) => {
     userInfo.value = { ...userInfo.value, ...partial }
   }
-
+  const setCouponsList = (partial: any) => {
+    userInfo.value.couponsList = [...partial]
+  }
   const login = async (loginForm: LoginData) => {
     try {
       const { data } = await userLogin(loginForm)
-      setToken(data.token)
+      setToken(data.access_token)
       const { data: userInfo } = await getUserInfo()
       setInfo(userInfo)
 
@@ -42,10 +44,22 @@ export const useUserStore = defineStore('user', () => {
   const register = async (form: any) => {
     try {
       const { data } = await userRegister(form)
-      setToken(data.token)
+      setToken(data.access_token)
     }
     catch (error) {
       clearToken()
+      throw error
+    }
+  }
+  const getUserCouponList = async (couponStatus = null) => {
+    try {
+      const { data } = await userCouponsList({
+        page: 1,
+        pageSize: 100,
+        status: couponStatus
+      })
+      setCouponsList(data.rows)
+    } catch (error) {
       throw error
     }
   }
@@ -53,10 +67,10 @@ export const useUserStore = defineStore('user', () => {
     try {
       const { data } = await getUserInfo()
       // const { data: ff2 } = await getBalance()
-      const { data: ff3 } = await totalAsset()
+      // const { data: ff3 } = await totalAsset()
       setInfo(data)
       // setInfo(ff2)
-      setInfo(ff3)
+      // setInfo(ff3)
     }
     catch (error) {
       // clearToken()
@@ -120,7 +134,8 @@ export const useUserStore = defineStore('user', () => {
     logout,
     getCode,
     register,
-    getAssetsData
+    getAssetsData,
+    getUserCouponList,
   }
 }, {
   persist: true,

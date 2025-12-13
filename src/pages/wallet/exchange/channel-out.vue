@@ -1,5 +1,5 @@
 <template>
-  <div class="exchange-in-content py-16 px-24 pb-95px">
+  <div class="exchange-in-content py-16 px-24 pb-[95px]">
     <!-- <div class="flex justify-between items-center font-size-12">
       {{ t("Please select the payment currency") }}
       <img src="@/assets/image/deliveryContract/Group1663.png" alt="" class="w-24 h-18 pr-6"
@@ -16,46 +16,31 @@
         <div class="font-size-12 mt-12">{{ t("USDT Top-up") }}</div>
       </div>
     </div> -->
-    <div
-      class="radio-group flex flex-col gap-16px mb-16px"
-      v-for="(item, index) in payTypeList"
-      :key="index"
-    >
-      <div class="label text-#0F172A text-18px font-bold">
+    <div class="radio-group flex flex-col gap-[16px] mb-[16px]" v-for="(item, index) in payTypeList" :key="index">
+      <div class="label text-[#0F172A] text-[18px] font-bold">
         {{ item.name }}
       </div>
       <div
-        class="item w-full rounded-12px border-1px border-solid border-#E2E8F0 min-h-78px flex items-center justify-between px-16px"
-        v-for="(listItem, key) in item.list"
-        :key="key"
-        @click="payType = listItem.id"
-      >
-        <div class="left h-46px flex items-center gap-16px">
-          <div
-            class="img rounded-full w-40px h-40px overflow-hidden bg-#F8F9FD"
-          >
-            <img
-              :src="listItem.logo"
-              alt=""
-              class="w-full h-full object-cover"
-            />
+        class="item w-full rounded-[12px] border border-solid border-[#E2E8F0] min-h-[78px] flex items-center justify-between px-[16px]"
+        v-for="(listItem, key) in item.list" :key="key" @click="payType = listItem.id">
+        <div class="left h-[46px] flex items-center gap-[16px] ">
+          <div class="img rounded-full w-[40px] h-[40px] overflow-hidden bg-[#F8F9FD]">
+            <!-- <img :src="listItem.logo" alt="" class="w-full h-full object-cover" /> -->
           </div>
-          <div class="info h-46px flex flex-col justify-between">
-            <div class="name text-#0F172A text-14px font-bold">
-              {{ listItem.name }}
+          <div class="info h-[46px] flex flex-col justify-between items-center">
+            <div class="name text-[#0F172A] text-[14px] font-bold">
+              {{ listItem.method }}
             </div>
-            <div class="name2 text-#64748B text-12px">
-              {{ t("Amount range") }}: MX${{ listItem.min_amount }} ~ MX${{
+            <!-- <div class="name2 text-[#64748B] text-[12px]">
+              {{ t("Amount range") }}: ₹{{ listItem.min_amount }} ~ ₹{{
                 listItem.max_amount
               }}
-            </div>
+            </div> -->
           </div>
         </div>
 
-        <div
-          class="radio border-solid border-1px border-#D1D5DB rounded-full w-20px h-20px relative flex-shrink-0"
-          :class="payType == listItem.id ? 'radio-active' : ''"
-        ></div>
+        <div class="radio border-solid border border-[#D1D5DB] rounded-full w-[20px] h-[20px] relative flex-shrink-0"
+          :class="payType == listItem.id ? 'radio-active' : ''"></div>
       </div>
     </div>
 
@@ -63,7 +48,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import BottomButton from "../component/bottom-button.vue";
+import BottomButton from "@/components/bottom-button.vue";
 import { ref, reactive } from "vue";
 import item from "@/components/item.vue";
 const router = useRouter();
@@ -72,7 +57,7 @@ const toUrl = (url: string) => {
 };
 import { depositMethod } from "@/api/billing";
 
-const payType = ref("1");
+const payType = ref<any>("1");
 const payTypeList = ref([]);
 const { t } = useI18n();
 const getMethod = async () => {
@@ -85,12 +70,12 @@ const getMethod = async () => {
       payTypeList.value = [
         {
           name: t("Bank card recharge"),
-          list: data.bank,
+          list: data.methods,
         },
-        {
-          name: t("Digital currency recharge"),
-          list: data.crypto,
-        },
+        // {
+        //   name: t("Digital currency recharge"),
+        //   list: data.crypto,
+        // },
       ];
     }
   } catch (error) {

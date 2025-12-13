@@ -1,15 +1,15 @@
 <template>
-    <div class="deposit-preview bg-#0F172A min-h-screen">
+    <div class="deposit-preview bg-[#0F172A] min-h-screen">
         <!-- 头部导航 -->
         <VanNavBar title="提现确认" :fixed="true" clickable :left-arrow="true" @click-left="onBack" z-index="999" />
 
         <!-- 主要内容 -->
-        <div class="content px-12 pt-80px pb-24px">
+        <div class="content px-12 pt-[80px] pb-[24px]">
             <!-- 主卡片 -->
-            <div class="main-card bg-white rounded-16px p-24px mb-24px">
+            <div class="main-card bg-white rounded-[16px] p-[24px] mb-[24px]">
                 <!-- 顶部图标和金额 -->
-                <div class="top-section text-center mb-32px">
-                    <div class="w-40 h-40 flex mx-auto items-center  justify-center flex-shrink-0 block bg-#6B39F4 rounded-full"
+                <div class="top-section text-center mb-[32px]">
+                    <div class="w-40 h-40 flex mx-auto items-center justify-center flex-shrink-0 block bg-[#6B39F4] rounded-full"
                         alt="">
                         <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -20,38 +20,38 @@
                                 stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </div>
-                    <div class="deposit-type text-14px color-#6B7280 mb-8px">Withdrawal (MX$)</div>
-                    <div class="amount text-32px font-700 color-#0F172A">+ MX${{ depositData.amount }}</div>
+                    <div class="deposit-type text-[14px] color-[#6B7280] mb-[8px]">Withdrawal (₹)</div>
+                    <div class="amount text-[32px] font-bold color-[#0F172A]">+ ₹{{ depositData.amount }}</div>
                 </div>
 
                 <!-- 详细信息 -->
                 <div class="details-section">
                     <!-- 钱包地址 -->
-                    <div class="detail-row flex justify-between items-start py-16px border-b  border-#E5E7EB">
-                        <div class="label text-14px color-#0F172A">提现账户</div>
-                        <div class="value text-14px color-#0F172A text-right max-w-200px break-all">
+                    <div class="detail-row flex justify-between items-start py-[16px] border-b border-[#E5E7EB]">
+                        <div class="label text-[14px] color-[#0F172A]">提现账户</div>
+                        <div class="value text-[14px] color-[#0F172A] text-right max-w-[200px] break-all">
                             {{ depositData.info.account }}
                         </div>
                     </div>
 
                     <!-- USDT数量 -->
-                    <div class="detail-row flex justify-between items-center py-16px border-b border-#E5E7EB">
-                        <div class="label text-14px color-#0F172A">提现金额</div>
-                        <div class="value text-14px color-#0F172A">MX$ {{ depositData.amount }}</div>
+                    <div class="detail-row flex justify-between items-center py-[16px] border-b border-[#E5E7EB]">
+                        <div class="label text-[14px] color-[#0F172A]">提现金额</div>
+                        <div class="value text-[14px] color-[#0F172A]">₹{{ depositData.amount }}</div>
                     </div>
 
                     <!-- 充值到账 -->
-                    <div class="detail-row flex justify-between items-center py-16px">
-                        <div class="label text-14px color-#0F172A">提现手续费</div>
-                        <div class="value text-14px color-#0F172A">MX$ {{ depositData.fee }}</div>
+                    <div class="detail-row flex justify-between items-center py-[16px]">
+                        <div class="label text-[14px] color-[#0F172A]">提现手续费</div>
+                        <div class="value text-[14px] color-[#0F172A]">₹{{ depositData.fee }}</div>
                     </div>
-                    <div class="detail-row flex justify-between items-center py-16px">
-                        <div class="label text-14px color-#0F172A">提现时间</div>
-                        <div class="value text-14px color-#0F172A">{{ dayjs().format('DD/MM') }}</div>
+                    <div class="detail-row flex justify-between items-center py-[16px]">
+                        <div class="label text-[14px] color-[#0F172A]">提现时间</div>
+                        <div class="value text-[14px] color-[#0F172A]">{{ dayjs().format('DD/MM') }}</div>
                     </div>
-                    <div class="detail-row flex justify-between items-center py-16px">
-                        <div class="label text-14px color-#0F172A">实际到账</div>
-                        <div class="value text-14px color-#0F172A">20 次网络确认</div>
+                    <div class="detail-row flex justify-between items-center py-[16px]">
+                        <div class="label text-[14px] color-[#0F172A]">实际到账</div>
+                        <div class="value text-[14px] color-[#0F172A]">20 次网络确认</div>
                     </div>
                 </div>
             </div>
@@ -68,7 +68,7 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue"
 import { useRouter } from "vue-router"
-import BottomButton from '../component/bottom-button.vue'
+import BottomButton from '@/components/bottom-button.vue'
 import { withdraw, withdraw_info } from '@/api/billing'
 import dayjs from 'dayjs'
 const { proxy } = getCurrentInstance()!
@@ -77,7 +77,7 @@ const router = useRouter()
 // 充值数据
 const depositData = ref({
     amount: '280.00',
-    unit: 'MX$',
+    unit: '₹',
     rate: '233.33',
     info: {
         account: '',

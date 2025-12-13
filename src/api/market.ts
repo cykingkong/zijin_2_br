@@ -1,7 +1,11 @@
 import request from '@/utils/request'
 
 export function indexInfo(): Promise<any> {
-    return request.get('/app-api/market/indexInfo')
+    return request.get('/index/indexInfo')
+}
+
+export function articleList(params): Promise<any> {
+    return request.get('/index/articleList', { params })
 }
 export function appCharts(params): Promise<any> {
     return request.get('/app-api/market/appCharts', { params })

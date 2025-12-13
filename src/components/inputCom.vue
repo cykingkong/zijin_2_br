@@ -1,14 +1,17 @@
 <template>
     <div class="input-com">
-        <!-- <div class="label-box wfull flex gap-8px items-center">
-            <div class="label" :class="[{ require: props.require }, 'flex items-center gap-4']">
-                {{ label }}
-            </div>
-            <div class="label-tips font-size-12 text-blueGray">
-                {{ labelTips }}
-            </div>
-        </div> -->
-        <div class="input-box h-56px w-full rounded-12px py-12  px-10  flex flex-items-center mt-12"
+        <div class="label-box w-full flex gap-[8px] items-center">
+            <slot name="label">
+                <div class="label" :class="[{ require: props.require }, 'flex items-center gap-4']">
+                    {{ label }}
+                </div>
+                <div class="label-tips font-size-12 text-blueGray">
+                    {{ labelTips }}
+                </div>
+            </slot>
+
+        </div>
+        <div class="input-box h-[56px] w-full rounded-[12px] px-10 flex flex-items-center mt-12"
             :class="{ 'focused': isFocused }">
             <div class="max-input w-full  font-size-16 relative flex items-center" v-if="type == 'text'">
                 <slot name="picker"></slot>
@@ -31,7 +34,7 @@
             <slot></slot>
 
         </div>
-        <div class="tips font-size-12 text-#000 mt-10"> {{ tips }}</div>
+        <!-- <div class="tips font-size-12 text-#000 mt-10"> {{ tips }}</div> -->
     </div>
 </template>
 <script setup lang="ts">
@@ -96,12 +99,12 @@ const handleBlur = () => {
 </script>
 <style lang="less" scoped>
 .input-box {
-    background: #F8F9FD;
+    // background: #F8F9FD;
     border: 1px solid transparent;
     transition: border-color 0.3s ease;
 
     &.focused {
-        border-color: #6B39F4;
+        border-color: #1B1B1B;
     }
 }
 
@@ -120,7 +123,7 @@ const handleBlur = () => {
 
 .max-input {
     input {
-        background: #F8F9FD;
+        // background: #F8F9FD;
         border: none;
 
         &::placeholder {

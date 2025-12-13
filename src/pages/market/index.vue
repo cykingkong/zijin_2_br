@@ -1,15 +1,13 @@
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import router from "@/router";
-import Grid from "@/components/grid.vue";
-import usStockIndexDetail from "../quotes/usStockIndexDetail.vue";
-import { assetsList } from "@/api/stock";
-import miniChartList from "@/components/miniChartList.vue";
+import { productList, userProductList } from "@/api/product";
 
 const activeName = ref(0);
 const searchMarkShow = ref(false);
 const page = reactive({
-  page: 1,
-  size: 5,
+  pageIndex: 1,
+  pageSize: 5,
 });
 const { t } = useI18n();
 const listStatus = ref(1); // 1-加载中 2-成功 3-已无更多
@@ -25,40 +23,51 @@ const tabList = ref([
     id: "501",
   },
 ]);
+const userProductArr = ref([])
 const categoryId = ref("200");
-const getStockList = async () => {
-  if (page.page == 1) {
+const getUserProArr = async () => {
+  try {
+    const { data, code } = await userProductList({
+      page: 1,
+      pageSize: 10,
+    })
+  } catch (error) {
+    console.log(error);
+
+  }
+}
+const getProductList = async () => {
+  if (page.pageIndex == 1) {
     stockSkeleton.value = true;
   }
-  const { data, code } = await assetsList({
+  const { data, code } = await productList({
     type: categoryId.value,
     ...page,
   });
   if (code == 200) {
     console.log(stockSkeleton.value);
-    if (stockSkeleton.value) {
-      setTimeout(() => {
-        stockSkeleton.value = false;
-      }, 3000); // 修改为3秒
-    }
-    if (!data.list) {
-      listStatus.value = 3;
 
+    if (!data.rows) {
+      listStatus.value = 3;
+      stockSkeleton.value = false;
       return;
     }
-    if (page.page == 1) {
-      stockList.value = data.list || [];
+    if (page.pageIndex == 1) {
+      stockList.value = data.rows || [];
     } else {
-      let result = data.list || [];
+      let result = data.rows || [];
       stockList.value = stockList.value.concat(result);
     }
+    stockSkeleton.value = false;
 
     // 根据新的分页格式判断是否还有更多数据
-    if (!data.pagination.has_more) {
+    if (stockList.value.length >= data.total) {
       listStatus.value = 3;
       return;
     }
     listStatus.value = 2;
+    stockSkeleton.value = false;
+
   }
 };
 const tabChange = (index: number) => {
@@ -69,13 +78,13 @@ const tabChange = (index: number) => {
     categoryId.value = "201";
   }
   // 重置分页和状态
-  page.page = 1;
+  page.pageIndex = 1;
   stockList.value = [];
   listStatus.value = 1;
-  getStockList();
+  getProductList();
 };
 const handleClickStock = (item: any) => {
-  router.push(`/quotes/detail?symbol=${item.symbol}`);
+  router.push(`/market/productDetail?productId=${item.productId}`);
 };
 function toSearch() {
   router.push("/market/search");
@@ -107,124 +116,81 @@ function handleClickGrid(val: any) {
   }
 }
 const loadMore = () => {
-  page.page++;
-  getStockList();
+  page.pageIndex++;
+  getProductList();
 };
-// watch(
-//     () => store.getklineList,
-//     (newV) => {
-//         if (
-//             newV &&
-//             stockList.value &&
-//             stockList.value.length
-//         ) {
-//             stockList.value.forEach((el) => {
-//                 let listItem = newV.find((item: any) => {
-//                     return item.tradingId == el.tradingPairsId;
-//                 });
-//                 if (listItem) {
-//                     if (listItem.tradingId == el.tradingPairsId) {
-//                         el.lastPrice = listItem.tick.close;
-//                         el.dayIncrease = listItem.tick.dayIncrease;
-//                         el.increase = listItem.tick.increase;
-//                     }
-//                 }
-//             });
-//         }
-//     }
-// );
+
 onMounted(() => {
-  getStockList();
+  getProductList();
+  getUserProArr()
 });
 </script>
 
 <template>
-  <div class="market relative overflow-hidden pb-20px">
-    <Grid @handleClickGrid="handleClickGrid" class="mt-32px" />
-    <div class="px-24px">
-      <div class="tab-list flex items-center mt-32px gap-7px mb-31px">
-        <div
-          class="tab-item flex-1 items-center justify-center flex text-14px text-#94A3B8 bg-#F8F9FD py-4px"
-          v-for="(item, index) in tabList"
-          :key="index"
-          @click="tabChange(index)"
-          :class="{ 'bg-#F8F5FF color-#6B39F4! font-700': activeName == index }"
-        >
-          {{ item.name }}
-        </div>
-      </div>
-      <div
-        class="search w-full rounded-12px bg-#F8F9FD flex py-9 px-16 flex items-center gap-12px mb-16"
-        @click="toSearch"
-      >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 20 20"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <circle
-            cx="9.80549"
-            cy="9.80541"
-            r="7.49047"
-            stroke="#94A3B8"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-          <path
-            d="M15.0153 15.4043L17.9519 18.3334"
-            stroke="#94A3B8"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
-        <div class="p text-16px text-#94A3B8">{{ t("Search") }}...</div>
-      </div>
-      <!-- <CardList class="mb-23px" :list="marketData"></CardList> -->
+  <div class="market relative overflow-hidden pb-[20px] bg-white min-h-screen">
+    <!-- Top Tabs -->
+    <div class="sticky top-0 z-50 bg-white">
+      <van-tabs v-model:active="activeName" @click-tab="tabChange" line-width="20px" color="#333"
+        title-active-color="#333" title-inactive-color="#999" class="custom-tabs">
+        <van-tab v-for="(item, index) in tabList" :title="item.name" :key="item.id">
+        </van-tab>
+      </van-tabs>
+    </div>
 
-      <div class="list mb-16">
-        <div class="label text-16px text-#0F172A font-700 mb-16px">
-          {{ t("All Stocks") }}
+    <!-- Product Grid -->
+    <div v-if="stockSkeleton" class="product-list grid grid-cols-2 gap-x-[15px] gap-y-[24px] px-[16px] mt-[20px]">
+      <!-- 骨架屏占位符 -->
+      <div v-for="n in 6" :key="n" class="product-item skeleton-animation">
+        <!-- Image Box -->
+        <div
+          class="img-box relative w-full aspect-square bg-[#F5F5F5] rounded-[20px] mb-[12px] flex items-center justify-center overflow-hidden">
+          <!-- 图片骨架 -->
+          <div class="w-full h-full bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200"></div>
         </div>
-        <div class="list-content min-h-600 relative">
+
+        <!-- Info -->
+        <div class="info">
+          <div class="title bg-gray-200 rounded h-[20px] mb-[8px] w-3/4"></div>
+          <div class="price bg-gray-200 rounded h-[18px] w-1/2"></div>
+        </div>
+      </div>
+    </div>
+
+    <div v-else class="product-list grid grid-cols-2 gap-x-[15px] gap-y-[24px] px-[16px] mt-[20px]">
+      <div v-for="(item, index) in stockList" :key="index" class="product-item" @click="handleClickStock(item)">
+        <!-- Image Box -->
+        <div
+          class="img-box relative w-full aspect-square bg-[#F5F5F5] rounded-[20px] mb-[12px] flex items-center justify-center overflow-hidden">
+          <!-- Like Icon -->
           <div
-            class="skeleton-list bg-#fff z-99 w-full h-full absolute top-0 left-0"
-            v-if="stockSkeleton"
-          >
-            <div
-              class="list-skeleton bg-coolgray skeleton-animation w-full h-130 rounded-12px mb-16px"
-              v-for="i in 5"
-              :key="i"
-            ></div>
+            class="absolute top-[12px] right-[12px] w-[32px] h-[32px] bg-white rounded-full flex items-center justify-center shadow-sm z-10">
+            <van-icon name="like-o" size="18" color="#333" />
           </div>
 
-          <miniChartList
-            :stockList="stockList"
-            @itemClick="handleClickStock"
-            itemClass="stock-item relative"
-          />
-          <empty
-            v-if="!stockSkeleton && stockList.length == 0"
-            :no-tips="true"
-          />
-          <LoadMore
-            v-if="!stockSkeleton"
-            :status="listStatus"
-            @load-more="loadMore"
-          ></LoadMore>
+          <!-- Product Image -->
+          <img v-if="item.productImage" :src="item.productImage" class="w-full h-full object-cover" />
+          <div v-else class="text-[#ccc] text-4xl">
+            <!-- Placeholder if no image -->
+            <van-icon name="photo-o" />
+          </div>
+        </div>
+
+        <!-- Info -->
+        <div class="info">
+          <div class="title text-[15px] font-bold text-[#1A1A1A] leading-[1.3] mb-[6px] line-clamp-2">
+            {{ item.symbol || 'Product Name' }}
+          </div>
+          <div class="price text-[16px] font-bold text-[#FF6B00]">
+            {{ item.lastPrice || '$0.00' }}
+          </div>
         </div>
       </div>
-      <usStockIndexDetail></usStockIndexDetail>
     </div>
-    <div
-      class="search-mark w-full h-100vh min-h-100vh bg-#fff absolute transition-all transition-delay-1300 top-[-1000] left-0 z-1000"
-      v-if="searchMarkShow"
-      :class="{ 'top-0': searchMarkShow }"
-      @click="searchMarkShow = false"
-    ></div>
+
+    <!-- Empty State -->
+    <empty v-if="stockList && stockList.length == 0"></empty>
+    <LoadMore :status="listStatus" @load-more="loadMore" />
+
   </div>
 </template>
 
@@ -233,7 +199,7 @@ onMounted(() => {
   name: 'Market',
   meta: {
     title: 'Market',
-    i18n: 'menus.Market'
+    i18n: 'Market'
   },
 }
 </route>
@@ -243,44 +209,18 @@ onMounted(() => {
   padding-bottom: calc(var(--van-tabbar-height) + 2px);
 }
 
-.iconTop3 {
-  width: 9px;
-  height: 8px;
+:deep(.van-tabs__wrap) {
+  height: 44px;
 }
 
-.header {
-  display: flex;
-  height: 64px;
-  padding: 0 24px;
-  align-items: center;
-  justify-content: space-between;
-  color: var(--van-text);
-
-  .left {
-    font-size: 20px;
-  }
-
-  .right {
-    display: flex;
-    align-items: center;
-
-    img {
-      width: 22px;
-      height: 22px;
-    }
-  }
-}
-
-.kf-fixed {
-  z-index: 1002;
+:deep(.van-tab) {
+  font-size: 16px;
+  font-weight: 500;
 }
 
 :deep(.van-tabs__line) {
-  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADxSURBVHgBnVHLDYJAEJ1ZjJ+LoQTsQDtA48GjJXj1YNQKKIGDIR4pQY8eTLQD7EBKIIZIBGEEiQSR5eNLNrs7efP27RsEDiZbR3J9OEXnrtce7Ndo5fEYT8D1cRluUrTslqPweFjw+jVdawrQO8w7ZiUHbkBqtub5oOdxfwRGmjMDwmm2TgDyeOPIpQIhk/vfAEGfqiRyBUbaI2qWgA/p1riv0oUkxHdwTzIAUYRCoNUUaPAJNHHgBaH10uYIJHoBql8OZM3uMxIMqAFGMDwuOmcWX4Qd1ARhHDbGY8ufcQWZNSsaWzmYwsIQTPgTCHR5AaMKT03qmstiAAAAAElFTkSuQmCC)
-    no-repeat center;
-  width: 9px;
-  height: 8px;
-  background-size: 100% 100%;
+  background: #333;
+  bottom: 6px;
 }
 
 .skeleton-animation {

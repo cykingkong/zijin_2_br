@@ -21,16 +21,14 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       host: true,
       port: 3323,
       proxy: {
-        '/api': {
-          target: `https://api.wttqc.com`, // 代理接口
-          // target: `https://api.oam007.icu`, // 代理接口
-          // target: `http://192.168.31.153`, // 代理接口
+        '/capi': {
+          target: `https://zj.crossbordershopping.one/app-api`, // 代理接口
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, ''),
+          rewrite: (path) => path.replace(/^\/capi/, ''),
           ws: false,
         },
         '/wss': {
-          target: `wss://api.hcenvio.com/ws`, // 代理接口
+          target: `wss://zj.crossbordershopping.one/ws`, // 代理接口
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/wss/, ''),
           ws: true,

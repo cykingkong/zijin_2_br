@@ -17,7 +17,7 @@ export interface UserState {
 }
 
 export function login(data: any): Promise<any> {
-  return request.post<LoginRes>('/api/auth/login', data)
+  return request.post<LoginRes>('/user/login', data)
 }
 
 export function logout() {
@@ -25,7 +25,7 @@ export function logout() {
 }
 
 export function getUserInfo() {
-  return request<UserState>('/api/user/info')
+  return request<UserState>('user/info')
 }
 
 export function getEmailCode(): Promise<any> {
@@ -45,13 +45,13 @@ export function updatePassword(data): Promise<any> {
   return request.post('/app-api/user/updatePassword', data)
 }
 export function register(data): Promise<any> {
-  return request.post('/api/auth/register', data)
+  return request.post('/user/register', data)
 }
 export function getCaptchaSlide(): Promise<any> {
   return request.post('/app-api/user/getCaptchaSlide')
 }
-export function sendCode(data): Promise<any> {
-  return request.post('/api/auth/sendCode', data)
+export function sendCode(params): Promise<any> {
+  return request.get('/user/sendCode', { params })
 }
 // 银行卡
 export function UserCardGrid(params): Promise<any> {
@@ -82,9 +82,7 @@ export function getBalancePair(params): Promise<any> {
   return request.get('/app-api/user/getBalancePair', { params })
 }
 // 账变记录
-export function walletLogsGrid(params): Promise<any> {
-  return request.get('/app-api/user/walletLogsGrid', { params })
-}
+
 export function dataAssets(): Promise<any> {
   return request.get('/app-api/user/dataAssets', {})
 }
@@ -92,7 +90,7 @@ export function bindPhone(data): Promise<any> {
   return request.post('/api/user/bindPhone', data)
 }
 export function bankList(params): Promise<any> {
-  return request.get('/api/bank_list', { params })
+  return request.get('/user/cardBankGrid', { params })
 }
 export function resetPassword(data): Promise<any> {
   return request.post('/api/auth/resetPassword', data)
@@ -106,4 +104,8 @@ export function getArticleList(params): Promise<any> {
 }
 export function notify_list(params): Promise<any> {
   return request.get('/api/user/notify_list', { params })
+}
+
+export function walletLogsGrid(params): Promise<any> {
+  return request.get('/user/walletLogsGrid', { params })
 }

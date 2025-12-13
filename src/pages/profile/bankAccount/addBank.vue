@@ -1,86 +1,60 @@
 <template>
   <div class="add-content p-24 flex flex-col">
-    <div class="label font-700 text-16px color-#64748B">
-      {{ t("Name") }}
-    </div>
-    <inputCom
-      :label="t('name')"
-      :placeholder="t('PleaseEnter')"
-      v-model:value="form.name"
-      :tips="''"
-      require
-    >
-    </inputCom>
-
-    <div class="label font-700 text-16px color-#64748B">
-      {{ t("Last Name") }}
-    </div>
-    <inputCom
-      :label="t('lastname')"
-      :placeholder="t('PleaseEnter')"
-      v-model:value="form.lastname"
-      :tips="''"
-      require
-    >
-    </inputCom>
-
-    <div class="label font-700 text-16px color-#64748B">
+    <div class="label font-bold text-[16px] color-[#64748B]">
       {{ t("Bank") }}
     </div>
-    <inputCom
-      :label="t('bankCardType')"
-      :placeholder="''"
-      v-model:value="bankCardType"
-      :type="'picker'"
-      require
-    >
-      <div class="w-full flex justify-between">
-        <div
-          class="l flex-1 font-size-14"
-          :class="form.bank_name ? '' : 'color-#9CA3AF'"
-          @click="showPicker = true"
-        >
-          {{ form.bank_name ? form.bank_name : t("PleaseSelect") }}
+    <div class="phone-input my-[12px]">
+
+      <inputCom :placeholder="''" v-model:value="bankCardType" :type="'picker'">
+        <div class="w-full flex justify-between">
+          <div class="l flex-1 font-size-14" :class="form.bankName ? '' : 'color-[#9CA3AF]'" @click="showPicker = true">
+            {{ form.bankName ? form.bankName : t("PleaseSelect") }}
+          </div>
+          <div class="r flex-shrink-0">
+            <van-icon receiveName="arrow" class="rotate-90" />
+          </div>
         </div>
-        <div class="r flex-shrink-0">
-          <van-icon name="arrow" class="rotate-90" />
-        </div>
-      </div>
-    </inputCom>
-    <div class="label font-700 text-16px color-#64748B">
+      </inputCom>
+    </div>
+
+    <div class="label font-bold text-[16px] color-[#64748B]">
+      {{ t("Name") }}
+    </div>
+    <div class="phone-input my-[12px]">
+      <inputCom v-model:value="form.receiveName" :placeholder="t('')" :onlyRead="false" :inputType="'text'">
+      </inputCom>
+    </div>
+
+    <div class="label font-bold text-[16px] color-[#64748B]">
       {{ t("Account") }}
     </div>
-    <inputCom
-      :label="t('account')"
-      :placeholder="t('PleaseEnter')"
-      v-model:value="form.account"
-      :tips="''"
-      require
-    >
-    </inputCom>
-
-    <div class="w-full flex flex-col gap-12 bottom-btn fixed left-0">
-      <van-button
-        type="primary"
-        block
-        @click="handleClickSubmit"
-        color="#6B39F4"
-        >{{ t("Submit") }}</van-button
-      >
+    <div class="phone-input my-[12px]">
+      <inputCom v-model:value="form.receiveAccount" :placeholder="t('')" :onlyRead="false" :inputType="'text'">
+      </inputCom>
     </div>
-    <nationalityList
-      ref="controlChildRef"
-      :title="t('Pick')"
-      @getName="getName"
-    ></nationalityList>
+
+    <div class="label font-bold text-[16px] color-[#64748B]">
+      {{ t("Phone") }}
+    </div>
+    <div class="phone-input my-[12px]">
+
+      <inputCom :placeholder="t('')" v-model:value="form.receivePhone" :tips="''">
+      </inputCom>
+    </div>
+
+    <div class="label font-bold text-[16px] color-[#64748B]">
+      {{ t("Email") }}
+    </div>
+    <div class="phone-input my-[12px]">
+
+      <inputCom :placeholder="t('')" v-model:value="form.receiveEmail" :tips="''">
+      </inputCom>
+    </div>
+    <BottomButton color="#1B1B1B" :button-text="t('Submit')" @click="handleClickSubmit"></BottomButton>
+
 
     <van-popup v-model:show="showPicker" destroy-on-close position="bottom">
-      <van-picker
-        :columns="columns"
-        :model-value="[form.bank_code]"
-        @confirm="onConfirm"
-        @cancel="showPicker = false"
-      />
+      <van-picker :columns="columns" :model-value="[form.bankCode]" @confirm="onConfirm" @cancel="showPicker = false" />
     </van-popup>
   </div>
 </template>
@@ -99,15 +73,13 @@ import { useStore } from "@/stores/modules/index";
 import { showToast, showSuccessToast, allowMultipleToast } from "vant";
 
 import { bankList } from "@/api/user";
-
+import local from "@/utils/local";
 import nationalityList from "@/components/nationality-list/nationalityList.vue";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
-const typeDesc = ["所有银行卡", "虚拟货币支付"];
 const showPicker = ref(false);
 const result = ref("");
-const store = useStore();
 const isEdit = ref(false);
 const pickerValue = ref([]);
 const columns = ref([]);
@@ -117,32 +89,32 @@ const getBankList = async () => {
     columns.value =
       data && data.length
         ? data.map((item: any) => {
-            return {
-              text: item.bank_name,
-              value: item.bank_code,
-            };
-          })
+          return {
+            text: item.bank_name,
+            value: item.bank_code,
+          };
+        })
         : [];
   }
 };
 const bankCardType = ref("");
 const form = reactive({
-  wallet_type: "bank",
-  name: "",
-  lastname: "",
-  account: "",
-  bank_code: "",
-  bank_name: "",
+  type: "bank_card",
+  receiveName: "",
+  receiveAccount: "",
+  bankCode: "",
+  bankName: "",
   id: "",
+  receivePhone: "",
+  receiveEmail: "",
 });
 const route = useRoute();
 const router = useRouter();
 const onConfirm = ({ selectedValues, selectedOptions }) => {
   result.value = selectedOptions[0]?.text;
   pickerValue.value = selectedValues;
-  form.bank_name = selectedOptions[0]?.text;
-  form.bank_code = selectedOptions[0]?.value;
-
+  form.bankName = selectedOptions[0]?.text;
+  form.bankCode = selectedOptions[0]?.value;
   showPicker.value = false;
 };
 const areaInfo = ref({
@@ -151,56 +123,42 @@ const areaInfo = ref({
   key: "br",
   name: "",
 });
-const getName = (val: any) => {
-  areaInfo.value = val;
-};
-const getCardInfo = (id: any) => {
-  bank_info({ id }).then((res) => {
-    if (res.code == 200) {
-      form.name = res.data.name;
-      form.lastname = res.data.lastname;
-      form.account = res.data.account;
-      form.bank_name = res.data.bank_name;
-      form.bank_code = res.data.bank_code;
-      form.id = res.data.id;
-    }
-  });
-};
-const controlChildRef = ref();
-const hanleClickAreaPick = () => {
-  controlChildRef.value.open();
 
-  // areaPopRef.value.popShow()
-};
-const handleClickDel = () => {
-  userCardDel({ id: form.id }).then((res) => {
-    if (res.code == 200) {
-      showToast(t("Successfully deleted"));
-      setTimeout(() => {
-        router.push("/profile/payMentMethod/list");
-      }, 500);
-    }
-  });
+const getCardInfo = () => {
+  let res = local.getlocal('bankAccountInfo')
+
+  form.receiveName = res.address.receiveName;
+
+  form.receiveAccount = res.address.receiveAccount;
+  form.receivePhone = res.address.receivePhone;
+  form.receiveEmail = res.address.receiveEmail;
+  form.bankName = res.address.bankName;
+  form.bankCode = res.address.bankCode;
+  form.id = res.id;
+
 };
 const handleClickSubmit = () => {
   // 校验必填
-  if (!form.name) {
+  if (!form.receiveName) {
     return;
   }
-  if (!form.lastname) {
+  if (!form.receivePhone) {
     return;
   }
-  if (!form.account) {
+  if (!form.receiveEmail) {
     return;
   }
-  if (!form.bank_name) {
+  if (!form.receiveAccount) {
+    return;
+  }
+  if (!form.bankName) {
     return;
   }
 
   let params = {
     ...form,
   };
-  params.bank_code = params.bank_code + "";
+  params.bankCode = params.bankCode + "";
   if (route.query.edit == "1") {
     userCardUpdate(params).then((res) => {
       if (res.code == 200) {
@@ -227,19 +185,18 @@ const handleClickSubmit = () => {
   });
 };
 onMounted(() => {
-  const isEditMode = route.query.edit === "1";
-  const newTitle = isEditMode ? "编辑银行卡" : "添加银行卡";
+
   // // 更新浏览器标题
   // setPageTitle(newTitle);
   // // 更新路由meta标题（用于导航栏显示）
-  router.currentRoute.value.meta.title = newTitle;
+
   // form.type = route.query.type == "1" ? "bank_card" : "crypto";
-  form.typeDesc = typeDesc[Number(route.query.type)];
+  // form.typeDesc = typeDesc[Number(route.query.type)];
   getBankList();
   if (route.query.edit == "1") {
     isEdit.value = true;
-    getCardInfo(route.query.id);
-    form.id = route.query.id;
+    getCardInfo();
+    form.id = String(route.query.id);
 
     console.log(form, 23123);
   }
@@ -253,10 +210,34 @@ onMounted(() => {
   box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.1);
   padding: 8px 24px 0;
 }
+
+.phone-input {
+
+  border-radius: 12px;
+  background: #F8F9FD;
+
+  :deep(.input-box) {
+    /* height: 48px; */
+    margin-top: 0px;
+    background: transparent;
+
+    .max-input {
+      background: transparent;
+
+      input {
+        background: transparent;
+      }
+    }
+  }
+
+  :deep(.tips) {
+    margin-bottom: 0px;
+  }
+}
 </style>
 <route lang="json5">
   {
-    name: 'addBank',
+    receiveName: 'addBank',
     meta: {
       title: 'addBank',
       i18n: 'addBank'

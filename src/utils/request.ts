@@ -30,7 +30,7 @@ function errorHandler(error: RequestError): Promise<any> {
   // 确保在错误处理时关闭loading
   closeToast(true)
   if (error.response) {
-    const { data = {}, status, statusText, message } = error.response
+    const { data = {}, status, statusText, } = error.response
     console.log(error.response, 'err')
     // 403 无权限
     if (status === 403) {

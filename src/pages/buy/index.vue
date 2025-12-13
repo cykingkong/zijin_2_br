@@ -14,7 +14,7 @@
         <div class="name font-size-18px">1 {{ info?.name || "" }} =</div>
         <div class="price">
           <div class="price-1 font-size-16px text-#0F172A">
-            {{ info?.close_unit || "MX$ " }}
+            {{ info?.close_unit || "₹" }}
             {{
               buyType == "stock"
                 ? addCommasToNumber(info?.close)
@@ -32,7 +32,7 @@
         <div class="label text-14px">{{ t("Balance") }}</div>
         <div class="value">
           <div class="v1 text-14px">
-            MX$
+            ₹
             {{ addCommasToNumber(userInfo.user_balance) || 0 }}
           </div>
         </div>
@@ -82,7 +82,7 @@
       @click="handleClickPaySub"
     >
     </BottomButton> -->
-    <BottomButton :button-text="`${type == '0' ? t('Buy') : t('Sell')} ${buyType == 'discount' && type == '1' ? ' ' : 'MX$ '
+    <BottomButton :button-text="`${type == '0' ? t('Buy') : t('Sell')} ${buyType == 'discount' && type == '1' ? ' ' : '₹ '
       }${buyType == 'stock'
         ? addCommasToNumber(count * info?.close)
         : type != 1
@@ -103,7 +103,7 @@
       block
       @click="handleClickBtn"
     >
-      {{ type == "0" ? t("Buy") : t("Sell") }} {{ info?.unit || "MX$ "
+      {{ type == "0" ? t("Buy") : t("Sell") }} {{ info?.unit || "₹ "
       }}{{
         buyType == "stock"
           ? addCommasToNumber(count * info?.close)

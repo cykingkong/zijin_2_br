@@ -1,19 +1,10 @@
 <template>
   <div class="stockOrderList w-full p-24">
-    <div
-      class="content"
-      v-for="(contentItem, index) in orderListData"
-      :key="index"
-    >
-      <div class="title color-#64748B text-14px">{{ contentItem.date }}</div>
-      <div class="order-list py-16px flex-col flex gap-16px">
-        <stockItem
-          v-for="(item, itemIndex) in contentItem.transactions"
-          :key="itemIndex"
-          :item="item"
-          @click="handleClickStockDetail(item)"
-        />
-      </div>
+
+
+    <div class="order-list pb-[16px] flex-col flex gap-[16px]">
+      <stockItem v-for="(item, index) in orderListData" :key="index" :item="item"
+        @click="handleClickStockDetail(item)" />
     </div>
     <empty v-if="orderListData.length == 0" :no-tips="true" />
     <LoadMore :status="listStatus" @load-more="loadMore"></LoadMore>
@@ -21,21 +12,21 @@
 </template>
 <script setup lang="ts">
 import { ref, reactive } from "vue";
-import { orderList } from "@/api/stock";
+import { walletLogsGrid } from "@/api/user";
 const { proxy } = getCurrentInstance()!;
-import stockItem from "../market/component/stock-item.vue";
+import stockItem from "@/components/stock-item.vue";
 
 const orderListData = ref([]);
 const router = useRouter();
 const listStatus = ref(0); // 0: 初始, 1: 加载中, 2: 可加载更多, 3: 没有更多
 const page = reactive({
-  page: 1,
-  size: 10,
+  pageIndex: 1,
+  pageSize: 10,
 });
 
 // 加载更多
 const loadMore = () => {
-  page.page++;
+  page.pageIndex++;
   getStockOrderList();
 };
 
@@ -44,39 +35,45 @@ const getStockOrderList = async () => {
   try {
     listStatus.value = 1; // 开始加载
 
-    const { data } = await orderList({
+    const { data } = await walletLogsGrid({
       ...page,
     });
 
-    if (!data.list || data.list.length === 0) {
+    if (!data.rows || data.rows.length === 0) {
       listStatus.value = 3; // 没有数据
       return;
     }
 
-    if (page.page === 1) {
+    if (page.pageIndex === 1) {
       // 第一页，直接替换数据
-      orderListData.value = data.list || [];
+      orderListData.value = data.rows || [];
     } else {
       // 后续页面，追加数据
-      orderListData.value = orderListData.value.concat(data.list || []);
+      orderListData.value = orderListData.value.concat(data.rows || []);
     }
 
     // 判断是否还有更多数据
-    if (!data.pagination.has_more) {
+    if (data.rows.length <= data.total) {
       listStatus.value = 3; // 没有更多数据
       return;
     }
 
     listStatus.value = 2; // 可以加载更多
+
   } catch (error) {
     console.error("获取订单列表失败:", error);
     listStatus.value = 3; // 出错时设置为没有更多
   }
 };
+onMounted(async () => {
 
-// 初始化加载
-getStockOrderList();
+  // 初始化加载
+  await getStockOrderList();
+  setTimeout(() => {
+    console.log(orderListData.value)
 
+  }, 999)
+})
 const handleClickStockDetail = (item: any) => {
   router.push("/buy/orderDetail?transaction_id=" + item.transaction_id);
 };
@@ -88,10 +85,10 @@ const handleClickStockDetail = (item: any) => {
 </style>
 <route lang="json5">
     {
-      name: 'Transactions History',
+      name: 'walletLogs',
       meta: {
-        title: 'Transactions History',
-        i18n: 'Transactions History',
+        title: 'walletLogs',
+        i18n: 'walletLogs',
       },
     }
 </route>

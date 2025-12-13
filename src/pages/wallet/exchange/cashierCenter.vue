@@ -1,10 +1,11 @@
+<!-- 充值 -->
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useLoadingStore } from '@/stores/modules/loading'
 
-import { deposit } from '@/api/billing'
+import { deposit, rechargeConfig } from '@/api/billing'
 import item from '../../../components/item.vue'
-import BottomButton from '../component/bottom-button.vue'
+import BottomButton from '@/components/bottom-button.vue'
 
 const info = ref<any>()
 const count = ref(0)
@@ -88,6 +89,7 @@ const onConfirm = proxy!.$throttle(handleBuyClickOriginal, 1000, {
   onStart: () => loadingStore.show(),
   onEnd: () => loadingStore.hide(),
 })
+
 // 数字键盘相关方法
 function appendNumber(num: string) {
   if (displayValue.value === "0" && num !== ".") {
@@ -124,11 +126,17 @@ function updateInfo() {
     info.value = null
   }
 }
-
+const minAmount = ref(0)
+const amountArr = ref([])
 onMounted(() => {
   // 初始获取localStorage中的dataInfo
   updateInfo()
-
+  rechargeConfig().then(({ data, code }) => {
+    if (code === 200) {
+      minAmount.value = Number(data.settings.find((item: any) => item.key == 'recharge_min_amount').value)
+      amountArr.value = data.settings.find((item: any) => item.key == 'recharge_number').value.split(',')
+    }
+  })
   // 监听localStorage变化
   window.addEventListener('storage', (e) => {
     if (e.key === 'dataInfo') {
@@ -163,28 +171,28 @@ function onBack() {
   <div class="cashier-center-content w-full px-12 pb-120">
     <VanNavBar title="" :fixed="true" clickable :left-arrow="true" z-index="999" @click-left="onBack">
       <template #title>
-        <div class="text-16px color-#0F172A font-bold">
-          {{ t("Checkout counter") }}
+        <div class="text-[16px] color-[#0F172A] font-bold">
+          {{ t("Deposit") }}
         </div>
       </template>
     </VanNavBar>
     <div v-if="info" class="info mt-32">
-      <div class="min-count mx-a mt-57px overflow-y-auto text-center font-size-40px text-#0F172A font-700">
-        MX${{ count }}
+      <div class="min-count mx-a mt-[57px] overflow-y-auto text-center font-size-[40px] text-[#0F172A] font-bold">
+        ₹{{ count }}
       </div>
-      <div class="mt-30px">
-        <item class="mt-62px">
+      <div class="mt-[30px]">
+        <item class="mt-[62px]">
           <template #left>
-            <div class="left h-46px flex items-center gap-16px">
-              <div class="img h-40px w-40px overflow-hidden rounded-full bg-#F8F9FD">
+            <div class="left h-[46px] flex items-center gap-[16px]">
+              <div class="img h-[40px] w-[40px] overflow-hidden rounded-full bg-[#F8F9FD]">
                 <img :src="info.logo" alt="" class="h-full w-full">
               </div>
-              <div class="info h-46px flex flex-col justify-between">
-                <div class="name text-14px text-#0F172A font-bold">
+              <div class="info h-[46px] flex flex-col justify-between">
+                <div class="name text-[14px] text-[#0F172A] font-bold">
                   {{ info.name }}
                 </div>
-                <div class="name2 text-12px text-#64748B">
-                  {{ t("Amount range") }}: MX${{ info.min_amount }} ~ MX${{
+                <div class="name2 text-[12px] text-[#64748B]">
+                  {{ t("Amount range") }}: ₹{{ info.min_amount }} ~ ₹{{
                     info.max_amount
                   }}
                 </div>
@@ -192,35 +200,44 @@ function onBack() {
             </div>
           </template>
           <template #right>
-            <div class="text-nowrap text-14px color-#6B39F4 font-bold" @click="onSelect">
+            <div class="text-nowrap text-[14px] color-[#FFCC00] font-bold" @click="onSelect">
               {{ t("Picker") }}
             </div>
           </template>
         </item>
       </div>
     </div>
-    <div class="tips mt-45px">
-      <div class="t-title mb-12px text-18px color-#FF383C80 font-bold">
+
+    <div class="label font-bold text-[16px] color-[#64748B] mt-16">
+      {{ t("PhoQuick Selectne") }}
+    </div>
+    <div class="phone-input my-[16px] flex flex-wrap gap-[8px]">
+      <div class="px-12 py-8 min-h-[18px] min-w-[30px] rounded-[64px] border border-[#F0F0F0] border-solid"
+        v-for="(item, index) in amountArr" :key="item" @click="count = item; displayValue = item;">{{ item }}
+      </div>
+    </div>
+    <div class="tips mt-[45px]" v-if="false">
+      <div class="t-title mb-[12px] text-[18px] color-[#FF383C80] font-bold">
         {{ t("Pay attention") }}
       </div>
-      <div class="l flex items-start gap-8px pl-6px text-14px color-#64748B">
-        <div class="dot h-4 w-4 rounded-full bg-#64748B" />
+      <div class="l flex items-start gap-[8px] pl-[6px] text-[14px] color-[#64748B]">
+        <div class="dot h-4 w-4 rounded-full bg-[#64748B]" />
         {{ t("fetchNewOrderForDeposit") }}
       </div>
-      <div class="l flex items-start gap-8px pl-6px text-14px color-#64748B">
-        <div class="dot h-4 w-4 rounded-full bg-#64748B" />
+      <div class="l flex items-start gap-[8px] pl-[6px] text-[14px] color-[#64748B]">
+        <div class="dot h-4 w-4 rounded-full bg-[#64748B]" />
         {{ t("avoidRepeatedDeposits") }}
       </div>
-      <div class="l flex items-start gap-8px pl-6px text-14px color-#64748B">
-        <div class="dot h-4 w-4 rounded-full bg-#64748B" />
+      <div class="l flex items-start gap-[8px] pl-[6px] text-[14px] color-[#64748B]">
+        <div class="dot h-4 w-4 rounded-full bg-[#64748B]" />
         {{ t("contactSupportForDepositIssues") }}
       </div>
     </div>
-    <div class="input-box mt-41px px-12">
+    <div class="input-box mt-[41px] px-12">
       <div class="keypad">
-        <div v-for="row in keypadRows" :key="row.join('')" class="keypad-row mb-8px flex gap-8px">
+        <div v-for="row in keypadRows" :key="row.join('')" class="keypad-row mb-[8px] flex gap-[8px]">
           <div v-for="key in row" :key="key"
-            class="keypad-btn h-56px flex flex-1 items-center justify-center border border-#E2E8F0 rounded-8px bg-#FFFFFF text-20px text-#0F172A font-medium hover:bg-#F1F5F9"
+            class="keypad-btn h-[56px] flex flex-1 items-center justify-center border border-[#E2E8F0] border-solid rounded-[8px] bg-[#FFFFFF] text-[20px] text-[#0F172A] font-medium hover:bg-[#F1F5F9]"
             @click="handleKeyClick(key)">
             <svg v-if="key === 'delete'" width="29" height="28" viewBox="0 0 29 28" fill="none"
               xmlns="http://www.w3.org/2000/svg">
@@ -243,7 +260,7 @@ function onBack() {
         </div>
       </div>
     </div>
-    <BottomButton :button-text="t(`Deposit Preview`)" @click="onConfirm" />
+    <BottomButton :button-text="t(`Deposit Preview`)" color="#1B1B1B" @click="onConfirm" />
   </div>
 </template>
 

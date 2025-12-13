@@ -241,27 +241,16 @@ function confirm() {
 <template>
   <div class="indicator-content pb-24px">
     <div class="tab-box flex gap-8px px-24 py-24">
-      <div
-        v-for="(item, index) in tabList"
-        :key="index"
+      <div v-for="(item, index) in tabList" :key="index"
         class="tab-item flex flex-1 items-center justify-center rounded-4 text-align-center line-height-24 px-10px"
-        :class="{ active: index === activeIndex }"
-        @click="changeTab(index)"
-      >
+        :class="{ active: index === activeIndex }" @click="changeTab(index)">
         <span>{{ t(item.i18n) }}</span>
       </div>
     </div>
 
-    <div
-      v-if="activeIndex === 0"
-      class="indicator-td flex flex-col px-24 gap-16"
-    >
-      <div
-        v-for="(item, index) in categoryPositionData"
-        :key="index"
-        class="w-full px-16 pt-9px pb-20px bg-#F3F4F6 rounded-12px"
-        @click="handleClickSubmit(item)"
-      >
+    <div v-if="activeIndex === 0" class="indicator-td flex flex-col px-24 gap-16">
+      <div v-for="(item, index) in categoryPositionData" :key="index"
+        class="w-full px-16 pt-9px pb-20px bg-#F3F4F6 rounded-12px" @click="handleClickSubmit(item)">
         <div class="li flex items-center justify-between">
           <div class="left label flex gap-16">
             <img :src="item.logo" alt="" class="block h-40 w-40 rounded-full" />
@@ -275,27 +264,23 @@ function confirm() {
             <div class="num color-#6B7280 text-12px">{{ t("Quantity") }}</div>
           </div>
         </div>
-        <div
-          class="categoryPositionDivider w-full h-1px bg-#EBECEF mt-12px mb-12px"
-        ></div>
+        <div class="categoryPositionDivider w-full h-1px bg-#EBECEF mt-12px mb-12px"></div>
         <div class="li flex items-center justify-between">
           <div class="left label flex-1 flex gap-4px flex-col">
             <div class="label text-#6B7280 text-12px">
               {{ t("Asset value") }}
             </div>
             <div class="value text-#111827 text-16px">
-              MX$ {{ addCommasToNumber(item.buy_price) }}
+              ₹{{ addCommasToNumber(item.buy_price) }}
             </div>
           </div>
-          <div
-            class="right flex-1 flex gap-4px flex-col flex-shrink-0 gap-12px text-align-right"
-          >
+          <div class="right flex-1 flex gap-4px flex-col flex-shrink-0 gap-12px text-align-right">
             <div class="label text-#6B7280 text-12px">{{ t("Profit") }}</div>
             <div class="value text-#111827 text-16px" v-if="item.profit >= 0">
-              MX$ {{ addCommasToNumber(item.profit) }}
+              ₹{{ addCommasToNumber(item.profit) }}
             </div>
             <div class="value text-#111827 text-16px" v-else>
-              -MX$ {{ addCommasToNumber(getAbsoluteValue(item.profit)) }}
+              -₹{{ addCommasToNumber(getAbsoluteValue(item.profit)) }}
             </div>
           </div>
         </div>
@@ -303,10 +288,7 @@ function confirm() {
       <empty v-if="categoryPositionData && categoryPositionData.length === 0" />
     </div>
     <div v-if="activeIndex === 1" class="indicator-td flex">
-      <discount
-        :only-show-order="true"
-        :category-id="activeName == '1' ? '200' : '201'"
-      />
+      <discount :only-show-order="true" :category-id="activeName == '1' ? '200' : '201'" />
     </div>
     <div v-if="activeIndex === 2" class="indicator-td flex">
       <fund :only-show-order="true" />
@@ -315,37 +297,21 @@ function confirm() {
       <ipo :only-show-order="true" />
     </div>
 
-    <van-popup
-      v-model:show="showPicker"
-      destroy-on-close
-      round
-      position="bottom"
-      :safe-area-inset-bottom="true"
-      z-index="10000"
-    >
+    <van-popup v-model:show="showPicker" destroy-on-close round position="bottom" :safe-area-inset-bottom="true"
+      z-index="10000">
       <div class="w-full flex flex-col gap-12 p-12">
         <div class="l flex flex-[2] flex-shrink-0 items-center gap-6">
           <div class="name font-size-14">
             {{ stockInfo.symbol }}
           </div>
         </div>
-        <inputCom
-          v-model:value="amount"
-          :label="t('SellShare')"
-          :placeholder="t('input.PleaseEnter')"
-        />
+        <inputCom v-model:value="amount" :label="t('SellShare')" :placeholder="t('input.PleaseEnter')" />
         <div class="sell-tips font-size-18 font-500">
           {{ t("MinBuyShare") }}: {{ stockInfo.minOrderSize }}
         </div>
         <div class="w-full flex gap-12">
           <div class="btn-box flex-1">
-            <van-button
-              type="default"
-              class="h-40!"
-              plain
-              block
-              @click="showPicker = false"
-            >
+            <van-button type="default" class="h-40!" plain block @click="showPicker = false">
               {{ t("cancel") }}
             </van-button>
           </div>

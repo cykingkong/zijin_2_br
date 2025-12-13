@@ -8,6 +8,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    ActivityCenter: typeof import('./../components/activityCenter.vue')['default']
     BottomButton: typeof import('./../components/bottom-button.vue')['default']
     Charts: typeof import('./../components/charts/charts.vue')['default']
     CloseButton: typeof import('./../components/CloseButton.vue')['default']
@@ -32,6 +33,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     SingleTicker: typeof import('./../components/singleTicker.vue')['default']
     SlidePop: typeof import('./../components/slidePop.vue')['default']
+    StockItem: typeof import('./../components/stock-item.vue')['default']
     Tab: typeof import('./../components/tab.vue')['default']
     TabBar: typeof import('./../components/TabBar.vue')['default']
     VanActionSheet: typeof import('vant/es')['ActionSheet']
@@ -43,10 +45,13 @@ declare module 'vue' {
     VanIcon: typeof import('vant/es')['Icon']
     VanLoading: typeof import('vant/es')['Loading']
     VanNavBar: typeof import('vant/es')['NavBar']
+    VanNoticeBar: typeof import('vant/es')['NoticeBar']
     VanPicker: typeof import('vant/es')['Picker']
     VanPopup: typeof import('vant/es')['Popup']
     VanSearch: typeof import('vant/es')['Search']
     VanSlider: typeof import('vant/es')['Slider']
+    VanSwipe: typeof import('vant/es')['Swipe']
+    VanSwipeItem: typeof import('vant/es')['SwipeItem']
     VanTab: typeof import('vant/es')['Tab']
     VanTabbar: typeof import('vant/es')['Tabbar']
     VanTabbarItem: typeof import('vant/es')['TabbarItem']

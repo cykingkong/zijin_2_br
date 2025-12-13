@@ -3,7 +3,7 @@
         z-index="10000">
         <div class="title text-24px font-bold mt-12px text-center">{{ title }}</div>
         <div class="min-count text-#0F172A font-size-40px mx-a text-center mt-24px overflow-y-auto">
-            MX$ {{ count }}
+            ₹{{ count }}
         </div>
         <div class="input-box px-12 mt-40px">
             <Keypad v-model="displayValue" />

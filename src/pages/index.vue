@@ -1,51 +1,26 @@
-<script setup lang="ts">
+<script setup>
 import router from "@/router";
-import { useStore } from "@/stores/modules/index";
-
-
-import Indicator from "@/components/indicator.vue";
-
 import Grid from "@/components/grid.vue";
-import axios from "axios";
-
 import { useUserStore } from "@/stores";
 import { navTitleStore } from "@/stores/index";
 import { isLogin } from "@/utils/auth";
-import CryptoJS from "crypto-js";
 import { useI18n } from "vue-i18n";
-import { appCharts, indexInfo, market } from "@/api/market";
-import { getKfUrl } from "@/api/user";
+import { indexInfo, articleList } from "@/api/market";
 import local from "@/utils/local";
 import { closeToast, showLoadingToast } from "vant";
-import { addCommasToNumber } from "@/utils/tool";
 
 const { t } = useI18n();
-const activeName = ref("");
 const navStore = navTitleStore();
-
-const store:any = useStore();
-const requestCount = ref(0);
-const getStockData = async () => {
-  try {
-    const response = await axios.get(
-      "https://stockanalysis.com/api/charts/a/bvmf-vale3/stream/c?chartiq=true&start=2025-08-13&end=2025-08-14&interval=1min"
-    );
-
-    console.log("股票数据:", response.data);
-    return response.data;
-  } catch (error) {
-    console.error("请求失败:", error);
-  }
-};
+const newsList = ref([]);
+const activityList = ref([])
 // getStockData();
 const userStore = useUserStore();
 const userInfo = computed(() => userStore.userInfo);
-const marketData = ref<any>([]);
-const indexInfoData = ref<any>({
+const indexInfoData = ref({
   banners: [],
 });
 
-function handleClickGrid(val: any) {
+function handleClickGrid(val) {
   if (val === 0) {
     // local.setlocal('rankInfo', marketData.value.list[0])
     // router.push('/quotes/openTrade?id=' + marketData.value.list[0].tradingPairsId + '&categoryId=' + categoryId.value)
@@ -80,65 +55,13 @@ function handleClickGrid(val: any) {
   }
 }
 
-function getContent(html: string) {
+function getContent(html) {
   if (!html) return "";
-  const reg: RegExp = /<[^>]+>/g;
+  const reg = /<[^>]+>/g;
   return html.replace(reg, "");
 }
 const indexData = ref({});
-const chartsDesc = ref([]);
 
-const kfUrl = ref("");
-function jumptoSearchUrl(data, url) {
-  for (var key in data) {
-    if (data[key]) {
-      url += '&' + key + '=' + data[key];
-    }
-  }
-  // window.location.href=encodeURI(url);
-  window.open(encodeURI(url), "_blank");
-}
-async function initKfUrl() {
-  await userStore.info()
-  if (!userInfo.value.kf_url) return;
-  router.push({
-    path: '/webview',
-    query: {
-      islogin: 'true',
-    }
-  })
-  return
-  // setTimeout(() => {
-  //   // 使用MD5加密生成wttUUid
-  //   let wttUUid = CryptoJS.MD5(
-  //     `${userInfo.value.user_id}+WTTexcellent`
-  //   ).toString();
-  //   const selData = {
-  //     uuid: wttUUid,
-  //     nickname: userInfo.value.user_id || userInfo.value.account || userInfo.value.email || userInfo.value.phone || 'User',
-  //   }
-  //   jumptoSearchUrl(selData, userInfo.value.kf_url)
-
-  //   console.log(wttUUid, userInfo.value);
-  //   // window.location.href =
-  //   //   userInfo.value.kf_url +
-  //   //   "&nickname=" +
-  //   //   userInfo.value.user_id +
-  //   //   `&uuid=${wttUUid}`;
-  // }, 40);
-  // }
-}
-function toUrl(path) {
-  router.push({
-    path,
-  });
-}
-async function getChartsDesc(type) {
-  const { data, code } = await appCharts({ type });
-  if (code == 200) {
-    chartsDesc.value = data.rows || [];
-  }
-}
 function init() {
   // 只有在用户已登录的情况下才调用 info
   if (isLogin()) {
@@ -148,22 +71,24 @@ function init() {
       path: "/login",
     });
   }
-  // indexInfo().then((res) => {
-  //   indexInfoData.value = res.data
-  //   if (res.data.notice) {
-  //     indexInfoData.value.noticeContent = getContent(indexInfoData.value.notice)
-  //     const readedNotice = local.getlocal('readedNotice')
-  //     if (!readedNotice) {
-  //       local.setlocal('readedNotice', '0')
-  //       showDatePicker.value = true
-  //     }
-  //     else {
-  //       if (readedNotice === '0') {
-  //         showDatePicker.value = true
-  //       }
-  //     }
-  //   }
-  // })
+  indexInfo().then((res) => {
+    indexInfoData.value = res.data
+    if (res.data.notice) {
+      indexInfoData.value.noticeContent = getContent(indexInfoData.value.notice)
+      const readedNotice = local.getlocal('readedNotice')
+      if (!readedNotice) {
+        local.setlocal('readedNotice', '0')
+        showDatePicker.value = true
+      }
+      else {
+        if (readedNotice === '0') {
+          showDatePicker.value = true
+        }
+      }
+    }
+  })
+  getArticleList({ article_type: 2 })
+  getArticleList({ article_type: 3 })
   // getMarketInfo({})
   // getChartsDesc(1)
   // getMarketIndex({
@@ -171,134 +96,36 @@ function init() {
   // })
   // initKfUrl();
 }
-const page = reactive({
-  pageIndex: 1,
-  pageSize: 20,
-});
-const rankListStatus = ref(1); // 1-加载中 2-成功 3-已无更多
-const proName = ref("");
-function getMarketIndex(params) {
-  market({ pageIndex: 1, pageSize: 20, ...params }).then(({ data, code }) => {
+function getArticleList(params) {
+  // 1 关于我们 常见问题 2 新闻中心 3 新闻活动
+  articleList({ pageIndex: 1, pageSize: 20, ...params }).then(({ data, code }) => {
     if (code == 200) {
-      indexData.value = data.list;
+      if (params.article_type === 2) {
+        newsList.value = data.rows
+      }
+      else if (params.article_type === 3) {
+        activityList.value = data.rows
+      }
     }
   });
 }
-function getMarketInfo(params) {
-  let p = {
-    ...page,
-  };
-  p.pageIndex = params.pageIndex || 1;
-  rankListStatus.value = 1;
-  requestCount.value++;
-  market({ ...p, ...params }).then((res) => {
-    const { data, code } = res;
-    if (code == 200) {
-      if (!data.list) {
-        rankListStatus.value = 3;
-        return;
-      }
-      rankListStatus.value = 2;
-      let result = [];
-      if (p.pageIndex == 1) {
-        result = data.list || [];
-      } else {
-        result = marketData.value.list.concat(data.list || []);
-      }
-      if (requestCount.value == 1) {
-        activeName.value = data.category[0].category_id;
-        categoryId.value = data.category[0].category_id;
-      }
-
-      marketData.value = {
-        ...res.data,
-        list: result,
-      };
-      store?.setMarketList(result || []);
-      if (data.total <= marketData.value.list.length) {
-        rankListStatus.value = 3;
-      }
-    } else {
-      rankListStatus.value = 4;
-    }
-  });
-}
-const categoryId = ref();
-function handleClickTabs(val: any) {
-  rankListStatus.value = 1;
-  categoryId.value = val;
-  marketData.value.list = [];
-  getMarketInfo({
-    categoryId: val,
-  });
-  if (val == 200) {
-    getMarketIndex({
-      categoryId: 500,
-    });
-    getChartsDesc(1);
-  } else if (val == 201) {
-    getMarketIndex({
-      categoryId: 501,
-    });
-    getChartsDesc(2);
-  } else if (val == 202) {
-    getMarketIndex({
-      categoryId: 502,
-    });
-  }
-
-  activeName.value = val;
-}
-const showDatePicker = ref<boolean>(false);
-function handleClickIndicator(val) {
-  local.setlocal("rankInfo", val);
-  // router.push('/quotes/detail?id=' + val.tradingPairsId + '&categoryId=' + categoryId.value)
+const handleClickItem = (item) => {
   router.push({
-    path: "/quotes/detail",
+    path: "/activityDetail",
     query: {
-      id: val.tradingPairsId,
-      categoryId: categoryId.value,
+      id: item.article_id,
     },
   });
+  local.setlocal('activityDetail', item)
 }
-function clickNotice() {
-  showDatePicker.value = true;
-}
+const categoryId = ref();
+
+const showDatePicker = ref(false);
 function cancelNotice() {
   showDatePicker.value = false;
   local.setlocal("readedNotice", "1");
 }
-function confirmNotice() {
-  try {
-    local.setlocal("readedNotice", "1");
-    if (indexInfoData.value.openUrl) {
-      const urlEnum = {
-        1: "/fund",
-        2: "/discount",
-        3: "/IPO",
-        4: "/dividend",
-      };
-      const url = urlEnum[indexInfoData.value.openUrl];
-      router.push(url);
-    }
-    showDatePicker.value = false;
-  } catch (e) {
-    console.error(e);
-  }
-}
 
-function toDetail() {
-  const id = marketData.value.list[0].tradingPairsId || 1;
-  const categoryId = marketData.value.category[0].category_id || 200;
-  // router.push(`/quotes/detail?id=${id}&categoryId=${categoryId}`)
-  router.push({
-    path: "/quotes/detail",
-    query: {
-      id,
-      categoryId,
-    },
-  });
-}
 showLoadingToast({
   message: "",
   duration: 0,
@@ -312,6 +139,30 @@ watch(
     }
   }
 );
+const formatName = (str) => {
+  // 将姓名开头的62 去掉，然后只显示前三字符和后三字符，中间用***替换
+  if (typeof str !== 'string') {
+    return '';
+  }
+
+  // 去掉开头的62
+  let processedStr = str;
+  if (str.startsWith('62')) {
+    processedStr = str.substring(2);
+  }
+
+  // 如果处理后的字符串长度小于等于6，直接返回
+  if (processedStr.length <= 6) {
+    return processedStr;
+  }
+
+  // 截取前3个字符和后3个字符，中间用***替换
+  const firstThree = processedStr.substring(0, 3);
+  const lastThree = processedStr.substring(processedStr.length - 3);
+
+  return `${firstThree}***${lastThree}`;
+
+};
 onMounted(() => {
   init();
   // closeToast();
@@ -320,77 +171,101 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="quotes">
-    <header class="header flex items-center justify-between" v-if="false">
-      <div class="left flex items-center gap-16px">
-        <!-- <div class="icon w-24 h-24">
-          <img src="../assets/logo.svg" alt="">
-        </div> -->
-        <!-- WTTexcellent -->
-      </div>
-      <!-- <div class="icon w-24 h-24 relative" @click="toUrl('/notify')">
-        <div class="dot w-4 h-4 rounded-full bg-#F14437 absolute top-0 right-0" v-if="userInfo.notify_start"></div>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M12.02 2.91003C8.71 2.91003 6.02 5.60003 6.02 8.91003V11.8C6.02 12.41 5.76 13.34 5.45 13.86L4.3 15.77C3.59 16.95 4.08 18.26 5.38 18.7C9.69 20.14 14.34 20.14 18.65 18.7C19.86 18.3 20.39 16.87 19.73 15.77L18.58 13.86C18.28 13.34 18.02 12.41 18.02 11.8V8.91003C18.02 5.61003 15.32 2.91003 12.02 2.91003Z"
-            stroke="#94A3B8" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" />
-          <path
-            d="M13.87 3.19994C13.56 3.10994 13.24 3.03994 12.91 2.99994C11.95 2.87994 11.03 2.94994 10.17 3.19994C10.46 2.45994 11.18 1.93994 12.02 1.93994C12.86 1.93994 13.58 2.45994 13.87 3.19994Z"
-            stroke="#94A3B8" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-          <path
-            d="M15.02 19.0601C15.02 20.7101 13.67 22.0601 12.02 22.0601C11.2 22.0601 10.44 21.7201 9.89999 21.1801C9.35999 20.6401 9.01999 19.8801 9.01999 19.0601"
-            stroke="#94A3B8" stroke-width="1.5" stroke-miterlimit="10" />
-        </svg>
-      </div> -->
-    </header>
-    <div class="w-full px-24px">
-
-      <div class="w-full px-24px mt-24 min-h-177px relative bg-#154183 rounded-12px overflow-hidden p-20px card-box">
-        <div class="round w-300 h-300 rounded-full absolute top-[-45px] left-[-99px] bg-#0b2956 z-1"></div>
-        <!-- <img :src="boxBg" alt="" class="w-486 h-468px absolute top-[-167px] left-[-55px]" /> -->
-        <div class="info z-80 relative">
-          <div class="title text-14px color-#94A3B8">
-            {{ t("Total assets") }}
-          </div>
-          <div class="price text-32px color-#fff font-bold mt-8px text-nowrap overflow-y-auto">
-            MX$ {{ addCommasToNumber(userInfo.user_balance) }}
-          </div>
-          <div class="bottom-li mt-24px flex items-center justify-between">
-            <div class="left">
-              <div class="title text-10px color-#94A3B8 line-height-170%">
-                {{ t("Profit") }}
-              </div>
-              <div class="title text-14px color-#fff line-height-140%">
-                MX$ {{ addCommasToNumber(userInfo.total_profit) }}
-              </div>
-            </div>
-            <div
-              class="right p4 h-24px rounded-24px color-#fff flex text-12px items-center justify-center gap-8px min-w-80px"
-              :class="userInfo.total_profit_rate > 0 ? 'bg-#1DCE5C' : 'bg-#F14437'
-                ">
-              <svg class="w-17 h-16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
-                :class="userInfo.total_profit_rate > 0 ? 'rotate-0' : 'rotate-180'">
-                <path
-                  d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z"
-                  stroke="white" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M8.00001 5.33337L5.33334 8.00004M8.00001 5.33337V10.6667M10.6667 8.00004L8.00001 5.33337"
-                  stroke="white" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-              {{ addCommasToNumber(userInfo.total_profit_rate) || 0 }} %
-            </div>
-          </div>
+  <div class="Home">
+    <header class="header flex items-center justify-between">
+      <div class="left flex items-center gap-[16px]">
+        <div class="info">
+          <div class="phone color-[#888888] text-12">+62 {{ formatName(userInfo.username) }}</div>
+          <div class="lv text-12 color-[#000]">{{ indexInfoData.level_name + userInfo.level }}</div>
         </div>
       </div>
+      <div class="flex icon-box gap-[8px]">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="40" height="40" rx="20" fill="#F6F6F6" />
+          <path
+            d="M18.09 25.2867V25.5908C18.09 26.645 18.945 27.5 20 27.5V27.5C21.055 27.5 21.91 26.645 21.91 25.59V25.2858"
+            stroke="#1B1B1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          <path
+            d="M21.5274 14.7925V14.0275C21.5274 13.1842 20.8441 12.5 19.9999 12.5V12.5C19.1557 12.5 18.4724 13.1842 18.4724 14.0275V14.7925"
+            stroke="#1B1B1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M15.4691 18.49V18.49C15.4691 16.4042 17.1599 14.7142 19.2449 14.7142H20.7558C22.8416 14.7142 24.5316 16.405 24.5316 18.49V18.49V20.8208C24.5316 21.2625 24.7074 21.6867 25.0199 21.9992L25.5541 22.5333C25.8666 22.8458 26.0424 23.27 26.0424 23.7117V23.7117C26.0424 24.5817 25.3374 25.2867 24.4674 25.2867H15.5333C14.6633 25.2867 13.9583 24.5817 13.9583 23.7117V23.7117C13.9583 23.27 14.1341 22.8458 14.4466 22.5333L14.9808 21.9992C15.2933 21.6867 15.4691 21.2625 15.4691 20.8208V18.49Z"
+            stroke="#1B1B1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <div class="relative">
+          <div
+            class="dot absolute top-[4px] right-[1px] py-4 rounded-full bg-[#FF4E4E] color-[#fff] text-[8px] min-w-[18px] text-center">
+            {{ 1 }}
+          </div>
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="40" height="40" rx="20" fill="#F6F6F6" />
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M13.3305 13.3306H26.6694C27.1298 13.3306 27.5031 13.7038 27.5031 14.1642V25.8358C27.5031 26.7566 26.7566 27.5031 25.8357 27.5031H14.1642C13.2433 27.5031 12.4968 26.7566 12.4968 25.8358V14.1642C12.4968 13.7038 12.8701 13.3306 13.3305 13.3306Z"
+              stroke="#1B1B1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M12.4968 16.2484H27.5031" stroke="#1B1B1B" stroke-width="1.5" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <path
+              d="M23.3347 19.1663C23.3347 21.008 21.8417 22.501 20 22.501C18.1583 22.501 16.6653 21.008 16.6653 19.1663"
+              stroke="#1B1B1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+
+
+      </div>
+    </header>
+    <div class="detail-image w-full px-[24px]" v-if="indexInfoData.banners.length > 0">
+      <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+        <van-swipe-item v-for="item in indexInfoData.banners" :key="item.id">
+          <div class="image bg-[#f5f5f5] rounded-[16px] min-h-[240px] w-full">
+            <img :src="item.image" alt="" class="w-full h-full object-cover rounded-[16px]">
+          </div>
+        </van-swipe-item>
+
+      </van-swipe>
+    </div>
+    <!-- notice -->
+    <div class="w-full px-[24px] my-16">
+      <div
+        class="notice text-[12px] gap-[12px] w-full border-[1px] px-12 h-42 border-solid border-[#B1DDC6] bg-[#F7FDFB] rounded-[8px] px-4 py-2 overflow-hidden flex items-center">
+        <svg width="16" height="16" class="w-16 h-16 flex-shrink-0" viewBox="0 0 16 16" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path d="M9.06668 13.3333H6.93335" stroke="#369A66" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round" />
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M11.3333 6.68799V6.66666V6.66666C11.3333 4.82599 9.84065 3.33333 7.99998 3.33333V3.33333C6.15931 3.33333 4.66665 4.82599 4.66665 6.66666V6.66666V6.68799V8.33599C4.66665 8.55199 4.54465 8.74866 4.35198 8.84533L4.01665 9.01266C3.59798 9.22266 3.33331 9.65066 3.33331 10.1187V10.1187C3.33331 10.8013 3.88665 11.3547 4.56931 11.3547H11.4306C12.1133 11.3547 12.6666 10.8013 12.6666 10.1187V10.1187C12.6666 9.65066 12.402 9.22266 11.9833 9.01333L11.648 8.84599C11.4553 8.74866 11.3333 8.55199 11.3333 8.33599V6.68799Z"
+            stroke="#369A66" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M12.634 4.03267C12.1593 3.19934 11.4673 2.50734 10.634 2.03267" stroke="#369A66" stroke-width="1.5"
+            stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M3.36603 4.03267C3.84069 3.19934 4.53269 2.50734 5.36603 2.03267" stroke="#369A66" stroke-width="1.5"
+            stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <div class="content text-no-wrap w-full">
+          <van-notice-bar scrollable :text="indexInfoData.notice" background="#F7FDFB" color="#888888"
+            class="notice flex-1" />
+        </div>
+      </div>
+
     </div>
 
     <Grid @handleClickGrid="handleClickGrid" />
-    <div class="indicator-title px-24 font-bold text-16px mt-12">
-      {{ t("Holding assets") }}
+    <div class="indicator-title px-24 font-bold text-[16px] mt-12">
+      {{ t("Activity Center") }}
     </div>
-    <Indicator :activeName="activeName" />
-
-    <div class="kf-fixed fixed bottom-120px right-0 h-auto w-40 overflow-hidden rounded-12px" @click="initKfUrl">
-      <img src="@/assets/kf.png" class="block h-full w-full scale-[1.1] bg-white" alt="" />
+    <ActivityCenter :arr="activityList" />
+    <div class="indicator-title px-24 font-bold text-[16px] mt-12 flex items-center justify-between">
+      {{ t("News Center") }}
+      <div class="see-all text-[14px] color-[#9CA3AF]">{{ t("See all") }}</div>
+    </div>
+    <div class="news-list px-24 py-12">
+      <div
+        class="news-item w-full rounded-[16px]  min-h-[120px] flex gap-[12px]   p-12 shadow-[0px_0px_10px_0px_rgba(0,0,0,0.1)]"
+        v-for="(item, index) in newsList" :key="index" @click="handleClickItem(item)">
+        <div class="img w-96 h-96 flex-shrink-0 bg-[#F5F5F5] overflow-hidden rounded-[16px]">
+          <img :src="item.article_image" alt="" v-if="item && item.article_image"
+            class="w-full h-full object-cover rounded-[16px]">
+        </div>
+        <div class="info color-[#111827] font-bold">{{ item.title }}</div>
+      </div>
     </div>
     <van-popup v-model:show="showDatePicker" position="center" :round="true">
       <div class="h-auto max-h-500 overflow-y-auto p-12">
@@ -398,12 +273,12 @@ onMounted(() => {
       </div>
       <div class="w-full flex gap-12 px-12 pb-12">
         <div class="btn-box flex-1">
-          <van-button type="default" class="h-40!" plain block @click="cancelNotice">
+          <van-button type="default" class="h-[40]!" plain block @click="cancelNotice">
             {{ t("Cancel") }}
           </van-button>
         </div>
         <div class="btn-box flex-1">
-          <van-button type="primary" class="h-40!" block @click="confirmNotice">
+          <van-button type="primary" class="h-[40]!" block @click="cancelNotice">
             {{ t("Confirm") }}
           </van-button>
         </div>
@@ -445,7 +320,7 @@ onMounted(() => {
 
     // 文字倾斜
     font-style: italic;
-    font-weight: 600;
+    font-weight: 400;
   }
 
   .right {

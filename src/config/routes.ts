@@ -9,35 +9,14 @@ export const routeWhiteList: readonly string[] = [
   // 'IPO',
   'portfolio',
   'wallet',
-  'Market'
+  'Market',
+  'Team',
 ]
 export const navWhiteList: readonly string[] = [
   'home', // 首页
   'profile', // 个人中心
   'quotes',
-  'news',
-  'deal',
-  'openTrade',
-  'optional',
-  '/ipo/creditPage',
-  'discount',
-  'dividend',
-  '/quotes/detail',
-  '/quotes/accountChange',
-  'portfolio',
-  'ipo',
-  'login', // 登录页面
-  '/login/', // 登录主页面
-  'register',
-  '/buy/success',
-  'wallet',
-  'orderDetail',
-  'fundOrderDetail',
-  'searchStock',
-  'wallet/exchange/deposit-success',
-  'wallet/exchange/withdraw-success',
-  'Market',
-  'creditLoan',
-  '/creditLoan/creditPage',
-  '/creditLoan/loan'
+  'activityDetail',
+  'Team',
+  'login'
 ]

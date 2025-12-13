@@ -2,43 +2,26 @@
   <div class="nationList">
     <van-action-sheet v-model:show="isShow" :title="props.title">
       <form>
-        <van-search
-          class="tabBackground vant-search-box"
-          v-model="val"
-          :placeholder="$t('PleaseEnter')"
-          @update:model-value="onSearch(val)"
-          @clear="onClear"
-        />
+        <van-search class="tabBackground vant-search-box" v-model="val" :placeholder="$t('PleaseEnter')"
+          @update:model-value="onSearch(val)" @clear="onClear" />
       </form>
-      <div class="px-12px flex flex-col gap-16px">
+      <div class="px-[12px] flex flex-col gap-[16px]">
         <div
-          class="flex px-12px pt-10 pb-8 h-64px bg-#F9FAFB rounded-12px justify-between list-view box-border textColor container items-center"
-          style="box-sizing: border-box"
-          v-for="(item, key) in countriesFind"
-          :key="key"
-          @click="selectItem(item, key)"
-        >
-          <div class="flex items-center gap-16px">
-            <div
-              class="bd w-40px h-40px rounded-12px bg-#EBECEF flex items-center justify-center"
-            >
+          class="flex px-[12px] pt-10 pb-8 h-[64px] bg-[#F9FAFB] rounded-[12px] justify-between list-view box-border textColor container items-center"
+          style="box-sizing: border-box" v-for="(item, key) in countriesFind" :key="key" @click="selectItem(item, key)">
+          <div class="flex items-center gap-[16px]">
+            <div class="bd w-[40px] h-[40px] rounded-[12px] bg-[#EBECEF] flex items-center justify-center">
               <div class="iti-flag" :class="key"></div>
             </div>
             <div>(+{{ item.dialCode }}){{ item.name }}</div>
           </div>
-          <div
-            class="radio flex-shrink-0 border-solid border-1px border-#D1D5DB rounded-full w-16px h-16px relative"
-            :class="selectIndex == key ? 'radio-active' : ''"
-          ></div>
+          <div class="radio flex-shrink-0 border-solid border border-[#D1D5DB] rounded-full w-[16px] h-[16px] relative"
+            :class="selectIndex == key ? 'radio-active' : ''"></div>
           <!-- <span>{{ item.dialCode }}</span> -->
           <!-- <img v-show="selectIndex==key" src="../../../assets/image/public/checked.png"
                     style="width: 20px;height: 20px;" /> -->
         </div>
-        <empty
-          v-if="Object.keys(countriesFind).length == 0"
-          :noTips="false"
-          :tipsText="$t('No more')"
-        ></empty>
+        <empty v-if="Object.keys(countriesFind).length == 0" :noTips="false" :tipsText="$t('No more')"></empty>
       </div>
     </van-action-sheet>
   </div>
@@ -66,7 +49,7 @@ let val = ref("");
 let list = ref([]);
 let countriesFind = ref({});
 const countries = ref(countriesinit);
-let selectIndex = ref("mx");
+let selectIndex = ref("id");
 let countryCodeList = ref([
   "93",
   "355",
@@ -958,14 +941,14 @@ onMounted(() => {
     getData();
     return;
   }
-  const mexicoKey = Object.keys(originalCountries).find(
+  const indonesiaKey = Object.keys(originalCountries).find(
     (key) =>
-      originalCountries[key].name === "墨西哥" ||
-      originalCountries[key].name === "Mexico"
+      originalCountries[key].name === "印度尼西亚" ||
+      originalCountries[key].name === "Indonesia"
   );
-  if (mexicoKey) {
-    const { [mexicoKey]: mexico, ...rest } = originalCountries;
-    countriesFind.value = { [mexicoKey]: mexico, ...rest };
+  if (indonesiaKey) {
+    const { [indonesiaKey]: indonesia, ...rest } = originalCountries;
+    countriesFind.value = { [indonesiaKey]: indonesia, ...rest };
   } else {
     countriesFind.value = originalCountries;
   }
@@ -979,8 +962,8 @@ const getData = () => {
   console.log(countries.value);
 
   let us = countries.value[locale.value]
-    ? countries.value[locale.value]["mx"]
-    : countries.value["en-US"]["mx"];
+    ? countries.value[locale.value]["id"]
+    : countries.value["en-US"]["id"];
   $emit("getName", us);
 };
 //选择国家
@@ -1018,12 +1001,12 @@ const onSearch = (val) => {
     }
   });
 
-  const mexicoKey = Object.keys(filtered).find(
-    (key) => filtered[key].name === "墨西哥" || filtered[key].name === "Mexico"
+  const indonesiaKey = Object.keys(filtered).find(
+    (key) => filtered[key].name === "印度尼西亚" || filtered[key].name === "Indonesia"
   );
-  if (mexicoKey) {
-    const { [mexicoKey]: mexico, ...rest } = filtered;
-    countriesFind.value = { [mexicoKey]: mexico, ...rest };
+  if (indonesiaKey) {
+    const { [indonesiaKey]: indonesia, ...rest } = filtered;
+    countriesFind.value = { [indonesiaKey]: indonesia, ...rest };
   } else {
     countriesFind.value = filtered;
   }

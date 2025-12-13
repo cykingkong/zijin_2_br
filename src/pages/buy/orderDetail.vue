@@ -19,7 +19,7 @@
           </div>
         </div>
         <div class="right h-46px flex flex flex-col justify-between ">
-          <div class="name text-#0F172A text-14px font-bold">MX$ {{ info.amount }}</div>
+          <div class="name text-#0F172A text-14px font-bold">₹{{ info.amount }}</div>
           <div class="name2 text-#64748B text-12px text-align-right">{{ info.quantity }}{{ t('share') }}</div>
         </div>
 
@@ -35,7 +35,7 @@
         <div class="li h-50px flex items-center justify-between h-44 ">
           <div class="label color-#64748B text-14px">Amount</div>
           <div class="value  flex flex-col justify-center h-40px">
-            MX$ {{ info.amount }}
+            ₹{{ info.amount }}
           </div>
         </div>
         <div class="li h-50px flex items-center justify-between h-44 ">
@@ -47,7 +47,7 @@
         <div class="li h-50px flex items-center justify-between h-44 border-none!">
           <div class="label color-#64748B text-14px">Buy fee</div>
           <div class="value  flex flex-col justify-center h-40px color-#1DCE5C">
-            MX$ {{ info.fee }}
+            ₹{{ info.fee }}
           </div>
         </div>
       </div>
