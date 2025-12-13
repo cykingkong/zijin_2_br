@@ -385,7 +385,7 @@ async function login() {
             @click="remember = !remember"></div>
           {{ t("Remember me") }} -->
         </div>
-        <div class="right color-[#6B39F4] font-size-[14px] font-bold cursor-pointer flex-shrink-0"
+        <div class="right color-[#1b1b1b] font-size-[14px] font-bold cursor-pointer flex-shrink-0"
           @click="toForgotPassword()">
           {{ t("Forgot Password") }}
         </div>

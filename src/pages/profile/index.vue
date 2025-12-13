@@ -6,11 +6,16 @@ import { indexInfo, } from "@/api/market";
 import { locale } from "@/utils/i18n";
 import { useUserStore } from "@/stores";
 import { loanIndex } from "@/api/ipo";
-import cell1 from "@/assets/cell/cell1.svg";
-import cell2 from "@/assets/cell/cell2.svg";
-import cell3 from "@/assets/cell/cell3.svg";
-import cell4 from "@/assets/cell/cell4.svg";
-import right from "@/assets/icon/right.svg";
+import cell1 from "@/assets/cell/cell1.png";
+import cell2 from "@/assets/cell/cell2.png";
+import cell3 from "@/assets/cell/cell3.png";
+import cell4 from "@/assets/cell/cell4.png";
+import cell5 from "@/assets/cell/cell5.png";
+import cell6 from "@/assets/cell/cell6.png";
+import cell7 from "@/assets/cell/cell7.png";
+import cell8 from "@/assets/cell/cell8.png";
+
+
 
 const userStore = useUserStore();
 const userInfo = computed(() => userStore.userInfo);
@@ -44,7 +49,7 @@ const cellList = [
         text: t("Income Details"),
         tips: "",
         iconType: "img",
-        icon: cell1,
+        icon: cell2,
         url: "/wallet/walletLogs",
         type: "incomeDetails",
       },
@@ -52,7 +57,7 @@ const cellList = [
         text: t("Coupon List"),
         tips: "",
         iconType: "img",
-        icon: cell1,
+        icon: cell3,
         url: "/profile/userCouponList",
         type: "couponList",
       },
@@ -60,7 +65,7 @@ const cellList = [
         text: t("Bank Account"),
         tips: "",
         iconType: "img",
-        icon: cell1,
+        icon: cell4,
         url: "/profile/bankAccount",
         type: "bankAccount",
       },
@@ -68,9 +73,31 @@ const cellList = [
         text: t("About Us"),
         tips: "",
         iconType: "img",
-        icon: cell1,
-        url: "/profile/bankAccount",
-        type: "bankAccount",
+        icon: cell5,
+        url: "",
+        type: "aboutUs",
+      },
+      {
+        text: t("App Download"),
+        tips: "",
+        iconType: "img",
+        icon: cell6,
+        url: "",
+        type: "appDownload",
+      },
+      {
+        text: t("Languange"),
+        tips: toUpperCase(locale.value),
+        iconType: "img",
+        icon: cell7,
+        url: "/profile/languange",
+      }, {
+        text: t("Logout"),
+        iconType: "img",
+        icon: cell8,
+        url: "/profile/languange",
+        color: '#FF4345',
+        type: "logout",
       },
     ],
   },
@@ -110,12 +137,17 @@ const handleHerf = (type) => {
 }
 const handleClickCell = async (item: any) => {
   if (item && item.url) {
+    if (item.type == 'logout') {
+      handleLogout()
+      return
+    }
     if (item.type == "Identify" && [1, 2].includes(userInfo.value.kyc_status)) {
       return;
     }
     if (item.type == "phone" && userInfo.value.phone) {
       return;
     }
+
     if (item.type == "creditLoan") {
       const { data, code } = await loanIndex({})
       if (code == 200) {
@@ -245,10 +277,9 @@ onMounted(async () => {
           class="cell-item px-[12px] w-full rounded-[12px] border border-[#E2E8F0] border-solid h-[72px] flex items-center justify-between mb-[16px]"
           v-for="(cell, k) in item.cell" :key="k" @click="handleClickCell(cell)">
           <div class="left flex items-center h-40 gap-[12px]">
-
-
+            <img :src="cell.icon" class="w-20 h-20 flex-shrink-0 block imgIcon" alt="" v-if="cell.iconType == 'img'" />
             <div class="info h-full flex flex-col justify-center gap-8">
-              <div class="t">{{ cell.text }}</div>
+              <div class="t" :class="cell.type == 'logout' ? 'text-[#FF4345]' : ''">{{ cell.text }}</div>
               <div class="t2 text-[#64748B] text-[10px]" v-if="cell.tips">
                 {{ cell.tips }}
               </div>
@@ -270,13 +301,17 @@ onMounted(async () => {
             </svg>
             <div class="dot w-8 h-8 rounded-full bg-[#F14437]" v-if="userInfo.notify_start && cell.type == 'notify'">
             </div>
-            <img :src="right" alt="" class="block w-20 h-20" />
+            <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8.33331 13.3334L11.6666 10.0001L8.33331 6.66675" stroke="#888888" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+
           </div>
         </div>
       </div>
 
-      <van-button type="primary" block color="#6B39F4" class="mt-[24px] h-[56px]" @click="handleLogout">{{ t("Logout")
-        }}</van-button>
+      <!-- <van-button type="primary" block color="#6B39F4" class="mt-[24px] h-[56px]" @click="handleLogout">{{ t("Logout")
+        }}</van-button> -->
     </div>
 
 

@@ -27,7 +27,7 @@ const userProductArr = ref([])
 const categoryId = ref("200");
 const getUserProArr = async () => {
   try {
-    const { data, code } = await userProductList({
+    const res = await userProductList({
       page: 1,
       pageSize: 10,
     })

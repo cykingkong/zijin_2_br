@@ -337,14 +337,14 @@ async function login() {
             @click="remember = !remember"></div>
           {{ t("Remember me") }} -->
         </div>
-        <div class="right color-[#6B39F4] font-size-[14px] font-bold cursor-pointer flex-shrink-0"
+        <div class="right color-[#1b1b1b] font-size-[14px] font-bold cursor-pointer flex-shrink-0"
           @click="toForgotPassword()">
           {{ t("Forgot Password") }}
         </div>
       </div>
       <van-button type="primary" color="#1B1B1B" class="login-btn h-[48px]!" block @click="login()">{{
         pageType == 0 ? t("Login") : t("Sign Up")
-      }}</van-button>
+        }}</van-button>
       <div class="or">{{ t("Or") }}</div>
       <div type="primary" color="#F6F6F6" :style="{ color: '#1B1B1B' }"
         class="signUpBtn items-center flex justify-center text-center bg-[#f6f6f6] rounded-[12px] h-[48px]! color-[#1b1b1b]!"
