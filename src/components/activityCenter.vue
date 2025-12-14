@@ -10,13 +10,17 @@
                 <div class="tips text-[14px] text-[#666]">{{ item?.tips }}</div>
             </div>
             <div class="avatar-box relative flex items-center justify-center h-[30px]">
-                <div class="avatar w-[30px] h-[30px] border-[1px] border-[#fff] rounded-full bg-[#FF4E4E] relative">
+                <div
+                    class="avatar w-[30px] h-[30px] border-[1px] border-[#fff] rounded-full bg-[#FF4E4E] relative overflow-hidden">
+                    <img :src="getRandomAvatar()" alt="" class="w-full h-full object-cover">
                 </div>
                 <div
-                    class="avatar w-[30px] h-[30px] border-[1px] border-[#fff] rounded-full bg-[blue] -ml-[10px] relative ">
+                    class="avatar w-[30px] h-[30px] border-[1px] border-[#fff] rounded-full bg-[blue] -ml-[10px] relative  overflow-hidden">
+                    <img :src="getRandomAvatar()" alt="" class="w-full h-full object-cover">
                 </div>
                 <div
-                    class="avatar w-[30px] h-[30px] border-[1px] border-[#fff] rounded-full bg-[green] -ml-[10px] relative ">
+                    class="avatar w-[30px] h-[30px] border-[1px] border-[#fff] rounded-full bg-[green] -ml-[10px] relative overflow-hidden">
+                    <img :src="getRandomAvatar()" alt="" class="w-full h-full object-cover">
                 </div>
             </div>
             <div class="join-btn w-full rounded-[16px] mt-[24px] text-[#00334E] text-[16px] font-bold text-align-center h-[44px] flex items-center justify-center"
@@ -28,6 +32,23 @@
 </template>
 <script setup>
 import { receiveCoupon } from '@/api/product'
+import avatar1 from '@/assets/avatar/1.jpg'
+import avatar2 from '@/assets/avatar/2.jpg'
+import avatar3 from '@/assets/avatar/3.jpg'
+import avatar4 from '@/assets/avatar/4.jpg'
+import avatar5 from '@/assets/avatar/5.jpg'
+import avatar6 from '@/assets/avatar/6.jpg'
+import avatar7 from '@/assets/avatar/7.jpg'
+import avatar8 from '@/assets/avatar/8.jpg'
+import avatar9 from '@/assets/avatar/9.jpg'
+import avatar10 from '@/assets/avatar/10.jpg'
+import avatar11 from '@/assets/avatar/11.jpg'
+import avatar12 from '@/assets/avatar/12.jpg'
+import avatar13 from '@/assets/avatar/13.jpg'
+import avatar14 from '@/assets/avatar/14.jpg'
+import avatar15 from '@/assets/avatar/15.jpg'
+
+
 
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
@@ -37,12 +58,16 @@ const props = defineProps({
         default: [],
     },
 });
-
+const avatarList = ref([avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7, avatar8, avatar9, avatar10, avatar11, avatar12, avatar13, avatar14, avatar15])
 const gridList = ref([]);
 const emits = defineEmits(["clickItem"]);
 const handleClickItem = (k) => {
     emits("clickItem", k);
 };
+const getRandomAvatar = () => {
+    const index = Math.floor(Math.random() * avatarList.value.length)
+    return avatarList.value[index]
+}
 const handleClickActivity = async (item) => {
     if (item) {
         const res = await receiveCoupon({
