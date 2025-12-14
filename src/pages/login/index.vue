@@ -51,6 +51,13 @@ onMounted(() => {
       localStorage.removeItem("remember");
     }
   }
+  if (route.query.loginType) {
+    pageType.value = Number(route.query.loginType)
+  }
+  if (route.query.inviteCode) {
+    postData.inviteCode = route.query.inviteCode as string
+  }
+
 });
 const typeArr = [
   {

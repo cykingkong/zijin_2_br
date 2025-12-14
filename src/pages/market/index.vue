@@ -15,11 +15,11 @@ const stockSkeleton = ref(false);
 const stockList = ref<any>([]);
 const tabList = ref([
   {
-    name: t("US Stock"),
+    name: t("Panl A"),
     id: "500",
   },
   {
-    name: t("Mexico Stock"),
+    name: t("Panl B"),
     id: "501",
   },
 ]);
@@ -130,7 +130,7 @@ onMounted(() => {
   <div class="market relative overflow-hidden pb-[20px] bg-white min-h-screen">
     <!-- Top Tabs -->
     <div class="sticky top-0 z-50 bg-white">
-      <van-tabs v-model:active="activeName" @click-tab="tabChange" line-width="20px" color="#333"
+      <van-tabs v-model:active="activeName" @click-tab="tabChange" line-width="180px" color="#333"
         title-active-color="#333" title-inactive-color="#999" class="custom-tabs">
         <van-tab v-for="(item, index) in tabList" :title="item.name" :key="item.id">
         </van-tab>
@@ -164,7 +164,25 @@ onMounted(() => {
           <!-- Like Icon -->
           <div
             class="absolute top-[12px] right-[12px] w-[32px] h-[32px] bg-white rounded-full flex items-center justify-center shadow-sm z-10">
-            <van-icon name="like-o" size="18" color="#333" />
+            <svg class="w-16 h-16" v-if="item.onlyNewUser" viewBox="0 0 16 16" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path d="M4.66667 6.33333V9.66666L2 6.33333V6.33599V9.66666" stroke="#1B1B1B" stroke-linecap="round"
+                stroke-linejoin="round" />
+              <path d="M6.66663 8.00001H8.66663" stroke="#1B1B1B" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M8.99996 6.336H6.66663V9.66667H8.99996" stroke="#1B1B1B" stroke-linecap="round"
+                stroke-linejoin="round" />
+              <path d="M10.6666 6.33333L11 9.66666H11.1426L12.3333 7.66666L13.524 9.66666H13.6666L14 6.33333"
+                stroke="#1B1B1B" stroke-linecap="round" stroke-linejoin="round" />
+              <path
+                d="M12.7413 4.33333C12.588 4.134 12.4253 3.94 12.2427 3.75733C9.89933 1.414 6.10067 1.414 3.75733 3.75733C3.57467 3.94 3.41267 4.134 3.25867 4.33333"
+                stroke="#1B1B1B" stroke-linecap="round" stroke-linejoin="round" />
+              <path
+                d="M3.25867 11.6667C3.412 11.866 3.57467 12.06 3.75733 12.2427C6.10067 14.586 9.89933 14.586 12.2427 12.2427C12.4253 12.06 12.5873 11.866 12.7413 11.6667"
+                stroke="#1B1B1B" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <van-icon name="like-o" size="18" color="#333" v-else />
+
+
           </div>
 
           <!-- Product Image -->
@@ -199,7 +217,7 @@ onMounted(() => {
   name: 'Market',
   meta: {
     title: 'Market',
-    i18n: 'Market'
+    i18n: 'Product Center'
   },
 }
 </route>
@@ -220,7 +238,9 @@ onMounted(() => {
 
 :deep(.van-tabs__line) {
   background: #333;
-  bottom: 6px;
+  // bottom: 6px;
+  height: 1px;
+
 }
 
 .skeleton-animation {

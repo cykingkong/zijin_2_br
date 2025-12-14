@@ -1,23 +1,22 @@
 <template>
   <div class="aboutUs p-12">
-    <div class="about-us-content" v-html="data?.content"></div>
+    <div class="about-us-content" v-html="data"></div>
   </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive } from "vue";
-import { getArticleList } from "@/api/user";
-const { proxy } = getCurrentInstance();
+import { ref } from "vue";
 import { indexInfo } from "@/api/market";
 const data = ref();
 const getData = async () => {
-  const res = await getArticleList({ key: "about_us" });
-  data.value = res.data;
+  const res = await indexInfo();
+  data.value = res.data.aboutUs || '';
   console.log(res.data);
 };
 getData();
 </script>
 <route lang="json5">
 {
+  name: 'aboutUs',
   meta: {
     i18n: 'AboutUs',
   },

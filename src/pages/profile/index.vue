@@ -75,7 +75,7 @@ const cellList = [
         tips: "",
         iconType: "img",
         icon: cell5,
-        url: "",
+        url: "/aboutUs",
         type: "aboutUs",
       },
       {

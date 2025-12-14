@@ -21,26 +21,31 @@
         <div
             class="stats-card bg-white rounded-[16px] border border-[#eee] border-solid p-[20px] mb-[24px] flex justify-between items-center shadow-sm">
             <div class="stat-item flex flex-col items-center">
-                <div class="num text-[20px] font-bold text-[#1A1A1A] mb-[4px]">150</div>
-                <div class="label text-[12px] text-[#999]">有效</div>
+                <div class="num text-[20px] font-bold text-[#1A1A1A] mb-[4px]">{{ teamsData?.topData?.vaildUserCount ||
+                    0
+                    }}</div>
+                <div class="label text-[12px] text-[#999]">{{ $t('Valid') }}</div>
             </div>
             <div class="stat-item flex flex-col items-center">
-                <div class="num text-[20px] font-bold text-[#1A1A1A] mb-[4px]">50</div>
-                <div class="label text-[12px] text-[#999]">无效</div>
+                <div class="num text-[20px] font-bold text-[#1A1A1A] mb-[4px]">{{ teamsData?.topData?.noVaildUserCount
+                    ||
+                    0 }}</div>
+                <div class="label text-[12px] text-[#999]">{{ $t('Invalid') }}</div>
             </div>
             <div class="stat-item flex flex-col items-center">
-                <div class="num text-[20px] font-bold text-[#1A1A1A] mb-[4px]">₹25,000,000</div>
-                <div class="label text-[12px] text-[#999]">团队总充值</div>
+                <div class="num text-[20px] font-bold text-[#1A1A1A] mb-[4px]">₹ {{
+                    teamsData?.topData?.itemRecharge || 0 }}</div>
+                <div class="label text-[12px] text-[#999]">{{ $t('Team Recharge') }}</div>
             </div>
         </div>
 
         <!-- Level Tabs -->
         <div class="level-tabs mb-[20px]">
-            <van-tabs v-model:active="activeTab" shrink line-width="40px" color="#333" title-active-color="#333"
-                title-inactive-color="#999" :border="false">
-                <van-tab title="Level B (10%)" name="b"></van-tab>
-                <van-tab title="Level C (5%)" name="c"></van-tab>
-                <van-tab title="Level D (3%)" name="d"></van-tab>
+            <van-tabs v-model:active="activeTab" line-width="140px" color="#333" title-active-color="#333"
+                :ellipsis="false" title-inactive-color="#999" :border="true">
+                <van-tab :title="`Level B (${teamsData?.rates?.B || 0}%)`" name="B"></van-tab>
+                <van-tab :title="`Level C (${teamsData?.rates?.C || 0}%)`" name="C"></van-tab>
+                <van-tab :title="`Level D (${teamsData?.rates?.D || 0}%)`" name="D"></van-tab>
             </van-tabs>
         </div>
 
@@ -48,16 +53,21 @@
         <div
             class="stats-card bg-white rounded-[16px] border border-[#eee] border-solid p-[20px] mb-[24px] flex justify-between items-center shadow-sm">
             <div class="stat-item flex flex-col items-center">
-                <div class="num text-[20px] font-bold text-[#1A1A1A] mb-[4px]">150</div>
-                <div class="label text-[12px] text-[#999]">有效</div>
+                <div class="num text-[20px] font-bold text-[#1A1A1A] mb-[4px]">{{ teamsData?.levelData?.vaildUserCount
+                    ||
+                    0 }}</div>
+                <div class="label text-[12px] text-[#999]">{{ $t('Valid') }}</div>
             </div>
             <div class="stat-item flex flex-col items-center">
-                <div class="num text-[20px] font-bold text-[#1A1A1A] mb-[4px]">50</div>
-                <div class="label text-[12px] text-[#999]">无效</div>
+                <div class="num text-[20px] font-bold text-[#1A1A1A] mb-[4px]">{{ teamsData?.levelData?.noVaildUserCount
+                    ||
+                    0 }}</div>
+                <div class="label text-[12px] text-[#999]">{{ $t('Invalid') }}</div>
             </div>
             <div class="stat-item flex flex-col items-center">
-                <div class="num text-[20px] font-bold text-[#1A1A1A] mb-[4px]">₹25,000,000</div>
-                <div class="label text-[12px] text-[#999]">佣金收入</div>
+                <div class="num text-[20px] font-bold text-[#1A1A1A] mb-[4px]">₹ {{
+                    teamsData?.levelData?.commisonPrice || 0 }}</div>
+                <div class="label text-[12px] text-[#999]">{{ $t('Commission Income') }}</div>
             </div>
         </div>
 
@@ -65,19 +75,20 @@
         <div class="member-list bg-[#F9FAFB] rounded-[16px] overflow-hidden">
             <!-- Table Header -->
             <div class="flex items-center h-[44px] px-[16px] border-b border-[#eee]">
-                <div class="w-[30%] text-[12px] text-[#333] font-medium">账号</div>
-                <div class="w-[30%] text-[12px] text-[#333] font-medium text-center">下级人数</div>
-                <div class="w-[40%] text-[12px] text-[#333] font-medium text-right">产品总金额</div>
+                <div class="w-[30%] text-[12px] text-[#333] font-medium">{{ $t('Account') }}</div>
+                <div class="w-[30%] text-[12px] text-[#333] font-medium text-center">{{ $t('Subordinate Count') }}</div>
+                <div class="w-[40%] text-[12px] text-[#333] font-medium text-right">{{ $t('Total Product Amount') }}
+                </div>
             </div>
-
             <!-- Table Body -->
             <div class="list-body">
-                <div v-for="(item, index) in memberList" :key="index"
+                <div v-for="(item, index) in teamsData?.userList" :key="index"
                     class="flex items-center h-[48px] px-[16px] bg-white">
                     <div class="w-[30%] text-[14px] text-[#1A1A1A]">{{ item.account }}</div>
-                    <div class="w-[30%] text-[14px] text-[#1A1A1A] text-center">{{ item.count }}</div>
-                    <div class="w-[40%] text-[14px] text-[#1A1A1A] text-right">{{ item.amount }}</div>
+                    <div class="w-[30%] text-[14px] text-[#1A1A1A] text-center">{{ item.chilrenCount }}</div>
+                    <div class="w-[40%] text-[14px] text-[#1A1A1A] text-right">{{ item.productPrice }}</div>
                 </div>
+                <empty v-if="teamsData?.userList?.length == 0" :no-tips="true"></empty>
             </div>
         </div>
 
@@ -87,9 +98,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { showToast } from 'vant';
-
+import { getTeamData } from '@/api/user'
 const inviteLink = ref('https://drops.com/adidasindonesia...');
-const activeTab = ref('d');
+const activeTab = ref('B');
 
 const memberList = ref([
     { account: '123****666', count: 8, amount: '₹100,000' },
@@ -99,11 +110,27 @@ const memberList = ref([
     { account: '123****666', count: 8, amount: '₹100,000' },
     { account: '123****666', count: 8, amount: '₹100,000' },
 ]);
-
+const teamsData = ref<any>({});
+const fetchTeamData = async () => {
+    // level B=1代, C=2代, D=3代
+    const res = await getTeamData({
+        level: activeTab.value
+        , pageIndex: 1
+        , pageSize: 50,
+    });
+    if (res.code == 200) {
+        teamsData.value = res.data || {};
+    }
+}
 const copyLink = () => {
-    // navigator.clipboard.writeText(inviteLink.value);
+    let url = location.href;
+    console.log(location);
+    navigator.clipboard.writeText(origin + '/#/login?loginType=1&inviteCode=' + teamsData.value?.inviteCode);
     showToast('Copied successfully');
 };
+onMounted(() => {
+    fetchTeamData()
+})
 </script>
 
 <style lang="less" scoped>
@@ -123,7 +150,9 @@ const copyLink = () => {
 
 :deep(.van-tabs__line) {
     background-color: #333;
-    bottom: 0;
+    // bottom: 0;
+    width: 100%;
+    height: 1px;
 }
 </style>
 <route lang="json5">

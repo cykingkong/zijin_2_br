@@ -180,7 +180,7 @@ onMounted(() => {
         </div>
       </div>
       <div class="flex icon-box gap-[8px]">
-        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect width="40" height="40" rx="20" fill="#F6F6F6" />
           <path
             d="M18.09 25.2867V25.5908C18.09 26.645 18.945 27.5 20 27.5V27.5C21.055 27.5 21.91 26.645 21.91 25.59V25.2858"
@@ -191,11 +191,12 @@ onMounted(() => {
           <path fill-rule="evenodd" clip-rule="evenodd"
             d="M15.4691 18.49V18.49C15.4691 16.4042 17.1599 14.7142 19.2449 14.7142H20.7558C22.8416 14.7142 24.5316 16.405 24.5316 18.49V18.49V20.8208C24.5316 21.2625 24.7074 21.6867 25.0199 21.9992L25.5541 22.5333C25.8666 22.8458 26.0424 23.27 26.0424 23.7117V23.7117C26.0424 24.5817 25.3374 25.2867 24.4674 25.2867H15.5333C14.6633 25.2867 13.9583 24.5817 13.9583 23.7117V23.7117C13.9583 23.27 14.1341 22.8458 14.4466 22.5333L14.9808 21.9992C15.2933 21.6867 15.4691 21.2625 15.4691 20.8208V18.49Z"
             stroke="#1B1B1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
+        </svg> -->
         <div class="relative">
           <div
-            class="dot absolute top-[4px] right-[1px] py-4 rounded-full bg-[#FF4E4E] color-[#fff] text-[8px] min-w-[18px] text-center">
-            {{ 1 }}
+            class="dot absolute top-[4px] right-[1px] py-4 rounded-full bg-[#FF4E4E] color-[#fff] text-[8px] min-w-[18px] text-center"
+            v-if="userInfo.productCount">
+            {{ userInfo.productCount || 0 }}
           </div>
           <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="40" height="40" rx="20" fill="#F6F6F6" />

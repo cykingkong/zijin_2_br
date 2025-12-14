@@ -55,5 +55,5 @@ onMounted(() => {
 
 <template>
   <VanNavBar v-if="!isShowNavBar" :title="title" :fixed="true" clickable placeholder
-    :left-arrow="!showLeftArrow && navStore.showNavLeft" @click-left="onBack" />
+    :left-arrow="!showLeftArrow && navStore.showNavLeft" @click-left="onBack" z-index="9999" />
 </template>

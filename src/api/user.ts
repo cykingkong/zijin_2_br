@@ -112,3 +112,6 @@ export function notify_list(params): Promise<any> {
 export function walletLogsGrid(params): Promise<any> {
   return request.get('/user/walletLogsGrid', { params })
 }
+export function getTeamData(params): Promise<any> {
+  return request.get('/user/getTeamData', { params })
+}

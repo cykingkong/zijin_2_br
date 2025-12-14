@@ -31,12 +31,12 @@ const tabList = [
     // onIcon: tab3Active,
     // offIcon: tab3,
   },
-  {
-    name: "Message",
-    path: "/wallet",
-    // onIcon: tab4Active,
-    // offIcon: tab4,
-  },
+  // {
+  //   name: "Message",
+  //   path: "/wallet",
+  //   // onIcon: tab4Active,
+  //   // offIcon: tab4,
+  // },
   {
     name: "Profile",
     path: "/profile",
