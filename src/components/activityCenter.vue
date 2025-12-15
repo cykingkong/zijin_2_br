@@ -70,6 +70,12 @@ const getRandomAvatar = () => {
 }
 const handleClickActivity = async (item) => {
     if (item) {
+        localStorage.setItem('activityDetail', JSON.stringify(item))
+
+
+        router.push({
+            path: '/activityDetail',
+        })
         const res = await receiveCoupon({
             couponId: item?.couponId
         })

@@ -188,10 +188,10 @@ onMounted(() => {
         <!-- Info -->
         <div class="info">
           <div class="title text-[15px] font-bold text-[#1A1A1A] leading-[1.3] mb-[6px] line-clamp-2">
-            {{ item.symbol || 'Product Name' }}
+            {{ item.productName || 'Product Name' }}
           </div>
           <div class="price text-[16px] font-bold text-[#FF6B00]">
-            {{ item.lastPrice || '$0.00' }}
+            {{ item.lastPrice || '₹ 0.00' }}
           </div>
         </div>
       </div>

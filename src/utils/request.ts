@@ -94,6 +94,12 @@ function requestHandler(config: InternalAxiosRequestConfig): InternalAxiosReques
   if (savedToken)
     config.headers[REQUEST_TOKEN_KEY] = `Bearer ${savedToken}`
   config.headers["language"] = lang || "zh";
+  if (config.method?.toLowerCase() === 'put' && config.data instanceof FormData) {
+    // 删除 Content-Type 让浏览器自动设置，或者显式设置为 multipart/form-data
+    // delete config.headers['Content-Type'];
+    // 或者显式设置：
+    config.headers['Content-Type'] = 'multipart/form-data';
+  }
   return config
 }
 
@@ -106,7 +112,6 @@ function responseHandler(response: any) {
   // response.config?.loadingToast?.close()
   if (code === 200) {
     closeToast(true)
-
     // 成功时保持Toast显示
     return response.data
   } else {

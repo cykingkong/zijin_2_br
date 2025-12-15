@@ -1,5 +1,5 @@
 <template>
-    <div class="activity-detail w-full">
+    <div class="activity-detail w-full pb-140">
         <div class="close-button h-[56px] w-full flex items-center px-[24px] justify-between">
             <svg class="w-32 h-32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"
                 @click="handleClose">
@@ -13,7 +13,7 @@
         </div>
         <div class="detail-image w-full px-[24px]">
             <div class="image bg-[#f5f5f5] rounded-[16px] min-h-[240px] w-full mb-16">
-                <img :src="info?.image" alt="" class="w-full h-full object-cover rounded-[16px]">
+                <img :src="info?.article_image" alt="" class="w-full h-full object-cover rounded-[16px]">
             </div>
             <div class="title text-[16px] font-bold text-[#333] mb-31">{{ info?.title }}</div>
             <div class="w-full">

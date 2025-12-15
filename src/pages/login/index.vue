@@ -86,7 +86,7 @@ const timer = ref()
 const getCode = async () => {
   if (countdown.value > 0) return
   if (!postData.account) {
-    showToast(t('input.PleaseEnter'))
+    showToast(t('PleaseEnterPhoneNumber'))
     return
   }
   try {
@@ -97,8 +97,6 @@ const getCode = async () => {
     }
     if (params.type == 'phone') {
       params.phone = `${areaInfo.value.dialCode}${postData.account}`
-    } else if (params.type == 'email') {
-      params.email = postData.account
     }
 
     await sendCode(params)

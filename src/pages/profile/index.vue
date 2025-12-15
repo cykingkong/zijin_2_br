@@ -2,7 +2,7 @@
 import router from "@/router";
 import { useI18n } from "vue-i18n";
 import { indexInfo, } from "@/api/market";
-
+import { showFailToast, showLoadingToast, showSuccessToast } from "vant";
 import { locale } from "@/utils/i18n";
 import { useUserStore } from "@/stores";
 import { loanIndex } from "@/api/ipo";
@@ -14,8 +14,10 @@ import cell5 from "@/assets/cell/cell5.png";
 import cell6 from "@/assets/cell/cell6.png";
 import cell7 from "@/assets/cell/cell7.png";
 import cell8 from "@/assets/cell/cell8.png";
+import defaultAvatar from "@/assets/image/avatar.png";
 import { addCommasToNumber } from "@/utils/tool";
-
+import { userUpdate } from '@/api/user'
+import { uploadFile } from "@/api/tool";
 
 
 const userStore = useUserStore();
@@ -23,6 +25,59 @@ const userInfo = computed(() => userStore.userInfo);
 const indexInfoData = ref({
   level_name: '',
 })
+/** 上传头像 */
+const canUpdateAvatar = ref(true)
+const uploadPopShow = ref<boolean>(false)
+const pictureList = ref<any[]>([])
+const userAvatar = ref('')
+const handleClickUploadAvatar = () => {
+  uploadPopShow.value = true;
+  canUpdateAvatar.value = true
+}
+const handleAfterRead = async (file: any, type: any) => {
+  queryUploadFile(file, type);
+};
+const queryUploadFile = async (file: any, type: any) => {
+  file.status = "uploading"; // 显示上传状态
+  // 创建 FormData 对象
+  const formData = new FormData();
+  formData.append("image", file.file);
+  console.log(file, "file.file");
+  // 发起上传请求
+  try {
+    const { data, code } = await uploadFile(formData);
+    if (code == 200) {
+      if (type == 1) {
+        userAvatar.value = data.url;
+        pictureList.value = [{ url: data.url }];
+        console.log(data.url, "dataUrl", type, pictureList.value);
+      }
+      canUpdateAvatar.value = false
+      console.log(userAvatar.value);
+    }
+  } catch (error) {
+    file.status = "failed";
+    file.message = "";
+    showFailToast(t("Upload failed"));
+  }
+};
+// 取到头像地址后 更新用户头像
+const updateUserAvatar = async () => {
+  if (!userAvatar.value) {
+    showFailToast(t("Please Try Again"));
+    return;
+  }
+  const res = await userUpdate({
+    avatar: userAvatar.value,
+  })
+  if (res.code === 200) {
+    showSuccessToast(t("Update successful"));
+    userStore.info();
+    uploadPopShow.value = false;
+
+  }
+}
+/** 上传结束 */
 const { t } = useI18n();
 
 
@@ -184,15 +239,11 @@ onMounted(async () => {
 
 <template>
   <div class="myself-index pt-16">
-    <!-- <VanNavBar title="" :fixed="true" clickable placeholder :left-arrow="false" @click-right="toKfUrl">
-      <template #right>
-        <van-icon name="service-o" class="icon" />
-      </template>
-</VanNavBar> -->
     <div class="top-info flex items-center justify-between px-16">
       <div class="user-info flex items-center gap-[12px]">
-        <div class="avatar rounded-full bg-[#f0f0f0] w-[40px] h-[40px] flex items-center justify-center">
-          <img src="@/assets/image/avatar.png" alt="" class="w-full h-full object-cover rounded-full">
+        <div class="avatar rounded-full bg-[#f0f0f0] w-[40px] h-[40px] flex items-center justify-center"
+          @click="handleClickUploadAvatar">
+          <img :src="userInfo.avatar || defaultAvatar" alt="" class="w-full h-full object-cover rounded-full">
         </div>
         <div class="info">
           <div class="phone text-[16px] text-[#000] font-bold">{{ indexInfoData.level_name + userInfo.level }} </div>
@@ -317,7 +368,48 @@ onMounted(async () => {
         }}</van-button> -->
     </div>
 
+    <van-popup v-model:show="uploadPopShow" destroy-on-close round :position="'center'" :safe-area-inset-bottom="true">
+      <div class="p-12">
+        <div class="upload-label  mb-12" :class="['flex items-center gap-4']">
+          {{ t('Upload Avatar') }}
+        </div>
+        <van-uploader accept="image/*" preview-image :max-count="1" v-model="pictureList"
+          :after-read="(file) => handleAfterRead(file, 1)" class="w-full flex items-center justify-center">
+          <div
+            class="upload-box  w-[300px] mx-auto rounded-[12px] h-[168px] border flex items-center justify-center flex-col text-center">
+            <svg class="w-25 h-24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M17.5 9.00195C19.675 9.01406 20.8529 9.11051 21.6213 9.8789C22.5 10.7576 22.5 12.1718 22.5 15.0002V16.0002C22.5 18.8286 22.5 20.2429 21.6213 21.1215C20.7426 22.0002 19.3284 22.0002 16.5 22.0002H8.5C5.67157 22.0002 4.25736 22.0002 3.37868 21.1215C2.5 20.2429 2.5 18.8286 2.5 16.0002L2.5 15.0002C2.5 12.1718 2.5 10.7576 3.37868 9.87889C4.14706 9.11051 5.32497 9.01406 7.5 9.00195"
+                stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" />
+              <path d="M12.5 15L12.5 2M12.5 2L15.5 5.5M12.5 2L9.5 5.5" stroke="#1C274C" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
 
+            <div class="t w-[263px] mt-[24px] mb-[8px]">{{ t("Choose a file") }}</div>
+            <div class="tips font-size-[12px] font-normal color-[#676F74] w-[263px]">
+              {{
+                t(
+                  "Ensure your avatar is in PNG, JPG with a maximum file size of 5MB."
+                )
+              }}
+            </div>
+          </div>
+        </van-uploader>
+        <div class="w-full flex gap-12 pb-12 mt-12">
+          <div class="btn-box flex-1">
+            <van-button type="default" class="h-[30]!" plain block @click="uploadPopShow = false">
+              {{ t("Cancel") }}
+            </van-button>
+          </div>
+          <div class="btn-box flex-1">
+            <van-button type="primary" :disabled="canUpdateAvatar" class="h-[30]!" color="#1b1b1b" block
+              @click="updateUserAvatar">
+              {{ t("Confirm") }}
+            </van-button>
+          </div>
+        </div>
+      </div>
+    </van-popup>
   </div>
 </template>
 
@@ -399,9 +491,19 @@ onMounted(async () => {
   border-radius: 16px;
 }
 
+.upload-box {
+  border: 1px #1c2024 dashed;
+}
+
 .withdraw-btn {
   border: 1px solid #F0F0F0;
   color: #000;
   background-color: #fff;
+}
+
+.btn-box {
+  :deep(.van-button) {
+    height: 40px !important;
+  }
 }
 </style>

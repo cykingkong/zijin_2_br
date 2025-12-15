@@ -1,17 +1,8 @@
 <template>
-  <div
-    class="fixed bottom-btn-box w-full px-24px left-0 flex gap-12"
-    :style="{ background: bgColor }"
-  >
-    <van-button
-      type="primary"
-      class="h-56px"
-      :color="color"
-      block
-      @click="handleClick"
-      :loading="loading"
-      :disabled="disabled"
-    >
+  <div class="fixed bottom-btn-box w-full px-[24px] left-0 flex gap-12"
+    :style="{ background: bgColor, zIndex: zIndex }">
+    <van-button type="primary" class="h-[56px]" :color="color" block @click="handleClick" :loading="loading"
+      :disabled="disabled">
       {{ buttonText }}
     </van-button>
     <slot name="btn"> </slot>
@@ -27,6 +18,7 @@ interface Props {
   disabled?: boolean;
   bgColor?: string;
   color?: string;
+  zIndex?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -35,6 +27,7 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   bgColor: "white",
   color: "#6B39F4",
+  zIndex: 10,
 });
 
 const emit = defineEmits<{

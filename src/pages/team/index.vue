@@ -102,14 +102,7 @@ import { getTeamData } from '@/api/user'
 const inviteLink = ref(location.origin + '/#/login?loginType=1&inviteCode=...');
 const activeTab = ref('B');
 
-const memberList = ref([
-    { account: '123****666', count: 8, amount: '₹100,000' },
-    { account: '123****666', count: 8, amount: '₹100,000' },
-    { account: '123****666', count: 8, amount: '₹100,000' },
-    { account: '123****666', count: 8, amount: '₹100,000' },
-    { account: '123****666', count: 8, amount: '₹100,000' },
-    { account: '123****666', count: 8, amount: '₹100,000' },
-]);
+
 const teamsData = ref<any>({});
 const fetchTeamData = async () => {
     // level B=1代, C=2代, D=3代

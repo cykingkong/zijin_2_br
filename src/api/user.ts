@@ -115,3 +115,6 @@ export function walletLogsGrid(params): Promise<any> {
 export function getTeamData(params): Promise<any> {
   return request.get('/user/getTeamData', { params })
 }
+export function userUpdate(data): Promise<any> {
+  return request.post('/user/userUpdate', data)
+}
