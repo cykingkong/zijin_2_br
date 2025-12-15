@@ -112,7 +112,8 @@
       <div class="p-12">
 
         <div
-          class="add-bank-li mb-12 h-52 border border-[#f0f0f0] border-solid rounded-[16px] p-[12px] flex justify-between items-center">
+          class="add-bank-li mb-12 h-52 border border-[#f0f0f0] border-solid rounded-[16px] p-[12px] flex justify-between items-center"
+          @click="handleClickAddBank">
           <div class="name flex items-center gap-12 text-[#0F172A] text-[14px] font-bold">
             <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -131,7 +132,7 @@
         </div>
         <div
           class="add-bank-li mb-12 h-52 border border-[#f0f0f0] border-solid rounded-[16px] p-[12px] flex justify-between items-center"
-          v-for="(item, index) in bankList" :key="index" @click="selectBank = item.id; showPicker = false;">
+          v-for="(item, index) in bankList" :key="index" @click="selectBank = item.id; showPicker = false; info = item">
           <div class="name text-[#0F172A] text-[14px] font-bold">
             {{ item.address.receiveName }}
           </div>
@@ -189,6 +190,11 @@ const handleKeyClick = (key: string) => {
     appendNumber(key);
   }
 };
+const handleClickAddBank = () => {
+  router.push({
+    path: "/profile/bankAccount/addBank"
+  })
+}
 const onSelect = () => {
   // router.replace("/wallet/exchange/withdraw-bank");
   showPicker.value = true

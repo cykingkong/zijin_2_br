@@ -1,16 +1,16 @@
 <template>
   <div class="wallet">
-    <div class="h-265px w-full top-info">
-      <div class="w-full h-56px mb-4px"></div>
-      <div class="info-box px-24px flex flex-col gap-4px h-102px">
-        <div class="t1 text-#B59CFA text-16px">{{ t("Balance") }}</div>
-        <div class="t1 text-#fff text-34px line-height-140%">
+    <div class="h-[265px] w-full top-info">
+      <div class="w-full h-[56px] mb-[4px]"></div>
+      <div class="info-box px-[24px] flex flex-col gap-[4px] h-[102px]">
+        <div class="t1 text-[#B59CFA] text-[16px]">{{ t("Balance") }}</div>
+        <div class="t1 text-[#fff] text-[34px] line-height-[140%]">
           ₹{{ addCommasToNumber(userInfo.user_balance) }}
         </div>
       </div>
-      <div class="btn-box w-full flex gap-10px px-24px mt-33px">
+      <div class="btn-box w-full flex gap-[10px] px-[24px] mt-[33px]">
         <div
-          class="rounded-12px border-#fff border-1px border-solid h-36px flex-1 flex items-center gap-12px justify-center text-#fff text-16px"
+          class="rounded-[12px] border-[#fff] border border-solid h-[36px] flex-1 flex items-center gap-[12px] justify-center text-[#fff] text-[16px]"
           @click="handleClickBtn(1)">
           <svg class="w-17 h-16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -21,7 +21,7 @@
           {{ t("Withdraw") }}
         </div>
         <div
-          class="rounded-12px border-#fff border-1px border-solid h-36px flex-1 flex items-center gap-12px justify-center text-#fff text-16px"
+          class="rounded-[12px] border-[#fff] border border-solid h-[36px] flex-1 flex items-center gap-[12px] justify-center text-[#fff] text-[16px]"
           @click="handleClickBtn(2)">
           <svg class="w-17 h-16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0_226_2318)">
@@ -40,25 +40,26 @@
         </div>
       </div>
     </div>
-    <div class="list w-full px-14px">
-      <div class="list-title flex items-center h-40px justify-between">
-        <div class="text-#0F172A text-16px font-700">
+    <div class="list w-full px-[14px]">
+      <div class="list-title flex items-center h-[40px] justify-between">
+        <div class="text-[#0F172A] text-[16px] font-bold">
           {{ t("Transactions") }}
         </div>
-        <div class="text-#6B39F4 text-16px" @click="reload">
+        <div class="text-[#6B39F4] text-[16px]" @click="reload">
           {{ t("Reload") }}
         </div>
       </div>
       <div class="list-content">
         <div class="list-items mb-24" v-for="(item, index) in list" :key="index">
-          <div class="item-time text-#64748B text-14px font-600">
+          <div class="item-time text-[#64748B] text-[14px] font-semibold">
             {{ item.date }}
           </div>
           <div
-            class="item mt-12 w-full rounded-12px border-1px border-solid border-#E2E8F0 min-h-78px flex items-center justify-between px-16px"
+            class="item mt-12 w-full rounded-[12px] border border-solid border-[#E2E8F0] min-h-[78px] flex items-center justify-between px-[16px]"
             v-for="(el, k) in item.transactions" :key="k" :item="el">
-            <div class="left h-46px flex items-center gap-16px w-220px flex-shrink-0">
-              <div class="img rounded-full w-40px h-40px overflow-hidden flex items-center justify-center bg-#F8F5FF">
+            <div class="left h-[46px] flex items-center gap-[16px] w-[220px] flex-shrink-0">
+              <div
+                class="img rounded-full w-[40px] h-[40px] overflow-hidden flex items-center justify-center bg-[#F8F5FF]">
                 <!-- in-Svg -->
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" :class="el.type" v-if="el.type == 'income'"
                   xmlns="http://www.w3.org/2000/svg">
@@ -81,15 +82,15 @@
                     fill="#f43368" :class="el.type" />
                 </svg>
               </div>
-              <div class="info h-46px flex flex-col justify-between">
-                <div class="name text-#0F172A text-14px font-bold">
+              <div class="info h-[46px] flex flex-col justify-between">
+                <div class="name text-[#0F172A] text-[14px] font-bold">
                   {{ el.log_type }}
                 </div>
-                <div class="time text-#64748B text-12px">{{ el.time }}</div>
+                <div class="time text-[#64748B] text-[12px]">{{ el.time }}</div>
               </div>
             </div>
 
-            <div class="right h-46px text-right flex flex-col justify-between gap-4px w-full text-right">
+            <div class="right h-[46px] text-right flex flex-col justify-between gap-[4px] w-full text-right">
               <div class="unit">{{ el.type == "income" ? "" : "-" }} ₹</div>
               {{ el.amount }}
             </div>
@@ -167,10 +168,12 @@ const loadMore = () => {
   page.page++;
   getWalletLogs();
 };
-onMounted(async () => {
-  await userStore.info();
 
-  getWalletLogs();
+onMounted(async () => {
+  router.push("/wallet/exchange/cashierCenter");
+  // await userStore.info();
+
+  // getWalletLogs();
 });
 </script>
 <style lang="less" scoped>

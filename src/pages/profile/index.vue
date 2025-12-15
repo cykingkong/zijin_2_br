@@ -43,7 +43,7 @@ const cellList = [
         tips: "",
         iconType: "img",
         icon: cell1,
-        url: "/profile/changePassword",
+        url: "/forgot-password?noLogin=1",
         type: "changePassword",
       },
       {
@@ -131,9 +131,9 @@ const formatName = (str) => {
 };
 const handleHerf = (type) => {
   if (type == 2) {
-    router.push("/wallet/exchange/channel-out");
+    router.push("/wallet/exchange/cashierCenter");
   } else {
-    router.push("/wallet/exchange/withdraw-bank");
+    router.push("/wallet/exchange/cashierCenter-withdraw");
   }
 }
 const handleClickCell = async (item: any) => {

@@ -42,10 +42,10 @@ export function walletInfo(params): Promise<any> {
   return request.get('/user/walletInfo', { params })
 }
 export function forgetPassword(data): Promise<any> {
-  return request.post('/api/auth/resetPassword', data)
+  return request.post('/user/forgetPassword', data)
 }
 export function updatePassword(data): Promise<any> {
-  return request.post('/app-api/user/updatePassword', data)
+  return request.post('/user/updatePassword', data)
 }
 export function register(data): Promise<any> {
   return request.post('/user/register', data)

@@ -17,6 +17,8 @@ export const navWhiteList: readonly string[] = [
   'profile', // 个人中心
   'quotes',
   'activityDetail',
+  '/wallet/exchange/cashierCenter',
+  '/wallet/exchange/cashierCenter-withdraw',
   'Team',
   'login'
 ]

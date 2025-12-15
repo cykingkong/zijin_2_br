@@ -99,7 +99,7 @@
 import { ref } from 'vue';
 import { showToast } from 'vant';
 import { getTeamData } from '@/api/user'
-const inviteLink = ref('https://drops.com/adidasindonesia...');
+const inviteLink = ref(location.origin + '/#/login?loginType=1&inviteCode=...');
 const activeTab = ref('B');
 
 const memberList = ref([

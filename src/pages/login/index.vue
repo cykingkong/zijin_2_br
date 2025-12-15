@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import type { RouteMap } from "vue-router";
 import { useUserStore } from "@/stores";
 import { useLoadingStore } from "@/stores/modules/loading";
 
@@ -10,7 +9,7 @@ import CloseButton from "@/components/CloseButton.vue";
 import { languageColumns, locale } from "@/utils/i18n";
 import { sendCode, register } from "@/api/user";
 
-const pageType = ref(0) // 0 login 1 register
+const pageType = ref(0) // 0 login 1 register 2 changePwd
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
@@ -35,8 +34,6 @@ function onBack() {
 }
 
 onMounted(() => {
-
-
   // 页面加载时检查是否有保存的登录信息
   const savedLoginInfo = localStorage.getItem("remember");
   if (savedLoginInfo) {
@@ -290,7 +287,7 @@ async function login() {
       <div class="label mb-8 mt-12" :class="['flex items-center gap-4']">
         {{ t('Phone') }}
       </div>
-      <div class="phone-input flex items-center gap-[12px]" v-if="type == '1'">
+      <div class="phone-input flex items-center gap-[12px]">
         <div class="picker flex-shrink-0 h-[48px] rounded-[12px] flex items-center justify-center px-16"
           @click="hanleClickAreaPick">
           <div class="iti-flag mr-10 rounded-full" :class="areaInfo?.code" style="transform: scale(1.5)"></div>

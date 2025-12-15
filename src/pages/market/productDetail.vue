@@ -20,7 +20,7 @@
 
         <!-- 2. Coupon Selection -->
         <div class="coupon-section mt-[20px]">
-            <h3 class="text-[16px] font-bold text-[#1A1A1A] mb-[12px]">优惠券选择</h3>
+            <h3 class="text-[16px] font-bold text-[#1A1A1A] mb-[12px]">{{ t("Counpon Select") }}</h3>
 
             <!-- Coupon List -->
             <div class="coupon-list flex flex-col gap-[12px]">
@@ -73,42 +73,42 @@
 
         <!-- 3. Purchase Details -->
         <div class="detail-section mt-[24px]">
-            <h3 class="text-[16px] font-bold text-[#1A1A1A] mb-[12px]">产品购买详情</h3>
+            <h3 class="text-[16px] font-bold text-[#1A1A1A] mb-[12px]">{{ t("Purchase Details") }}</h3>
 
             <div class="detail-card border border-[#eee] border-solid rounded-[16px] p-[16px]">
                 <div class="row flex justify-between mb-[12px]">
-                    <span class="label text-[14px] text-[#999]">产品价格</span>
+                    <span class="label text-[14px] text-[#999]">{{ t("Product Price") }}</span>
                     <span class="value text-[14px] text-[#666]">₹{{ productInfo.price || '1,099.00' }}</span>
                 </div>
                 <div class="row flex justify-between mb-[12px]">
-                    <span class="label text-[14px] text-[#999]">每日收入</span>
+                    <span class="label text-[14px] text-[#999]">{{ t("Daily Income") }}</span>
                     <span class="value text-[14px] text-[#666]">₹{{ productInfo.dailyIncome }}</span>
                 </div>
                 <div class="row flex justify-between mb-[12px]">
-                    <span class="label text-[14px] text-[#999]">周期天数</span>
-                    <span class="value text-[14px] text-[#666]">{{ productInfo.incomeCycle }} 天</span>
+                    <span class="label text-[14px] text-[#999]">{{ t("Income Cycle") }}</span>
+                    <span class="value text-[14px] text-[#666]">{{ productInfo.incomeCycle }} {{ t("Days") }}</span>
                 </div>
                 <div class="row flex justify-between mb-[12px]">
-                    <span class="label text-[14px] text-[#999]">等级限制</span>
+                    <span class="label text-[14px] text-[#999]">{{ t("Level Limit") }}</span>
                     <span class="value text-[14px] text-[#666]">{{ productInfo.levelLimit == 0 ? t('NoLimit') :
                         t('LevelLimit') }}</span>
                 </div>
                 <div class="row flex justify-between mb-[12px]">
-                    <span class="label text-[14px] text-[#999]">限购数量</span>
+                    <span class="label text-[14px] text-[#999]">{{ t("Purchase Limit") }}</span>
                     <span class="value text-[14px] text-[#666]">{{ productInfo.purchaseLimit ? productInfo.purchaseLimit
                         : t('NoLimit') }}</span>
                 </div>
                 <div class="row flex justify-between mb-[12px]">
-                    <span class="label text-[14px] text-[#999]">新购奖励</span>
+                    <span class="label text-[14px] text-[#999]">{{ t("New User Reward") }}</span>
                     <span class="value text-[14px] text-[#FF4E4E]">₹{{ productInfo.newUserReward }}</span>
                 </div>
                 <div class="row flex justify-between mb-[16px] pb-[16px] border-b border-[#eee]">
-                    <span class="label text-[14px] text-[#999]">折扣百分比</span>
+                    <span class="label text-[14px] text-[#999]">{{ t("Discount Rate") }}</span>
                     <span class="value text-[14px] text-[#FF4E4E]">{{ productInfo.discountRate }}%</span>
                 </div>
 
                 <div class="total-row flex justify-between items-center">
-                    <span class="label text-[14px] font-bold text-[#333]">支付总金额</span>
+                    <span class="label text-[14px] font-bold text-[#333]">{{ t("Total Payment Amount") }}</span>
                     <span class="value text-[18px] font-bold text-[#1A1A1A]">₹ {{ totalPrice }}</span>
                 </div>
             </div>

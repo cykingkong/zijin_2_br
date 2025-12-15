@@ -176,7 +176,7 @@ function onBack() {
 
 <template>
   <div class="cashier-center-content w-full px-12 pb-120">
-    <VanNavBar title="" :fixed="true" clickable :left-arrow="true" z-index="999" @click-left="onBack">
+    <VanNavBar :title="`${t('Deposit')}`" :fixed="true" clickable :left-arrow="true" z-index="999" @click-left="onBack">
       <template #title>
         <div class="text-[16px] color-[#0F172A] font-bold">
           {{ t("Deposit") }}

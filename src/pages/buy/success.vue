@@ -19,14 +19,27 @@
 
 
 
-    <BottomButton :button-text="t('Done')" color="#1B1B1B"></BottomButton>
+    <BottomButton :button-text="t('Done')" color="#1B1B1B" @click="handleClickDone"></BottomButton>
   </div>
 </template>
 
 <script setup lang="ts">
 import { addCommasToNumber } from "@/utils/tool";
 import { ref, onMounted, watch } from "vue";
+const router = useRouter()
+const handleClickDone = () => {
+  router.push({ name: 'home' })
+}
 const { t } = useI18n()
 </script>
 
 <style lang="less" scoped></style>
+<route lang="json5">
+{
+  name: 'buySuccess',
+  meta: {
+    title: '',
+    i18n: 'Success'
+  },
+}
+</route>

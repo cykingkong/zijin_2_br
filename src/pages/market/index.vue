@@ -7,24 +7,15 @@ const activeName = ref(0);
 const searchMarkShow = ref(false);
 const page = reactive({
   pageIndex: 1,
-  pageSize: 5,
+  pageSize: 10,
 });
 const { t } = useI18n();
 const listStatus = ref(1); // 1-加载中 2-成功 3-已无更多
 const stockSkeleton = ref(false);
 const stockList = ref<any>([]);
-const tabList = ref([
-  {
-    name: t("Panl A"),
-    id: "500",
-  },
-  {
-    name: t("Panl B"),
-    id: "501",
-  },
-]);
+const tabList = ref([]);
 const userProductArr = ref([])
-const categoryId = ref("200");
+const categoryId = ref();
 const getUserProArr = async () => {
   try {
     const res = await userProductList({
@@ -41,12 +32,17 @@ const getProductList = async () => {
     stockSkeleton.value = true;
   }
   const { data, code } = await productList({
-    type: categoryId.value,
+    classId: tabList.value[activeName.value]?.id || null,
     ...page,
   });
   if (code == 200) {
     console.log(stockSkeleton.value);
-
+    tabList.value = data.classList.map((e) => {
+      return {
+        name: e.class_name,
+        id: e.class_id,
+      }
+    }) || []
     if (!data.rows) {
       listStatus.value = 3;
       stockSkeleton.value = false;
@@ -70,13 +66,9 @@ const getProductList = async () => {
 
   }
 };
-const tabChange = (index: number) => {
-  activeName.value = index;
-  if (index == 0) {
-    categoryId.value = "200";
-  } else {
-    categoryId.value = "201";
-  }
+const tabChange = (item: any) => {
+  console.log(item, activeName.value)
+
   // 重置分页和状态
   page.pageIndex = 1;
   stockList.value = [];
@@ -206,7 +198,7 @@ onMounted(() => {
     </div>
 
     <!-- Empty State -->
-    <empty v-if="stockList && stockList.length == 0"></empty>
+    <empty v-if="stockList && stockList.length == 0" :no-tips="true"></empty>
     <LoadMore :status="listStatus" @load-more="loadMore" />
 
   </div>
