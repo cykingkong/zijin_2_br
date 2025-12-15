@@ -5,6 +5,9 @@
             <div class="image-box w-full rounded-[16px] bg-[#f5f5f5] min-h-[150px]">
                 <img :src="item?.article_image" alt="" class="w-full h-full  min-h-[150px] object-cover rounded-[16px]">
             </div>
+            <div class="my-6 text-gray text-12">
+                <div class="" v-html="item.content"></div>
+            </div>
             <div class="info pl-4 my-12">
                 <div class="title text-[16px] font-bold text-[#333] mb-4">{{ item?.title }}</div>
                 <div class="tips text-[14px] text-[#666]">{{ item?.tips }}</div>
@@ -23,6 +26,7 @@
                     <img :src="getRandomAvatar()" alt="" class="w-full h-full object-cover">
                 </div>
             </div>
+
             <div class="join-btn w-full rounded-[16px] mt-[24px] text-[#00334E] text-[16px] font-bold text-align-center h-[44px] flex items-center justify-center"
                 @click="handleClickActivity(item)">
                 {{ t('Claim Coupon') }}
@@ -68,6 +72,7 @@ const getRandomAvatar = () => {
     const index = Math.floor(Math.random() * avatarList.value.length)
     return avatarList.value[index]
 }
+const router = useRouter()
 const handleClickActivity = async (item) => {
     if (item) {
         localStorage.setItem('activityDetail', JSON.stringify(item))
@@ -76,12 +81,12 @@ const handleClickActivity = async (item) => {
         router.push({
             path: '/activityDetail',
         })
-        const res = await receiveCoupon({
-            couponId: item?.couponId
-        })
-        if (res.code == 200) {
-            showSuccessToast('Claim Coupon Success')
-        }
+        // const res = await receiveCoupon({
+        //     couponId: item?.couponId
+        // })
+        // if (res.code == 200) {
+        //     showSuccessToast('Claim Coupon Success')
+        // }
 
     }
 }

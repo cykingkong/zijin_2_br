@@ -42,7 +42,7 @@
         <!-- Level Tabs -->
         <div class="level-tabs mb-[20px]">
             <van-tabs v-model:active="activeTab" line-width="140px" color="#333" title-active-color="#333"
-                :ellipsis="false" title-inactive-color="#999" :border="true">
+                :ellipsis="false" title-inactive-color="#999" :border="true" @change="handleChangeTab">
                 <van-tab :title="`Level B (${teamsData?.rates?.B || 0}%)`" name="B"></van-tab>
                 <van-tab :title="`Level C (${teamsData?.rates?.C || 0}%)`" name="C"></van-tab>
                 <van-tab :title="`Level D (${teamsData?.rates?.D || 0}%)`" name="D"></van-tab>
@@ -89,6 +89,7 @@
                     <div class="w-[40%] text-[14px] text-[#1A1A1A] text-right">{{ item.productPrice }}</div>
                 </div>
                 <empty v-if="teamsData?.userList?.length == 0" :no-tips="true"></empty>
+
             </div>
         </div>
 
@@ -109,7 +110,7 @@ const fetchTeamData = async () => {
     const res = await getTeamData({
         level: activeTab.value
         , pageIndex: 1
-        , pageSize: 50,
+        , pageSize: 100,
     });
     if (res.code == 200) {
         teamsData.value = res.data || {};
@@ -121,6 +122,9 @@ const copyLink = () => {
     navigator.clipboard.writeText(origin + '/#/login?loginType=1&inviteCode=' + teamsData.value?.inviteCode);
     showToast('Copied successfully');
 };
+const handleChangeTab = () => {
+    fetchTeamData()
+}
 onMounted(() => {
     fetchTeamData()
 })
