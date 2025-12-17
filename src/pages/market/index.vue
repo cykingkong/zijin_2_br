@@ -114,7 +114,7 @@ const loadMore = () => {
 
 onMounted(() => {
   getProductList();
-  getUserProArr()
+  // getUserProArr()
 });
 </script>
 
@@ -190,8 +190,23 @@ onMounted(() => {
           <div class="title text-[15px] font-bold text-[#1A1A1A] leading-[1.3] mb-[6px] line-clamp-2">
             {{ item.productName || 'Product Name' }}
           </div>
+          <div class="bottom text-12 my-6">
+            <div class="li flex justify-between">
+              <div class="label text-[#666]">{{ $t('Cycle') }}</div>
+              <div class="value text-amber">{{ `${item.incomeCycle} ${$t('Days')}` || '- ' + $t('Days') }}</div>
+            </div>
+            <div class="li flex justify-between">
+              <div class="label text-[#666]">{{ $t('Daily') }}</div>
+              <div class="value text-amber">₹ {{ item.dailyIncome }}</div>
+            </div>
+            <div class="li flex justify-between">
+              <div class="label text-[#666]">{{ $t('Total') }}</div>
+              <div class="value text-amber">₹ {{ item.totalIncome }}</div>
+            </div>
+
+          </div>
           <div class="price text-[16px] font-bold text-[#FF6B00]">
-            {{ item.lastPrice || '₹ 0.00' }}
+            ₹ {{ item.discountRate || '0.00' }}
           </div>
         </div>
       </div>

@@ -321,7 +321,6 @@ const countries = {
   },
   'Japanese': {
     'br': { 'code': 'br', 'name': 'ブラジル', 'dialCode': 55, 'phoneFormat': '(11) 96123-4567' },
-
     'af': { 'code': 'af', 'name': 'アフガニスタン', 'dialCode': 93, 'phoneFormat': '070 123 4567' },
     'al': { 'code': 'al', 'name': 'アルバニア', 'dialCode': 355, 'phoneFormat': '066 123 4567' },
     'dz': { 'code': 'dz', 'name': 'アルジェリア', 'dialCode': 213, 'phoneFormat': '0551 23 45 67' },

@@ -1,7 +1,13 @@
 <template>
   <div class="stockOrderList w-full p-24">
-
-
+    <div class="order-type-tab flex justify-center items-center mb-12 gap-[16px]">
+      <div
+        class="tab-item flex-1 flex items-center justify-center text-center border text-14 border-[#E5E5E5] border-solid rounded-[16px] py-4 px-6 h-40"
+        :class="activeTab == index ? 'bg-[#F5F5F5] text-[#222222] font-bold' : 'text-[#999999]'"
+        v-for="(item, index) in orderTypeList" :key="index" @click="activeTab = index; getWalletLogsList()">{{ $t(item)
+        }}
+      </div>
+    </div>
     <div class="order-list pb-[16px] flex-col flex gap-[16px]">
       <stockItem v-for="(item, index) in orderListData" :key="index" :item="item"
         @click="handleClickStockDetail(item)" />
@@ -16,6 +22,8 @@ import { walletLogsGrid } from "@/api/user";
 const { proxy } = getCurrentInstance()!;
 import stockItem from "@/components/stock-item.vue";
 
+const orderTypeList = ref(['All', 'Deposit', 'Withdrawal'])
+const activeTab = ref(0)
 const orderListData = ref([]);
 const router = useRouter();
 const listStatus = ref(0); // 0: 初始, 1: 加载中, 2: 可加载更多, 3: 没有更多
@@ -27,16 +35,17 @@ const page = reactive({
 // 加载更多
 const loadMore = () => {
   page.pageIndex++;
-  getStockOrderList();
+  getWalletLogsList();
 };
 
 // 获取股票订单列表
-const getStockOrderList = async () => {
+const getWalletLogsList = async () => {
   try {
     listStatus.value = 1; // 开始加载
 
     const { data } = await walletLogsGrid({
       ...page,
+      type: activeTab.value == 0 ? null : activeTab.value,
     });
 
     if (!data.rows || data.rows.length === 0) {
@@ -68,7 +77,7 @@ const getStockOrderList = async () => {
 onMounted(async () => {
 
   // 初始化加载
-  await getStockOrderList();
+  await getWalletLogsList();
   setTimeout(() => {
     console.log(orderListData.value)
 

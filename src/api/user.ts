@@ -73,7 +73,7 @@ export function kyc(data): Promise<any> {
   return request.post('/api/user/kyc', data)
 }
 export function getKfUrl(params): Promise<any> {
-  return request.get('/app-api/user/getKfUrl', { params })
+  return request.get('/user/getKfUrl', { params })
 }
 // 用户信息相关
 // 获取可用余额（全部）

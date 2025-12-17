@@ -25,14 +25,14 @@
 
       <div class="countdown flex items-center text-[12px] text-[#FF4E4E] mb-[12px] gap-6">
         <van-icon name="clock-o" class="mr-1" />
-        <span>{{ $t('RemainingUseTime') }} {{ item.validEndTime }}</span>
+        <span>{{ $t('Remaining usable time') }} {{ item.validEndTime }}</span>
       </div>
 
       <div class="coupon-divider relative mb-[12px]">
       </div>
 
       <div class="terms text-[12px] text-[#666]">
-        <span class="text-[#00B86B]">Terms and conditions</span> apply for eligible products
+        <span class="text-[#00B86B]">{{ ($t(`Terms and conditions`)) }}</span> {{ $t(`apply for eligible products`) }}
       </div>
     </div>
     <empty v-if="couponList.length == 0" :no-tips="true" />
@@ -109,7 +109,7 @@ onMounted(() => {
       name: 'userCouponList',
       meta: {
         title: 'userCouponList',
-        i18n: 'userCouponList',
+        i18n: 'List',
       },
     }
 </route>

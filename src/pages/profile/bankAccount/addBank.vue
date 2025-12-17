@@ -1,5 +1,12 @@
 <template>
   <div class="add-content p-24 flex flex-col">
+    <VanNavBar title="" :fixed="true" clickable :left-arrow="true" @click-left="onBack" placeholder z-index="999">
+      <template #title>
+        <div class="flex flex-items-center gap-6 font-size-[18px] font-bold">
+          {{ isEdit ? t("Edit Bank") : t('Add Bank') }}
+        </div>
+      </template>
+    </VanNavBar>
     <div class="label font-bold text-[16px] color-[#64748B]">
       {{ t("Bank") }}
     </div>
@@ -11,7 +18,11 @@
             {{ form.bankName ? form.bankName : t("PleaseSelect") }}
           </div>
           <div class="r flex-shrink-0">
-            <van-icon receiveName="arrow" class="rotate-90" />
+            <svg class="w-16 h-16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 6L8 10L12 6" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+
           </div>
         </div>
       </inputCom>
@@ -43,13 +54,20 @@
     </div>
 
     <div class="label font-bold text-[16px] color-[#64748B]">
-      {{ t("Email") }}
+      {{ t("login.email") }}
     </div>
     <div class="phone-input my-[12px]">
-
       <inputCom :placeholder="t('')" v-model:value="form.receiveEmail" :tips="''">
       </inputCom>
     </div>
+    <div class="label font-bold text-[16px] color-[#64748B]">
+      {{ t("IFSC") }}
+    </div>
+    <div class="phone-input my-[12px]">
+      <inputCom :placeholder="t('')" v-model:value="form.IFSC" :tips="''">
+      </inputCom>
+    </div>
+
     <BottomButton color="#1B1B1B" :button-text="t('Submit')" @click="handleClickSubmit"></BottomButton>
 
 
@@ -105,6 +123,7 @@ const form = reactive({
   bankCode: "",
   bankName: "",
   id: "",
+  IFSC: "",
   receivePhone: "",
   receiveEmail: "",
 });
@@ -132,6 +151,7 @@ const getCardInfo = () => {
   form.receiveAccount = res.address.receiveAccount;
   form.receivePhone = res.address.receivePhone;
   form.receiveEmail = res.address.receiveEmail;
+  form.IFSC = res.address.IFSC;
   form.bankName = res.address.bankName;
   form.bankCode = res.address.bankCode;
   form.id = res.id;
@@ -184,21 +204,24 @@ const handleClickSubmit = () => {
     }
   });
 };
+function onBack() {
+  if (window.history.state.back)
+    history.back()
+  else
+    router.replace('/')
+}
+onUnmounted(() => {
+  local.removelocal('bankAccountInfo')
+})
 onMounted(() => {
-
-  // // 更新浏览器标题
-  // setPageTitle(newTitle);
-  // // 更新路由meta标题（用于导航栏显示）
-
-  // form.type = route.query.type == "1" ? "bank_card" : "crypto";
-  // form.typeDesc = typeDesc[Number(route.query.type)];
   getBankList();
+  if (!local.getlocal('bankAccountInfo')) router.back()
   if (route.query.edit == "1") {
     isEdit.value = true;
     getCardInfo();
     form.id = String(route.query.id);
-
-    console.log(form, 23123);
+    isEdit.value = true
+    console.log(route, 23123);
   }
 });
 </script>
@@ -237,10 +260,9 @@ onMounted(() => {
 </style>
 <route lang="json5">
   {
-    receiveName: 'addBank',
+    name: 'addBank',
     meta: {
-      title: 'addBank',
-      i18n: 'addBank'
+    
     },
   }
   </route>

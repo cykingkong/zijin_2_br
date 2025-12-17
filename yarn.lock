@@ -1547,6 +1547,15 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@lucky-canvas/vue@^0.1.11":
+  version "0.1.11"
+  resolved "https://registry.yarnpkg.com/@lucky-canvas/vue/-/vue-0.1.11.tgz#79d79d1a07b71c572080e638bb78d8636d8d759d"
+  integrity sha512-5vm0txSKRBtMgrE/HZEvw1joSTx9NTdAkc8tBp/aX0LxyhQtiTVBLsRgdYUK/OiURCL8bo+046BTGnV+Q4JFlg==
+  dependencies:
+    "@vue/composition-api" "^1.0.0"
+    lucky-canvas "^1.7.23"
+    vue-demi "^0.7.4"
+
 "@napi-rs/wasm-runtime@^0.2.8":
   version "0.2.8"
   resolved "https://registry.npmmirror.com/@napi-rs/wasm-runtime/-/wasm-runtime-0.2.8.tgz#642e8390ee78ed21d6b79c467aa610e249224ed6"
@@ -2558,6 +2567,11 @@
   dependencies:
     de-indent "^1.0.2"
     he "^1.2.0"
+
+"@vue/composition-api@^1.0.0":
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/@vue/composition-api/-/composition-api-1.7.2.tgz#0b656f3ec39fefc2cf40aaa8c12426bcfeae1b44"
+  integrity sha512-M8jm9J/laYrYT02665HkZ5l2fWTK4dcVg3BsDHm/pfz+MjDYwX+9FUaZyGwEyXEDonQYRCo0H7aLgdklcIELjw==
 
 "@vue/devtools-api@^6.5.0", "@vue/devtools-api@^6.6.4":
   version "6.6.4"
@@ -5693,6 +5707,11 @@ lru-cache@^5.1.1:
   dependencies:
     yallist "^3.0.2"
 
+lucky-canvas@^1.7.23:
+  version "1.7.27"
+  resolved "https://registry.yarnpkg.com/lucky-canvas/-/lucky-canvas-1.7.27.tgz#ce4689e99aa1945d981f0489304f5f3c1789023d"
+  integrity sha512-Ftz6qD+863bI7xijBmZg3dw3cNEc7odPr70EZQcGA14y3TgTAzH65HPosOCd6kKUlMwhntBaHMx3onoj9MtJRQ==
+
 magic-string-ast@^0.7.0:
   version "0.7.1"
   resolved "https://registry.npmmirror.com/magic-string-ast/-/magic-string-ast-0.7.1.tgz#07b044f98d061a71f1e38f08de2fa5fee4051563"
@@ -8432,6 +8451,11 @@ vscode-uri@^3.0.8:
   version "3.1.0"
   resolved "https://registry.npmmirror.com/vscode-uri/-/vscode-uri-3.1.0.tgz#dd09ec5a66a38b5c3fffc774015713496d14e09c"
   integrity sha512-/BpdSx+yCQGnCvecbyXdxHDkuk55/G3xwnC0GqY4gmQ3j+A+g8kzzgB4Nk/SINjqn6+waqw3EgbVF2QKExkRxQ==
+
+vue-demi@^0.7.4:
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.7.5.tgz#88dee7492fc99a0f911ff03fc02c658fa2a79af8"
+  integrity sha512-eFSQSvbQdY7C9ujOzvM6tn7XxwLjn0VQDXQsiYBLBwf28Na+2nTQR4BBBcomhmdP6mmHlBKAwarq6a0BPG87hQ==
 
 vue-eslint-parser@^10.1.3:
   version "10.1.3"

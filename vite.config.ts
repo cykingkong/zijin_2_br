@@ -57,15 +57,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
         },
       },
       rollupOptions: {
-        output: {
-          // 确保图片文件名不变
-          assetFileNames: (assetInfo) => {
-            if (assetInfo.name && assetInfo.name.endsWith('.jpg')) {
-              return 'assets/[name].[ext]';
-            }
-            return 'assets/[name]-[hash].[ext]';
-          }
-        }
+
       }
     },
 

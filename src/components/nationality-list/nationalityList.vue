@@ -43,13 +43,13 @@ const props = defineProps({
   },
 });
 
-let language = ref("pt-BR");
+let language = ref("ind");
 let isShow = ref(false);
 let val = ref("");
 let list = ref([]);
 let countriesFind = ref({});
 const countries = ref(countriesinit);
-let selectIndex = ref("id");
+let selectIndex = ref("in");
 let countryCodeList = ref([
   "93",
   "355",
@@ -943,9 +943,10 @@ onMounted(() => {
   }
   const indonesiaKey = Object.keys(originalCountries).find(
     (key) =>
-      originalCountries[key].name === "印度尼西亚" ||
-      originalCountries[key].name === "Indonesia"
+      originalCountries[key].name === "印度" ||
+      originalCountries[key].name === "India"
   );
+
   if (indonesiaKey) {
     const { [indonesiaKey]: indonesia, ...rest } = originalCountries;
     countriesFind.value = { [indonesiaKey]: indonesia, ...rest };
@@ -959,11 +960,12 @@ const open = () => {
   isShow.value = true;
 };
 const getData = () => {
-  console.log(countries.value);
+  console.log(countries.value, 'getData');
 
   let us = countries.value[locale.value]
-    ? countries.value[locale.value]["id"]
-    : countries.value["en-US"]["id"];
+    ? countries.value[locale.value]["in"]
+    : countries.value["en-US"]["in"];
+
   $emit("getName", us);
 };
 //选择国家
@@ -1002,7 +1004,7 @@ const onSearch = (val) => {
   });
 
   const indonesiaKey = Object.keys(filtered).find(
-    (key) => filtered[key].name === "印度尼西亚" || filtered[key].name === "Indonesia"
+    (key) => filtered[key].name === "印度" || filtered[key].name === "India"
   );
   if (indonesiaKey) {
     const { [indonesiaKey]: indonesia, ...rest } = filtered;

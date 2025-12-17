@@ -1,5 +1,5 @@
 <template>
-  <div class="changePassword-content flex flex-col gap-24 p-12">
+  <div class="changePassword-content flex flex-col  p-12">
 
 
 
@@ -19,20 +19,26 @@
         class="flex-1 w-full">
       </inputCom>
     </div>
+    <div class="label mb-8 mt-12" :class="['flex items-center gap-4']">
+      {{ t('NewPassword') }}
+    </div>
+    <div class="phone-input flex items-center gap-[12px]">
 
-
-    <inputCom :label="t('NewPassword')" v-model:value="form.password" :placeholder="t('NewPassword')">
-    </inputCom>
-    <!-- <inputCom :label="t('input.ConfirmPassword')" v-model:value="form.password_confirmation"
-      :placeholder="t('input.PleaseEnter')"></inputCom> -->
-    <inputCom :label="t('VerificationCode')" :placeholder="t('VerificationCode')" v-model:value="form.code" :tips="''">
-      <template #sendCode>
-        <div class="absolute right-0 font-size-12 sendCode text-[#000]" @click="getCode">
-          {{ countdown > 0 ? `${countdown}s` : t("SendCode") }}
-        </div>
-      </template>
-    </inputCom>
-
+      <inputCom class="w-full" v-model:value="form.password" :placeholder="t('NewPassword')">
+      </inputCom>
+    </div>
+    <div class="label mb-8 mt-12" :class="['flex items-center gap-4']">
+      {{ t('VerificationCode') }}
+    </div>
+    <div class="phone-input flex items-center gap-[12px]">
+      <inputCom class="w-full" :placeholder="t('VerificationCode')" v-model:value="form.code" :tips="''">
+        <template #sendCode>
+          <div class="absolute right-0 font-size-12 sendCode text-[#000]" @click="getCode">
+            {{ countdown > 0 ? `${countdown}s` : t("SendCode") }}
+          </div>
+        </template>
+      </inputCom>
+    </div>
     <bottom-button color="#1b1b1b" :button-text="t('Confirm')" @click="onSubmit"></bottom-button>
     <nationalityList ref="controlChildRef" :title="t('Pick')" @getName="getName"></nationalityList>
   </div>

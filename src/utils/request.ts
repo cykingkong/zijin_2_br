@@ -29,6 +29,7 @@ export type RequestError = AxiosError<{
 function errorHandler(error: RequestError): Promise<any> {
   // 确保在错误处理时关闭loading
   closeToast(true)
+
   if (error.response) {
     const { data = {}, status, statusText, } = error.response
     console.log(error.response, 'err')
@@ -51,6 +52,7 @@ function errorHandler(error: RequestError): Promise<any> {
         router.replace('/login')  // 使用Vue Router的replace方法进行跳转
       }
     }
+
     if (status !== 200) {
       showNotify({
         type: 'danger',
@@ -109,12 +111,19 @@ request.interceptors.request.use(requestHandler, errorHandler)
 // 响应拦截器
 function responseHandler(response: any) {
   const { code, message } = response.data
+  console.log(code, 'code')
   // response.config?.loadingToast?.close()
   if (code === 200) {
     closeToast(true)
     // 成功时保持Toast显示
     return response.data
-  } else {
+  }
+  else if (code == 10002) {
+    closeToast(true)
+    return response.data
+
+  }
+  else {
     closeToast(true)
 
     showNotify({

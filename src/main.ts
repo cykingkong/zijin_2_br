@@ -11,6 +11,8 @@ import { throttleAfterCompletion } from '@/utils/tool'
 import inputCom from './components/inputCom.vue'
 // Vant 桌面端适配
 import '@vant/touch-emulator'
+// 引入转盘
+import VueLuckyCanvas from '@lucky-canvas/vue'
 
 /* --------------------------------
 Vant 中有个别组件是以函数的形式提供的，
@@ -29,6 +31,7 @@ app.use(head)
 app.use(router)
 app.use(pinia)
 app.use(i18n)
+app.use(VueLuckyCanvas)
 app.component('inputCom', inputCom)
 
 // 注册全局防抖方法

@@ -39,11 +39,13 @@
 
 
       </div>
-      <empty v-if="bankListData.length == 0" :noTips="true" :tipsText="`${t('No more')}`"></empty>
+      <empty v-if="bankListData.length == 0" :noTips="false" :tipsText="`${t('No more')}`"></empty>
+
+
     </div>
 
 
-    <bottom-button color="#1B1B1B" :button-text="t('Add Bank Account')" @click="herfUrl()"></bottom-button>
+    <bottom-button color="#1B1B1B" :button-text="$t('Add Bank Account')" @click="herfUrl()"></bottom-button>
 
     <van-popup v-model:show="showPicker" destroy-on-close round :position="'bottom'" :safe-area-inset-bottom="true">
       <div class="content py-[12px]">

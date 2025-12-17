@@ -29,7 +29,7 @@ const webviewUrl = computed(() => {
     if (islogin === 'true') {
         // 使用MD5加密生成wttUUid
         let wttUUid = CryptoJS.MD5(
-            `${userInfo.value.user_id}+WTTexcellent`
+            `${userInfo.value.user_id}+DDBworkers`
         ).toString();
         const selData = {
             uuid: wttUUid,
@@ -41,7 +41,7 @@ const webviewUrl = computed(() => {
 
     } else if (islogin === 'false') {
         // 使用MD5加密生成游客UUid 时间戳 + 固定字符串
-        let ykUUid = CryptoJS.MD5(`${Date.now()}+WTTexcellent`).toString();
+        let ykUUid = CryptoJS.MD5(`${Date.now()}+DDBworkers`).toString();
         return localStorage.getItem("kf_url") + `&uuid=${ykUUid}`;
 
 

@@ -1,35 +1,22 @@
 <template>
-    <div class="item-box w-full px-[24px] py-[24px]  flex overflow-x-auto gap-[20px]  min-h-[335px]">
-        <div class="item w-240 p-[7px] rounded-[16px] bg-[#fff] flex-shrink-0 shadow-[0px_0px_10px_0px_rgba(0,0,0,0.1)]"
+    <div class="item-box  px-24 py-12 flex flex-col gap-12">
+        <div class="news-item w-full rounded-[16px]  min-h-[120px] flex gap-[12px]   p-12 shadow-[0px_0px_10px_0px_rgba(0,0,0,0.1)]"
             v-for="(item, index) in arr" :key="index">
-            <div class="image-box w-full rounded-[16px] bg-[#f5f5f5] min-h-[150px]">
-                <img :src="item?.article_image" alt="" class="w-full h-full  min-h-[150px] object-cover rounded-[16px]">
+            <div class="img w-96 h-96 flex-shrink-0 bg-[#F5F5F5] overflow-hidden rounded-[16px]">
+                <img :src="item.article_image" alt="" v-if="item && item.article_image"
+                    class="w-full h-full object-cover rounded-[16px] ">
             </div>
-            <div class="my-6 text-gray text-12">
-                <div class="" v-html="item.content"></div>
-            </div>
-            <div class="info pl-4 my-12">
-                <div class="title text-[16px] font-bold text-[#333] mb-4">{{ item?.title }}</div>
-                <div class="tips text-[14px] text-[#666]">{{ item?.tips }}</div>
-            </div>
-            <div class="avatar-box relative flex items-center justify-center h-[30px]">
-                <div
-                    class="avatar w-[30px] h-[30px] border-[1px] border-[#fff] rounded-full bg-[#FF4E4E] relative overflow-hidden">
-                    <img :src="getRandomAvatar()" alt="" class="w-full h-full object-cover">
+            <div class="info w-full color-[#111827] font-bold flex flex-col justify-between">
+                {{ item.title }}
+                <div class="w-full flex justify-end">
+                    <div @click="handleClickActivity(item)"
+                        class="receive-btn border b-solid b-[#1b1b1b] rounded-[16px] text-[#1b1b1b] text-[12px] min-w-[86px] h-37 text-center p-6 line-height-[24px]">
+                        {{
+                            t('Receive')
+                        }}
+                    </div>
                 </div>
-                <div
-                    class="avatar w-[30px] h-[30px] border-[1px] border-[#fff] rounded-full bg-[blue] -ml-[10px] relative  overflow-hidden">
-                    <img :src="getRandomAvatar()" alt="" class="w-full h-full object-cover">
-                </div>
-                <div
-                    class="avatar w-[30px] h-[30px] border-[1px] border-[#fff] rounded-full bg-[green] -ml-[10px] relative overflow-hidden">
-                    <img :src="getRandomAvatar()" alt="" class="w-full h-full object-cover">
-                </div>
-            </div>
 
-            <div class="join-btn w-full rounded-[16px] mt-[24px] text-[#00334E] text-[16px] font-bold text-align-center h-[44px] flex items-center justify-center"
-                @click="handleClickActivity(item)">
-                {{ t('Claim Coupon') }}
             </div>
         </div>
     </div>

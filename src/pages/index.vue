@@ -3,12 +3,13 @@ import router from "@/router";
 import Grid from "@/components/grid.vue";
 import { useUserStore } from "@/stores";
 import { navTitleStore } from "@/stores/index";
+import { receiveCoupon } from '@/api/product'
 import { isLogin } from "@/utils/auth";
 import { useI18n } from "vue-i18n";
 import { indexInfo, articleList } from "@/api/market";
 import local from "@/utils/local";
 import { closeToast, showLoadingToast } from "vant";
-
+import { getKfUrl } from '@/api/user'
 const { t } = useI18n();
 const navStore = navTitleStore();
 const newsList = ref([]);
@@ -18,43 +19,50 @@ const userStore = useUserStore();
 const userInfo = computed(() => userStore.userInfo);
 const indexInfoData = ref({
   banners: [],
+  discountBanners: [],
 });
 
 function handleClickGrid(val) {
   if (val === 0) {
-    // local.setlocal('rankInfo', marketData.value.list[0])
-    // router.push('/quotes/openTrade?id=' + marketData.value.list[0].tradingPairsId + '&categoryId=' + categoryId.value)
+
     router.push({
-      path: "/market",
-      // query: {
-      //   id: marketData.value.list[0].tradingPairsId,
-      //   categoryId: categoryId.value
-      // }
+      path: "/exchange",
     });
   }
   if (val === 1) {
-    router.push(`/discount`);
+    router.push({
+      path: "/lottery",
+    });
+
   }
   if (val === 2) {
     router.push({
-      path: "/fund",
-      // query: {
-      //   categoryId: activeName.value == '200' ? "202" : "198",
-      // },
+      path: "/receive",
     });
   }
   if (val === 3) {
     // router.push('/quotes/accountChange?type=3' + '&categoryId=' + categoryId.value)
+    getKfUrl().then((res) => {
+      if (res.code == 200) {
+        window.open(res.data.kfUrl)
+      }
+    })
+  }
+  if (val === 4) {
     router.push({
-      path: "/IPO",
-      query: {
-        type: 3,
-        categoryId: categoryId.value,
-      },
+      path: "/community",
     });
   }
 }
-
+const handleClickBanner = async (item) => {
+  if (!item.coupon_id) return
+  const res = await receiveCoupon({
+    couponId: item?.coupon_id
+  })
+  if (res.code == 200) {
+    showSuccessToast('Claim Coupon Success')
+  }
+}
 function getContent(html) {
   if (!html) return "";
   const reg = /<[^>]+>/g;
@@ -80,8 +88,8 @@ function init() {
         local.setlocal('readedNotice', '0')
         showDatePicker.value = true
       }
-
     }
+    console.log(indexInfoData.value)
   })
   getArticleList({ article_type: 2 })
   getArticleList({ article_type: 3 })
@@ -143,7 +151,7 @@ const formatName = (str) => {
 
   // 去掉开头的62
   let processedStr = str;
-  if (str.startsWith('62')) {
+  if (str.startsWith('91')) {
     processedStr = str.substring(2);
   }
 
@@ -171,11 +179,11 @@ onMounted(() => {
     <header class="header flex items-center justify-between">
       <div class="left flex items-center gap-[16px]">
         <div class="info">
-          <div class="phone color-[#888888] text-12">+62 {{ formatName(userInfo.username) }}</div>
-          <div class="lv text-12 color-[#000]">{{ indexInfoData.level_name + userInfo.level }}</div>
+          <div class="phone color-[#888888] text-12">{{ formatName(userInfo.username) }}</div>
+          <div class="lv text-12 color-[#000]">{{ userInfo && userInfo.levelName ? userInfo.levelName : '--' }}</div>
         </div>
       </div>
-      <div class="flex icon-box gap-[8px]">
+      <div class="flex icon-box gap-[8px]" @click="handleClickGrid(2)">
         <div class="relative">
           <div
             class="dot absolute top-[4px] right-[1px] py-4 rounded-full bg-[#FF4E4E] color-[#fff] text-[8px] min-w-[18px] text-center"
@@ -200,39 +208,50 @@ onMounted(() => {
     </header>
     <div class="detail-image w-full px-[24px]" v-if="indexInfoData.banners.length > 0">
       <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-        <van-swipe-item v-for="item in indexInfoData.banners" :key="item.id">
-          <div class="image bg-[#f5f5f5] rounded-[16px] min-h-[240px] w-full">
-            <img :src="item.image" alt="" class="w-full h-full object-cover rounded-[16px]">
+        <van-swipe-item v-for="item in indexInfoData.banners" :key="index" @click="handleClickBanner(item)">
+          <div class="image bg-[#f5f5f5] rounded-[16px] w-full">
+            <img :src="item.url" alt="" class="w-full h-full object-cover rounded-[16px]">
           </div>
         </van-swipe-item>
-
       </van-swipe>
     </div>
+
     <!-- notice -->
     <div class="w-full px-[24px] my-16">
       <div
-        class="notice text-[12px] gap-[12px] w-full border-[1px] px-12 h-42 border-solid border-[#B1DDC6] bg-[#F7FDFB] rounded-[8px] px-4 py-2 overflow-hidden flex items-center">
-        <svg width="16" height="16" class="w-16 h-16 flex-shrink-0" viewBox="0 0 16 16" fill="none"
-          xmlns="http://www.w3.org/2000/svg">
-          <path d="M9.06668 13.3333H6.93335" stroke="#369A66" stroke-width="1.5" stroke-linecap="round"
-            stroke-linejoin="round" />
-          <path fill-rule="evenodd" clip-rule="evenodd"
-            d="M11.3333 6.68799V6.66666V6.66666C11.3333 4.82599 9.84065 3.33333 7.99998 3.33333V3.33333C6.15931 3.33333 4.66665 4.82599 4.66665 6.66666V6.66666V6.68799V8.33599C4.66665 8.55199 4.54465 8.74866 4.35198 8.84533L4.01665 9.01266C3.59798 9.22266 3.33331 9.65066 3.33331 10.1187V10.1187C3.33331 10.8013 3.88665 11.3547 4.56931 11.3547H11.4306C12.1133 11.3547 12.6666 10.8013 12.6666 10.1187V10.1187C12.6666 9.65066 12.402 9.22266 11.9833 9.01333L11.648 8.84599C11.4553 8.74866 11.3333 8.55199 11.3333 8.33599V6.68799Z"
-            stroke="#369A66" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M12.634 4.03267C12.1593 3.19934 11.4673 2.50734 10.634 2.03267" stroke="#369A66" stroke-width="1.5"
-            stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M3.36603 4.03267C3.84069 3.19934 4.53269 2.50734 5.36603 2.03267" stroke="#369A66" stroke-width="1.5"
-            stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
+        class="notice text-[12px]  w-full border-[1px] px-12 h-42 border-solid border-[#B1DDC6] bg-[#F7FDFB] rounded-[8px] px-4 py-2 overflow-hidden flex items-center">
+
         <div class="content text-no-wrap w-full">
           <van-notice-bar scrollable :text="indexInfoData.noticeContent" background="#F7FDFB" color="#888888"
             class="notice flex-1">
+            <template #left-icon> <svg width="16" height="16" class="w-16 h-16 flex-shrink-0 mr-12" viewBox="0 0 16 16"
+                fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9.06668 13.3333H6.93335" stroke="#369A66" stroke-width="1.5" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M11.3333 6.68799V6.66666V6.66666C11.3333 4.82599 9.84065 3.33333 7.99998 3.33333V3.33333C6.15931 3.33333 4.66665 4.82599 4.66665 6.66666V6.66666V6.68799V8.33599C4.66665 8.55199 4.54465 8.74866 4.35198 8.84533L4.01665 9.01266C3.59798 9.22266 3.33331 9.65066 3.33331 10.1187V10.1187C3.33331 10.8013 3.88665 11.3547 4.56931 11.3547H11.4306C12.1133 11.3547 12.6666 10.8013 12.6666 10.1187V10.1187C12.6666 9.65066 12.402 9.22266 11.9833 9.01333L11.648 8.84599C11.4553 8.74866 11.3333 8.55199 11.3333 8.33599V6.68799Z"
+                  stroke="#369A66" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M12.634 4.03267C12.1593 3.19934 11.4673 2.50734 10.634 2.03267" stroke="#369A66"
+                  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M3.36603 4.03267C3.84069 3.19934 4.53269 2.50734 5.36603 2.03267" stroke="#369A66"
+                  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg> </template>
           </van-notice-bar>
         </div>
       </div>
 
     </div>
+    <div class="detail-image w-full px-[24px]"
+      v-if="indexInfoData.discountBanners && indexInfoData.discountBanners.length > 0">
+      <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+        <van-swipe-item v-for="item in indexInfoData.discountBanners" :key="index" @click="handleClickBanner(item)">
+          <div class="image bg-[#f5f5f5] rounded-[16px] w-full">
+            <img :src="item.url" alt="" class="w-full h-full object-cover rounded-[16px]">
+          </div>
+        </van-swipe-item>
 
+      </van-swipe>
+    </div>
     <Grid @handleClickGrid="handleClickGrid" />
     <div class="indicator-title px-24 font-bold text-[16px] mt-12">
       {{ t("Activity Center") }}
@@ -240,7 +259,7 @@ onMounted(() => {
     <ActivityCenter :arr="activityList" />
     <div class="indicator-title px-24 font-bold text-[16px] mt-12 flex items-center justify-between">
       {{ t("News Center") }}
-      <div class="see-all text-[14px] color-[#9CA3AF]">{{ t("See all") }}</div>
+      <!-- <div class="see-all text-[14px] color-[#9CA3AF]">{{ t("See all") }}</div> -->
     </div>
     <div class="news-list px-24 py-12">
       <div
@@ -278,7 +297,7 @@ onMounted(() => {
   name: 'home',
   meta: {
     title: 'quotes',
-    i18n: 'menus.home'
+    i18n: 'home'
   },
 }
 </route>

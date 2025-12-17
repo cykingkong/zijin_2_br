@@ -15,17 +15,17 @@
                         <div class="detail-card  rounded-[16px] ">
                             <div class="row flex justify-between mb-[12px]">
                                 <span class="label text-[14px] text-[#999]">{{ t("Product Price") }}</span>
-                                <span class="value text-[14px] text-[#666]">₹{{ productInfo.price || '1,099.00'
-                                    }}</span>
+                                <span class="value text-[14px] text-[#666]">₹ {{ productInfo.price || '1,099.00'
+                                }}</span>
                             </div>
                             <div class="row flex justify-between mb-[12px]">
                                 <span class="label text-[14px] text-[#999]">{{ t("Daily Income") }}</span>
-                                <span class="value text-[14px] text-[#666]">₹{{ productInfo.dailyIncome }}</span>
+                                <span class="value text-[14px] text-[#666]">₹ {{ productInfo.dailyIncome }}</span>
                             </div>
                             <div class="row flex justify-between mb-[12px]">
                                 <span class="label text-[14px] text-[#999]">{{ t("Income Cycle") }}</span>
                                 <span class="value text-[14px] text-[#666]">{{ productInfo.incomeCycle }} {{ t("Days")
-                                    }}</span>
+                                }}</span>
                             </div>
                             <div class="row flex justify-between mb-[12px]">
                                 <span class="label text-[14px] text-[#999]">{{ t("Level Limit") }}</span>
@@ -39,18 +39,18 @@
                                     productInfo.purchaseLimit
                                     : t('NoLimit') }}</span>
                             </div>
-                            <div class="row flex justify-between mb-[12px]">
+                            <!-- <div class="row flex justify-between mb-[12px]">
                                 <span class="label text-[14px] text-[#999]">{{ t("New User Reward") }}</span>
-                                <span class="value text-[14px] text-[#FF4E4E]">₹{{ productInfo.newUserReward }}</span>
+                                <span class="value text-[14px] text-[#FF4E4E]">₹ {{ productInfo.newUserReward }}</span>
                             </div>
                             <div class="row flex justify-between mb-[16px] pb-[16px] border-b border-[#eee]">
                                 <span class="label text-[14px] text-[#999]">{{ t("Discount Rate") }}</span>
                                 <span class="value text-[14px] text-[#FF4E4E]">{{ productInfo.discountRate }}%</span>
-                            </div>
+                            </div> -->
 
                             <div class="total-row flex  items-center">
                                 <span
-                                    class="label w-full text-align-right text-nowrap text-[14px] font-bold text-[#333]">{{
+                                    class="label w-full text-align-right text-nowrap text-[14px] font-bold text-[#333] whitespace-nowrap">{{
                                         t(`
                                     Total Payment Amount
                                     `) }}₹ {{ totalPrice }}</span>
@@ -60,7 +60,7 @@
                     </div>
                 </div>
                 <div class="price text-[14px] font-bold text-[#999] text-align-right mt-12 mb-6"> {{ t(`Original Price`)
-                }}:
+                    }}:
                     <span class="discount-price line-through text-[#999]">
                         ₹{{
                             productInfo.originalPrice
@@ -76,9 +76,8 @@
         </div>
 
         <!-- 2. Coupon Selection -->
-        <div class="coupon-section mt-[20px]">
+        <div class="coupon-section mt-[20px]" v-if="couponList && couponList.length > 0">
             <h3 class="text-[16px] font-bold text-[#1A1A1A] mb-[12px]">{{ t("Counpon Select") }}</h3>
-
             <!-- Coupon List -->
             <div class="coupon-list flex flex-col gap-[12px]">
                 <div v-for="(item, index) in couponList" :key="index"
@@ -115,21 +114,23 @@
 
                     <div class="countdown flex items-center text-[12px] text-[#FF4E4E] mb-[12px] gap-6">
                         <van-icon name="clock-o" class="mr-1" />
-                        <span>剩余可使用时间 {{ item.validEndTime }}</span>
+                        <span>{{ t('Remaining usable time') }} {{ item.validEndTime }}</span>
                     </div>
 
                     <div class="coupon-divider relative mb-[12px]">
                     </div>
 
                     <div class="terms text-[12px] text-[#666]">
-                        <span class="text-[#00B86B]">Terms and conditions</span> apply for eligible products
+                        <span class="text-[#00B86B]">{{ t('Terms and conditions') }}</span> {{ t(`
+                        apply for eligible products
+                        `) }}
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- 3. Purchase Details -->
-        <div class="text-[14px] text-[#999] mt-12">{{ productInfo.productContent || '产品介绍' }}</div>
+        <div class="text-[14px] text-[#999] mt-12" v-html="productInfo.productContent"></div>
 
         <bottom-button color="#1B1B1B" :button-text="t('Activate')" @click="activateCoupon"></bottom-button>
     </div>
@@ -184,8 +185,11 @@ const getProductDetail = async (id) => {
     }
 }
 const handleClickCoupon = (item) => {
-
     if (item.status == 2) return
+    if (item.id == selectedCouponId.value) {
+        selectedCouponId.value = -1
+        return
+    }
     selectedCouponId.value = item.id
 }
 const activateCoupon = async () => {

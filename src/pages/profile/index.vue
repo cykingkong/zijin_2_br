@@ -168,7 +168,7 @@ const formatName = (str) => {
 
   // 去掉开头的62
   let processedStr = str;
-  if (str.startsWith('62')) {
+  if (str.startsWith('91')) {
     processedStr = str.substring(2);
   }
 
@@ -246,8 +246,9 @@ onMounted(async () => {
           <img :src="userInfo.avatar || defaultAvatar" alt="" class="w-full h-full object-cover rounded-full">
         </div>
         <div class="info">
-          <div class="phone text-[16px] text-[#000] font-bold">{{ indexInfoData.level_name + userInfo.level }} </div>
-          <div class="phone text-[14px] text-[#64748B] mt-[4px]">+62 {{ formatName(userInfo.username) }}</div>
+          <div class="phone text-[16px] text-[#000] font-bold">{{ userInfo.levelName || '--' }}
+          </div>
+          <div class="phone text-[14px] text-[#64748B] mt-[4px]">{{ formatName(userInfo.username) }}</div>
         </div>
       </div>
       <!-- <div class="edit-info rounded-[8px] flex items-center gap-8">
@@ -268,7 +269,7 @@ onMounted(async () => {
         <div class="top-grid flex">
           <div class="grid-item flex-1">
             <div class="money">₹ {{ addCommasToNumber(userInfo.balance) || 0 }}</div>
-            <div class="label">{{ t('Wallet Balance') }}</div>
+            <div class="label">{{ t('Recharge Balance') }}</div>
           </div>
           <div class="grid-item flex-1">
             <div class="money text-nowrap">₹ {{ addCommasToNumber(userInfo.itemBalance) }}</div>

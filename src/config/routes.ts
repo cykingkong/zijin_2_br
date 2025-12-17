@@ -20,5 +20,8 @@ export const navWhiteList: readonly string[] = [
   '/wallet/exchange/cashierCenter',
   '/wallet/exchange/cashierCenter-withdraw',
   'Team',
-  'login'
+  'login',
+  'lottery',
+  'addBank'
+
 ]

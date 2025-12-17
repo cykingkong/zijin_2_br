@@ -23,7 +23,7 @@
             <div class="stat-item flex flex-col items-center">
                 <div class="num text-[20px] font-bold text-[#1A1A1A] mb-[4px]">{{ teamsData?.topData?.vaildUserCount ||
                     0
-                    }}</div>
+                }}</div>
                 <div class="label text-[12px] text-[#999]">{{ $t('Valid') }}</div>
             </div>
             <div class="stat-item flex flex-col items-center">
@@ -43,9 +43,9 @@
         <div class="level-tabs mb-[20px]">
             <van-tabs v-model:active="activeTab" line-width="140px" color="#333" title-active-color="#333"
                 :ellipsis="false" title-inactive-color="#999" :border="true" @change="handleChangeTab">
-                <van-tab :title="`Level B (${teamsData?.rates?.B || 0}%)`" name="B"></van-tab>
-                <van-tab :title="`Level C (${teamsData?.rates?.C || 0}%)`" name="C"></van-tab>
-                <van-tab :title="`Level D (${teamsData?.rates?.D || 0}%)`" name="D"></van-tab>
+                <van-tab :title="`${$t('Level')} B (${teamsData?.rates?.B || 0}%)`" name="B"></van-tab>
+                <van-tab :title="`${$t('Level')} C (${teamsData?.rates?.C || 0}%)`" name="C"></van-tab>
+                <van-tab :title="`${$t('Level')} D (${teamsData?.rates?.D || 0}%)`" name="D"></van-tab>
             </van-tabs>
         </div>
 

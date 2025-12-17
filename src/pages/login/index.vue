@@ -58,11 +58,11 @@ onMounted(() => {
 });
 const typeArr = [
   {
-    label: `${t("input.Phone")}`,
+    label: `${t("Phone")}`,
     value: "phone",
   },
   {
-    label: `${t("login.email")}`,
+    label: `${t("Email")}`,
     value: "email",
   },
 ];
@@ -97,6 +97,8 @@ const getCode = async () => {
     }
     if (params.type == 'phone') {
       params.phone = `${areaInfo.value.dialCode}${postData.account}`
+    } else {
+      params.email = postData.account
     }
 
     await sendCode(params)
@@ -127,7 +129,8 @@ const rules = reactive({
 
 const controlChildRef = ref();
 const hanleClickAreaPick = () => {
-  controlChildRef.value.open();
+  return
+  // controlChildRef.value.open();
 
   // areaPopRef.value.popShow()
 };
@@ -220,8 +223,8 @@ async function login() {
     };
     await userStore.login(params);
     // await userStore.info()
-    localStorage.setItem("language", "id");
-    locale.value = "id";
+    localStorage.setItem("language", "hi");
+    locale.value = "hi";
     const { redirect, ...othersQuery } = router.currentRoute.value.query;
     router.push({
       name: "home",

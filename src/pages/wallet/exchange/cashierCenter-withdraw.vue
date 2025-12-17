@@ -123,7 +123,7 @@
                 d="M9.99996 13.3333C11.3807 13.3333 12.5 12.214 12.5 10.8333C12.5 9.45254 11.3807 8.33325 9.99996 8.33325C8.61925 8.33325 7.49996 9.45254 7.49996 10.8333C7.49996 12.214 8.61925 13.3333 9.99996 13.3333Z"
                 stroke="#1B1B1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
-            {{ t("Add bank account") }}
+            {{ t("Add Bank Account") }}
           </div>
           <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M8.33325 13.3334L11.6666 10.0001L8.33325 6.66675" stroke="#888888" stroke-width="1.5"
@@ -203,6 +203,10 @@ const bankList = ref([])
 const getBankList = async () => {
   const { data, code } = await bank_list({ ...{ pageIndex: 1, pageSize: 30 }, wallet_type: "auto" });
   if (code == 200) {
+    if (data.rows && data.rows.length == 0) {
+      router.push({ path: '/profile/bankAccount' })
+      return
+    }
     bankList.value = data.rows;
     info.value = data.rows[0]
     selectBank.value = data.rows[0].id

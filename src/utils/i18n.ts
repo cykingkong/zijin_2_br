@@ -5,39 +5,34 @@ import jaJP from 'vant/es/locale/lang/ja-JP'
 import koKR from 'vant/es/locale/lang/ko-KR'
 import deDE from 'vant/es/locale/lang/de-DE'
 import esES from 'vant/es/locale/lang/es-ES'
-
+import hiIn from 'vant/es/locale/lang/hi-IN'
 import en from '@/locales/en-US.json'
 import zhTW from '@/locales/zh-TW.json'
-import jp from '@/locales/jp.json'
-import kr from '@/locales/kr.json'
-import de from '@/locales/de.json'
-import es from '@/locales/es.json'
+import hi from '@/locales/hi.json'
+import ta from '@/locales/ta.json'
+import te from '@/locales/te.json'
 
 import { Locale } from 'vant'
 import type { PickerColumn } from 'vant'
 
-const FALLBACK_LOCALE = 'en'
+const FALLBACK_LOCALE = 'hi'
 
 
 const vantLocales = {
   'en': { ...en, ...enUS }, // 英语使用 Vant 官方英语包
   'zh-TW': { ...zhTW, ...zhCN }, // 中文繁体使用 Vant 官方中文包
-  'jp': { ...jp, ...jaJP }, // 日语使用 Vant 官方日语包
-  'kr': { ...kr, ...koKR }, // 韩语使用 Vant 官方韩语包
-  'de': { ...de, ...deDE }, // 德语使用 Vant 官方德语包
-  'es': { ...es, ...esES }, // 西班牙语使用 Vant 官方西班牙语包
+  'hi': { ...hiIn, ...hi }
 }
 
 
 
 
 export const languageColumns: PickerColumn = [
-  { text: 'Español', value: 'es' },
   { text: 'English', value: 'en' },
   { text: '繁體中文', value: 'zh-TW' },
-  { text: '日本語', value: 'jp' },
-  { text: '한국어', value: 'kr' },
-  { text: 'Deutsch', value: 'de' },
+  { text: 'हिंदी', value: 'hi' },
+  { text: 'தமிழ்', value: 'ta' },
+  { text: 'తెలుగు', value: 'te' },
 ]
 
 export const i18n = setupI18n()
@@ -83,20 +78,18 @@ async function loadLocaleMsg(locale: string, i18n: I18n) {
     case 'zh-TW':
       messages = await import(`../locales/zh-TW.json`)
       break
-    case 'jp':
-      messages = await import(`../locales/jp.json`)
+    case 'zh-CN':
+      messages = await import(`../locales/zh-CN.json`)
       break
-    case 'kr':
-      messages = await import(`../locales/kr.json`)
+    case 'hi':
+      messages = await import(`../locales/hi.json`)
       break
-    case 'de':
-      messages = await import(`../locales/de.json`)
+    case 'ta':
+      messages = await import(`../locales/ta.json`)
       break
-    case 'es':
-      messages = await import(`../locales/es.json`)
+    case 'te':
+      messages = await import(`../locales/te.json`)
       break
-    default:
-      messages = await import(`../locales/es.json`)
   }
   i18n.global.setLocaleMessage(locale, messages.default)
 }

@@ -10,10 +10,8 @@ declare module 'vue' {
   export interface GlobalComponents {
     ActivityCenter: typeof import('./../components/activityCenter.vue')['default']
     BottomButton: typeof import('./../components/bottom-button.vue')['default']
-    Charts: typeof import('./../components/charts/charts.vue')['default']
     CloseButton: typeof import('./../components/CloseButton.vue')['default']
     CodeInput: typeof import('./../components/CodeInput.vue')['default']
-    Echarts: typeof import('./../components/echarts.vue')['default']
     Empty: typeof import('./../components/empty.vue')['default']
     GhostButton: typeof import('./../components/GhostButton.vue')['default']
     Grid: typeof import('./../components/grid.vue')['default']
@@ -33,6 +31,7 @@ declare module 'vue' {
     VanButton: typeof import('vant/es')['Button']
     VanConfigProvider: typeof import('vant/es')['ConfigProvider']
     VanIcon: typeof import('vant/es')['Icon']
+    VanImage: typeof import('vant/es')['Image']
     VanNavBar: typeof import('vant/es')['NavBar']
     VanNoticeBar: typeof import('vant/es')['NoticeBar']
     VanPicker: typeof import('vant/es')['Picker']

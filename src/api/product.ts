@@ -34,3 +34,9 @@ export function getPosition(params): Promise<any> {
 export function purchase(data): Promise<any> {
     return request.post<any>('/gameplay/product/purchase', data)
 }
+
+
+
+export function tipsList(params): Promise<any> {
+    return request.get('/gameplay/product/tipsList', { params })
+}

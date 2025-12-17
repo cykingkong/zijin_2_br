@@ -50,28 +50,12 @@ const searchLoading = ref(false);
 
 // 语言代码到国家代码的映射
 const languageToCountryMap = {
-  "pt-BR": "br", // 巴西
+  hi: "in", // 印地语
   "zh-CN": "cn", // 中国
   "zh-TW": "hk", // 中国
   "en-US": "us", // 美国
-  "pt-PT": "pt", // 葡萄牙
-  cs: "cz", // 捷克
-  de: "de", // 德国
-  es: "es", // 西班牙
-  fr: "fr", // 法国
-  id: "id", // 印度尼西亚
-  it: "it", // 意大利
-  jp: "jp", // 日本
-  kr: "kr", // 韩国
-  ms: "my", // 马来西亚
-  nl: "nl", // 荷兰
-  pl: "pl", // 波兰
-  ru: "ru", // 俄罗斯
-  sv: "se", // 瑞典
-  th: "th", // 泰国
-  tr: "tr", // 土耳其
-  uk: "ua", // 乌克兰
-  vn: "vn", // 越南
+  ta: 'in', // 泰米尔语
+  te: 'in' // 泰卢固语
 };
 
 function getCountryCode(languageCode) {

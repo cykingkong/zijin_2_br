@@ -1,5 +1,5 @@
 <template>
-  <div class="grid-box w-full px-[24px] mt-[24px]">
+  <div class="grid-box w-full px-[20px] mt-[24px]">
     <div class="grid flex gap-8">
       <div class="grid-item flex-1 text-center" v-for="(item, index) in gridList" :key="index"
         @click="handleClickItem(index)">
@@ -154,7 +154,7 @@ const gridList = ref([
     // image: grid2,
   },
   {
-    name: t("Receive"),
+    name: t("Product"),
     // image: grid3,
   },
   {

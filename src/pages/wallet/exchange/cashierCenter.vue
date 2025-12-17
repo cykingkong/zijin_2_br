@@ -138,7 +138,7 @@ onMounted(() => {
   rechargeConfig().then(({ data, code }) => {
     if (code === 200) {
       minAmount.value = Number(data.settings.find((item: any) => item.key == 'recharge_min_amount').value)
-      amountArr.value = data.settings.find((item: any) => item.key == 'recharge_number').value.split(',')
+      amountArr.value = data.settings.find((item: any) => item.key == 'recharge_number').value ? data.settings.find((item: any) => item.key == 'recharge_number').value?.split(',') : []
       methodsList.value = data.methods;
       selected.value = methodsList.value[0].id
       info.value = methodsList.value[0]
