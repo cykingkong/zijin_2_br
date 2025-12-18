@@ -59,7 +59,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="price text-[14px] font-bold text-[#999] text-align-right mt-12 mb-6"> {{ t(`Original Price`)
+                <div class="price text-[14px] font-bold text-[#999] text-align-right mt-6 mb-6"
+                    v-if="productInfo.discountRate"> {{ t(`Original Price`)
                     }}:
                     <span class="discount-price line-through text-[#999]">
                         ₹{{
@@ -68,9 +69,10 @@
                     </span>
 
                 </div>
-                <div class="price text-[18px] font-bold text-[#FF6B00] text-align-right"> {{ t(`Discount Price`) }}:₹{{
-                    productInfo.discountPrice
-                    || '0.00' }}
+                <div class="price text-[18px] font-bold text-[#FF6B00] text-align-right mt-6"> {{ t(`Discount Price`)
+                    }}:₹{{
+                        productInfo.discountPrice
+                        || '0.00' }}
                 </div>
             </div>
         </div>

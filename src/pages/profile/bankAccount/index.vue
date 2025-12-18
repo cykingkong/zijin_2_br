@@ -106,13 +106,9 @@ const getBankList = async () => {
   }
 };
 const herfUrl = () => {
-  if (activeRadio.value == 0) {
-    router.push({
-      path: "/profile/bankAccount/addBank?edit=0",
-    });
-  } else if (activeRadio.value == 1) {
-    router.push("/profile/bankAccount/add?edit=0");
-  }
+  router.push({
+    path: "/profile/bankAccount/addBank?edit=0",
+  });
 };
 const handleClickEdit = (item: any) => {
   local.setlocal('bankAccountInfo', item)

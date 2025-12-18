@@ -215,7 +215,7 @@ onUnmounted(() => {
 })
 onMounted(() => {
   getBankList();
-  if (!local.getlocal('bankAccountInfo')) router.back()
+  if (!local.getlocal('bankAccountInfo') && route.query.edit == "1") router.back()
   if (route.query.edit == "1") {
     isEdit.value = true;
     getCardInfo();

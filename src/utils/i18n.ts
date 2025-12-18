@@ -29,7 +29,7 @@ const vantLocales = {
 
 export const languageColumns: PickerColumn = [
   { text: 'English', value: 'en' },
-  { text: '繁體中文', value: 'zh-TW' },
+  // { text: '繁體中文', value: 'zh-TW' },
   { text: 'हिंदी', value: 'hi' },
   { text: 'தமிழ்', value: 'ta' },
   { text: 'తెలుగు', value: 'te' },

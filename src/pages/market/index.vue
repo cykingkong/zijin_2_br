@@ -2,6 +2,7 @@
 import { useI18n } from "vue-i18n";
 import router from "@/router";
 import { productList, userProductList } from "@/api/product";
+import { addCommasToNumber } from "@/utils/tool";
 
 const activeName = ref(0);
 const searchMarkShow = ref(false);
@@ -203,10 +204,18 @@ onMounted(() => {
               <div class="label text-[#666]">{{ $t('Total') }}</div>
               <div class="value text-amber">₹ {{ item.totalIncome }}</div>
             </div>
-
           </div>
-          <div class="price text-[16px] font-bold text-[#FF6B00]">
-            ₹ {{ item.discountRate || '0.00' }}
+          <div class="price text-[14px] font-bold text-[#999] text-align-right mt-6 mb-6" v-if="item.discountRate"> {{
+            t(`Original Price`)
+          }}:
+            <span class="discount-price line-through text-[#999]">
+              ₹{{
+                addCommasToNumber(item.originalPrice)
+                || '0.00' }}
+            </span>
+          </div>
+          <div class="price text-[16px] font-bold text-right  text-[#FF6B00]">
+            ₹ {{ addCommasToNumber(item.discountPrice) || '0.00' }}
           </div>
         </div>
       </div>
