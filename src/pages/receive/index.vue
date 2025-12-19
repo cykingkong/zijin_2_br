@@ -17,7 +17,8 @@
                 <div class="bottom text-12 my-6 w-full">
                     <div class="li flex justify-between">
                         <div class="label text-[#666]">{{ $t('Cycle') }}</div>
-                        <div class="value text-amber">{{ `${item.total_days} ${$t('Days')}` || '- ' + $t('Days') }}
+                        <div class="value text-amber">
+                            {{ `${item.received_days} / ${item.total_days} ${$t('Days')}` || '- ' + $t('Days') }}
                         </div>
                     </div>
                     <div class="li flex justify-between">

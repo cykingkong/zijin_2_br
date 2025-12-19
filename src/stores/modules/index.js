@@ -14,13 +14,12 @@ export const useStore = defineStore('main', {
   state: () => ({
     loginShow: false,
     listData: {},
-    klineList: [],
     token: local.getlocal('token') || '',
     service: '',
-    userCardList:[],
+    userCardList: [],
     marketList: [],
-    qaList:[],
-    withdrawParams:{}
+    qaList: [],
+    withdrawParams: {}
   }),
   actions: {
     setLoginShow(showState) {
@@ -28,9 +27,6 @@ export const useStore = defineStore('main', {
     },
     setlistData(data) {
       this.listData = data
-    },
-    setklineList(data) {
-      this.klineList = data
     },
     setToken(data) {
       this.token = data
@@ -53,12 +49,11 @@ export const useStore = defineStore('main', {
     setQaList(data) {
       this.qaList = data
     },
-    
+
   },
   getters: {
     doubleCount: state => state.count * 2,
     getlistData: state => state.listData,
-    getklineList: state => state.klineList,
     getService: state => state.service,
     getUserCardList: state => state.userCardList,
     getToken: state => state.token,

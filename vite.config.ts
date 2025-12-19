@@ -57,7 +57,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
         },
       },
       rollupOptions: {
-
+        reeshake: 'safest',  // 或 'safest' 以强制优化
       }
     },
 

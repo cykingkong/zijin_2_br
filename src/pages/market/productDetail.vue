@@ -1,31 +1,31 @@
 <template>
     <div class="productDetail min-h-screen bg-white px-[16px] ">
         <!-- 1. Product Header -->
-        <div class="header-section flex py-[20px] ">
+        <div class="header-section flex py-[20px] gap-[16px]">
             <div
-                class="img-box w-[100px] h-[100px] bg-[#F7F7F7] rounded-[12px] flex items-center justify-center mr-[16px] overflow-hidden">
-                <!-- Placeholder Image -->
-                <van-icon name="photo-o" size="40" color="#ccc" v-if="!productInfo.productImage" />
-                <img v-else :src="productInfo.productImage" class="w-full h-full object-cover" />
+                class="img-box flex-shrink-0 w-[100px] h-[100px] bg-[#F7F7F7] rounded-[12px] flex items-center justify-center overflow-hidden">
+                <img :src="productInfo.productImage" class="w-full h-full object-cover" />
             </div>
-            <div class="info flex flex-col justify-between py-[4px] ">
-                <div>
+            <div class="info flex flex-col justify-between py-[4px] w-[236px]">
+                <div class="max-w-[100%]">
                     <div class="text-[16px] font-bold text-[#1A1A1A]">{{ productInfo.productName || '产品名字' }}</div>
                     <div class="detail-section mt-12">
                         <div class="detail-card  rounded-[16px] ">
                             <div class="row flex justify-between mb-[12px]">
                                 <span class="label text-[14px] text-[#999]">{{ t("Product Price") }}</span>
-                                <span class="value text-[14px] text-[#666]">₹ {{ productInfo.price || '1,099.00'
+                                <span class="value text-[14px] text-[#666]">₹ {{
+                                    addCommasToNumber(productInfo.originalPrice) || '0.00'
                                 }}</span>
                             </div>
                             <div class="row flex justify-between mb-[12px]">
                                 <span class="label text-[14px] text-[#999]">{{ t("Daily Income") }}</span>
-                                <span class="value text-[14px] text-[#666]">₹ {{ productInfo.dailyIncome }}</span>
+                                <span class="value text-[14px] text-[#666]">₹ {{
+                                    addCommasToNumber(productInfo.dailyIncome) }}</span>
                             </div>
                             <div class="row flex justify-between mb-[12px]">
                                 <span class="label text-[14px] text-[#999]">{{ t("Income Cycle") }}</span>
                                 <span class="value text-[14px] text-[#666]">{{ productInfo.incomeCycle }} {{ t("Days")
-                                }}</span>
+                                    }}</span>
                             </div>
                             <div class="row flex justify-between mb-[12px]">
                                 <span class="label text-[14px] text-[#999]">{{ t("Level Limit") }}</span>
@@ -48,19 +48,17 @@
                                 <span class="value text-[14px] text-[#FF4E4E]">{{ productInfo.discountRate }}%</span>
                             </div> -->
 
-                            <div class="total-row flex  items-center">
-                                <span
-                                    class="label w-full text-align-right text-nowrap text-[14px] font-bold text-[#333] whitespace-nowrap">{{
-                                        t(`
-                                    Total Payment Amount
-                                    `) }}₹ {{ totalPrice }}</span>
-                                <!-- <span class="value text-[18px] font-bold text-[#1A1A1A]"></span> -->
-                            </div>
+
                         </div>
                     </div>
                 </div>
+                <div class="total-row flex  items-center">
+                    <span class="label w-full text-align-right text-[14px] font-bold text-[#333] ">{{
+                        t(`Total Payment Amount`) }}:₹ {{ totalPrice }}</span>
+                    <!-- <span class="value text-[18px] font-bold text-[#1A1A1A]"></span> -->
+                </div>
                 <div class="price text-[14px] font-bold text-[#999] text-align-right mt-6 mb-6"
-                    v-if="productInfo.discountRate"> {{ t(`Original Price`)
+                    v-if="productInfo.discountRate != 0"> {{ t(`Original Price`)
                     }}:
                     <span class="discount-price line-through text-[#999]">
                         ₹{{
@@ -70,7 +68,7 @@
 
                 </div>
                 <div class="price text-[18px] font-bold text-[#FF6B00] text-align-right mt-6"> {{ t(`Discount Price`)
-                    }}:₹{{
+                }}:₹{{
                         productInfo.discountPrice
                         || '0.00' }}
                 </div>
@@ -123,16 +121,15 @@
                     </div>
 
                     <div class="terms text-[12px] text-[#666]">
-                        <span class="text-[#00B86B]">{{ t('Terms and conditions') }}</span> {{ t(`
-                        apply for eligible products
-                        `) }}
+                        <span class="text-[#00B86B]">{{ t('Terms and conditions') }}</span>
+                        {{ t(`apply for eligible products`) }}
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- 3. Purchase Details -->
-        <div class="text-[14px] text-[#999] mt-12" v-html="productInfo.productContent"></div>
+        <div class="text-[14px] text-[#999] mt-12" v-html="productInfo.productContented"></div>
 
         <bottom-button color="#1B1B1B" :button-text="t('Activate')" @click="activateCoupon"></bottom-button>
     </div>
@@ -140,6 +137,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { optimizeRichText } from '@/utils/richText';
 import { productInfo as info, purchase } from '@/api/product';
 import { useUserStore } from '@/stores';
 import { addCommasToNumber } from '@/utils/tool';
@@ -173,6 +171,7 @@ const totalPrice = computed(() => {
         }
         console.log(coupon, 'citem')
     }
+
     return addCommasToNumber(productInfo.value.discountPrice)
 })
 const getProductDetail = async (id) => {
@@ -180,6 +179,8 @@ const getProductDetail = async (id) => {
         const { data, code } = await info({ productId: id })
         if (code == 200) {
             productInfo.value = data
+
+            productInfo.value.productContented = optimizeRichText(data.productContent)
             await userStore.getUserCouponList(1)
         }
     } catch (e) {
