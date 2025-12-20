@@ -6,6 +6,12 @@ import { addCommasToNumber } from "@/utils/tool";
 
 const activeName = ref(0);
 const searchMarkShow = ref(false);
+const enumBtnText = {
+  0: 'Sold out',
+  1: 'Activate',
+  2: 'Sold out',
+  3: 'Pre-sale'
+}
 const page = reactive({
   pageIndex: 1,
   pageSize: 10,
@@ -207,16 +213,22 @@ onMounted(() => {
           </div>
           <div class="price text-[14px] font-bold text-[#999] text-align-right mt-6 mb-6" v-if="item.discountRate"> {{
             t(`Original Price`)
-          }}:
+            }}:
             <span class="discount-price line-through text-[#999]">
               ₹{{
                 addCommasToNumber(item.originalPrice)
                 || '0.00' }}
             </span>
           </div>
-          <div class="price text-[16px] font-bold text-right  text-[#FF6B00]">
-            ₹ {{ addCommasToNumber(item.discountPrice) || '0.00' }}
+          <div class="flex items-center justify-between gap-16">
+            <div class="text-14 text-gray-400">
+              {{ t(enumBtnText[item.status]) }}
+            </div>
+            <div class="price text-[16px] font-bold text-right  text-[#FF6B00] text-nowrap">
+              ₹ {{ addCommasToNumber(item.discountPrice) || '0.00' }}
+            </div>
           </div>
+
         </div>
       </div>
     </div>

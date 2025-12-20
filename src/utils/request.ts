@@ -117,19 +117,21 @@ function responseHandler(response: any) {
     closeToast(true)
     // 成功时保持Toast显示
     return response.data
-  }
-  else if (code == 10002) {
+  } else if (code == 10002) {
     closeToast(true)
     return response.data
 
   }
   else {
     closeToast(true)
-
-    showNotify({
-      type: 'danger',
+    console.log(code, 'code', message, 'message')
+    showFailToast({
       message: message
     })
+    // showNotify({
+    //   type: 'danger',
+    //   message: message
+    // })
     return Promise.reject(new Error(message))
   }
 

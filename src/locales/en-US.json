@@ -134,5 +134,7 @@
   "Payment success!": "Payment success!",
   "Thank you! We have successfully received your payment.": "Thank you! We have successfully received your payment.",
   "Done": "Done",
-  "Success": "Success"
+  "Success": "Success",
+  "Sold out": "Sold out",
+  "Pre-sale": "Pre-sale"
 }

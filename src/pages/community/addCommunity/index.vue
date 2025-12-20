@@ -37,12 +37,17 @@
 import { uploadFile, } from '@/api/tool'
 import { create, list } from '@/api/dyname'
 import { userProductList as userProductListApi, claimIncome, tipsList } from '@/api/product'
-
+import local from '@/utils/local'
+import { getCurrentInstance } from "vue";
+import { useLoadingStore } from "@/stores/modules/loading";
 const { t } = useI18n()
 const text = ref('')
+
 const router = useRouter()
 const watingReceiveId = ref<any>([])
 const route = useRoute()
+const { proxy } = getCurrentInstance()!;
+const loadingStore = useLoadingStore();
 /** 上传头像 */
 const canUpdateAvatar = ref(true)
 const uploadPopShow = ref<boolean>(false)
@@ -99,17 +104,17 @@ const handleClickReceive = async () => {
     }
     if (flag) {
       showSuccessToast({})
-      setTimeout(() => {
-        router.push({
-          path: '/profile'
-        })
-      }, 400)
+      router.push({
+        path: '/profile',
+        replace: true,
+      })
+
     }
   } catch (e) {
     console.log(e, 'error')
   }
 }
-const handleClickSubmit = async () => {
+const handleClickSubmitOriginal = async () => {
   try {
     const { data, code } = await create({
       content: text.value + 'OK',
@@ -123,9 +128,13 @@ const handleClickSubmit = async () => {
 
   }
 }
+const handleClickSubmit = proxy!.$throttle(handleClickSubmitOriginal, 1000, {
+  onStart: () => loadingStore.show(),
+  onEnd: () => loadingStore.hide(),
+});
 onMounted(() => {
-  if (route.query.watingReceiveIds) {
-    watingReceiveId.value = JSON.parse(route.query.watingReceiveIds as string)
+  if (local.getlocal('idsString') && route.query) {
+    watingReceiveId.value = JSON.parse(local.getlocal('idsString')) || JSON.parse(route.query.watingReceiveIds as string) || []
     console.log(watingReceiveId.value)
   }
 

@@ -4,18 +4,19 @@
         <div class="header-section flex py-[20px] gap-[16px]">
             <div
                 class="img-box flex-shrink-0 w-[100px] h-[100px] bg-[#F7F7F7] rounded-[12px] flex items-center justify-center overflow-hidden">
-                <img :src="productInfo.productImage" class="w-full h-full object-cover" />
+                <img :src="productInfo.productImage" class="w-full h-full object-cover"
+                    v-if="productInfo.productImage" />
             </div>
             <div class="info flex flex-col justify-between py-[4px] w-[236px]">
                 <div class="max-w-[100%]">
-                    <div class="text-[16px] font-bold text-[#1A1A1A]">{{ productInfo.productName || '产品名字' }}</div>
+                    <div class="text-[16px] font-bold text-[#1A1A1A]">{{ productInfo.productName || '...' }}</div>
                     <div class="detail-section mt-12">
                         <div class="detail-card  rounded-[16px] ">
                             <div class="row flex justify-between mb-[12px]">
                                 <span class="label text-[14px] text-[#999]">{{ t("Product Price") }}</span>
                                 <span class="value text-[14px] text-[#666]">₹ {{
                                     addCommasToNumber(productInfo.originalPrice) || '0.00'
-                                }}</span>
+                                    }}</span>
                             </div>
                             <div class="row flex justify-between mb-[12px]">
                                 <span class="label text-[14px] text-[#999]">{{ t("Daily Income") }}</span>
@@ -25,7 +26,7 @@
                             <div class="row flex justify-between mb-[12px]">
                                 <span class="label text-[14px] text-[#999]">{{ t("Income Cycle") }}</span>
                                 <span class="value text-[14px] text-[#666]">{{ productInfo.incomeCycle }} {{ t("Days")
-                                    }}</span>
+                                }}</span>
                             </div>
                             <div class="row flex justify-between mb-[12px]">
                                 <span class="label text-[14px] text-[#999]">{{ t("Level Limit") }}</span>
@@ -68,7 +69,7 @@
 
                 </div>
                 <div class="price text-[18px] font-bold text-[#FF6B00] text-align-right mt-6"> {{ t(`Discount Price`)
-                }}:₹{{
+                    }}:₹{{
                         productInfo.discountPrice
                         || '0.00' }}
                 </div>
@@ -131,7 +132,8 @@
         <!-- 3. Purchase Details -->
         <div class="text-[14px] text-[#999] mt-12" v-html="productInfo.productContented"></div>
 
-        <bottom-button color="#1B1B1B" :button-text="t('Activate')" @click="activateCoupon"></bottom-button>
+        <bottom-button color="#1B1B1B" :button-text="t(enumBtnText[productInfo.status])"
+            @click="activateCoupon"></bottom-button>
     </div>
 </template>
 
@@ -145,12 +147,24 @@ const userStore = useUserStore();
 const userInfo = computed(() => userStore.userInfo);
 const { t } = useI18n()
 const productInfo = ref<any>({
-    name: '产品名字',
-    desc: '产品介绍',
-    price: '1,099.00',
-    image: '' // Add image URL here
+    name: '...',
+    desc: '...',
+    price: '0.00',
+    image: '',// Add image URL here
+    status: 0,
 });
-
+/**
+ *  0 => '下架',
+    1 => '上架',
+    2 => '售罄',
+    3 => '预售',
+ */
+const enumBtnText = {
+    0: 'Sold out',
+    1: 'Activate',
+    2: 'Sold out',
+    3: 'Pre-sale'
+}
 const selectedCouponId = ref(-1);
 const router = useRouter()
 const couponList = computed(() => {

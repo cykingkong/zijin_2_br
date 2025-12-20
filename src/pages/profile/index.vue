@@ -18,7 +18,7 @@ import defaultAvatar from "@/assets/image/avatar.png";
 import { addCommasToNumber } from "@/utils/tool";
 import { userUpdate } from '@/api/user'
 import { uploadFile } from "@/api/tool";
-
+import local from '@/utils/local'
 
 const userStore = useUserStore();
 const userInfo = computed(() => userStore.userInfo);
@@ -234,6 +234,9 @@ onMounted(async () => {
   indexInfo().then((res) => {
     indexInfoData.value = res.data
   })
+  if (local.getlocal('idsString')) {
+    local.removelocal("idsString")
+  }
 });
 </script>
 

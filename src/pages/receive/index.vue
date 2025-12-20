@@ -63,6 +63,8 @@
 </template>
 <script setup lang="ts">
 import { userProductList as userProductListApi, claimIncome, tipsList } from '@/api/product'
+import { showNotify, showLoadingToast, closeToast } from 'vant'
+import local from '@/utils/local';
 const userProductList = ref([])
 const listStatus = ref(1); // 1-加载中 2-成功 3-已无更多
 const page = reactive({
@@ -91,6 +93,12 @@ const handleClickActivity = async () => {
                 router.push({
                     path: "/profile"
                 })
+            } else if (code == 1001) {
+
+                showNotify({
+                    type: 'danger',
+                    message: message
+                })
             } else {
                 errorHtml.value = message
                 showPicker.value = true
@@ -101,12 +109,13 @@ const handleClickActivity = async () => {
 
     } catch (e) {
         // showPicker.value = true
-        console.log(e)
+        console.log(e, 'error')
     }
 }
 
 const handleClickConfirm = () => {
     let idsString = JSON.stringify(watingReceiveIds.value)
+    local.setlocal('idsString', idsString)
     router.push({
         path: '/community/addCommunity?watingReceiveIds=' + idsString,
         query: {
