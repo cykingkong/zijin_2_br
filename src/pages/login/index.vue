@@ -180,8 +180,8 @@ async function signUp() {
       "password": postData.password
     }
     await userStore.register(params);
-    localStorage.setItem("language", "id");
-    locale.value = "id";
+    localStorage.setItem("language", "en");
+    locale.value = "en";
     const { redirect, ...othersQuery } = router.currentRoute.value.query;
     router.push({
       name: "home",
@@ -223,8 +223,8 @@ async function login() {
     };
     await userStore.login(params);
     // await userStore.info()
-    localStorage.setItem("language", "hi");
-    locale.value = "hi";
+    localStorage.setItem("language", "en");
+    locale.value = "en";
     const { redirect, ...othersQuery } = router.currentRoute.value.query;
     router.push({
       name: "home",

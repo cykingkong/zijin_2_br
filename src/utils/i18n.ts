@@ -15,7 +15,7 @@ import te from '@/locales/te.json'
 import { Locale } from 'vant'
 import type { PickerColumn } from 'vant'
 
-const FALLBACK_LOCALE = 'hi'
+const FALLBACK_LOCALE = 'en'
 
 
 const vantLocales = {
