@@ -20,7 +20,7 @@
                 <div class="w-full" v-html="info?.content"></div>
             </div>
         </div>
-        <BottomButton :color="info.couponId ? '#FEC600' : '#888'" :button-text="t('Claim Coupon')"
+        <BottomButton :color="info.couponId ? '#FEC600' : '#888'" :button-text="t('Claim Coupon')" v-if="info&&info.couponId"
             @click="handleClickClaimCoupon">
         </BottomButton>
     </div>
@@ -29,10 +29,13 @@
 import local from '@/utils/local'
 import { receiveCoupon } from '@/api/product'
 import { showSuccessToast } from 'vant'
+import { optimizeRichText } from '@/utils/richText';
+
 const { t } = useI18n()
 const router = useRouter()
 const handleClose = () => {
-    router.back()
+  if (window.history.state.back) history.back();
+  else router.replace("/");
 }
 const info = ref<any>({ couponId: null })
 
@@ -55,6 +58,7 @@ onMounted(() => {
     if (item) {
         document.title = item.title
         info.value = item
+        info.value.content = optimizeRichText(item.content)
     }
 })
 </script>

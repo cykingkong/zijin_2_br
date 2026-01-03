@@ -23,7 +23,7 @@
             <div class="stat-item flex flex-col items-center">
                 <div class="num text-[20px] font-bold text-[#1A1A1A] mb-[4px]">{{ teamsData?.topData?.vaildUserCount ||
                     0
-                }}</div>
+                    }}</div>
                 <div class="label text-[12px] text-[#999]">{{ $t('Valid') }}</div>
             </div>
             <div class="stat-item flex flex-col items-center">
@@ -35,7 +35,7 @@
             <div class="stat-item flex flex-col items-center">
                 <div class="num text-[20px] font-bold text-[#1A1A1A] mb-[4px]">₹ {{
                     teamsData?.topData?.itemRecharge || 0 }}</div>
-                <div class="label text-[12px] text-[#999]">{{ $t('Team Recharge') }}</div>
+                <div class="label text-[12px] text-[#999]">{{ $t('Team Commission') }}</div>
             </div>
         </div>
 

@@ -114,12 +114,10 @@ function getArticleList(params) {
   });
 }
 const handleClickItem = (item) => {
-  // router.push({
-  //   path: "/activityDetail",
-  //   query: {
-  //     id: item.article_id,
-  //   },
-  // });
+   localStorage.setItem('activityDetail', JSON.stringify(item))
+        router.push({
+            path: '/activityDetail',
+        })
   // local.setlocal('activityDetail', item)
 }
 const categoryId = ref();
