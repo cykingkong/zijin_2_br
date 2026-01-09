@@ -19,7 +19,9 @@ export interface UserState {
 export function login(data: any): Promise<any> {
   return request.post<LoginRes>('/user/login', data)
 }
-
+export function seologin(data: any): Promise<any> {
+  return request.post<LoginRes>('/user/seologin', data)
+}
 export function logout() {
   return request.post('/user/logout')
 }

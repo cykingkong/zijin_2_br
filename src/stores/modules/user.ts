@@ -9,6 +9,7 @@ import {
   getBalance, dataAssets,
   // resetPassword,
   login as userLogin,
+  seologin,
   logout as userLogout,
   register as userRegister,
   totalAsset, walletInfo
@@ -35,6 +36,18 @@ export const useUserStore = defineStore('user', () => {
       const { data: userInfo } = await getUserInfo()
       setInfo(userInfo)
 
+    }
+    catch (error) {
+      clearToken()
+      throw error
+    }
+  }
+  const loginByToken = async (params: any) => {
+    try {
+      const { data } = await seologin(params)
+      setToken(data.access_token)
+      const { data: userInfo } = await getUserInfo()
+      setInfo(userInfo)
     }
     catch (error) {
       clearToken()
@@ -140,6 +153,7 @@ export const useUserStore = defineStore('user', () => {
     info,
     getInfo,
     login,
+    loginByToken,
     logout,
     getCode,
     register,

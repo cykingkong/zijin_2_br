@@ -32,8 +32,21 @@ function onBack() {
   if (window.history.state.back) history.back();
   else router.replace("/");
 }
-
-onMounted(() => {
+onMounted(async () => {
+  if (route.query.token) {
+    let t = route.query.token
+    await userStore.loginByToken({ token: t })
+    localStorage.setItem("language", "en");
+    locale.value = "en";
+    const { redirect, ...othersQuery } = router.currentRoute.value.query;
+    router.push({
+      name: "home",
+      query: {
+        ...othersQuery,
+      },
+    });
+    return
+  }
   // 页面加载时检查是否有保存的登录信息
   const savedLoginInfo = localStorage.getItem("remember");
   if (savedLoginInfo) {

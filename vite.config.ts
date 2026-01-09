@@ -22,7 +22,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       port: 3323,
       proxy: {
         '/capi': {
-          target: `https://zj.crossbordershopping.one/app-api`, // 代理接口
+          target: `https://api.ddbindia.online/app-api`, // 代理接口
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/capi/, ''),
           ws: false,
