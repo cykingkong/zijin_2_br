@@ -2,6 +2,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useLoadingStore } from '@/stores/modules/loading'
+import { optimizeRichText } from '@/utils/richText';
 
 import { deposit, rechargeConfig } from '@/api/billing'
 import item from '../../../components/item.vue'
@@ -17,6 +18,7 @@ const loadingStore = useLoadingStore()
 const showPicker = ref(false);
 const selected = ref(-1)
 const methodsList = ref([])
+const rechargeContent = ref("")
 // 数字键盘布局数据
 const keypadRows = [
   ['1', '2', '3'],
@@ -68,11 +70,12 @@ async function handleBuyClickOriginal() {
     methodId: info.value.id,
   })
   if (code === 200) {
-    if (data.type == 'bank') {
+    // if (data.type == 'bank') {
       setTimeout(() => {
-        window.location.href = data.url
+        window.location.href = data.payUrl
       }, 40)
-    }
+      return 
+    // }
     if (data.type == 'crypto') {
       let cInfo = {
         ...data,
@@ -140,6 +143,7 @@ onMounted(() => {
       minAmount.value = Number(data.settings.find((item: any) => item.key == 'recharge_min_amount').value)
       amountArr.value = data.settings.find((item: any) => item.key == 'recharge_number').value ? data.settings.find((item: any) => item.key == 'recharge_number').value?.split(',') : []
       methodsList.value = data.methods;
+      rechargeContent.value = data.rechargeContent || ""
       selected.value = methodsList.value[0].id
       info.value = methodsList.value[0]
     }
@@ -280,6 +284,7 @@ function onBack() {
         </div>
       </div>
     </div>
+    <div class="v-html" v-html="optimizeRichText(rechargeContent)"></div>
     <BottomButton :button-text="t(`Deposit Preview`)" color="#1B1B1B" @click="onConfirm" />
     <van-popup v-model:show="showPicker" destroy-on-close round :position="'bottom'" :safe-area-inset-bottom="true">
       <div class="p-12">

@@ -107,6 +107,8 @@
         </div>
       </div>
     </div>
+    <div class="v-html" v-html="optimizeRichText(withdrwaInfo.withdrawContent)"></div>
+
     <BottomButton :button-text="t(`Withdraw Preview`)" color="#1B1B1B" @click="onConfirm" />
     <van-popup v-model:show="showPicker" destroy-on-close round :position="'bottom'" :safe-area-inset-bottom="true">
       <div class="p-12">
@@ -157,6 +159,7 @@ import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useLoadingStore } from "@/stores/modules/loading";
 import { bank_list } from "@/api/payment";
+import { optimizeRichText } from '@/utils/richText';
 
 import { deposit, withdraw_info, withdraw } from "@/api/billing";
 import item from "../../../components/item.vue";
@@ -294,6 +297,7 @@ const updateInfo = () => {
 };
 const withdrwaInfo = ref<any>({
   withdrawFee: 0,
+  withdrawContent:"",
 });
 const getWithdrawInfo = async () => {
   const { data, code } = await withdraw_info();

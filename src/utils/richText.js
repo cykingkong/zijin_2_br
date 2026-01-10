@@ -1,4 +1,5 @@
 export function optimizeRichText(html) {
+  if(!html) return ""
   // 简单净化：移除脚本和样式标签以防XSS
   let sanitized = html.replace(/<script[^>]*>([\s\S]*?)<\/script>/gi, '')
     .replace(/<style[^>]*>([\s\S]*?)<\/style>/gi, '');
