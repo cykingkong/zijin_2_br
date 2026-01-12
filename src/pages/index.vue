@@ -42,7 +42,9 @@ function handleClickGrid(val) {
   }
   if (val === 3) {
     // router.push('/quotes/accountChange?type=3' + '&categoryId=' + categoryId.value)
-    getKfUrl().then((res) => {
+    getKfUrl({
+        userId: userInfo.value ? userInfo.value.userId: null,
+    }).then((res) => {
       if (res.code == 200) {
         window.open(res.data.kfUrl)
       }
