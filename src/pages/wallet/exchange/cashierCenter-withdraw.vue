@@ -13,8 +13,12 @@
         ₹ {{ count }}
       </div>
       <div class="min-count-fee text-[#64748B] font-size-[14px] mx-a text-center mt-[6px] font-bold overflow-y-auto">
-        {{ t("Withdraw fee") }} ₹{{ fee }}
+        {{ t("Tax") }} ₹{{ fee }}
       </div>
+       <div class="min-count-fee text-[#64748B] font-size-[14px] mx-a text-center mt-[6px] font-bold overflow-y-auto">
+       {{ t('Withdrawable Amount') }} ₹ {{ addCommasToNumber(userInfo.itemBalance) }}
+      </div>
+  
       <div class="mt-[30px]">
         <item class="mt-[62px]">
           <template #left>
@@ -53,7 +57,7 @@
             </div>
           </template>
         </item>
-        <div class="tips mt-[45px]">
+        <!-- <div class="tips mt-[45px]">
           <div class="t-title mb-[12px] color-[#FF383C80] font-bold text-[18px]">
             {{ t("Pay attention") }}
           </div>
@@ -77,11 +81,11 @@
               )
             }}
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
 
-    <div class="input-box px-12 mt-[60px]">
+    <div class="input-box px-12 mt-[20px]">
       <div class="keypad">
         <div class="keypad-row flex gap-[8px] mb-[8px]" v-for="row in keypadRows" :key="row.join('')">
           <div v-for="key in row" :key="key" @click="handleKeyClick(key)"
@@ -115,7 +119,7 @@
 
         <div
           class="add-bank-li mb-12 h-52 border border-[#f0f0f0] border-solid rounded-[16px] p-[12px] flex justify-between items-center"
-          @click="handleClickAddBank">
+          @click="handleClickAddBank" v-if="bankList && bankList.length < 1">
           <div class="name flex items-center gap-12 text-[#0F172A] text-[14px] font-bold">
             <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -132,6 +136,7 @@
               stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </div>
+
         <div
           class="add-bank-li mb-12 h-52 border border-[#f0f0f0] border-solid rounded-[16px] p-[12px] flex justify-between items-center"
           v-for="(item, index) in bankList" :key="index" @click="selectBank = item.id; showPicker = false; info = item">
@@ -160,6 +165,7 @@ import { useRouter } from "vue-router";
 import { useLoadingStore } from "@/stores/modules/loading";
 import { bank_list } from "@/api/payment";
 import { optimizeRichText } from '@/utils/richText';
+import { useUserStore } from "@/stores";
 
 import { deposit, withdraw_info, withdraw } from "@/api/billing";
 import item from "../../../components/item.vue";
@@ -173,6 +179,9 @@ const fee = computed(() => {
   return addCommasToNumber(count.value * withdrwaInfo.value.withdrawFee * 0.01);
 });
 const { proxy } = getCurrentInstance()!;
+const userStore = useUserStore();
+
+const userInfo = computed(() => userStore.userInfo);
 const loadingStore = useLoadingStore();
 const selectBank = ref(0)
 // 数字键盘布局数据

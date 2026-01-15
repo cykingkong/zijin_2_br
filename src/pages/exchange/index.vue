@@ -70,12 +70,17 @@ const page = reactive({
     pageSize: 10
 })
 const handleClickExchange = async () => {
+        codes.value = ''
+        
     try {
         const { code } = await create({
             code: codes.value
         })
+
         if (code == 200) {
-            showSuccessToast({})
+            showSuccessToast({
+                message:t("Redemption successful")
+            })
             getUserList()
         }
     } catch (err) {
