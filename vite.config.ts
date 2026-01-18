@@ -56,9 +56,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
           drop_debugger: true,
         },
       },
-      rollupOptions: {
-        reeshake: 'safest',  // 或 'safest' 以强制优化
-      }
+
     },
 
     optimizeDeps: { include, exclude },

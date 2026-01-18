@@ -70,7 +70,6 @@ const page = reactive({
     pageSize: 10
 })
 const handleClickExchange = async () => {
-        codes.value = ''
         
     try {
         const { code } = await create({
@@ -82,6 +81,7 @@ const handleClickExchange = async () => {
                 message:t("Redemption successful")
             })
             getUserList()
+            codes.value = ''
         }
     } catch (err) {
         console.log(err, '兑换失败')
