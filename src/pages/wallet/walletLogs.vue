@@ -10,7 +10,7 @@
     </div>
     <div class="order-list pb-[16px] flex-col flex gap-[16px]">
       <stockItem v-for="(item, index) in orderListData" :key="index" :item="item"
-        @click="handleClickStockDetail(item)" />
+        />
     </div>
     <empty v-if="orderListData.length == 0" :no-tips="true" />
     <LoadMore :status="listStatus" @load-more="loadMore"></LoadMore>
@@ -84,7 +84,7 @@ onMounted(async () => {
   }, 999)
 })
 const handleClickStockDetail = (item: any) => {
-  router.push("/buy/orderDetail?transaction_id=" + item.transaction_id);
+  // router.push("/buy/orderDetail?transaction_id=" + item.transaction_id);
 };
 </script>
 <style lang="less" scoped>
