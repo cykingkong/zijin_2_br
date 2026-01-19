@@ -1,5 +1,5 @@
 <template>
-  <div class="add-content p-24 flex flex-col">
+  <div class="add-content p-24 flex flex-col pb-90">
     <VanNavBar title="" :fixed="true" clickable :left-arrow="true" @click-left="onBack" placeholder z-index="999">
       <template #title>
         <div class="flex flex-items-center gap-6 font-size-[18px] font-bold">
