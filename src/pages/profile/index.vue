@@ -15,7 +15,7 @@ import cell6 from "@/assets/cell/cell6.png";
 import cell7 from "@/assets/cell/cell7.png";
 import cell8 from "@/assets/cell/cell8.png";
 import defaultAvatar from "@/assets/image/avatar.png";
-import { addCommasToNumber } from "@/utils/tool";
+// import { addCommasToNumber } from "@/utils/tool";
 import { userUpdate } from '@/api/user'
 import { uploadFile } from "@/api/tool";
 import local from '@/utils/local'
@@ -37,6 +37,9 @@ const handleClickUploadAvatar = () => {
 const handleAfterRead = async (file: any, type: any) => {
   queryUploadFile(file, type);
 };
+const addCommasToNumber = (str:any)=>{
+  return str
+}
 const queryUploadFile = async (file: any, type: any) => {
   file.status = "uploading"; // 显示上传状态
   // 创建 FormData 对象

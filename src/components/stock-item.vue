@@ -3,25 +3,24 @@
         <div class="flex items-center justify-between">
             <!-- 左侧：Logo和公司信息 -->
             <div class="left flex items-center gap-[12px]">
-                <!-- 亚马逊Logo -->
-
-
                 <!-- 股票信息 -->
                 <div class="stock-info h-40 flex flex-col justify-between">
-                    <div class="symbol text-[16px] font-bold color-[#374151]">{{ item.logTypeDesc }}
+                    <div class="symbol text-[16px] font-bold color-[#374151]">{{ props.showType == 2 ? t('Withdrawal')
+                        :item.logTypeDesc }}
                     </div>
                     <div class="company-name text-[12px] color-[#6B7280]">{{ item?.createdAt }}
                     </div>
                 </div>
             </div>
-
             <!-- 右侧：价格信息 -->
             <div class="right text-right ">
-
                 <div
                     class="price-change text-nowrap flex items-center justify-end gap-[4px] color-[#64748B] text-[12px]">
                     {{ item.type == '1' ? '+' : '-' }} ₹ {{ item.amount }}
-
+                </div>
+                <div v-if="props.showType == 2"
+                    class="status text-nowrap flex items-center justify-end gap-[4px] color-[#64748B] text-[12px]">
+                    {{ t(statusEnum[item.status]) }}
                 </div>
             </div>
         </div>
@@ -36,8 +35,22 @@ const props = defineProps({
     item: {
         type: Object,
         default: () => ({})
+    },
+    showType: {
+        type: String || Number
     }
 })
+const { t } = useI18n()
+const statusEnum = {
+    0: "Under review",
+    1: 'Successful',
+    2: 'Processed',
+    3: "Under review",
+    4: "Under review",
+    5: "Under review",
+    6: "Under review",
+
+}
 // 字符串 字母首大写
 function capitalize(str: string) {
     return str.charAt(0).toUpperCase() + str.slice(1)

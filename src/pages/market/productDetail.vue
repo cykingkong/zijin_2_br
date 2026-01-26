@@ -168,7 +168,8 @@ const enumBtnText = {
 const selectedCouponId = ref(-1);
 const router = useRouter()
 const couponList = computed(() => {
-    return userStore.userInfo?.couponsList || []
+    // 过滤出 status != 0 的优惠券
+    return userStore.userInfo?.couponsList.filter(item => item.status != 0) || []
 })
 const totalPrice = computed(() => {
     if (selectedCouponId.value) {

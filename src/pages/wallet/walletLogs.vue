@@ -4,12 +4,12 @@
       <div
         class="tab-item flex-1 flex items-center justify-center text-center border text-14 border-[#E5E5E5] border-solid rounded-[16px] py-4 px-6 h-40"
         :class="activeTab == index ? 'bg-[#F5F5F5] text-[#222222] font-bold' : 'text-[#999999]'"
-        v-for="(item, index) in orderTypeList" :key="index" @click="activeTab = index; getWalletLogsList()">{{ $t(item)
+        v-for="(item, index) in orderTypeList" :key="index" @click="activeTab = index; getData()">{{ $t(item)
         }}
       </div>
     </div>
     <div class="order-list pb-[16px] flex-col flex gap-[16px]">
-      <stockItem v-for="(item, index) in orderListData" :key="index" :item="item"
+      <stockItem v-for="(item, index) in orderListData" :key="index" :item="item" :showType="activeTab"
         />
     </div>
     <empty v-if="orderListData.length == 0" :no-tips="true" />
@@ -19,6 +19,7 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import { walletLogsGrid } from "@/api/user";
+import{withdrawOrderGrid} from '@/api/withdraw'
 const { proxy } = getCurrentInstance()!;
 import stockItem from "@/components/stock-item.vue";
 
@@ -35,14 +36,55 @@ const page = reactive({
 // 加载更多
 const loadMore = () => {
   page.pageIndex++;
-  getWalletLogsList();
+  getData();
 };
+const getData = ()=>{
+      orderListData.value =  [];
 
+  if(activeTab.value == 2){
+    getWithdrawalOrderList()
+  }else{
+    getWalletLogsList()
+  }
+}
+const getWithdrawalOrderList = async ()=>{
+    try {
+    listStatus.value = 1; // 开始加载
+    const { data } = await withdrawOrderGrid({
+      ...page,
+      type: activeTab.value == 0 ? null : activeTab.value,
+    });
+
+    if (!data.rows || data.rows.length === 0) {
+      listStatus.value = 3; // 没有数据
+      return;
+    }
+
+    if (page.pageIndex === 1) {
+      // 第一页，直接替换数据
+      orderListData.value = data.rows || [];
+    } else {
+      // 后续页面，追加数据
+      orderListData.value = orderListData.value.concat(data.rows || []);
+    }
+
+    // 判断是否还有更多数据
+    if (data.rows.length <= data.total) {
+      listStatus.value = 3; // 没有更多数据
+      return;
+    }
+
+    listStatus.value = 2; // 可以加载更多
+
+  } catch (error) {
+    console.error("获取订单列表失败:", error);
+    listStatus.value = 3; // 出错时设置为没有更多
+  }
+}
 // 获取股票订单列表
 const getWalletLogsList = async () => {
   try {
     listStatus.value = 1; // 开始加载
-
     const { data } = await walletLogsGrid({
       ...page,
       type: activeTab.value == 0 ? null : activeTab.value,
