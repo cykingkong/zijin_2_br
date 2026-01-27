@@ -1,11 +1,12 @@
 <template>
   <div class="aboutUs p-12">
-    <div class="about-us-content" v-html="data"></div>
+    <div class="about-us-content" v-html="optimizeRichText(data)"></div>
   </div>
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
 import { indexInfo } from "@/api/market";
+import {optimizeRichText} from "@/utils/richText"
 const data = ref();
 const getData = async () => {
   const res = await indexInfo();

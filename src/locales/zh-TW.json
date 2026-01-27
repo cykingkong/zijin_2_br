@@ -37,5 +37,7 @@
   "Redemption successful": "兑换成功",
   "Under review": "审核中",
   "Approved": "已通过",
-  "Rejected": "已拒绝"
+  "Rejected": "已拒绝",
+  "Application successful": "申请成功",
+  "Withdrawal requests will arrive within 10-72 hours. Please be patient.": "提取请求将在10-72小时内到达。请耐心等待。"
 }
