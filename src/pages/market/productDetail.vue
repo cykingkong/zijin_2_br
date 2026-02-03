@@ -1,326 +1,265 @@
 <template>
-    <div class="productDetail min-h-screen bg-white px-[16px] ">
-        <!-- 1. Product Header -->
-        <div class="header-section flex py-[20px] gap-[16px]">
-            <div
-                class="img-box flex-shrink-0 w-[100px] h-[100px] bg-[#F7F7F7] rounded-[12px] flex items-center justify-center overflow-hidden">
-                <img :src="productInfo.productImage" class="w-full h-full object-cover"
-                    v-if="productInfo.productImage" />
-            </div>
-            <div class="info flex flex-col justify-between py-[4px] w-[236px]">
-                <div class="max-w-[100%]">
-                    <div class="text-[16px] font-bold text-[#1A1A1A]">{{ productInfo.productName || '...' }}</div>
-                    <div class="detail-section mt-12">
-                        <div class="detail-card  rounded-[16px] ">
-                            <div class="row flex justify-between mb-[12px]">
-                                <span class="label text-[14px] text-[#999]">{{ t("Product Price") }}</span>
-                                <span class="value text-[14px] text-[#666]">₹ {{
-                                    addCommasToNumber(productInfo.originalPrice) || '0.00'
-                                    }}</span>
-                            </div>
-                            <div class="row flex justify-between mb-[12px]">
-                                <span class="label text-[14px] text-[#999]">{{ t("Daily Income") }}</span>
-                                <span class="value text-[14px] text-[#666]">₹ {{
-                                    addCommasToNumber(productInfo.dailyIncome) }}</span>
-                            </div>
-                            <div class="row flex justify-between mb-[12px]">
-                                <span class="label text-[14px] text-[#999]">{{ t("Income Cycle") }}</span>
-                                <span class="value text-[14px] text-[#666]">{{ productInfo.incomeCycle }} {{ t("Days")
-                                }}</span>
-                            </div>
-                            <div class="row flex justify-between mb-[12px]">
-                                <span class="label text-[14px] text-[#999]">{{ t("Level Limit") }}</span>
-                                <span class="value text-[14px] text-[#666]">{{ productInfo.levelLimit == 0 ?
-                                    t('NoLimit') :
-                                    t('LevelLimit') }}</span>
-                            </div>
-                            <div class="row flex justify-between mb-[12px]">
-                                <span class="label text-[14px] text-[#999]">{{ t("Purchase Limit") }}</span>
-                                <span class="value text-[14px] text-[#666]">{{ productInfo.purchaseLimit ?
-                                    productInfo.purchaseLimit
-                                    : t('NoLimit') }}</span>
-                            </div>
-                            <!-- <div class="row flex justify-between mb-[12px]">
-                                <span class="label text-[14px] text-[#999]">{{ t("New User Reward") }}</span>
-                                <span class="value text-[14px] text-[#FF4E4E]">₹ {{ productInfo.newUserReward }}</span>
-                            </div>
-                            <div class="row flex justify-between mb-[16px] pb-[16px] border-b border-[#eee]">
-                                <span class="label text-[14px] text-[#999]">{{ t("Discount Rate") }}</span>
-                                <span class="value text-[14px] text-[#FF4E4E]">{{ productInfo.discountRate }}%</span>
-                            </div> -->
+    <div class="productDetail min-h-screen bg-white pb-[100px] font-sans">
 
+        <!-- 顶部导航栏 (如果这是子页面通常会有个 header，这里保留 content 结构) -->
+        <!-- 假设外部 layout 已处理 header，这里直接开始内容 -->
 
-                        </div>
-                    </div>
-                </div>
-                <div class="total-row flex  items-center">
-                    <span class="label w-full text-align-right text-[14px] font-bold text-[#333] ">{{
-                        t(`Total Payment Amount`) }}:₹ {{ totalPrice }}</span>
-                    <!-- <span class="value text-[18px] font-bold text-[#1A1A1A]"></span> -->
-                </div>
-                <div class="price text-[14px] font-bold text-[#999] text-align-right mt-6 mb-6"
-                    v-if="productInfo.discountRate != 0"> {{ t(`Original Price`)
-                    }}:
-                    <span class="discount-price line-through text-[#999]">
-                        ₹{{
-                            productInfo.originalPrice
-                            || '0.00' }}
-                    </span>
-
-                </div>
-                <div class="price text-[18px] font-bold text-[#FF6B00] text-align-right mt-6"> {{ t(`Discount Price`)
-                    }}:₹{{
-                        productInfo.discountPrice
-                        || '0.00' }}
-                </div>
+        <!-- 1. Hero Image (顶部大图) -->
+        <div class="w-full aspect-square bg-[#F7F7F7] relative overflow-hidden">
+            <img :src="productInfo.productImage" class="w-full h-full object-cover" v-if="productInfo.productImage" />
+            <!-- 空白占位 -->
+            <div v-else class="w-full h-full flex items-center justify-center bg-gray-100 text-gray-300">
+                <span>Product Image</span>
             </div>
         </div>
 
-        <!-- 2. Coupon Selection -->
-        <div class="coupon-section mt-[20px]" v-if="couponList && couponList.length > 0">
-            <h3 class="text-[16px] font-bold text-[#1A1A1A] mb-[12px]">{{ t("Counpon Select") }}</h3>
-            <!-- Coupon List -->
-            <div class="coupon-list flex flex-col gap-[12px]">
-                <div v-for="(item, index) in couponList" :key="index"
-                    class="coupon-item z-1 relative  rounded-[12px] p-[16px] cursor-pointer transition-all duration-200"
-                    :class="selectedCouponId === item.id ? 'active-coupon' : ''" @click="handleClickCoupon(item)">
-                    <div class="notches absolute -left-[5px] top-[71px] w-[10px] z-[10] h-[10px] bg-[#fff] rounded-full border-r border-[#eee]"
-                        :class="selectedCouponId === item.id ? 'active-notches' : ''">
-                        <svg class="absolute -left-[2px] top-[-1px] w-11 h-12" viewBox="0 0 10 10">
-                            <path d="M 5 0 A 5 5 0 0 0 5 10 Z" fill="#FFFFFF" />
-                            <path d="M 5 0 A 5 5 0 0 0 5 10" stroke="#fff" stroke-width="2" fill="none" />
-                        </svg>
-                    </div>
-                    <div class="notches absolute -right-[5px] top-[71px] w-[10px] z-10 h-[10px] bg-[#fff] rounded-full border-l border-[#eee]"
-                        :class="selectedCouponId === item.id ? 'active-notches' : ''">
-                        <svg class="absolute -right-[2px] top-[-2px] w-12 h-13" wi viewBox="0 0 10 10">
-                            <path d="M 5 0 A 5 5 0 0 1 5 10 Z" fill="#FFFFFF" />
-                            <path d="M 5 0 A 5 5 0 0 1 5 10" stroke="#fff" stroke-width="2" fill="none" />
-                        </svg>
-                    </div>
-                    <div class="flex justify-between items-start mb-[8px]">
-                        <div class="font-bold text-[15px] text-[#1A1A1A]">{{ item.couponName }}</div>
-                        <div class="checkbox">
-                            <div class="radio w-[16px] h-[16px] rounded-[4px] border flex items-center justify-center"
-                                :class="selectedCouponId === item.id ? 'radio-active' : ''">
-                                <svg class="w-10 h-10" v-if="selectedCouponId === item.id" viewBox="0 0 10 10"
-                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M8.33341 2.70834L3.75008 7.29168L1.66675 5.20834" stroke="white"
-                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
+        <div class="px-[px] -mt-[20px] relative z-10">
+            <!-- 2. Product Title (产品标题) -->
+            <!-- 使用白色背景和圆角模拟截图中的卡片头部效果，或者直接放在背景上 -->
+            <div class="bg-white rounded-t-[20px] pt-[20px] pb-[10px] px-20">
+                <h1 class="text-[20px] font-bold text-[#1A1A1A] leading-[1.3]">
+                    {{ productInfo.productName || 'Product Name' }}
+                </h1>
+            </div>
+            <div class="px-20">
 
-                            </div>
-                        </div>
+                <!-- 3. Core Data Card (核心数据列表) -->
+                <div
+                    class="data-card bg-white rounded-[12px] border border-[#F2F2F2] border-solid shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-[16px] mb-[24px]">
+
+                    <!-- Limit buying -->
+                    <div class="flex justify-between items-center py-[12px] border-b border-[#F5F5F5]">
+                        <span class="text-[#999] text-[14px]">{{ t("Limit buying") }}</span>
+                        <span class="text-[#333] text-[15px] font-bold font-din">
+                            {{ productInfo.purchaseCount || 0 }}/{{ productInfo.purchaseLimit || 1 }}
+                        </span>
                     </div>
 
-                    <div class="countdown flex items-center text-[12px] text-[#FF4E4E] mb-[12px] gap-6">
-                        <van-icon name="clock-o" class="mr-1" />
-                        <span>{{ t('Remaining usable time') }} {{ item.validEndTime }}</span>
+                    <!-- Price -->
+                    <div class="flex justify-between items-center py-[12px] border-b border-[#F5F5F5]">
+                        <span class="text-[#999] text-[14px]">{{ t("Price") }}</span>
+                        <span class="text-[#333] text-[15px] font-bold font-din">
+                            {{ currencySymbol }} {{ addCommasToNumber(productInfo.discountPrice ||
+                                productInfo.originalPrice) }}
+                        </span>
                     </div>
 
-                    <div class="coupon-divider relative mb-[12px]">
+                    <!-- Validity period -->
+                    <div class="flex justify-between items-center py-[12px] border-b border-[#F5F5F5]">
+                        <span class="text-[#999] text-[14px]">{{ t("Validity period") }}</span>
+                        <span class="text-[#333] text-[15px] font-bold font-din">
+                            {{ productInfo.incomeCycle }} {{ t("Days") }}
+                        </span>
                     </div>
 
-                    <div class="terms text-[12px] text-[#666]">
-                        <span class="text-[#00B86B]">{{ t('Terms and conditions') }}</span>
-                        {{ t(`apply for eligible products`) }}
+                    <!-- Daily Income -->
+                    <div class="flex justify-between items-center py-[12px] border-b border-[#F5F5F5]">
+                        <span class="text-[#999] text-[14px]">{{ t("Daily Income") }}</span>
+                        <span class="text-[#333] text-[15px] font-bold font-din">
+                            {{ currencySymbol }} {{ addCommasToNumber(productInfo.dailyIncome) }}
+                        </span>
+                    </div>
+
+                    <!-- Total Revenue (Calculated) -->
+                    <div class="flex justify-between items-center py-[12px] border-b border-[#F5F5F5]">
+                        <span class="text-[#999] text-[14px]">{{ t("Total Revenue") }}</span>
+                        <span class="text-[#333] text-[15px] font-bold font-din">
+                            {{ currencySymbol }} {{ totalRevenue }}
+                        </span>
+                    </div>
+
+                    <!-- Rate of return (Calculated) -->
+                    <div class="flex justify-between items-center py-[12px]">
+                        <span class="text-[#999] text-[14px]">{{ t("Rate of return") }}</span>
+                        <span class="text-[#333] text-[15px] font-bold font-din">
+                            {{ rateOfReturn }}%
+                        </span>
+                    </div>
+                </div>
+
+                <!-- 4. Description Text (产品描述) -->
+                <div class="description text-[#666] text-[13px] leading-[1.6] mb-[24px]">
+                    <!-- 如果后端有富文本，使用 v-html，否则显示静态模拟文案 -->
+                    <div v-if="productInfo.productContented" v-html="productInfo.productContented"></div>
+                    <div v-else>
+                        <p class="mb-4">We're excited to share some great news. Our growth in September was stronger
+                            than in
+                            August.</p>
+                        <p class="mb-4">To meet rising member demand, we're launching a limited-time product: Lucky
+                            Series.
+                        </p>
+                        <p>Benefits of the Lucky Series: higher daily returns, faster payback, quicker profits.</p>
+                    </div>
+                </div>
+
+                <!-- 5. Rewards Info (奖励信息 - 仿截图样式) -->
+                <h3 class="text-[15px] font-bold text-[#1A1A1A] mb-[12px]">About Rewards</h3>
+                <div
+                    class="rewards-card bg-white rounded-[12px] border border-[#F2F2F2] border-solid shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-[16px] mb-[24px]">
+                    <div class="flex justify-between items-center py-[10px] border-b border-[#F5F5F5]">
+                        <span class="text-[#666] text-[13px]">{{ t("Referral reward") }}</span>
+                        <span class="text-[#333] text-[14px] font-bold font-din">{{ currencySymbol }} {{ referralReward
+                            }}</span>
+                    </div>
+                    <div class="flex justify-between items-center py-[10px] border-b border-[#F5F5F5]">
+                        <span class="text-[#666] text-[13px]">{{ t("Upgrade reward") }}</span>
+                        <span class="text-[#333] text-[14px] font-bold font-din">{{ currencySymbol }} {{ upgradeReward
+                            }}</span>
+                    </div>
+                    <div class="flex justify-between items-center py-[10px]">
+                        <span class="text-[#666] text-[13px]">{{ t("Upgrade Diamonds") }}</span>
+                        <span class="text-[#333] text-[14px] font-bold font-din">{{ currencySymbol }} {{ upgradeDiamonds
+                            }}</span>
+                    </div>
+                </div>
+
+                <!-- 6. Commission Info (佣金信息 - 仿截图样式) -->
+                <div class="commission-section mb-[30px]">
+                    <h3 class="text-[14px] font-bold text-[#1A1A1A] mb-[8px]">B/C/D Team commission</h3>
+                    <div class="text-[#666] text-[12px] leading-[1.8] font-din">
+                        <p>B=10% - 10*30={{ currencySymbol }}300</p>
+                        <p>C= 5% - 5*30={{ currencySymbol }}150</p>
+                        <p>D= 5% - 5*30={{ currencySymbol }}150</p>
                     </div>
                 </div>
             </div>
+
         </div>
 
-        <!-- 3. Purchase Details -->
-        <div class="text-[14px] text-[#999] mt-12" v-html="productInfo.productContented"></div>
-
-        <bottom-button color="#1B1B1B" :button-text="t(enumBtnText[productInfo.status])"
-            @click="activateCoupon"></bottom-button>
+        <!-- 底部按钮 -->
+        <bottom-button color="#1B1B1B" :button-text="t(enumBtnText[productInfo.status] || 'Buy Now')"
+            @click="handlePurchase"></bottom-button>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { optimizeRichText } from '@/utils/richText';
-import { productInfo as info, purchase } from '@/api/product';
+import { ref, computed, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { productInfo as infoApi, purchase } from '@/api/product';
 import { useUserStore } from '@/stores';
 import { addCommasToNumber } from '@/utils/tool';
+import { optimizeRichText } from '@/utils/richText';
+import { showToast } from 'vant';
+
+// 假设 BottomButton 是全局组件或已注册
+// import BottomButton from '@/components/BottomButton.vue';
+
+const route = useRoute();
+const router = useRouter();
+const { t } = useI18n();
 const userStore = useUserStore();
-const userInfo = computed(() => userStore.userInfo);
-const { t } = useI18n()
+
+const currencySymbol = '₹'; // 根据截图或项目配置修改货币符号，截图是 $ 但代码原为 ₹
+
 const productInfo = ref<any>({
-    name: '...',
-    desc: '...',
-    price: '0.00',
-    image: '',// Add image URL here
-    status: 0,
+    productId: '',
+    productName: '',
+    productImage: '',
+    originalPrice: 0,
+    discountPrice: 0,
+    dailyIncome: 0,
+    incomeCycle: 0,
+    purchaseLimit: 1,
+    purchaseCount: 0, // 当前购买数
+    status: 1,
+    productContented: ''
 });
-/**
- *  0 => '下架',
-    1 => '上架',
-    2 => '售罄',
-    3 => '预售',
- */
+
+// 模拟的奖励数据 (如果接口没有返回，暂时使用计算值或固定值)
+const referralReward = computed(() => addCommasToNumber((productInfo.value.discountPrice * 0.1).toFixed(2))); // 假设10%
+const upgradeReward = computed(() => addCommasToNumber((productInfo.value.discountPrice * 0.2).toFixed(2)));
+const upgradeDiamonds = computed(() => addCommasToNumber((productInfo.value.discountPrice * 5).toFixed(2)));
+
 const enumBtnText = {
     0: 'Sold out',
-    1: 'Activate',
+    1: 'Buy Now', // 截图上没显示按钮文字，改为通用购买文字
     2: 'Sold out',
     3: 'Pre-sale'
-}
-const selectedCouponId = ref(-1);
-const router = useRouter()
-const couponList = computed(() => {
-    // 过滤出 status != 0 的优惠券
-    return userStore.userInfo?.couponsList.filter(item => item.status != 0) || []
-})
-const totalPrice = computed(() => {
-    if (selectedCouponId.value) {
-        const coupon = couponList.value.find(item => item.id == selectedCouponId.value)
-        let couponType = coupon?.couponType // 1:百分比折扣 2:固定金额
-        if (couponType == 1) {
-            // 百分比折扣
-            let discountPrice = productInfo.value.discountPrice * (1 - coupon.discountValue / 100)
-            return addCommasToNumber(discountPrice.toFixed(2))
-        } else if (couponType == 2) {
-            // 固定金额折扣
-            let discountPrice = productInfo.value.discountPrice - coupon.discountValue
-            return addCommasToNumber(discountPrice.toFixed(2))
-        }
-        console.log(coupon, 'citem')
-    }
+};
 
-    return addCommasToNumber(productInfo.value.discountPrice)
-})
+// 计算总收益: 日收益 * 周期
+const totalRevenue = computed(() => {
+    const daily = Number(productInfo.value.dailyIncome) || 0;
+    const cycle = Number(productInfo.value.incomeCycle) || 0;
+    return addCommasToNumber((daily * cycle).toFixed(2));
+});
+
+// 计算回报率: ((总收益 - 本金) / 本金) * 100% 或者 (总收益 / 本金) * 100%
+// 通常这类理财App的回报率是指总产出比例，这里按 (Total / Price) * 100 计算，或者按截图自行调整逻辑
+const rateOfReturn = computed(() => {
+    const price = Number(productInfo.value.discountPrice) || 1; // 避免除以0
+    const daily = Number(productInfo.value.dailyIncome) || 0;
+    const cycle = Number(productInfo.value.incomeCycle) || 0;
+    const total = daily * cycle;
+
+    // 简单计算：(总收益 / 价格) * 100，保留1位小数
+    if (price <= 0) return '0.0';
+    return ((total / price) * 100).toFixed(1);
+});
+
 const getProductDetail = async (id) => {
     try {
-        const { data, code } = await info({ productId: id })
+        const { data, code } = await infoApi({ productId: id });
         if (code == 200) {
-            productInfo.value = data
+            productInfo.value = data;
+            // 处理富文本
+            if (data.productContent) {
+                productInfo.value.productContented = optimizeRichText(data.productContent);
+            }
+            // 如果需要更新用户优惠券等信息
+            // await userStore.getUserCouponList(1); 
+        }
+    } catch (e) {
+        console.log(e);
+    }
+};
 
-            productInfo.value.productContented = optimizeRichText(data.productContent)
-            await userStore.getUserCouponList(1)
-        }
-    } catch (e) {
-        console.log(e)
-    }
-}
-const handleClickCoupon = (item) => {
-    if (item.status == 2) return
-    if (item.id == selectedCouponId.value) {
-        selectedCouponId.value = -1
-        return
-    }
-    selectedCouponId.value = item.id
-}
-const activateCoupon = async () => {
+const handlePurchase = async () => {
+    // 简化购买逻辑，截图未显示优惠券选择，这里直接调用购买
+    // 如果需要弹窗选择优惠券，可以在这里加弹窗逻辑
     try {
-        const { data, code } = await purchase({
+        const { code } = await purchase({
             productId: productInfo.value.productId,
-            couponId: selectedCouponId.value
-        })
+            couponId: -1 // 假设不传或传-1代表不使用优惠券
+        });
         if (code == 200) {
-            showToast({
-                message: t('ActivateSuccess')
-            })
-            await getProductDetail(productInfo.value.productId)
+            showToast({ message: t('ActivateSuccess') });
+            await getProductDetail(productInfo.value.productId);
             setTimeout(() => {
-                router.push({
-                    path: "/buy/success"
-                })
-            })
+                router.push({ path: "/buy/success" });
+            }, 500);
         }
     } catch (e) {
-        console.log(e)
+        console.log(e);
     }
-}
-const init = (id) => {
-    getProductDetail(id)
-}
-const route = useRoute()
+};
+
 onMounted(() => {
     if (route.query.productId) {
-        init(route.query.productId)
+        getProductDetail(route.query.productId);
     }
-})
+});
 </script>
 
-<style lang="less" scoped>
-// --- 新增变量 ---
-@coupon-border-color: #F0F0F0; // 优惠券未选中时的边框颜色（图中为黄色）
-@coupon-active-color: #ffd700; // 优惠券选中时的边框颜色
-@coupon-bg-color: #fff;
-@notch-size: 10px; // 凹口（半圆）的直径
-
-.productDetail {
-    padding-bottom: calc(env(safe-area-inset-bottom) + 180px);
+<style scoped lang="less">
+/* 使用 DIN 字体显示数字，符合财经类 App 风格 */
+.font-din {
+    font-family: 'DIN Alternate', 'Roboto', sans-serif;
 }
 
-.header-section {
-    border-bottom: 2px dashed #eee;
-}
-
-.dashed-line {
-    border-top: 1px dashed #eee;
-}
-
-.coupon-item {
-    border: 1px solid @coupon-border-color; // 默认使用黄色边框
-    box-shadow: 0 0 0 1px @coupon-border-color inset; // 添加内嵌阴影模拟双线边框
-    background-color: @coupon-bg-color;
-    // overflow: hidden; // 隐藏凹口溢出的部分
-    padding-bottom: 16px; // 确保底部有足够的内边距
-}
-
-.active-coupon {
-    border-color: #FFD700;
-}
-
-.coupon-divider {
-    // 自身不显示边框，仅作为伪元素的容器
-    height: 1px;
-
-    width: 100%;
-    border-top: 1px dashed #e5e5e5;
-    height: 0; // 移除默认高度
-
-}
-
-
-.notches {
-    border: 1.5px solid #F0F0F0;
-}
-
-.active-notches {
-    border-color: #FFD700;
-}
-
-.radio {
-    border: 1px solid #cbd5e1;
-}
-
-.radio.radio-active {
-    background-color: #FFD700;
-    border-color: #FFD700;
-}
-
-.radio .radio-active::after {
-    content: "";
-    width: 8px;
-    height: 4px;
-    border: 2px solid #ffffff;
-    border-top: none;
-    border-right: none;
-    transform: rotate(-45deg);
-    position: absolute;
-    top: 4px;
-    left: 3px;
+/* 隐藏滚动条但保留功能 (如果 Description 太长) */
+.description::-webkit-scrollbar {
+    display: none;
 }
 </style>
 
 <route lang="json5">
 {
-  name: 'productDetail',
+  name: 'productDetailss', 
   meta: {
-    title: 'Product Detail',
-    i18n: 'Product Detail'
+    title: 'Product Details',
+    i18n: 'Product Details'
   }
 }
 </route>

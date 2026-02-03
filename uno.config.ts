@@ -19,10 +19,16 @@ export default defineConfig({
     }),
     presetMini(),
   ],
-
+  theme: {
+    fontFamily: {
+      // 定义名为 'grotesk' 的字体工具类
+      // 这里的 'Space Grotesk' 必须和上面 CSS 里的 font-family 名字一致
+      grotesk: ['Space Grotesk', 'sans-serif'],
+    },
+  },
   shortcuts: [
     // shortcuts to multiple utilities
     ['btn', 'px-6 py-3 rounded-3 border-none inline-block bg-green-400 text-white cursor-pointer !outline-none hover:bg-green-600 disabled:cursor-default disabled:bg-gray-600 disabled:opacity-50'],
-
+    ['flex-center', 'flex items-center justify-center'],
   ],
 })

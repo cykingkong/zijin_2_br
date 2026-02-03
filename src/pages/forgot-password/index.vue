@@ -1,44 +1,62 @@
 <template>
   <div class="changePassword-content flex flex-col  p-12">
 
+    <div class="top-image w-full bg-[#fff]">
+      <CloseButton @close="onBack">
+        <template #right>
+          <LangSelectDropdown v-model="lang" />
 
+        </template>
+      </CloseButton>
 
-    <div class="label mb-8 mt-12" :class="['flex items-center gap-4']">
-      {{ t('Phone') }}
     </div>
-    <div class="phone-input flex items-center gap-[12px]">
-      <div class="picker flex-shrink-0 h-[48px] rounded-[12px] flex items-center justify-center px-16"
+
+    <div class="label mb-8 mt-12 font-bold text-[28px]" :class="['flex items-center gap-4']">
+      {{ t('Forgot password') }}
+    </div>
+    <div class="flex flex-col gap-[20px]">
+      <div class="phone-input flex items-center gap-[12px]">
+        <!-- <div class="picker flex-shrink-0 h-[48px] rounded-[12px] flex items-center justify-center px-16"
         @click="hanleClickAreaPick">
         <div class="iti-flag mr-10 rounded-full" :class="areaInfo?.code" style="transform: scale(1.5)"></div>
         <div class="num">+{{ areaInfo?.dialCode }}</div>
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M4 6L8 10L12 6" fill="#1B1B1B" />
         </svg>
+      </div> -->
+        <inputCom :placeholder="t('PleaseEnterPhoneNumber')" v-model:value="form.account" :tips="''"
+          class="flex-1 w-full">
+        </inputCom>
       </div>
-      <inputCom :placeholder="t('PleaseEnterPhoneNumber')" v-model:value="form.account" :tips="''"
-        class="flex-1 w-full">
-      </inputCom>
-    </div>
-    <div class="label mb-8 mt-12" :class="['flex items-center gap-4']">
+      <!-- <div class="label mb-8 mt-12" :class="['flex items-center gap-4']">
       {{ t('NewPassword') }}
-    </div>
-    <div class="phone-input flex items-center gap-[12px]">
+    </div> -->
 
-      <inputCom class="w-full" v-model:value="form.password" :placeholder="t('NewPassword')">
-      </inputCom>
-    </div>
-    <div class="label mb-8 mt-12" :class="['flex items-center gap-4']">
+      <!-- <div class="label mb-8 mt-12" :class="['flex items-center gap-4']">
       {{ t('VerificationCode') }}
+    </div> -->
+      <div class="phone-input flex items-center gap-[12px]">
+        <inputCom class="w-full" :placeholder="t('VerificationCode')" v-model:value="form.code" :tips="''">
+          <template #sendCode>
+            <div class="absolute right-0 font-size-12 h-18 flex justify-center items-center sendCode"
+              :class="countdown > 0 ? 'text-gray-400' : 'text-[#000]'" @click="getCode">
+              {{ countdown > 0 ? `${countdown}s` : t("Get") }}
+            </div>
+          </template>
+        </inputCom>
+      </div>
+      <div class="phone-input flex items-center gap-[12px]">
+
+        <inputCom class="w-full" v-model:value="form.password" :placeholder="t('NewPassword')">
+        </inputCom>
+      </div>
+      <div class="phone-input flex items-center gap-[12px]">
+
+        <inputCom class="w-full" v-model:value="form.password" :placeholder="t('Confirm Password')">
+        </inputCom>
+      </div>
     </div>
-    <div class="phone-input flex items-center gap-[12px]">
-      <inputCom class="w-full" :placeholder="t('VerificationCode')" v-model:value="form.code" :tips="''">
-        <template #sendCode>
-          <div class="absolute right-0 font-size-12 sendCode text-[#000]" @click="getCode">
-            {{ countdown > 0 ? `${countdown}s` : t("SendCode") }}
-          </div>
-        </template>
-      </inputCom>
-    </div>
+
     <bottom-button color="#1b1b1b" :button-text="t('Confirm')" @click="onSubmit"></bottom-button>
     <nationalityList ref="controlChildRef" :title="t('Pick')" @getName="getName"></nationalityList>
   </div>
@@ -47,11 +65,14 @@
 import { ref, reactive } from "vue";
 import inputCom from "@/components/inputCom.vue";
 import nationalityList from "@/components/nationality-list/nationalityList.vue";
+import local from "@/utils/local";
 
 import { useUserStore } from "@/stores";
 import { forgetPassword, sendCode } from "@/api/user";
 import loginTab from "@/components/tab.vue";
 const { t } = useI18n();
+const lang = ref(local.getlocal('lang') || 'en')
+
 const hasLogin = ref(false);
 interface formDataInter {
   password: string,
@@ -73,6 +94,13 @@ const form = reactive<formDataInter>({
   username: "",
   code: "",
 });
+function onBack() {
+  if (window.history.state.back) history.back();
+  else router.replace("/");
+}
+const toSetLang = () => {
+  router.push("/profile/languange");
+};
 const forgotType = ref(0); // 1 忘记登录密码  2 忘记支付密码
 const typeArr = [
   {
@@ -181,9 +209,11 @@ onMounted(async () => {
 @import "@/components/nationality-list/intl.css";
 
 .sendCode {
-  padding: 8px;
-  border-radius: 10px;
+  padding: 10px;
+  border-radius: 8px;
   border: 1px solid #868c9a;
+  color: #fff;
+  background: #424242;
 }
 
 .link {

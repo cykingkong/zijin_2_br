@@ -126,7 +126,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="market relative overflow-hidden pb-[20px] bg-white min-h-screen">
+  <div class="market relative overflow-hidden pb-[20px] bg-[#f7f7f7] min-h-screen">
     <!-- Top Tabs -->
     <div class="sticky top-0 z-50 bg-white">
       <van-tabs v-model:active="activeName" @click-tab="tabChange" line-width="180px" color="#333"
@@ -232,6 +232,38 @@ onMounted(() => {
         </div>
       </div>
     </div>
+    <div class="list px-[20px] flex flex-col gap-[20px]">
+      <div class="product-item w-full bg-[#fff] px-[8px] py-[14px] rounded-[20px]">
+        <div class="top flex gap-[8px] pb-[13px] border-b-solid border-b-[1px] border-b-[#F5F5F5]">
+          <div class="img w-68 h-68 flex-shrink-0 bg-[#555] rounded-[20px]"></div>
+          <div class="info w-full">
+            <div class="title font-bold text-[14px] color-[#161616]">1231231231</div>
+            <div class="desc text-[12px] color-[#8C91A2] font-normal">LV1 and above</div>
+            <div class="flex justify-between items-end">
+              <div class="price color-[#FF6464] font-[14px] font-bold">#49</div>
+              <div class="button text-[14px] font-bold text-[#fff] bg-[#161616] px-[12px] py-[6px] rounded-[8px]">
+                {{ t('Buy Now') }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bottom flex pt-[13px]">
+          <div class="item flex-1">
+            <div class="label mb-4">{{ t('Validity period') }}</div>
+            <div class="value text-left">123</div>
+          </div>
+          <div class="item flex-1">
+            <div class="label text-center mb-4">{{ t('Validity period') }}</div>
+            <div class="value text-center">123</div>
+          </div>
+          <div class="item flex-1">
+            <div class="label text-right mb-4">{{ t('Validity period') }}</div>
+            <div class="value text-right">123</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
 
     <!-- Empty State -->
     <empty v-if="stockList && stockList.length == 0" :no-tips="true"></empty>
@@ -287,5 +319,29 @@ onMounted(() => {
   100% {
     opacity: 0.7;
   }
+}
+
+.label {
+  font-family: Space Grotesk;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 12px;
+  leading-trim: NONE;
+  line-height: 100%;
+  letter-spacing: 0px;
+  vertical-align: middle;
+
+}
+
+.value {
+  font-family: Space Grotesk;
+  font-weight: 500;
+  font-style: Medium;
+  font-size: 14px;
+  leading-trim: NONE;
+  line-height: 100%;
+  letter-spacing: 0px;
+  vertical-align: middle;
+
 }
 </style>

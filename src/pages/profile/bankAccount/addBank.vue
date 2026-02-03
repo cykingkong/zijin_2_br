@@ -1,5 +1,5 @@
 <template>
-  <div class="add-content p-24 flex flex-col pb-90">
+  <div class="add-content p-16 flex flex-col pb-90">
     <VanNavBar title="" :fixed="true" clickable :left-arrow="true" @click-left="onBack" placeholder z-index="999">
       <template #title>
         <div class="flex flex-items-center gap-6 font-size-[18px] font-bold">
@@ -7,65 +7,69 @@
         </div>
       </template>
     </VanNavBar>
-    <div class="label font-bold text-[16px] color-[#64748B]">
-      {{ t("Bank") }}
-    </div>
-    <div class="phone-input my-[12px]">
+    <div class="p-16 rounded-20 bg-[#fff] card">
 
-      <inputCom :placeholder="''" v-model:value="bankCardType" :type="'picker'">
-        <div class="w-full flex justify-between">
-          <div class="l flex-1 font-size-14" :class="form.bankName ? '' : 'color-[#9CA3AF]'" @click="showPicker = true">
-            {{ form.bankName ? form.bankName : t("PleaseSelect") }}
+      <div class="label font-bold text-[16px] color-[#64748B]">
+        {{ t("Bank") }}
+      </div>
+      <div class="phone-input my-[12px]">
+
+        <inputCom :placeholder="''" v-model:value="bankCardType" :type="'picker'">
+          <div class="w-full flex justify-between">
+            <div class="l flex-1 font-size-14" :class="form.bankName ? '' : 'color-[#9CA3AF]'"
+              @click="showPicker = true">
+              {{ form.bankName ? form.bankName : t("PleaseSelect") }}
+            </div>
+            <div class="r flex-shrink-0">
+              <svg class="w-16 h-16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 6L8 10L12 6" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+
+            </div>
           </div>
-          <div class="r flex-shrink-0">
-            <svg class="w-16 h-16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M4 6L8 10L12 6" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round" />
-            </svg>
+        </inputCom>
+      </div>
 
-          </div>
-        </div>
-      </inputCom>
-    </div>
+      <div class="label font-bold text-[16px] color-[#64748B]">
+        {{ t("Name") }}
+      </div>
+      <div class="phone-input my-[12px]">
+        <inputCom v-model:value="form.receiveName" :placeholder="t('')" :onlyRead="false" :inputType="'text'">
+        </inputCom>
+      </div>
 
-    <div class="label font-bold text-[16px] color-[#64748B]">
-      {{ t("Name") }}
-    </div>
-    <div class="phone-input my-[12px]">
-      <inputCom v-model:value="form.receiveName" :placeholder="t('')" :onlyRead="false" :inputType="'text'">
-      </inputCom>
-    </div>
+      <div class="label font-bold text-[16px] color-[#64748B]">
+        {{ t("Account") }}
+      </div>
+      <div class="phone-input my-[12px]">
+        <inputCom v-model:value="form.receiveAccount" :placeholder="t('')" :onlyRead="false" :inputType="'text'">
+        </inputCom>
+      </div>
 
-    <div class="label font-bold text-[16px] color-[#64748B]">
-      {{ t("Account") }}
-    </div>
-    <div class="phone-input my-[12px]">
-      <inputCom v-model:value="form.receiveAccount" :placeholder="t('')" :onlyRead="false" :inputType="'text'">
-      </inputCom>
-    </div>
+      <div class="label font-bold text-[16px] color-[#64748B]">
+        {{ t("Phone") }}
+      </div>
+      <div class="phone-input my-[12px]">
 
-    <div class="label font-bold text-[16px] color-[#64748B]">
-      {{ t("Phone") }}
-    </div>
-    <div class="phone-input my-[12px]">
+        <inputCom :placeholder="t('')" v-model:value="form.receivePhone" :tips="''">
+        </inputCom>
+      </div>
 
-      <inputCom :placeholder="t('')" v-model:value="form.receivePhone" :tips="''">
-      </inputCom>
-    </div>
-
-    <div class="label font-bold text-[16px] color-[#64748B]">
-      {{ t("login.email") }}
-    </div>
-    <div class="phone-input my-[12px]">
-      <inputCom :placeholder="t('')" v-model:value="form.receiveEmail" :tips="''">
-      </inputCom>
-    </div>
-    <div class="label font-bold text-[16px] color-[#64748B]">
-      {{ t("IFSC") }}
-    </div>
-    <div class="phone-input my-[12px]">
-      <inputCom :placeholder="t('')" v-model:value="form.IFSC" :tips="''">
-      </inputCom>
+      <div class="label font-bold text-[16px] color-[#64748B]">
+        {{ t("login.email") }}
+      </div>
+      <div class="phone-input my-[12px]">
+        <inputCom :placeholder="t('')" v-model:value="form.receiveEmail" :tips="''">
+        </inputCom>
+      </div>
+      <div class="label font-bold text-[16px] color-[#64748B]">
+        {{ t("IFSC") }}
+      </div>
+      <div class="phone-input my-[12px]">
+        <inputCom :placeholder="t('')" v-model:value="form.IFSC" :tips="''">
+        </inputCom>
+      </div>
     </div>
 
     <BottomButton color="#1B1B1B" :button-text="t('Submit')" @click="handleClickSubmit"></BottomButton>
@@ -235,9 +239,10 @@ onMounted(() => {
 }
 
 .phone-input {
+  border: 1px solid #F0F0F0;
 
   border-radius: 12px;
-  background: #F8F9FD;
+  // background: #F8F9FD;
 
   :deep(.input-box) {
     /* height: 48px; */
@@ -256,6 +261,10 @@ onMounted(() => {
   :deep(.tips) {
     margin-bottom: 0px;
   }
+}
+
+.card {
+  border: 1px solid #0000001A
 }
 </style>
 <route lang="json5">

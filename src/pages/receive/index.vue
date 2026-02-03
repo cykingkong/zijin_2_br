@@ -1,10 +1,40 @@
 <template>
     <div class="receive-content p-16 flex flex-col gap-16 ">
-        <div @click="handleClickActivity()"
+        <div class="p-[16px] rounded-[12px] bg-[#fff] border-solid flex flex-col gap-[16px] border-[#0000000D] border">
+            <div class="li-flex flex justify-between items-center">
+                <div class="label text-[12px] text-[#8C91A2]">Today's product revenue</div>
+                <div class="value flex items-center font-bold gap-8">
+                    <img src="@/assets/coin.png" class="w-20 h-20 block" alt="">
+                    $1231.12
+                </div>
+            </div>
+            <div class="li-flex flex justify-between items-center">
+                <div class="label text-[12px] text-[#8C91A2]">Today's product revenue</div>
+                <div class="value flex items-center font-bold gap-8">
+                    <img src="@/assets/coin.png" class="w-20 h-20 block" alt="">
+                    $1231.12
+                </div>
+            </div>
+            <div class="li-flex flex justify-between items-center">
+                <div class="label text-[12px] text-[#8C91A2]">Today's product revenue</div>
+                <div class="value flex items-center font-bold gap-8">
+                    <img src="@/assets/coin.png" class="w-20 h-20 block" alt="">
+                    $1231.12
+                </div>
+            </div>
+        </div>
+        <!-- <div @click="handleClickActivity()"
             class="receive-btn border b-solid b-[#1b1b1b] rounded-[16px] text-[#1b1b1b] text-[12px] min-w-[86px] h-37 text-center p-6 flex items-center justify-center">
             {{
                 $t('Receive')
             }}
+        </div> -->
+        <div class="flex bg-[#0000000D] rounded-[8px] p-[4px] mb-[16px] flex h-38">
+            <div class="btn-1 flex-1 flex text-[13px] font-bold justify-center items-center"
+                v-for="(item, index) in typeList" @click="activeIndex = index"
+                :class="activeIndex == index ? 'bg-[#161616] text-white rounded-[8px]' : ''" :key="index"> {{ item
+                }}
+            </div>
         </div>
         <div class="news-item w-full rounded-[16px]  min-h-[120px] flex gap-[12px]   p-12 shadow-[0px_0px_10px_0px_rgba(0,0,0,0.1)]"
             v-for="(item, index) in userProductList" :key="index">
@@ -73,6 +103,11 @@ const page = reactive({
 })
 const router = useRouter()
 const errorHtml = ref("")
+const activeIndex = ref(0);
+const typeList = ref([
+    'Unexpired products',
+    'Expired products',
+])
 const showPicker = ref(false)
 const receivedInfo = ref({ id: null })
 const watingReceiveIds = ref([])

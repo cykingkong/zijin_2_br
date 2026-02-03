@@ -12,6 +12,7 @@ export const routeWhiteList: readonly string[] = [
   'Market',
   'Team',
 ]
+// 顶部导航栏
 export const navWhiteList: readonly string[] = [
   'home', // 首页
   'profile', // 个人中心
@@ -21,6 +22,7 @@ export const navWhiteList: readonly string[] = [
   '/wallet/exchange/cashierCenter-withdraw',
   'Team',
   'login',
+  'forgotPassword',
   'lottery',
   'addBank'
 

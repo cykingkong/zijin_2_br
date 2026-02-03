@@ -1,58 +1,44 @@
 <template>
     <div class="exchange-content p-16">
-        <div class="input-box flex gap-8 w-full">
-            <div class="input-content h-48 w-full">
-                <input type="text" :placeholder="t('Codes')" v-model="codes">
+        <div class="mt-32 font-bold text-24 text-center">R$ 123,323</div>
+        <div class="tips text-[#424242] text-center mb-32">{{ t('珍珠数量') }}</div>
+        <div class="bg-white p-16 rounded-[16px] mb-16 card">
+            <div class="input-box flex flex-col gap-8 w-full">
+                <div class="input-content h-48 w-full">
+                    <input type="text" :placeholder="t('Enter your Amount')" v-model="codes">
+                </div>
+                <div class="text-14 text-[#424242] mb-12">{{ t('可兑换金额：') }}</div>
+                <div class="button border b-solid border flex-shrink-0 bg-[#1b1b1b] text-white px-12 h-48 rounded-16 flex items-center justify-center"
+                    @click="handleClickExchange">
+                    {{ t('Exchange') }}</div>
             </div>
-            <div class="button border b-solid border flex-shrink-0 bg-[#1b1b1b] text-white px-12 h-48 rounded-16 flex items-center justify-center"
-                @click="handleClickExchange">
-                {{ t('Exchange') }}</div>
         </div>
-        <div class="flex w-full items-center justify-center mb-16">
-            <div class="piggy-wrapper">
-                <div class="piggy-wrap">
-                    <div class="piggy">
-                        <div class="nose"></div>
-                        <div class="mouth"></div>
-                        <div class="ear"></div>
-                        <div class="tail">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
-                        <div class="eye"></div>
-                        <div class="hole"></div>
+
+        <!-- 2. 薪资标准标题 -->
+        <div class="text-[16px] font-bold text-[#333] mb-[12px]">Salary Standards</div>
+
+        <!-- 薪资标准列表 -->
+        <div class="standards-table bg-white rounded-[16px] p-[16px]  mb-[24px]">
+            <!-- 表头 -->
+            <div
+                class="flex justify-between text-[#333] font-bold text-[14px] mb-[16px] pb-[12px] border-b-solid border-b-[1px] border-b-[#0000000D] border">
+                <span class=" flex-1">Level</span>
+                <span class=" flex-1">Weekly pay</span>
+            </div>
+
+            <!-- 列表内容 -->
+            <div class="flex flex-col gap-[18px]">
+                <div v-for="(item, index) in salaryList" :key="index"
+                    class="flex justify-between items-center text-[14px] ">
+                    <div class="flex items-center flex-1">
+                        <!-- 图标 -->
+                        <img :src="item.img" class="w-[20px] h-[20px] mr-[8px] object-contain" />
+                        <!-- 等级文字 -->
+                        <span class="text-[#00000080]">{{ item.lv }}</span>
                     </div>
+                    <!-- 金额 -->
+                    <span class="text-[#333] font-medium  text-[15px] flex-1">{{ item.amount }}</span>
                 </div>
-                <div class="coin-wrap">
-                    <div class="coin">$</div>
-                </div>
-                <div class="legs"></div>
-                <div class="legs back"></div>
-            </div>
-        </div>
-        <!-- Team Member List -->
-        <div class="member-list bg-[#F9FAFB] rounded-[16px] overflow-hidden">
-            <!-- Table Header -->
-            <div class="flex items-center h-[44px] px-[16px] border-b border-[#eee]">
-                <div class="w-[30%] text-[12px] text-[#333] font-medium">{{ $t('Codes') }}</div>
-                <div class="w-[30%] text-[12px] text-[#333] font-medium text-center">{{ $t('Amount') }}</div>
-                <div class="w-[40%] text-[12px] text-[#333] font-medium text-right">{{ $t('Receive Time') }}
-                </div>
-            </div>
-            <!-- Table Body -->
-            <div class="list-body">
-                <div v-for="(item, index) in userList" :key="index"
-                    class="flex items-center h-[48px] px-[16px] bg-white">
-                    <div class="w-[30%] text-[14px] text-[#1A1A1A]">{{ item.account }}</div>
-                    <div class="w-[30%] text-[14px] text-[#1A1A1A] text-center">{{ item.chilrenCount }}</div>
-                    <div class="w-[40%] text-[14px] text-[#1A1A1A] text-right">{{ item.productPrice }}</div>
-                </div>
-
-                <empty v-if="userList?.length == 0" :no-tips="true"></empty>
-                <LoadMore :status="listStatus" @load-more="loadMore" />
-
             </div>
         </div>
     </div>
@@ -60,7 +46,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { create, list } from '@/api/gift'
-
+// 复用之前的图片资源引入逻辑
+import lv2 from '@/assets/lv/lv2.png';
+import lv3 from '@/assets/lv/lv3.png';
+import lv4 from '@/assets/lv/lv4.png';
+import lv5 from '@/assets/lv/lv5.png';
+import lv6 from '@/assets/lv/lv6.png';
+import lv7 from '@/assets/lv/lv7.png';
+import lv8 from '@/assets/lv/lv8.png';
 const codes = ref('')
 const userList = ref([])
 const listStatus = ref(1); // 1-加载中 2-成功 3-已无更多
@@ -69,8 +62,18 @@ const page = reactive({
     pageIndex: 1,
     pageSize: 10
 })
+// 注意：截图是从 LV2 开始的
+const salaryList = ref([
+    { lv: 'LV2', amount: '$7.00', img: lv2 },
+    { lv: 'LV3', amount: '$20.00', img: lv3 },
+    { lv: 'LV4', amount: '$45.00', img: lv4 },
+    { lv: 'LV5', amount: '$120.00', img: lv5 },
+    { lv: 'LV6', amount: '$300.00', img: lv6 },
+    { lv: 'LV7', amount: '$1,000.00', img: lv7 },
+    { lv: 'LV8', amount: '$3,000.00', img: lv8 },
+]);
 const handleClickExchange = async () => {
-        
+
     try {
         const { code } = await create({
             code: codes.value
@@ -78,7 +81,7 @@ const handleClickExchange = async () => {
 
         if (code == 200) {
             showSuccessToast({
-                message:t("Redemption successful")
+                message: t("Redemption successful")
             })
             getUserList()
             codes.value = ''
@@ -164,401 +167,8 @@ onMounted(() => {
     }
 }
 
-/* From Uiverse.io by JkHuger */
-.piggy-wrapper {
-    position: relative;
-    width: 350px;
-    height: 350px;
-    display: block;
-    margin: 0 auto;
-    margin-top: 0px;
-    transform: scale(.7);
-}
-
-.piggy-wrap {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 10;
-    width: 100%;
-    height: 100%;
-    transform-origin: bottom center;
-    animation: trembling 5s linear infinite;
-}
-
-@keyframes trembling {
-    0% {
-        transform: scale(1);
-    }
-
-    19% {
-        transform: scale(1);
-    }
-
-    21% {
-        transform: scale(0.99);
-    }
-
-    22% {
-        transform: scale(1);
-    }
-
-    23% {
-        transform: scale(0.99);
-    }
-
-    24% {
-        transform: scale(1);
-    }
-
-    25% {
-        transform: scale(0.99);
-    }
-
-    26% {
-        transform: scale(1);
-    }
-
-    25% {
-        transform: scale(0.99);
-    }
-
-    26% {
-        transform: scale(1);
-    }
-
-    27% {
-        transform: scale(0.99);
-    }
-
-    28% {
-        transform: scale(1);
-    }
-
-    29% {
-        transform: scale(0.99);
-    }
-
-    30% {
-        transform: scale(1);
-    }
-
-    60% {
-        transform: scale(0.95);
-    }
-
-    61% {
-        transform: scale(1);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-}
-
-.piggy {
-    position: absolute;
-    bottom: 40px;
-    left: 50%;
-    margin-left: -160px;
-    width: 270px;
-    height: 200px;
-    display: block;
-    border-radius: 100px;
-    background-color: #d88fa0;
-}
-
-.nose {
-    position: absolute;
-    top: 80px;
-    left: -25px;
-    width: 40px;
-    height: 60px;
-    display: block;
-    background-color: #d88fa0;
-    z-index: 1;
-    border-radius: 4px;
-}
-
-.mouth {
-    position: absolute;
-    top: 95px;
-    left: -15px;
-    width: 0;
-    height: 0;
-    z-index: 8;
-    display: block;
-    border-bottom: 60px solid #d88fa0;
-    border-left: 20px solid transparent;
-    border-right: 20px solid transparent;
-    border-radius: 4px;
-}
-
-.ear {
-    position: absolute;
-    top: -35px;
-    left: 70px;
-    width: 45px;
-    height: 40px;
-    display: block;
-    border-top-right-radius: 60px;
-    background-color: #d88fa0;
-    z-index: 1;
-}
-
-.piggy:before {
-    position: absolute;
-    content: '';
-    top: -25px;
-    left: 55px;
-    width: 60px;
-    height: 60px;
-    display: block;
-    border-top-right-radius: 60px;
-    background-color: #cb6980;
-    z-index: -1;
-}
-
-.tail {
-    position: absolute;
-    left: 254px;
-    top: 125px;
-}
-
-.tail span {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 20px;
-    height: 5px;
-    transform: rotate(30deg);
-    background-color: #d88fa0;
-}
-
-.tail span:nth-child(2) {
-    left: 3px;
-    top: -38px;
-    width: 50px;
-    height: 50px;
-    transform: rotate(-20deg);
-    background-color: transparent;
-    border-radius: 50%;
-    border-width: 5px;
-    border-style: solid;
-    border-color: transparent #d88fa0 #d88fa0 transparent;
-}
-
-.tail span:nth-child(3) {
-    left: 22px;
-    top: -36px;
-    width: 30px;
-    height: 30px;
-    transform: rotate(-40deg);
-    background-color: transparent;
-    border-radius: 50%;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #d88fa0 transparent transparent #d88fa0;
-}
-
-.tail span:nth-child(4) {
-    left: 7px;
-    top: -66px;
-    width: 60px;
-    height: 60px;
-    transform: rotate(-40deg);
-    background-color: transparent;
-    border-radius: 50%;
-    border-width: 5px;
-    border-style: solid;
-    border-color: transparent transparent #d88fa0 transparent;
-}
-
-.eye {
-    position: absolute;
-    left: 35px;
-    top: 75px;
-    width: 30px;
-    height: 30px;
-    transform: rotate(45deg);
-    border-radius: 50%;
-    border-width: 4px;
-    border-style: solid;
-    border-color: #555 transparent transparent #555;
-    animation: blink 5s linear infinite;
-}
-
-@keyframes blink {
-    0% {
-        border-color: #555 transparent transparent #555;
-    }
-
-    19% {
-        border-color: #555 transparent transparent #555;
-    }
-
-    20% {
-        border-color: transparent #555 #555 transparent;
-    }
-
-    60% {
-        border-color: transparent #555 #555 transparent;
-    }
-
-    61% {
-        border-color: #555 transparent transparent #555;
-    }
-
-    100% {
-        border-color: #555 transparent transparent #555;
-    }
-}
-
-.hole {
-    position: absolute;
-    left: 121px;
-    top: 0;
-    width: 60px;
-    height: 5px;
-    background-color: #555;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
-
-.coin-wrap {
-    position: absolute;
-    top: 0;
-    left: -8px;
-    z-index: 9;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transform-origin: bottom center;
-    animation: trembling 5s linear infinite, moveCoin 5s linear infinite;
-}
-
-.coin {
-    position: absolute;
-    top: 110px;
-    left: 143px;
-    z-index: 9;
-    width: 61.5px;
-    height: 61.5px;
-    border-radius: 50%;
-    border: 6px solid #e67e22;
-    background-color: #f39c12;
-    text-align: center;
-    line-height: 68px;
-    font-size: 45px;
-    font-weight: 500;
-    color: rgba(32, 32, 32, 0.5);
-    box-shadow: inset 0 0 4px #777;
-}
-
-@keyframes moveCoin {
-    0% {
-        opacity: 0;
-        top: 0;
-    }
-
-    19% {
-        opacity: 1;
-        top: 0;
-    }
-
-    21% {
-        top: -7px;
-    }
-
-    22% {
-        top: -7px;
-    }
-
-    23% {
-        top: -14px;
-    }
-
-    24% {
-        top: -14px;
-    }
-
-    25% {
-        top: -21px;
-    }
-
-    26% {
-        top: -21px;
-    }
-
-    27% {
-        top: -28px;
-    }
-
-    28% {
-        top: -28px;
-    }
-
-    29% {
-        top: -35px;
-    }
-
-    30% {
-        top: -35px;
-    }
-
-    60% {
-        top: -35px;
-    }
-
-    66% {
-        top: -220px;
-        opacity: 1;
-    }
-
-    67% {
-        top: -220px;
-        opacity: 0;
-    }
-
-    99% {
-        top: 0;
-        opacity: 0;
-    }
-
-    100% {
-        opacity: 0;
-        top: 0;
-    }
-}
-
-.legs {
-    position: absolute;
-    bottom: 14px;
-    left: 96px;
-    width: 40px;
-    height: 60px;
-    display: block;
-    background-color: #cb6980;
-    border-radius: 3px;
-    z-index: 1;
-}
-
-.legs:after {
-    position: absolute;
-    content: '';
-    bottom: 0;
-    left: 0;
-    width: 30px;
-    height: 12px;
-    display: block;
-    background-color: #d88fa0;
-    border-bottom-left-radius: 3px;
-    border-top-right-radius: 3px;
-    z-index: 1;
-}
-
-.legs.back {
-    left: 206px;
+.card {
+    border: 1px solid #0000001A
 }
 </style>
 <route lang="json5">

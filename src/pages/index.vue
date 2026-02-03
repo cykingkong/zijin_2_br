@@ -2,6 +2,7 @@
 import router from "@/router";
 import Grid from "@/components/grid.vue";
 import { useUserStore } from "@/stores";
+import LangSelectDropdown from '@/components/LangSelectDropdown.vue'
 import { navTitleStore } from "@/stores/index";
 import { receiveCoupon } from '@/api/product'
 import { isLogin } from "@/utils/auth";
@@ -21,12 +22,12 @@ const indexInfoData = ref({
   banners: [],
   discountBanners: [],
 });
-
+const lang = ref(local.getlocal('lang') || 'en')
 function handleClickGrid(val) {
   if (val === 0) {
 
     router.push({
-      path: "/exchange",
+      path: "/signIn",
     });
   }
   if (val === 1) {
@@ -43,7 +44,7 @@ function handleClickGrid(val) {
   if (val === 3) {
     // router.push('/quotes/accountChange?type=3' + '&categoryId=' + categoryId.value)
     getKfUrl({
-        userId: userInfo.value ? userInfo.value.userId: null,
+      userId: userInfo.value ? userInfo.value.userId : null,
     }).then((res) => {
       if (res.code == 200) {
         window.open(res.data.kfUrl)
@@ -116,10 +117,10 @@ function getArticleList(params) {
   });
 }
 const handleClickItem = (item) => {
-   localStorage.setItem('activityDetail', JSON.stringify(item))
-        router.push({
-            path: '/activityDetail',
-        })
+  localStorage.setItem('activityDetail', JSON.stringify(item))
+  router.push({
+    path: '/activityDetail',
+  })
   // local.setlocal('activityDetail', item)
 }
 const categoryId = ref();
@@ -175,32 +176,35 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="Home">
+  <div class="Home bg-[#f7f7f7]">
     <header class="header flex items-center justify-between">
       <div class="left flex items-center gap-[16px]">
         <div class="info">
-          <div class="phone color-[#888888] text-12">{{ formatName(userInfo.username) }}</div>
-          <div class="lv text-12 color-[#000]">{{ userInfo && userInfo.levelName ? userInfo.levelName : '--' }}</div>
+          <img src="@/assets/Logo.png" alt="" class="w-30 h-30">
         </div>
       </div>
-      <div class="flex icon-box gap-[8px]" @click="handleClickGrid(2)">
-        <div class="relative">
+      <div class="flex justify-center items-center icon-box gap-[8px]">
+        <LangSelectDropdown v-model="lang" />
+        <div class="relative" @click="handleClickGrid(2)">
           <div
-            class="dot absolute top-[4px] right-[1px] py-4 rounded-full bg-[#FF4E4E] color-[#fff] text-[8px] min-w-[18px] text-center"
+            class="dot absolute bottom-[8px] right-[1px]  rounded-full bg-[#FF4E4E] color-[#fff] text-[8px] w-[5px] h-[5px] text-center"
             v-if="userInfo.productCount">
-            {{ userInfo.productCount || 0 }}
+            <!-- {{ userInfo.productCount || 0 }} -->
           </div>
-          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="40" height="40" rx="20" fill="#F6F6F6" />
-            <path fill-rule="evenodd" clip-rule="evenodd"
-              d="M13.3305 13.3306H26.6694C27.1298 13.3306 27.5031 13.7038 27.5031 14.1642V25.8358C27.5031 26.7566 26.7566 27.5031 25.8357 27.5031H14.1642C13.2433 27.5031 12.4968 26.7566 12.4968 25.8358V14.1642C12.4968 13.7038 12.8701 13.3306 13.3305 13.3306Z"
-              stroke="#1B1B1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M12.4968 16.2484H27.5031" stroke="#1B1B1B" stroke-width="1.5" stroke-linecap="round"
+          <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M10.0167 2.42505C7.25835 2.42505 5.01668 4.66672 5.01668 7.42505V9.83338C5.01668 10.3417 4.80001 11.1167 4.54168 11.55L3.58335 13.1417C2.99168 14.125 3.40001 15.2167 4.48335 15.5834C8.07501 16.7834 11.95 16.7834 15.5417 15.5834C16.55 15.2501 16.9917 14.0584 16.4417 13.1417L15.4833 11.55C15.2333 11.1167 15.0167 10.3417 15.0167 9.83338V7.42505C15.0167 4.67505 12.7667 2.42505 10.0167 2.42505Z"
+              stroke="#161616" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" />
+            <path
+              d="M11.5583 2.6667C11.3 2.5917 11.0333 2.53337 10.7583 2.50003C9.95831 2.40003 9.19164 2.45837 8.47498 2.6667C8.71664 2.05003 9.31664 1.6167 10.0166 1.6167C10.7166 1.6167 11.3166 2.05003 11.5583 2.6667Z"
+              stroke="#161616" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
               stroke-linejoin="round" />
             <path
-              d="M23.3347 19.1663C23.3347 21.008 21.8417 22.501 20 22.501C18.1583 22.501 16.6653 21.008 16.6653 19.1663"
-              stroke="#1B1B1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              d="M12.5167 15.8833C12.5167 17.2583 11.3917 18.3833 10.0167 18.3833C9.33333 18.3833 8.7 18.1 8.25 17.65C7.8 17.2 7.51666 16.5666 7.51666 15.8833"
+              stroke="#161616" stroke-width="1.5" stroke-miterlimit="10" />
+            <!-- <circle cx="16.5" cy="15.5" r="2.5" fill="#FF6464" /> -->
           </svg>
+
         </div>
 
 
@@ -217,25 +221,27 @@ onMounted(() => {
     </div>
 
     <!-- notice -->
-    <div class="w-full px-[24px] my-16">
-      <div
-        class="notice text-[12px]  w-full border-[1px] px-12 h-42 border-solid border-[#B1DDC6] bg-[#F7FDFB] rounded-[8px] px-4 py-2 overflow-hidden flex items-center">
+    <div class="w-full pl-[4px] pr-[4px] my-16">
+      <div class="notice text-[12px]  w-full border-[1px] px-12 h-42  px-4 py-2 overflow-hidden flex items-center">
 
         <div class="content text-no-wrap w-full">
-          <van-notice-bar scrollable :text="indexInfoData.noticeContent" background="#F7FDFB" color="#888888"
+          <van-notice-bar scrollable :text="indexInfoData.noticeContent" background="transparent" color="#161616"
             class="notice flex-1">
-            <template #left-icon> <svg width="16" height="16" class="w-16 h-16 flex-shrink-0 mr-12" viewBox="0 0 16 16"
-                fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M9.06668 13.3333H6.93335" stroke="#369A66" stroke-width="1.5" stroke-linecap="round"
-                  stroke-linejoin="round" />
-                <path fill-rule="evenodd" clip-rule="evenodd"
-                  d="M11.3333 6.68799V6.66666V6.66666C11.3333 4.82599 9.84065 3.33333 7.99998 3.33333V3.33333C6.15931 3.33333 4.66665 4.82599 4.66665 6.66666V6.66666V6.68799V8.33599C4.66665 8.55199 4.54465 8.74866 4.35198 8.84533L4.01665 9.01266C3.59798 9.22266 3.33331 9.65066 3.33331 10.1187V10.1187C3.33331 10.8013 3.88665 11.3547 4.56931 11.3547H11.4306C12.1133 11.3547 12.6666 10.8013 12.6666 10.1187V10.1187C12.6666 9.65066 12.402 9.22266 11.9833 9.01333L11.648 8.84599C11.4553 8.74866 11.3333 8.55199 11.3333 8.33599V6.68799Z"
-                  stroke="#369A66" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M12.634 4.03267C12.1593 3.19934 11.4673 2.50734 10.634 2.03267" stroke="#369A66"
-                  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M3.36603 4.03267C3.84069 3.19934 4.53269 2.50734 5.36603 2.03267" stroke="#369A66"
-                  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-              </svg> </template>
+            <template #left-icon> <svg class="mr-12 w-12 h-12" viewBox="0 0 12 12" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M7.99464 1.52131L3.0985 3.7067H1.14209V8.27507H3.10021L3.32349 8.37557L7.99464 10.4759V1.52131ZM8.51087 0.0405852C8.745 -0.0759082 9.0111 0.0668531 9.10476 0.360371C9.12589 0.427183 9.13673 0.498564 9.13673 0.571087V11.429C9.13673 11.7442 8.9323 12 8.6799 12C8.62093 11.9997 8.56285 11.9856 8.5103 11.9589L2.85523 9.41716H0.456837C0.204434 9.41716 -1.67299e-08 9.16133 0 8.84611V3.13565C0 2.82044 0.204434 2.56461 0.456837 2.56461H2.85523L8.51087 0.0405852ZM10.2788 3.13565H11.4209V8.84611H10.2788V3.13565Z"
+                  fill="black" />
+              </svg>
+            </template>
+            <template #right-icon>
+              <svg class="w-14 h-14 ml-14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="14" height="1.5" fill="#1D1F22" />
+                <rect y="6" width="14" height="1.5" fill="#1D1F22" />
+                <rect y="12" width="14" height="1.5" fill="#1D1F22" />
+              </svg>
+
+            </template>
           </van-notice-bar>
         </div>
       </div>
@@ -253,10 +259,26 @@ onMounted(() => {
       </van-swipe>
     </div>
     <Grid @handleClickGrid="handleClickGrid" />
+
     <div class="indicator-title px-24 font-bold text-[16px] mt-12">
       {{ t("Activity Center") }}
     </div>
     <ActivityCenter :arr="activityList" />
+    <div class="indicator-title px-24 font-bold text-[16px] mt-12 flex items-center justify-between">
+      {{ t("FAQ") }}
+      <div class="see-all text-[14px] color-[#9CA3AF]">{{ t("See all") }} <svg width="14" height="14"
+          viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5.19751 11.62L9.00084 7.81667C9.45001 7.3675 9.45001 6.6325 9.00084 6.18334L5.19751 2.38"
+            stroke="#8C91A2" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </div>
+    </div>
+    <div class="news-list px-24 py-12 flex flex-col gap-12">
+
+      <FaqItem v-for="(item, index) in newsList" :key="index" :item="item" @click="handleClickItem" />
+
+      <!-- </div> -->
+    </div>
     <div class="indicator-title px-24 font-bold text-[16px] mt-12 flex items-center justify-between">
       {{ t("News Center") }}
       <!-- <div class="see-all text-[14px] color-[#9CA3AF]">{{ t("See all") }}</div> -->
@@ -348,5 +370,10 @@ onMounted(() => {
   width: 9px;
   height: 8px;
   background-size: 100% 100%;
+}
+
+.Home {
+  font-family: 'Space Grotesk', sans-serif;
+
 }
 </style>

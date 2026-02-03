@@ -1,5 +1,5 @@
 <template>
-  <div class="stockOrderList w-full p-24">
+  <div class="stockOrderList w-full p-24 bg-">
     <div class="order-type-tab flex justify-center items-center mb-12 gap-[16px]">
       <div
         class="tab-item flex-1 flex items-center justify-center text-center border text-14 border-[#E5E5E5] border-solid rounded-[16px] py-4 px-6 h-40"
@@ -9,8 +9,7 @@
       </div>
     </div>
     <div class="order-list pb-[16px] flex-col flex gap-[16px]">
-      <stockItem v-for="(item, index) in orderListData" :key="index" :item="item" :showType="activeTab"
-        />
+      <stockItem v-for="(item, index) in orderListData" :key="index" :item="item" :showType="activeTab" />
     </div>
     <empty v-if="orderListData.length == 0" :no-tips="true" />
     <LoadMore :status="listStatus" @load-more="loadMore"></LoadMore>
@@ -19,7 +18,7 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import { walletLogsGrid } from "@/api/user";
-import{withdrawOrderGrid} from '@/api/withdraw'
+import { withdrawOrderGrid } from '@/api/withdraw'
 const { proxy } = getCurrentInstance()!;
 import stockItem from "@/components/stock-item.vue";
 
@@ -38,17 +37,17 @@ const loadMore = () => {
   page.pageIndex++;
   getData();
 };
-const getData = ()=>{
-      orderListData.value =  [];
+const getData = () => {
+  orderListData.value = [];
 
-  if(activeTab.value == 2){
+  if (activeTab.value == 2) {
     getWithdrawalOrderList()
-  }else{
+  } else {
     getWalletLogsList()
   }
 }
-const getWithdrawalOrderList = async ()=>{
-    try {
+const getWithdrawalOrderList = async () => {
+  try {
     listStatus.value = 1; // 开始加载
     const { data } = await withdrawOrderGrid({
       ...page,

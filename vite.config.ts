@@ -19,10 +19,11 @@ export default ({ mode }: ConfigEnv): UserConfig => {
     mode: env.VITE_USER_NODE_ENV,
     server: {
       host: true,
-      port: 3323,
+      port: 3345,
       proxy: {
         '/capi': {
           target: `https://api.ddbindia.online/app-api`, // 代理接口
+          // target: `https://api2.fuxing.one/app-api`, // 代理接口
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/capi/, ''),
           ws: false,
@@ -33,7 +34,6 @@ export default ({ mode }: ConfigEnv): UserConfig => {
           rewrite: (path) => path.replace(/^\/wss/, ''),
           ws: true,
         },
-
       },
     },
 

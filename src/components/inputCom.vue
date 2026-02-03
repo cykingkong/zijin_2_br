@@ -104,7 +104,7 @@ const handleBlur = () => {
     transition: border-color 0.3s ease;
 
     &.focused {
-        border-color: #1B1B1B;
+        // border-color: #1B1B1B;
     }
 }
 
@@ -127,25 +127,25 @@ const handleBlur = () => {
         border: none;
 
         &::placeholder {
-            color: #999999;
+            color: #3C3C434D;
             font-size: 14px;
             font-weight: 400;
         }
 
         &::-webkit-input-placeholder {
-            color: #999999;
+            color: #3C3C434D;
             font-size: 14px;
             font-weight: 400;
         }
 
         &::-moz-placeholder {
-            color: #999999;
+            color: #3C3C434D;
             font-size: 14px;
             font-weight: 400;
         }
 
         &:-ms-input-placeholder {
-            color: #999999;
+            color: #3C3C434D;
             font-size: 14px;
             font-weight: 400;
         }

@@ -23,21 +23,7 @@
 </template>
 <script setup>
 import { receiveCoupon } from '@/api/product'
-import avatar1 from '@/assets/avatar/1.jpg'
-import avatar2 from '@/assets/avatar/2.jpg'
-import avatar3 from '@/assets/avatar/3.jpg'
-import avatar4 from '@/assets/avatar/4.jpg'
-import avatar5 from '@/assets/avatar/5.jpg'
-import avatar6 from '@/assets/avatar/6.jpg'
-import avatar7 from '@/assets/avatar/7.jpg'
-import avatar8 from '@/assets/avatar/8.jpg'
-import avatar9 from '@/assets/avatar/9.jpg'
-import avatar10 from '@/assets/avatar/10.jpg'
-import avatar11 from '@/assets/avatar/11.jpg'
-import avatar12 from '@/assets/avatar/12.jpg'
-import avatar13 from '@/assets/avatar/13.jpg'
-import avatar14 from '@/assets/avatar/14.jpg'
-import avatar15 from '@/assets/avatar/15.jpg'
+
 
 
 
@@ -49,16 +35,16 @@ const props = defineProps({
         default: [],
     },
 });
-const avatarList = ref([avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7, avatar8, avatar9, avatar10, avatar11, avatar12, avatar13, avatar14, avatar15])
+// const avatarList = ref([avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7, avatar8, avatar9, avatar10, avatar11, avatar12, avatar13, avatar14, avatar15])
 const gridList = ref([]);
 const emits = defineEmits(["clickItem"]);
 const handleClickItem = (k) => {
     emits("clickItem", k);
 };
-const getRandomAvatar = () => {
-    const index = Math.floor(Math.random() * avatarList.value.length)
-    return avatarList.value[index]
-}
+// const getRandomAvatar = () => {
+//     const index = Math.floor(Math.random() * avatarList.value.length)
+//     return avatarList.value[index]
+// }
 const router = useRouter()
 const handleClickActivity = async (item) => {
     if (item) {

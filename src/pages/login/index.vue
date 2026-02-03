@@ -2,12 +2,16 @@
 import { useRouter } from "vue-router";
 import { useUserStore } from "@/stores";
 import { useLoadingStore } from "@/stores/modules/loading";
-
+import br from '@/assets/br.png'
+import usa from '@/assets/usa.png'
 import inputCom from "@/components/inputCom.vue";
 import nationalityList from "@/components/nationality-list/nationalityList.vue";
 import CloseButton from "@/components/CloseButton.vue";
 import { languageColumns, locale } from "@/utils/i18n";
 import { sendCode, register } from "@/api/user";
+import local from "@/utils/local";
+
+const lang = ref(local.getlocal('lang') || 'en')
 
 const pageType = ref(0) // 0 login 1 register 2 changePwd
 const { t } = useI18n();
@@ -16,6 +20,23 @@ const router = useRouter();
 const userStore = useUserStore();
 const { proxy } = getCurrentInstance();
 const loadingStore = useLoadingStore();
+let countryList = ref<any>([
+  {
+    code: "br",
+    dialCode: 60,
+    key: "br",
+    name: "Brazil",
+    img: br
+  },
+  {
+    code: "us",
+    dialCode: 88,
+    key: "us",
+    name: "U.S.A",
+    img: usa
+  },
+])
+let active = ref(0)
 const loading = ref(false);
 const type = ref<any>("1");
 const remember = ref(false);
@@ -161,6 +182,10 @@ const changePageType = () => {
 const getName = (val: any) => {
   areaInfo.value = val;
 };
+const handleClickType = (index: any) => {
+  active.value = index
+
+}
 // 校验帐号密码必填
 const validateAccountPassword = () => {
   if (!postData.account) {
@@ -179,12 +204,12 @@ async function signUp() {
     showToast(t('Please Enter Code'))
     return
   }
-  if (!postData.inviteCode) {
-    showToast(t('Please Enter Invite Code'))
-    return
-  }
+  // if (!postData.inviteCode) {
+  //   showToast(t('Please Enter Invite Code'))
+  //   return
+  // }
   try {
-    let area = areaInfo.value?.dialCode;
+    let area = countryList.value[active.value].dialCode;
     let params = {
       "type": postData.type,
       "phone": area + postData.account,
@@ -225,7 +250,7 @@ async function login() {
 
   try {
     loading.value = true;
-    let area = areaInfo.value?.dialCode;
+    let area = countryList.value[active.value]?.dialCode;
     let params = {
       account:
         postData.type == "phone"
@@ -258,54 +283,35 @@ async function login() {
     <div class="top-image w-full bg-[#fff]">
       <CloseButton @close="onBack">
         <template #right>
-          <svg t="1757699550709" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-            p-id="2781" width="24" height="24" @click="toSetLang">
-            <path
-              d="M512 929.959184c-230.4 0-417.959184-187.559184-417.959184-417.959184s187.559184-417.959184 417.959184-417.959184 417.959184 187.559184 417.959184 417.959184-187.559184 417.959184-417.959184 417.959184z m0-794.122449c-207.412245 0-376.163265 168.75102-376.163265 376.163265s168.75102 376.163265 376.163265 376.163265 376.163265-168.75102 376.163265-376.163265-168.75102-376.163265-376.163265-376.163265z"
-              fill="#1B1B1B" p-id="2782"></path>
-            <path
-              d="M512 929.959184c-11.493878 0-20.897959-9.404082-20.897959-20.89796V114.938776c0-11.493878 9.404082-20.897959 20.897959-20.89796s20.897959 9.404082 20.897959 20.89796v794.122448c0 11.493878-9.404082 20.897959-20.897959 20.89796z"
-              fill="#1B1B1B" p-id="2783"></path>
-            <path
-              d="M909.061224 532.897959H114.938776c-11.493878 0-20.897959-9.404082-20.89796-20.897959s9.404082-20.897959 20.89796-20.897959h794.122448c11.493878 0 20.897959 9.404082 20.89796 20.897959s-9.404082 20.897959-20.89796 20.897959z"
-              fill="#1B1B1B" p-id="2784"></path>
-            <path
-              d="M227.787755 809.795918c-5.22449 0-10.971429-2.089796-15.15102-6.269387C136.359184 725.159184 94.040816 621.191837 94.040816 512s42.318367-213.159184 118.595919-291.526531c7.836735-8.359184 21.420408-8.359184 29.779592-0.522449 8.359184 7.836735 8.359184 21.420408 0.522449 29.779592C173.97551 320.261224 135.836735 413.257143 135.836735 512s38.138776 191.738776 106.579592 262.269388c7.836735 8.359184 7.836735 21.420408-0.522449 29.779592-3.657143 3.657143-8.881633 5.746939-14.106123 5.746938z"
-              fill="#1B1B1B" p-id="2785"></path>
-            <path
-              d="M504.163265 929.959184c-0.522449 0-0.522449 0 0 0-110.759184-2.089796-214.204082-47.020408-291.52653-126.432653-7.836735-8.359184-7.836735-20.897959 0-29.257143 39.183673-40.228571 84.636735-71.57551 135.836734-92.995919 5.22449-2.089796 10.971429-2.089796 16.195919 0s9.404082 6.269388 11.493877 11.493878c29.779592 76.8 78.889796 146.285714 141.583674 200.097959 6.791837 5.746939 8.881633 15.15102 5.746939 23.510204-3.134694 7.836735-10.971429 13.583673-19.330613 13.583674z m-246.595918-141.061225c53.289796 49.110204 118.073469 80.979592 188.604082 93.518368-42.318367-44.930612-76.277551-97.17551-100.832653-153.6-31.869388 15.673469-61.64898 35.526531-87.771429 60.081632zM356.310204 344.293878c-2.612245 0-5.746939-0.522449-8.359184-1.567347-51.2-21.942857-96.653061-53.289796-135.836734-92.995919-7.836735-8.359184-7.836735-20.897959 0-29.257143C289.959184 141.061224 392.881633 96.653061 503.640816 94.040816c8.881633-0.522449 16.718367 5.22449 19.853062 13.583674s0.522449 17.763265-5.746939 23.510204C454.530612 184.946939 405.420408 253.910204 375.640816 331.232653c-2.089796 5.22449-6.269388 9.404082-11.493877 11.493878-2.089796 1.044898-5.22449 1.567347-7.836735 1.567347zM257.567347 235.102041c26.644898 24.555102 55.902041 44.408163 87.771429 60.604081 24.555102-56.42449 59.036735-108.669388 100.832653-153.6-70.530612 12.016327-135.314286 43.885714-188.604082 92.995919zM796.212245 809.795918c-5.22449 0-10.44898-2.089796-14.628572-5.746938-8.359184-7.836735-8.359184-21.420408-0.522449-29.779592C850.02449 703.738776 888.163265 610.742857 888.163265 512s-38.138776-191.738776-106.579592-262.269388c-7.836735-8.359184-7.836735-21.420408 0.522449-29.779592 8.359184-7.836735 21.420408-7.836735 29.779592 0.522449C887.640816 298.840816 929.959184 402.808163 929.959184 512s-42.318367 213.159184-118.595919 291.526531c-4.179592 4.179592-9.404082 6.269388-15.15102 6.269387z"
-              fill="#1B1B1B" p-id="2786"></path>
-            <path
-              d="M514.612245 929.959184c-8.881633 0-16.718367-5.22449-19.330612-13.583674-3.134694-8.359184-0.522449-17.240816 5.746938-22.987755 63.738776-54.334694 112.84898-124.342857 142.628572-202.187755 2.089796-5.22449 6.269388-9.404082 11.493877-11.493878 5.22449-2.089796 10.971429-2.089796 16.195919 0 52.767347 21.942857 100.310204 53.812245 140.538775 95.085715 7.836735 8.359184 7.836735 20.897959 0 29.257143-78.889796 80.457143-184.42449 124.865306-297.273469 125.910204z m159.869388-203.755102c-25.077551 57.991837-59.559184 111.281633-102.922449 157.257142 72.620408-11.493878 140.016327-43.885714 194.873469-94.563265-27.689796-25.6-58.514286-46.497959-91.95102-62.693877zM662.987755 346.383673c-2.612245 0-5.746939-0.522449-8.359184-1.567346-5.22449-2.089796-9.404082-6.269388-11.493877-11.493878-29.779592-77.844898-78.889796-147.853061-142.628572-202.187755-6.791837-5.746939-8.881633-15.15102-5.746938-22.987755 3.134694-8.359184 10.971429-13.583673 19.330612-13.583674 112.84898 0.522449 217.861224 45.453061 296.75102 126.432653 7.836735 8.359184 7.836735 20.897959 0 29.257143-40.228571 41.273469-87.24898 73.142857-140.538775 95.085715-1.567347 0.522449-4.702041 1.044898-7.314286 1.044897z m-91.428571-205.844897c42.840816 45.97551 77.844898 99.265306 102.922449 157.257142 33.436735-16.195918 64.783673-37.093878 91.95102-62.693877-54.857143-50.677551-122.253061-83.069388-194.873469-94.563265z"
-              fill="#1B1B1B" p-id="2787"></path>
-            <path
-              d="M356.310204 721.502041c-2.612245 0-5.746939-0.522449-8.359184-1.567347-5.22449-2.089796-9.404082-6.269388-11.493877-11.493878-24.032653-62.693878-36.571429-128.522449-36.571429-195.918367s12.016327-133.22449 36.571429-195.918367c2.089796-5.22449 6.269388-9.404082 11.493877-11.493878s10.971429-2.089796 16.195919 0c47.020408 19.330612 96.653061 29.257143 147.853061 29.257143 49.632653 0 97.697959-9.404082 143.15102-28.212245 5.22449-2.089796 10.971429-2.089796 16.195919 0s9.404082 6.269388 11.493877 11.493878c23.510204 62.171429 35.526531 127.477551 35.526531 193.828571 0 66.873469-12.016327 132.179592-35.526531 193.828571-2.089796 5.22449-6.269388 9.404082-11.493877 11.493878-5.22449 2.089796-10.971429 2.089796-16.195919 0-45.453061-18.808163-93.518367-28.212245-143.15102-28.212245-51.2 0-100.832653 9.926531-147.330612 29.779592-2.612245 2.612245-5.746939 3.134694-8.359184 3.134694z m12.538776-370.416327c-17.763265 51.722449-26.644898 106.057143-26.644898 160.914286s8.881633 109.191837 26.644898 160.914286c45.97551-16.718367 94.040816-25.077551 143.15102-25.077551 47.542857 0 94.040816 7.836735 138.44898 23.510204 17.240816-51.2 26.122449-105.012245 26.122449-159.346939 0-54.857143-8.881633-108.146939-26.122449-159.346939-44.408163 15.673469-90.906122 23.510204-138.44898 23.510204-49.632653 0-97.697959-8.359184-143.15102-25.077551z"
-              fill="#1B1B1B" p-id="2788"></path>
-          </svg>
+          <LangSelectDropdown v-model="lang" />
+
         </template>
       </CloseButton>
-      <!-- <div class="mid-logo w-64px h-64px m-x-a rounded-12px overflow-hidden">
-       <img src="@/assets/logo.png" alt="" class="w-full h-full">
-      </div> -->
-      <div class="text-left m-x-a mt-[16px] color-white px-16">
+      <div class="mid-logo w-[64px] h-[64px] rounded-[12px] overflow-hidden ml-[30px]">
+        <img src="@/assets/Logo.png" alt="" class="w-full h-full">
+      </div>
+      <div class="text-left m-x-a mt-[16px] color-white px-30">
         <div class="t font-size-[24px] font-semibold m-b-[4px] color-[#1B1B1B]">
-          {{ t("Welcome back to Worker APP!") }}
-        </div>
-        <div class="t2 font-size-[14px] font-normal color-[#6B6B6B]">
-          {{ t("Great to see you again!") }}
+          {{ t("Welcome") }}
         </div>
       </div>
     </div>
-
     <div class="login-form p-24">
-      <div class="label mb-8 mt-12" :class="['flex items-center gap-4']">
-        {{ t('Phone') }}
+      <div class="type-box flex gap-[10px] mb-[20px]">
+        <div
+          class="type-item text-[#424242] text-[14px] rounded-[8px] h-26 px-14 flex justify-center items-center bg-[#0000000D]"
+          v-for="(item, index) in countryList" :key="index" :class="active == index ? 'item-active' : ''"
+          @click="handleClickType(index)">
+          {{
+            t(item.name)
+          }}
+        </div>
       </div>
-      <div class="phone-input flex items-center gap-[12px]">
+      <div class="phone-input flex items-center gap-[12px] mb-20">
         <div class="picker flex-shrink-0 h-[48px] rounded-[12px] flex items-center justify-center px-16"
           @click="hanleClickAreaPick">
-          <div class="iti-flag mr-10 rounded-full" :class="areaInfo?.code" style="transform: scale(1.5)"></div>
-          <div class="num">+{{ areaInfo?.dialCode }}</div>
+          <img :src="countryList[active]?.img" alt="" class="w-24 h-24 rounded-full mr-4">
+          <div class="num">+{{ countryList[active]?.dialCode }}</div>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M4 6L8 10L12 6" fill="#1B1B1B" />
           </svg>
@@ -314,10 +320,8 @@ async function login() {
           class="flex-1 w-full">
         </inputCom>
       </div>
-      <div class="label mb-8 mt-12" :class="['flex items-center gap-4']">
-        {{ t('Password') }}
-      </div>
-      <div class="phone-input">
+
+      <div class="phone-input mb-20">
         <inputCom v-model:value="postData.password" :placeholder="t('Password')" :onlyRead="false"
           :inputType="inputType">
           <template #sendCode>
@@ -344,10 +348,10 @@ async function login() {
         </inputCom>
       </div>
       <!-- Confirm password -->
-      <div class="label mb-8 mt-12" :class="['flex items-center gap-4']" v-if="pageType == 1">
+      <!-- <div class="label mb-8 mt-12" :class="['flex items-center gap-4']" v-if="pageType == 1">
         {{ t('Confirm password') }}
-      </div>
-      <div class="phone-input" v-if="pageType == 1">
+      </div> -->
+      <!-- <div class="phone-input mb-20" v-if="pageType == 1">
         <inputCom v-model:value="postData.passwordConfirmation" :placeholder="t('Password')" :onlyRead="false"
           :inputType="inputType">
           <template #sendCode>
@@ -372,26 +376,24 @@ async function login() {
             </svg>
           </template>
         </inputCom>
-      </div>
+      </div> -->
       <!-- Invitation code -->
-      <div class="label mb-8 mt-12" :class="['flex items-center gap-4']" v-if="pageType == 1">
+      <!-- <div class="label mb-8 mt-12" :class="['flex items-center gap-4']" v-if="pageType == 1">
         {{ t('Invitation code') }}
       </div>
       <div class="phone-input" v-if="pageType == 1">
         <inputCom v-model:value="postData.inviteCode" :placeholder="t('Invitation code')" :onlyRead="false"
           :inputType="'text'">
         </inputCom>
-      </div>
+      </div> -->
       <!-- Code -->
-      <div class="label mb-8 mt-12" :class="['flex items-center gap-4']" v-if="pageType == 1">
-        {{ t('Code') }}
-      </div>
+
       <div class="phone-input" v-if="pageType == 1">
         <inputCom v-model:value="postData.code" :placeholder="t('Code')" :onlyRead="false" :inputType="'text'">
           <template #sendCode>
-            <div class="absolute right-0 font-size-12 sendCode" :class="countdown > 0 ? 'text-gray-400' : 'text-[#000]'"
-              @click="getCode">
-              {{ countdown > 0 ? `${countdown}s` : t("SendCode") }}
+            <div class="absolute right-0 font-size-12 h-18 flex justify-center items-center sendCode"
+              :class="countdown > 0 ? 'text-gray-400' : 'text-[#000]'" @click="getCode">
+              {{ countdown > 0 ? `${countdown}s` : t("Get") }}
             </div>
           </template>
         </inputCom>
@@ -412,12 +414,12 @@ async function login() {
         @click="pageType == 0 ? login() : signUp()">{{
           pageType == 0 ? t("Login") : t("Sign Up")
         }}</van-button>
-      <div class="or">{{ t("Or") }}</div>
-      <div type="primary" color="#F6F6F6" :style="{ color: '#1B1B1B' }"
-        class="signUpBtn items-center flex justify-center text-center bg-[#f6f6f6] rounded-[12px] h-[48px]! color-[#1b1b1b]!"
+      <!-- <div class="or">{{ t("Or") }}</div> -->
+      <div :style="{ color: '#1B1B1B' }"
+        class="fixed bottom-40 left-0 font-regular w-full  items-center flex justify-center text-center  color-[#1b1b1b]! font-bold"
         block @click="changePageType()">
-        {{
-          pageType == 0 ? t("Sign Up") : t("Login")
+        <span class="text-[#0000004D] mr-4"> {{ pageType == 0 ? t('Don’t have an account?') : '' }} </span> {{
+          pageType == 0 ? t("Sign Up") : t("Log in")
         }}
       </div>
       <!--  <div class="tips my-24px">Or sign in with</div>
@@ -580,8 +582,15 @@ async function login() {
 }
 
 .sendCode {
-  padding: 8px;
-  border-radius: 10px;
+  padding: 10px;
+  border-radius: 8px;
   border: 1px solid #868c9a;
+  color: #fff;
+  background: #424242;
+}
+
+.item-active {
+  background: #424242;
+  color: #fff
 }
 </style>

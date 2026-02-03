@@ -1,14 +1,44 @@
+/* =========================================
+   1. 字体定义 (必须放在最顶部)
+   注意：请确保你的 assets 目录下确实有这个文件
+   ========================================= */
+@font-face {
+  font-family: 'Space Grotesk';
+  /* 这里的路径 '@/' 取决于你的 Vite 配置，如果报错尝试用相对路径 '../assets/...' */
+  src: url('../assets/font/SpaceGrotesk-Variable.woff2') format('woff2-variations'); 
+  font-weight: 300 700; 
+  font-display: swap;
+}
+
+/* =========================================
+   2. 全局基础样式
+   ========================================= */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
+:root {
+  /* [专家技巧] 覆盖 Vant 的默认字体变量，确保 Vant 组件统一使用该字体 */
+  --van-base-font-family: 'Space Grotesk', sans-serif;
+}
+
+body {
+  margin: 0;
+  /* 核心修改：设置在 body 上，而不是 div */
+  font-family: 'Space Grotesk', sans-serif;
+  /* 移动端字体平滑处理，看起来更精致 */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #f7f7f7;
+}
+
 html {
-  // background: var(--van-gray-1);
-  // background: #1f1f1f;
   font-size: var(--van-font-size-lg);
   color-scheme: light;
+  /* 建议加上 text-size-adjust 防止横屏时字体忽大忽小 */
+  -webkit-text-size-adjust: 100%;
 }
 
 html.dark {
@@ -21,8 +51,13 @@ html.dark {
   height: 100%;
   position: relative;
   overflow-x: hidden;
+  /* 继承 body 的字体，通常不需要再次声明，除非被覆盖 */
+  font-family: inherit; 
 }
 
+/* =========================================
+   3. 工具类与滚动条
+   ========================================= */
 ::-webkit-scrollbar {
   width: 0;
   background: transparent;
@@ -32,4 +67,5 @@ html.dark {
   white-space: nowrap;
 }
 
-:root:root {}
+/* 删除原本的 div 选择器，那是错误的写法 */
+/* div { font-family: Space Grotesk; } -> 已删除 */
