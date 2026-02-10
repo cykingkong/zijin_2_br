@@ -4,7 +4,7 @@
     <div class="top-image w-full bg-[]">
       <CloseButton @close="onBack">
         <template #right>
-          <LangSelectDropdown v-model="lang" />
+          <!-- <LangSelectDropdown v-model="lang" /> -->
 
         </template>
       </CloseButton>
@@ -72,7 +72,7 @@ import { useUserStore } from "@/stores";
 import { forgetPassword, sendCode } from "@/api/user";
 import loginTab from "@/components/tab.vue";
 const { t } = useI18n();
-const lang = ref(local.getlocal('lang') || 'en')
+const lang = ref(local.getlocal('lang') || 'br')
 
 const hasLogin = ref(false);
 interface formDataInter {

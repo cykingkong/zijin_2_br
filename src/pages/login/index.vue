@@ -201,8 +201,8 @@ async function signUp() {
       "password": postData.password
     }
     await userStore.register(params);
-    localStorage.setItem("language", "en");
-    locale.value = "en";
+    localStorage.setItem("language", "br");
+    locale.value = "br";
     const { redirect, ...othersQuery } = router.currentRoute.value.query;
     router.push({
       name: "home",
@@ -272,7 +272,7 @@ async function login() {
           <div class="e" v-else></div>
         </template>
         <template #right>
-          <LangSelectDropdown v-model="lang" />
+          <!-- <LangSelectDropdown v-model="lang" /> -->
         </template>
       </CloseButton>
       <div class="mid-logo h-[64px] rounded-[12px] overflow-hidden ml-[16px]">

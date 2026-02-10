@@ -22,7 +22,7 @@ const indexInfoData = ref({
   banners: [],
   discountBanners: [],
 });
-const lang = ref(local.getlocal('lang') || 'en')
+const lang = ref(local.getlocal('lang') || 'br')
 let pathEnum = {
   0: 'SignIn',
   1: 'team',
@@ -209,7 +209,7 @@ onMounted(() => {
         </div>
       </div>
       <div class="flex justify-center items-center icon-box gap-[8px]">
-        <LangSelectDropdown v-model="lang" />
+        <!-- <LangSelectDropdown v-model="lang" /> -->
         <div class="relative" @click="handleClickGrid(8)">
           <div
             class="dot absolute bottom-[8px] right-[1px]  rounded-full bg-[#FF4E4E] color-[#fff] text-[8px] w-[5px] h-[5px] text-center"

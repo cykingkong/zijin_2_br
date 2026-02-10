@@ -142,21 +142,17 @@ onMounted(() => {
     </div>
 
     <!-- Product Grid -->
-    <div v-if="stockSkeleton" class="product-list grid grid-cols-2 gap-x-[15px] gap-y-[24px] px-[16px] mt-[20px]">
+    <div v-if="stockSkeleton" class="product-list grid grid-cols-1 gap-x-[15px] gap-y-[16px] px-[16px] mt-[20px]">
       <!-- 骨架屏占位符 -->
       <div v-for="n in 6" :key="n" class="product-item skeleton-animation">
         <!-- Image Box -->
         <div
-          class="img-box relative w-full aspect-square bg-[#F5F5F5] rounded-[20px] mb-[12px] flex items-center justify-center overflow-hidden">
+          class="img-box relative w-full aspect-square bg-[#F5F5F5] rounded-[20px] mb-[12px] flex items-center justify-center overflow-hidden h-[160px]">
           <!-- 图片骨架 -->
           <div class="w-full h-full bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200"></div>
         </div>
 
-        <!-- Info -->
-        <div class="info">
-          <div class="title bg-gray-200 rounded h-[20px] mb-[8px] w-3/4"></div>
-          <div class="price bg-gray-200 rounded h-[18px] w-1/2"></div>
-        </div>
+       
       </div>
     </div>
 

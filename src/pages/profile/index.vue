@@ -249,6 +249,7 @@ import { useUserStore } from '@/stores';
 import { userUpdate } from '@/api/user';
 import { uploadFile } from '@/api/tool';
 import { showFailToast, showSuccessToast } from 'vant';
+import { addCommasToNumber } from '@/utils/tool';
 import defaultAvatar from "@/assets/image/avatar.png";
 import lv1 from "@/assets/lv/lv1.png";
 import lv2 from "@/assets/lv/lv2.png";
@@ -273,10 +274,7 @@ const canUpdateAvatar = ref(true);
 const userAvatar = ref('');
 
 // --- 数据处理 ---
-const addCommasToNumber = (num: any) => {
-  if (!num) return '0';
-  return Number(num).toLocaleString('en-US');
-};
+
 
 const formatName = (str: string) => {
   if (!str) return '';
