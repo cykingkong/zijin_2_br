@@ -11,7 +11,7 @@ const loadingStore = useLoadingStore();
 const store: any = useStore();
 let ws = null;
 useHead({
-  title: "workers",
+  title: "SIGNET",
   meta: [
     {
       name: "description",

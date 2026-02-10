@@ -20,7 +20,7 @@
                 <div class="w-full" v-html="info?.content"></div>
             </div>
         </div>
-        <BottomButton :color="info.couponId ? '#FEC600' : '#888'" :button-text="t('Claim Coupon')"
+        <BottomButton :color="info.couponId ? '#FEC600' : '#888'" :button-text="'Resgatar Cupom'"
             v-if="info && info.couponId" @click="handleClickClaimCoupon">
         </BottomButton>
     </div>

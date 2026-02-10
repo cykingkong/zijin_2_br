@@ -1,16 +1,9 @@
 import { createI18n } from 'vue-i18n'
 import enUS from 'vant/es/locale/lang/en-US'
-import zhCN from 'vant/es/locale/lang/zh-CN'
-import jaJP from 'vant/es/locale/lang/ja-JP'
-import koKR from 'vant/es/locale/lang/ko-KR'
-import deDE from 'vant/es/locale/lang/de-DE'
-import esES from 'vant/es/locale/lang/es-ES'
-import hiIn from 'vant/es/locale/lang/hi-IN'
+// import zhCN from 'vant/es/locale/lang/zh-CN'
+
 import en from '@/locales/en-US.json'
-import zhTW from '@/locales/zh-TW.json'
-import hi from '@/locales/hi.json'
-import ta from '@/locales/ta.json'
-import te from '@/locales/te.json'
+
 
 import { Locale } from 'vant'
 import type { PickerColumn } from 'vant'
@@ -20,8 +13,8 @@ const FALLBACK_LOCALE = 'en'
 
 const vantLocales = {
   'en': { ...en, ...enUS }, // 英语使用 Vant 官方英语包
-  'zh-TW': { ...zhTW, ...zhCN }, // 中文繁体使用 Vant 官方中文包
-  'hi': { ...hiIn, ...hi }
+  // 'zh-TW': { ...zhCN }, // 中文繁体使用 Vant 官方中文包
+
 }
 
 
@@ -75,21 +68,6 @@ async function loadLocaleMsg(locale: string, i18n: I18n) {
   switch (locale) {
     case 'en':
       messages = await import(`../locales/en-US.json`)
-      break
-    case 'zh-TW':
-      messages = await import(`../locales/zh-TW.json`)
-      break
-    case 'zh-CN':
-      messages = await import(`../locales/zh-CN.json`)
-      break
-    case 'hi':
-      messages = await import(`../locales/hi.json`)
-      break
-    case 'ta':
-      messages = await import(`../locales/ta.json`)
-      break
-    case 'te':
-      messages = await import(`../locales/te.json`)
       break
   }
   i18n.global.setLocaleMessage(locale, messages.default)

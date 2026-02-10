@@ -38,7 +38,6 @@ let countryList = ref<any>([
 ])
 let active = ref(0)
 const loading = ref(false);
-const type = ref<any>("1");
 const remember = ref(false);
 const areaInfo = ref({
   code: "mx",
@@ -46,9 +45,6 @@ const areaInfo = ref({
   key: "mx",
   name: "Mexico",
 });
-const toSetLang = () => {
-  router.push("/profile/languange");
-};
 function onBack() {
   if (pageType.value == 1) {
     pageType.value = 0
@@ -94,16 +90,7 @@ onMounted(async () => {
   }
 
 });
-const typeArr = [
-  {
-    label: `${t("Phone")}`,
-    value: "phone",
-  },
-  {
-    label: `${t("Email")}`,
-    value: "email",
-  },
-];
+
 
 const inputType = ref("password");
 const changeInputType = () => {
@@ -157,15 +144,7 @@ const startCountdown = () => {
   }, 1000)
 }
 /* 验证码结束 */
-const changeIndex = (val: any) => {
-  postData.type = typeArr[val].value;
-};
-const rules = reactive({
-  email: [{ required: true, message: t("login.pleaseEnterEmail") }],
-  password: [{ required: true, message: t("login.pleaseEnterPassword") }],
-});
 
-const controlChildRef = ref();
 const hanleClickAreaPick = () => {
   return
   // controlChildRef.value.open();
@@ -235,10 +214,6 @@ async function signUp() {
     console.log(e)
   }
 }
-const onSignUp = proxy!.$throttle(signUp, 1000, {
-  onStart: () => loadingStore.show(),
-  onEnd: () => loadingStore.hide(),
-});
 async function login() {
   if (!postData.password) {
     showToast("PleaseEnter");
@@ -300,8 +275,8 @@ async function login() {
           <LangSelectDropdown v-model="lang" />
         </template>
       </CloseButton>
-      <div class="mid-logo w-[64px] h-[64px] rounded-[12px] overflow-hidden ml-[30px]">
-        <img src="@/assets/Logo.png" alt="" class="w-full h-full">
+      <div class="mid-logo h-[64px] rounded-[12px] overflow-hidden ml-[16px]">
+        <img src="@/assets/Logo.png" alt="" class="w-auto h-full">
       </div>
       <div class="text-left m-x-a mt-[16px] color-white px-30">
         <div class="t font-size-[24px] font-semibold m-b-[4px] color-[#1B1B1B]">
@@ -429,7 +404,9 @@ async function login() {
         @click="pageType == 0 ? login() : signUp()">{{
           pageType == 0 ? t("Login") : t("Sign Up")
         }}</van-button>
-      <!-- <div class="or">{{ t("Or") }}</div> -->
+      <div class="or">{{ '©2026 Signet Jewelers. Este site é utilizado sob autorização, todos os direitos reservados.'
+        }}
+      </div>
       <div :style="{ color: '#1B1B1B' }"
         class="fixed bottom-40 left-0 font-regular w-full  items-center flex justify-center text-center  color-[#1b1b1b]! font-bold"
         block @click="changePageType()">
@@ -567,33 +544,12 @@ async function login() {
 
 .or {
   margin: 20px 0;
-  font-size: 14px;
+  font-size: 12px;
   color: #94a3b8;
   position: relative;
   width: 100%;
   text-align: center;
 
-  &::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    width: 144px;
-    height: 1px;
-    background-color: #cbd5e1;
-    transform: translateY(-50%);
-    right: 0;
-  }
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    width: 144px;
-    height: 1px;
-    background-color: #cbd5e1;
-    transform: translateY(-50%);
-    left: 0;
-  }
 }
 
 .sendCode {

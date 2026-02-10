@@ -50,12 +50,12 @@ const searchLoading = ref(false);
 
 // 语言代码到国家代码的映射
 const languageToCountryMap = {
-  hi: "in", // 印地语
-  "zh-CN": "cn", // 中国
-  "zh-TW": "hk", // 中国
+  // hi: "in", // 印地语
+  // "zh-CN": "cn", // 中国
+  // "zh-TW": "hk", // 中国
   "en-US": "us", // 美国
-  ta: 'ta', // 泰米尔语
-  te: 'te' // 泰卢固语
+  // ta: 'ta', // 泰米尔语
+  // te: 'te' // 泰卢固语
 };
 
 function getCountryCode(languageCode) {

@@ -82,7 +82,7 @@ const handleClickBanner = async (item) => {
     couponId: item?.coupon_id
   })
   if (res.code == 200) {
-    showSuccessToast('Claim Coupon Success')
+    showSuccessToast({})
   }
 }
 function getContent(html) {
@@ -205,7 +205,7 @@ onMounted(() => {
     <header class="header flex items-center justify-between">
       <div class="left flex items-center gap-[16px]">
         <div class="info">
-          <img src="@/assets/Logo.png" alt="" class="w-30 h-30">
+          <img src="@/assets/Logo.png" alt="" class="w-auto h-30">
         </div>
       </div>
       <div class="flex justify-center items-center icon-box gap-[8px]">

@@ -2,19 +2,19 @@
   <div class="discont-content px-12 w-full min-h-screen pb-120">
     <VanNavBar title="" :fixed="true" clickable :left-arrow="true" @click-left="onBack" z-index="999">
       <template #title>
-        <div class="flex flex-items-center gap-6 font-size-18px font-bold">
+        <div class="flex flex-items-center gap-6 font-size-[18px] font-bold">
           {{ type == "0" ? t("Buy") : t("Sell") }} {{ info?.name || "" }}
         </div>
       </template>
     </VanNavBar>
     <div class="info mt-32" v-if="info && info">
       <div v-if="buyType == 'discount' && type == '1'"></div>
-      <div class="mid-content flex items-center mx-auto items-center justify-center gap-8px" v-else>
+      <div class="mid-content flex items-center mx-auto items-center justify-center gap-[8px]" v-else>
         <img :src="info.logo" class="block w-45 h-45 rounded-full" alt="" />
-        <div class="name font-size-18px">1 {{ info?.name || "" }} =</div>
+        <div class="name font-size-[18px]">1 {{ info?.name || "" }} =</div>
         <div class="price">
-          <div class="price-1 font-size-16px text-#0F172A">
-            {{ info?.close_unit || "₹" }}
+          <div class="price-1 font-size-[16px] text-[#0F172A]">
+            {{ info?.close_unit || "R$" }}
             {{
               buyType == "stock"
                 ? addCommasToNumber(info?.close)
@@ -23,38 +23,38 @@
           </div>
         </div>
       </div>
-      <div class="min-count text-#0F172A font-size-40px mx-a text-center mt-57px overflow-y-auto">
+      <div class="min-count text-[#0F172A] font-size-[40px] mx-a text-center mt-[57px] overflow-y-auto">
         {{ count }}
       </div>
       <div v-if="buyType == 'discount' && type == '1'"></div>
 
-      <div class="balance flex items-start justify-center gap-8px text-#64748B mt-8" v-else>
-        <div class="label text-14px">{{ t("Balance") }}</div>
+      <div class="balance flex items-start justify-center gap-[8px] text-[#64748B] mt-8" v-else>
+        <div class="label text-[14px]">{{ t("Balance") }}</div>
         <div class="value">
-          <div class="v1 text-14px">
+          <div class="v1 text-[14px]">
             ₹
             {{ addCommasToNumber(userInfo.user_balance) || 0 }}
           </div>
         </div>
       </div>
 
-      <div class="balance flex items-start justify-center gap-8px text-#64748B mt-8" v-if="type == '1'">
-        <div class="label text-14px">{{ t("Sellable quantity") }}:</div>
+      <div class="balance flex items-start justify-center gap-[8px] text-[#64748B] mt-8" v-if="type == '1'">
+        <div class="label text-[14px]">{{ t("Sellable quantity") }}:</div>
         <div class="value">
-          <div class="v1 text-14px">
+          <div class="v1 text-[14px]">
             {{ info.available_quantity || info.quantity || 0 }}
           </div>
         </div>
       </div>
-      <div class="tips text-#64748B text-12px text-center" v-if="info.min">
+      <div class="tips text-[#64748B] text-[12px] text-center" v-if="info.min">
         {{ t("Minimum purchase amount is ") + info.min }} {{ info?.name || "" }}
       </div>
     </div>
-    <div class="input-box px-12 mt-111px">
+    <div class="input-box px-12 mt-[111px]">
       <div class="keypad">
-        <div class="keypad-row flex gap-8px mb-8px" v-for="row in keypadRows" :key="row.join('')">
+        <div class="keypad-row flex gap-[8px] mb-[8px]" v-for="row in keypadRows" :key="row.join('')">
           <div v-for="key in row" :key="key" @click="key === 'delete' ? deleteLastChar() : appendNumber(key)"
-            class="keypad-btn flex-1 h-56px bg-#FFFFFF border border-#E2E8F0 rounded-8px text-20px font-medium text-#0F172A hover:bg-#F1F5F9 flex items-center justify-center">
+            class="keypad-btn flex-1 h-[56px] bg-[#FFFFFF] border border-[#E2E8F0] border-solid rounded-[8px] text-[20px] font-medium text-[#0F172A] hover:bg-[#F1F5F9] flex items-center justify-center">
             <svg width="29" v-if="key === 'delete'" height="28" viewBox="0 0 29 28" fill="none"
               xmlns="http://www.w3.org/2000/svg">
               <g clip-path="url(#clip0_94_1671)">
@@ -90,7 +90,7 @@
           : count
       }`" @click="handleClickBtn">
       <template #btn v-if="buyType == 'discount' && type != 1 && info.status == 1 && info.is_reserve == 1">
-        <van-button type="primary" class="h-56px" color="#6B39F4" block @click="handleClickSub">
+        <van-button type="primary" class="h-[56px]" color="#6B39F4" block @click="handleClickSub">
           {{ t("Reserved") }}
         </van-button>
       </template>
