@@ -20,8 +20,8 @@
                                 stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </div>
-                    <div class="deposit-type text-[14px] color-[#6B7280] mb-[8px]">Withdrawal (₹)</div>
-                    <div class="amount text-[32px] font-bold color-[#0F172A]">+ ₹{{ depositData.amount }}</div>
+                    <div class="deposit-type text-[14px] color-[#6B7280] mb-[8px]">Withdrawal (R$)</div>
+                    <div class="amount text-[32px] font-bold color-[#0F172A]">+ R${{ depositData.amount }}</div>
                 </div>
 
                 <!-- 详细信息 -->
@@ -37,13 +37,13 @@
                     <!-- USDT数量 -->
                     <div class="detail-row flex justify-between items-center py-[16px] border-b border-[#E5E7EB]">
                         <div class="label text-[14px] color-[#0F172A]">提现金额</div>
-                        <div class="value text-[14px] color-[#0F172A]">₹{{ depositData.amount }}</div>
+                        <div class="value text-[14px] color-[#0F172A]">R${{ depositData.amount }}</div>
                     </div>
 
                     <!-- 充值到账 -->
                     <div class="detail-row flex justify-between items-center py-[16px]">
                         <div class="label text-[14px] color-[#0F172A]">提现手续费</div>
-                        <div class="value text-[14px] color-[#0F172A]">₹{{ depositData.fee }}</div>
+                        <div class="value text-[14px] color-[#0F172A]">R${{ depositData.fee }}</div>
                     </div>
                     <div class="detail-row flex justify-between items-center py-[16px]">
                         <div class="label text-[14px] color-[#0F172A]">提现时间</div>
@@ -77,7 +77,7 @@ const router = useRouter()
 // 充值数据
 const depositData = ref({
     amount: '280.00',
-    unit: '₹',
+    unit: 'R$',
     rate: '233.33',
     info: {
         account: '',

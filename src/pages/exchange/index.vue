@@ -1,13 +1,13 @@
 <template>
     <div class="exchange-content p-16">
         <div class="mt-32 font-bold text-24 text-center">R$ {{ seedConfigData?.seedBalance }}</div>
-        <div class="tips text-[#424242] text-center mb-32">{{ t('珍珠数量') }}</div>
+        <div class="tips text-[#424242] text-center mb-32">{{ t('Number of pearls') }}</div>
         <div class="bg-white p-16 rounded-[16px] mb-16 card">
             <div class="input-box flex flex-col gap-8 w-full">
                 <div class="input-content h-48 w-full">
                     <input type="number" :placeholder="t('Enter your Exchange Amount')" v-model="codes">
                 </div>
-                <div class="text-14 text-[#424242] mb-12">{{ t('可兑换金额：') }}{{ canExchangeNum }} </div>
+                <div class="text-14 text-[#424242] mb-12">{{ t('Redeemable Amount:') }}{{ canExchangeNum }} </div>
                 <div class="button border b-solid border flex-shrink-0 bg-[#1b1b1b] text-white px-12 h-48 rounded-16 flex items-center justify-center"
                     @click="handleClickExchange">
                     {{ t('Exchange') }}</div>
@@ -15,15 +15,15 @@
         </div>
 
         <!-- 2. 薪资标准标题 -->
-        <div class="text-[16px] font-bold text-[#333] mb-[12px]">Salary Standards</div>
+        <div class="text-[16px] font-bold text-[#333] mb-[12px]">{{ t('Salary Standards') }}</div>
 
         <!-- 薪资标准列表 -->
         <div class="standards-table bg-white rounded-[16px] p-[16px]  mb-[24px]">
             <!-- 表头 -->
             <div
                 class="flex justify-between text-[#333] font-bold text-[14px] mb-[16px] pb-[12px] border-b-solid border-b-[1px] border-b-[#0000000D] border">
-                <span class=" flex-1">Level</span>
-                <span class=" flex-1">Rate</span>
+                <span class=" flex-1">{{ t('Level') }}</span>
+                <span class=" flex-1">{{ t('Rate') }}</span>
             </div>
 
             <!-- 列表内容 -->
@@ -35,7 +35,7 @@
                         <!-- 图标 -->
                         <img :src="imgEnum[item.level]" class="w-[20px] h-[20px] mr-[8px] object-contain" />
                         <!-- 等级文字 -->
-                        <span class="text-[#00000080]">LV{{ item.level }}</span>
+                        <span class="text-[#00000080]">{{ t('Lv') }}{{ item.level }}</span>
                     </div>
                     <!-- 金额 -->
                     <span class="text-[#333] font-medium  text-[15px] flex-1">{{ item.seedRadio }} %</span>

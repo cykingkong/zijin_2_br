@@ -6,11 +6,11 @@
                 <img src="@/assets/reward.png" alt="" class="w-28 h-24 block mr-[3px]">
                 {{ t('Exchange') }}
             </div>
-            <div class="input-box flex flex-col gap-8 w-full">
+            <div class="input-box flex flex-col gap-16 w-full">
                 <div class="input-content h-48 w-full">
                     <input type="text" :placeholder="t('Enter your Amount')" v-model="codes">
                 </div>
-                <div class="button border b-solid border flex-shrink-0 bg-[#1b1b1b] text-white px-12 h-48 rounded-16 flex items-center justify-center"
+                <div class="button  border b-solid border flex-shrink-0 bg-[#1b1b1b] text-white px-12 h-48 rounded-16 flex items-center justify-center"
                     @click="handleClickExchange">
                     {{ t('Exchange') }}</div>
             </div>
@@ -57,13 +57,13 @@ const handleClickExchange = async () => {
 
         if (code == 200) {
             showSuccessToast({
-                message: t("Redemption successful")
+          
             })
             getUserList()
             codes.value = ''
         }
     } catch (err) {
-        console.log(err, '兑换失败')
+        console.log(err, '')
     }
 }
 const getUserList = async () => {

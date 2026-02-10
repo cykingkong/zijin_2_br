@@ -6,7 +6,7 @@
             <button
                 class="w-full bg-[#1A1A1A] text-white h-[48px] rounded-[12px] font-bold text-[16px] active:opacity-90 transition-opacity mb-16"
                 @click="handleClaim">
-                Claim
+                {{ t("Claim") }}
             </button>
             <!-- 薪资标准表格卡片 -->
             <div class="standards-table bg-white rounded-[16px] p-[16px] mb-[24px]">
@@ -47,14 +47,15 @@
             </div>
 
             <!-- 规则说明 -->
-            <h3 class="text-[16px] font-bold text-[#333] mb-[12px]">Rule</h3>
+            <h3 class="text-[16px] font-bold text-[#333] mb-[12px]">
+                {{ t("Rules") }}
+            </h3>
             <div class="rules-text text-[#666] text-[13px] leading-[1.6]">
                 <p class="mb-[16px]">
-                    The monthly salary is divided into two parts: individual monthly salary and team subsidy.
+                    {{ t("The monthly salary is divided into two parts: individual monthly salary and team subsidy.") }}
                 </p>
                 <p class="mb-[8px]">
-                    Personal monthly salary is your personal income, and team subsidies are used for your team meetings
-                    and meals. The team subsidies will be distributed after you complete the team meetings or meals.
+                    {{ t("Personal monthly salary is your personal income, and team subsidies are used for your team meetings and meals. The team subsidies will be distributed after you complete the team meetings or meals.") }}
                 </p>
             </div>
 

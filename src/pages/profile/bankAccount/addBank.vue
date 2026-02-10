@@ -35,7 +35,7 @@
           <div class="w-full flex justify-between">
             <div class="l flex-1 font-size-14" :class="form.bankName ? '' : 'color-[#9CA3AF]'"
               @click="showPicker = true">
-              {{ form.bankName ? form.bankName : t("PleaseSelect") }}
+              {{ form.bankName ? form.bankName : t("PleaseSelectBank") }}
             </div>
             <div class="r flex-shrink-0">
               <svg class="w-16 h-16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -60,7 +60,7 @@
 
 
       <div class="label font-bold text-[16px] color-[#64748B]">
-        {{ t("login.email") }}
+        {{ t("Email") }}
       </div>
       <div class="phone-input my-[12px]">
         <inputCom :placeholder="t('')" v-model:value="form.receiveEmail" :tips="''">

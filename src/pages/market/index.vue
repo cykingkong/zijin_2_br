@@ -126,7 +126,7 @@ onMounted(() => {
         <template #sendCode>
           <div class="absolute right--20 font-size-12 h-28 flex justify-center items-center sendCode text-[#1b1b1b]"
             @click="toSearch()">
-            {{ t("Seach") }}
+            {{ t("Search") }}
           </div>
         </template>
       </inputCom>

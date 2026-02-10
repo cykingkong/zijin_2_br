@@ -5,7 +5,7 @@
       <div class="info-box px-[24px] flex flex-col gap-[4px] h-[102px]">
         <div class="t1 text-[#B59CFA] text-[16px]">{{ t("Balance") }}</div>
         <div class="t1 text-[#fff] text-[34px] line-height-[140%]">
-          ₹{{ addCommasToNumber(userInfo.user_balance) }}
+          R${{ addCommasToNumber(userInfo.user_balance) }}
         </div>
       </div>
       <div class="btn-box w-full flex gap-[10px] px-[24px] mt-[33px]">

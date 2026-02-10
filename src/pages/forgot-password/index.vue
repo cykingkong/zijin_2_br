@@ -59,13 +59,13 @@
     </div>
 
     <bottom-button color="#1b1b1b" :button-text="t('Confirm')" @click="onSubmit"></bottom-button>
-    <nationalityList ref="controlChildRef" :title="t('Pick')" @getName="getName"></nationalityList>
+
   </div>
 </template>
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import inputCom from "@/components/inputCom.vue";
-import nationalityList from "@/components/nationality-list/nationalityList.vue";
+
 import local from "@/utils/local";
 
 import { useUserStore } from "@/stores";

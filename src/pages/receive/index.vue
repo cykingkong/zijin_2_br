@@ -2,21 +2,21 @@
     <div class="receive-content p-16 flex flex-col gap-16 ">
         <div class="p-[16px] rounded-[12px] bg-[#fff] border-solid flex flex-col gap-[16px] border-[#0000000D] border">
             <div class="li-flex flex justify-between items-center">
-                <div class="label text-[12px] text-[#8C91A2]">Today's product revenue</div>
+                <div class="label text-[12px] text-[#8C91A2]">{{t("Today's product revenue")}}</div>
                 <div class="value flex items-center font-bold gap-8">
                     <img src="@/assets/coin.png" class="w-20 h-20 block" alt="">
                     R$ {{ info.todayIncome || '0' }}
                 </div>
             </div>
             <div class="li-flex flex justify-between items-center">
-                <div class="label text-[12px] text-[#8C91A2]">Yesterday's product revenue</div>
+                <div class="label text-[12px] text-[#8C91A2]">{{t("Yesterday's product revenue")}}</div>
                 <div class="value flex items-center font-bold gap-8">
                     <img src="@/assets/coin.png" class="w-20 h-20 block" alt="">
                     R${{ info.yesterdayIncome || '0' }}
                 </div>
             </div>
             <div class="li-flex flex justify-between items-center">
-                <div class="label text-[12px] text-[#8C91A2]">Received product revenue</div>
+                <div class="label text-[12px] text-[#8C91A2]">{{t('Received product revenue')}}</div>
                 <div class="value flex items-center font-bold gap-8">
                     <img src="@/assets/coin.png" class="w-20 h-20 block" alt="">
                     R${{ info.allIncome || '0' }}
@@ -114,6 +114,7 @@ const timerMap = ref({}); // 存储结构: { [id]: { text: '00:00:00', disabled:
 let intervalId = null;
 const userProductList = ref([])
 const listStatus = ref(1); // 1-加载中 2-成功 3-已无更多
+const {t} = useI18n()
 const page = reactive({
     pageIndex: 1,
     pageSize: 10
@@ -221,9 +222,9 @@ const handleClickActivity = async () => {
             console.log(data, message, 'asdasd')
             if (code == 200) {
                 showSuccessToast({})
-                router.push({
-                    path: "/profile"
-                })
+                // router.push({
+                //     path: "/profile"
+                // })
             } else if (code == 1001) {
                 showNotify({
                     type: 'danger',

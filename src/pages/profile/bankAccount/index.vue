@@ -157,10 +157,10 @@ onMounted(() => {
 
 <route lang="json5">
     {
-      name: 'bankAccount',
+      name: 'BankAccount',
       meta: {
-        title: 'bankAccount',
-        i18n: 'bankAccount'
+        title: 'BankAccount',
+        i18n: 'BankAccount'
       },
     }
     </route>

@@ -9,14 +9,14 @@
             <div class="salary-card bg-white rounded-[16px] p-[20px] shadow-sm mb-[24px]">
                 <!-- Weekly Salary Row -->
                 <div class="flex justify-between items-center mb-[12px]">
-                    <span class="text-[#8E9FAE] text-[15px]">Weekly salary</span>
+                    <span class="text-[#8E9FAE] text-[15px]">{{t("Weekly salary")}}</span>
                     <span class="text-[#333] text-[18px] font-bold ">R$ {{
                         addCommasToNumber(config.weekly.pending_income) }}</span>
                 </div>
 
                 <!-- Total Weekly Salary Row -->
                 <div class="flex justify-between items-center mb-[24px]">
-                    <span class="text-[#8E9FAE] text-[15px]">Total weekly salary</span>
+                    <span class="text-[#8E9FAE] text-[15px]">{{t("Total weekly salary")}}</span>
                     <span class="text-[#333] text-[18px] font-bold ">R$ {{
                         addCommasToNumber(config.weekly.received_income) }}</span>
                 </div>
@@ -25,12 +25,12 @@
                 <button
                     class="w-full bg-[#1A1A1A] text-white h-[48px] rounded-[12px] font-bold text-[16px] active:opacity-90 transition-opacity"
                     @click="handleClaim">
-                    Claim
+                    {{t("Claim")}}
                 </button>
             </div>
 
             <!-- 2. 薪资标准标题 -->
-            <div class="text-[16px] font-bold text-[#333] mb-[12px]">Salary Standards</div>
+            <div class="text-[16px] font-bold text-[#333] mb-[12px]">{{t("Salary Standards")}}</div>
 
             <!-- 薪资标准列表 -->
             <div class="standards-table bg-white rounded-[16px] p-[16px]  mb-[24px]">
@@ -40,7 +40,7 @@
             </div>
 
             <!-- 3. 规则说明 -->
-            <h3 class="text-[16px] font-bold text-[#333] mb-[12px]">Rule</h3>
+            <!-- <h3 class="text-[16px] font-bold text-[#333] mb-[12px]">Rule</h3>
             <div class="rules-text text-[#666] text-[13px] leading-[1.8]">
                 <p class="mb-[8px]">1. Salary is collected every Sunday from 10am to 10pm.</p>
                 <p class="mb-[8px]">2. After the upgrade, the salary will automatically increase.</p>
@@ -48,7 +48,7 @@
                 <p class="mb-[8px]">4. If you violate the company's rules and regulations, our company has the right to
                     dismiss you.</p>
                 <p>5. Limited quota, first come, first served.</p>
-            </div>
+            </div> -->
 
         </div>
     </div>
@@ -67,7 +67,9 @@ import lv6 from '@/assets/lv/lv6.png';
 import lv7 from '@/assets/lv/lv7.png';
 import lv8 from '@/assets/lv/lv8.png';
 import { addCommasToNumber } from '@/utils/tool';
+import { optimizeRichText } from '@/utils/richText';
 
+const { t } = useI18n();
 const router = useRouter();
 const config = ref({
     salaryTextWeek: "",

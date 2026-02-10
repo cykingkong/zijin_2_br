@@ -1,7 +1,7 @@
 <template>
     <div class="faq-list flex-col gap-[12px] min-h-[100vh] bg-[#F7F7F7] p-20  flex">
         <!-- -->
-        <FaqItem v-for="(item, index) in newsList" :key="index" :item="item" @click="handleClickItem" />
+        <FaqItem v-for="(item, index) in newsList" :key="index" :item="item" @click="handleClickItem(item)" />
 
     </div>
 </template>
@@ -10,6 +10,7 @@
 import { indexInfo, articleList } from "@/api/market";
 import { ref } from 'vue';
 const newsList = ref([]);
+const router = useRouter()
 function getArticleList(params) {
     // 1 关于我们 常见问题 2 新闻中心 3 新闻活动
     articleList({ pageIndex: 1, pageSize: 20, ...params }).then(({ data, code }) => {
@@ -23,9 +24,16 @@ function getArticleList(params) {
         }
     });
 }
+const handleClickItem = (item) => {
+    localStorage.setItem('activityDetail', JSON.stringify(item))
+    router.push({
+        path: '/activityDetail',
+    })
+    // local.setlocal('activityDetail', item)
+}
 onMounted(() => {
     getArticleList({ article_type: 2 })
-    getArticleList({ article_type: 3 })
+
 })
 const feature = ref();
 </script>

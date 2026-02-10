@@ -4,7 +4,7 @@
         <!-- 顶部收益区域 -->
         <div class="earnings-section flex justify-between items-center px-[24px] py-[10px] h-[134px]">
             <div class="flex flex-col ">
-                <span class="text-[#666] text-[14px] mb-[4px] t1">My Earnings</span>
+                <span class="text-[#666] text-[14px] mb-[4px] t1">{{t("My Earnings")}}</span>
                 <span class="text-[#333] text-[36px] font-bold ">{{ addCommasToNumber(userInfo.teamBalance || 0)
                 }}</span>
             </div>
@@ -19,7 +19,7 @@
             <!-- 等级显示 -->
             <div class="level-info flex items-center mb-[16px]">
                 <img src="@/assets/sign-level.png" class="w-[16px] h-[16px] mr-[6px] rounded-full" />
-                <span class="font-bold text-[16px] text-[#333] level">LV1</span>
+                <span class="font-bold text-[16px] text-[#333] level">LV{{ userInfo.level || '' }}</span>
             </div>
 
             <!-- 7天签到 Grid -->
@@ -57,20 +57,20 @@
             <button
                 class="w-full bg-[#1A1A1A] text-white h-[48px] rounded-[12px] font-bold text-[16px] active:opacity-90 transition-opacity"
                 @click="handleSignIn">
-                立即签到
+                {{t("Sign In")}}
             </button>
         </div>
 
         <!-- 奖励规则列表 -->
         <div class="criteria-section px-[16px] flex-1">
-            <h3 class="text-[18px] font-bold text-[#333] mb-[12px]">Reward Criteria</h3>
+            <h3 class="text-[18px] font-bold text-[#333] mb-[12px]">{{t("Reward Criteria")}}</h3>
 
             <div class="reward-table bg-white rounded-[16px] p-[16px] pb-[8px]">
                 <!-- 表头 -->
                 <div
                     class="flex justify-between text-[#333] font-bold text-[14px] mb-[12px] pb-[12px] border-b-solid border-b-[1px] border-b-[#0000000D] border ">
-                    <span>Level</span>
-                    <span>Reward</span>
+                    <span>{{t("Level")}}</span>
+                    <span>{{t("Reward")}}</span>
                 </div>
 
                 <!-- 列表内容 -->
@@ -110,6 +110,7 @@ import lv7 from '@/assets/lv/lv7.png'; // 修正路径
 import lv8 from '@/assets/lv/lv8.png'; // 修正路径
 const router = useRouter();
 const userStore = useUserStore();
+const { t } = useI18n()
 const userInfo = computed(() => userStore.userInfo);
 // 模拟签到天数数据
 // status: 'missed' | 'checked' | 'today' | 'future'

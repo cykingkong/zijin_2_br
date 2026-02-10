@@ -32,7 +32,7 @@
         <div class="label text-[14px]">{{ t("Balance") }}</div>
         <div class="value">
           <div class="v1 text-[14px]">
-            ₹
+            R$
             {{ addCommasToNumber(userInfo.user_balance) || 0 }}
           </div>
         </div>
@@ -82,7 +82,7 @@
       @click="handleClickPaySub"
     >
     </BottomButton> -->
-    <BottomButton :button-text="`${type == '0' ? t('Buy') : t('Sell')} ${buyType == 'discount' && type == '1' ? ' ' : '₹ '
+    <BottomButton :button-text="`${type == '0' ? t('Buy') : t('Sell')} ${buyType == 'discount' && type == '1' ? ' ' : 'R$ '
       }${buyType == 'stock'
         ? addCommasToNumber(count * info?.close)
         : type != 1
@@ -103,7 +103,7 @@
       block
       @click="handleClickBtn"
     >
-      {{ type == "0" ? t("Buy") : t("Sell") }} {{ info?.unit || "₹ "
+      {{ type == "0" ? t("Buy") : t("Sell") }} {{ info?.unit || "R$ "
       }}{{
         buyType == "stock"
           ? addCommasToNumber(count * info?.close)

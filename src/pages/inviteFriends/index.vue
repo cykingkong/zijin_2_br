@@ -39,8 +39,7 @@
 
                 <!-- 3. 警告/说明文字 -->
                 <p class="text-[#8C91A2] text-[12px] text-left leading-[1.3] mb-[16px] px-[4px]">
-                    Please do not invite fake accounts to join. Each person can only have one account in our company to
-                    make money.
+                    {{ t('Please do not invite fake accounts to join. Each person can only have one account in our company to make money.')}}
                 </p>
 
                 <!-- 4. 二维码区域 -->
@@ -57,7 +56,7 @@
                 </div>
 
                 <!-- 5. 底部提示 -->
-                <span class="text-[#AAA] text-[12px]">Long press the image to save</span>
+                <span class="text-[#AAA] text-[12px]">{{ t('Long press the image to save') }}</span>
 
             </div>
         </div>

@@ -2,8 +2,8 @@
   <div class="profile-page min-h-screen bg-[#F7F7F7] pb-[100px] ">
 
     <!-- 1. Header Title -->
-    <div class="pt-[30px] pb-[10px] text-center">
-      <h1 class="text-[18px] font-bold text-[#1A1A1A]">我的</h1>
+    <div class="pt-[10px] pb-[10px] text-center">
+      <h1 class="text-[18px] font-bold text-[#1A1A1A]">{{ t("Profile") }}</h1>
     </div>
 
     <!-- 2. User Info Card -->
@@ -37,12 +37,12 @@
     <!-- 3. My Product Card -->
     <div class="px-[16px] mb-[16px]">
       <div class="bg-white rounded-[16px] p-[16px] flex justify-between items-center shadow-sm">
-        <span class="text-[16px] font-bold text-[#1A1A1A]">我的产品</span>
+        <span class="text-[16px] font-bold text-[#1A1A1A]">{{ t("MyProducts") }}</span>
         <div
-          class="bg-[#1A1A1A] text-[#fff] px-[12px] py-[6px] rounded-[8px] flex items-center gap-1 text-[12px] active:opacity-80 text-[12px]"
+          class="bg-[#1A1A1A] text-[#fff] px-[12px] py-[6px] rounded-[8px] flex items-center gap-4 text-[12px] active:opacity-80 text-[12px]"
           @click="toReceive">
           <img src="@/assets/coin.png" alt="" class="w-16 h-16 block">
-          <span>领取收入</span>
+          <span>{{ t("ReceiveIncome") }}</span>
         </div>
       </div>
     </div>
@@ -55,55 +55,55 @@
           <div class="flex flex-col items-center flex-1">
             <span class="text-[24px] font-bold text-[#A26D47] ">{{ addCommasToNumber(userInfo.balance) || '0'
             }}</span>
-            <span class="text-[#666] text-[12px] mt-[4px]">充值钱包</span>
+            <span class="text-[#666] text-[12px] mt-[4px]">{{ t("DepositWallet") }}</span>
           </div>
           <div class="flex flex-col items-center flex-1 border-l border-[#f5f5f5]">
             <span class="text-[24px] font-bold text-[#A26D47] ">{{ addCommasToNumber(userInfo.teamBalance) ||
               '0' }}</span>
-            <span class="text-[#666] text-[12px] mt-[4px]">余额钱包</span>
+            <span class="text-[#666] text-[12px] mt-[4px]">{{ t("TeamWallet") }}</span>
           </div>
         </div>
 
         <!-- Action Buttons -->
         <div class="flex gap-[16px] mb-[24px]">
           <button @click="handleHerf(2)"
-            class="flex-1 bg-[#1A1A1A] text-white h-[44px] rounded-[12px] font-bold text-[15px]">充值</button>
+            class="flex-1 bg-[#1A1A1A] text-white h-[44px] rounded-[12px] font-bold text-[15px]">{{ t("Deposit") }}</button>
           <button @click="handleHerf(1)"
-            class="flex-1 bg-[#1A1A1A] text-white h-[44px] rounded-[12px] font-bold text-[15px]">提现</button>
+            class="flex-1 bg-[#1A1A1A] text-white h-[44px] rounded-[12px] font-bold text-[15px]">{{ t("Withdraw") }}</button>
         </div>
 
         <!-- 6-Grid Data Stats -->
         <div class="grid grid-cols-2 gap-y-[20px] gap-x-[12px]">
           <!-- Row 1 -->
           <div class="flex flex-col">
-            <span class="text-[#999] text-[12px] mb-[2px]">总收入</span>
+            <span class="text-[#999] text-[12px] mb-[2px]">{{ t("TotalIncome") }}</span>
             <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ addCommasToNumber(userInfo.allProfit)
             }}</span>
           </div>
           <div class="flex flex-col items-end">
-            <span class="text-[#999] text-[12px] mb-[2px]">总提款</span>
-            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ addCommasToNumber(userInfo.withdrawPrice)
+            <span class="text-[#999] text-[12px] mb-[2px]">{{ t("TotalWithdraw") }}</span>
+            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ addCommasToNumber(userInfo.rechargePrice)
             }}</span>
           </div>
           <!-- Row 2 -->
           <div class="flex flex-col">
-            <span class="text-[#999] text-[12px] mb-[2px]">产品收入</span>
-            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ addCommasToNumber(userInfo.productPrice)
+            <span class="text-[#999] text-[12px] mb-[2px]">{{ t("ProductIncome") }}</span>
+            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ addCommasToNumber(userInfo.productProfit)
             }}</span>
           </div>
           <div class="flex flex-col items-end">
-            <span class="text-[#999] text-[12px] mb-[2px]">团队收入</span>
+            <span class="text-[#999] text-[12px] mb-[2px]">{{ t("TeamIncome") }}</span>
             <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ addCommasToNumber(userInfo.itemProfit)
             }}</span>
           </div>
           <!-- Row 3 (Missing Fields Simulation) -->
           <div class="flex flex-col">
-            <span class="text-[#999] text-[12px] mb-[2px]">其他收入</span>
+            <span class="text-[#999] text-[12px] mb-[2px]">{{ t("OtherIncome") }}</span>
             <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ addCommasToNumber(userInfo.otherIncome ||
               '0') }}</span>
           </div>
           <div class="flex flex-col items-end" @click="router.push('/exchange')">
-            <span class="text-[#999] text-[12px] mb-[2px]">Pearl <svg class="w-14 h-14" viewBox="0 0 14 14" fill="none"
+            <span class="text-[#999] text-[12px] mb-[2px]">{{t('Pearl')}} <svg class="w-14 h-14" viewBox="0 0 14 14" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
                 <g clip-path="url(#clip0_6753_24019)">
                   <path
@@ -150,7 +150,7 @@
     <div class="px-[16px] mb-[16px]">
       <div class="bg-white rounded-[16px] p-[16px] shadow-sm relative">
         <div class="flex justify-between items-center mb-[16px]">
-          <span class="text-[16px] font-bold text-[#1A1A1A]">我的团队</span>
+          <span class="text-[16px] font-bold text-[#1A1A1A]">{{ t('My team') }}</span>
           <!-- Calculator Icon Placeholder -->
           <svg class="w-24 h-24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
             @click="router.push('/team')">
@@ -188,14 +188,13 @@
 
         <!-- Rules Text -->
         <div class="text-[#666] text-[11px] leading-[1.5] mb-[12px]">
-          Regras: Membros Nível 1 - comissão de 10%; Membros Nível 2 - comissão de 5%; Membros Nível 3 - comissão de
-          2%.
+          Regras: Membros Nível 1 - comissão de 10%; Membros Nível 2 - comissão de 5%; Membros Nível 3 - comissão de 2%.
         </div>
 
         <!-- Details Link -->
         <div class="text-center" @click="router.push('/team')">
           <span class="text-[#999] text-[12px] flex items-center justify-center gap-1">
-            详情 <van-icon name="arrow" size="10" />
+            {{ t('Details') }} <van-icon name="arrow" size="10" />
           </span>
         </div>
       </div>
@@ -211,7 +210,7 @@
             <img :src="item.icon" alt="" class="w-20 h-20 block">
           </div>
           <!-- Text -->
-          <span class="text-[#333] text-[12px] font-medium" :class="{ 'text-red-500': item.isLogout }">{{ item.text
+          <span class="text-[#333] text-[12px] font-medium text-center" :class="{ 'text-red-500': item.isLogout }">{{ item.text
           }}</span>
         </div>
       </div>
@@ -296,12 +295,12 @@ const getLevelCount = (level: number) => {
 
 // --- 菜单配置 (Grid Menu) ---
 const menuList = [
-  { text: '兑换代码', icon: iconExchange, url: '/reward', type: 'link' },
-  { text: '银行卡设置', icon: iconBank, url: '/profile/bankAccount', type: 'link' },
-  { text: '资金明细', icon: iconFunds, url: '/wallet/walletLogs', type: 'link' },
-  { text: '密码', icon: iconPass, url: '/forgot-password?noLogin=1', type: 'link' },
-  { text: '辞职文章', icon: iconQuit, url: '/richTextDetail?type=czwz', type: 'link' }, // 暂定 About Us
-  { text: '登出', icon: iconLogout, type: 'logout', isLogout: false }
+  { text: t('Exchange Code'), icon: iconExchange, url: '/reward', type: 'link' },
+  { text: t('Bank Account'), icon: iconBank, url: '/profile/bankAccount', type: 'link' },
+  { text: t('Fund Details'), icon: iconFunds, url: '/wallet/walletLogs', type: 'link' },
+  { text: t('Password'), icon: iconPass, url: '/forgot-password?noLogin=1', type: 'link' },
+  { text: t('Quit Article'), icon: iconQuit, url: '/richTextDetail?type=czwz', type: 'link' }, // 暂定 About Us
+  { text: t('Logout'), icon: iconLogout, type: 'logout', isLogout: false }
 ];
 const myteamList = ref([
   {

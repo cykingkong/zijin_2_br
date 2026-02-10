@@ -343,16 +343,14 @@ onMounted(() => {
 {
   name: 'home',
   meta: {
-    title: 'quotes',
+    title: 'home',
     i18n: 'home'
   },
 }
 </route>
 
 <style lang="less" scoped>
-.quotes {
-  // padding-bottom: calc(var(--van-tabbar-height) + 2px);
-}
+
 
 .iconTop3 {
   width: 9px;
@@ -398,7 +396,6 @@ onMounted(() => {
 }
 
 .Home {
-  font-family: 'Space Grotesk', sans-serif;
 
 }
 </style>

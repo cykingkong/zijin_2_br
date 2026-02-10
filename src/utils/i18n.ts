@@ -1,28 +1,31 @@
 import { createI18n } from 'vue-i18n'
 import enUS from 'vant/es/locale/lang/en-US'
+import ptBR from 'vant/es/locale/lang/pt-BR'
 // import zhCN from 'vant/es/locale/lang/zh-CN'
 
 import en from '@/locales/en-US.json'
+import br from '@/locales/br.json'
+
 
 
 import { Locale } from 'vant'
 import type { PickerColumn } from 'vant'
 
-const FALLBACK_LOCALE = 'en'
+const FALLBACK_LOCALE = 'br'
 
 
 const vantLocales = {
   'en': { ...en, ...enUS }, // 英语使用 Vant 官方英语包
   // 'zh-TW': { ...zhCN }, // 中文繁体使用 Vant 官方中文包
-
+  'br': { ...br, ...ptBR }, // 巴西葡萄牙语使用自定义巴西语言包
 }
 
 
 
 
 export const languageColumns: PickerColumn = [
-  { text: 'English', value: 'en' },
-  { text: 'Brazilian', value: 'br' },
+  // { text: 'English', value: 'en' },
+  { text: 'Brazil', value: 'br' },
   // { text: '繁體中文', value: 'zh-TW' },
   // { text: 'हिंदी', value: 'hi' },
   // { text: 'தமிழ்', value: 'ta' },
@@ -68,6 +71,9 @@ async function loadLocaleMsg(locale: string, i18n: I18n) {
   switch (locale) {
     case 'en':
       messages = await import(`../locales/en-US.json`)
+      break
+    case 'br':
+      messages = await import(`../locales/br.json`)
       break
   }
   i18n.global.setLocaleMessage(locale, messages.default)

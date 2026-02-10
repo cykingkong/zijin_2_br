@@ -194,7 +194,7 @@ function onBack() {
       <div class="min-count mx-a  overflow-y-auto text-center font-size-[24px] text-[#0F172A] font-bold">
         R$ {{ count || '0' }}
       </div>
-      <div class="text-[14px] mt-[20px] text-center">{{ t("累计充值:") }}R$ {{ addCommasToNumber(userInfo.rechargePrice) ||
+      <div class="text-[14px] mt-[20px] text-center">{{ t("Accumulated recharge:") }}R$ {{ addCommasToNumber(userInfo.rechargePrice) ||
         '0.00' }}</div>
 
       <div class="mt-[30px] ">

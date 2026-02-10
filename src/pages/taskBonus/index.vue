@@ -7,7 +7,7 @@
         <!-- 顶部收益区域 -->
         <div class="earnings-section flex justify-between items-center px-[24px] py-[10px] h-[134px]">
             <div class="flex flex-col ">
-                <span class="text-[#666] text-[14px] mb-[4px] t1">My Earnings</span>
+                <span class="text-[#666] text-[14px] mb-[4px] t1">{{t("My Earnings")}}</span>
                 <span class="text-[#333] text-[36px] font-bold ">{{ addCommasToNumber(userInfo.teamBalance || 0)
                     }}</span>
             </div>

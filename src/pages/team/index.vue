@@ -16,30 +16,30 @@
 
                 <!-- Total Amount -->
                 <div class="text-[28px] font-bold text-[#1A1A1A]  mb-[4px]">R$ {{ '0' }}</div>
-                <div class="text-[12px] text-[#666] mb-[24px]">团队累计总充值</div>
+                <div class="text-[12px] text-[#666] mb-[24px]">{{t("Total Team Top-up")}}</div>
 
                 <!-- 4-Grid Stats -->
                 <div class="w-full grid grid-cols-2 gap-y-[20px]">
                     <div class="flex flex-col items-start pl-[20px] border-r border-[#f5f5f5]">
-                        <span class="text-[#999] text-[12px] mb-[4px]">今日充值</span>
+                        <span class="text-[#999] text-[12px] mb-[4px]">{{t("Today's Top-up")}}</span>
                         <span class="text-[#333] text-[16px] font-bold ">{{
                             addCommasToNumber(userInfo.rechargeData.todayRecharge)
                         }}</span>
                     </div>
                     <div class="flex flex-col items-end pr-[20px]">
-                        <span class="text-[#999] text-[12px] mb-[4px]">昨日充值</span>
+                        <span class="text-[#999] text-[12px] mb-[4px]">{{t("Yesterday's Top-up")}}</span>
                         <span class="text-[#333] text-[16px] font-bold ">{{
                             addCommasToNumber(userInfo.rechargeData.yesterdayRecharge)
                         }}</span>
                     </div>
                     <div class="flex flex-col items-start pl-[20px] border-r border-[#f5f5f5]">
-                        <span class="text-[#999] text-[12px] mb-[4px]">本月充值</span>
+                        <span class="text-[#999] text-[12px] mb-[4px]">{{t("This Month's Top-up")}}</span>
                         <span class="text-[#333] text-[16px] font-bold ">{{
                             addCommasToNumber(userInfo.rechargeData.thisMonthRecharge)
                         }}</span>
                     </div>
                     <div class="flex flex-col items-end pr-[20px]">
-                        <span class="text-[#999] text-[12px] mb-[4px]">上月充值</span>
+                        <span class="text-[#999] text-[12px] mb-[4px]">{{t("Last Month's Top-up")}}</span>
                         <span class="text-[#333] text-[16px] font-bold ">{{
                             addCommasToNumber(userInfo.rechargeData.lastMonthRecharge)
                         }}</span>
@@ -62,34 +62,34 @@
                         <span class="text-[#333] text-[16px] font-bold ">{{ lv.count }}</span>
                     </div>
                 </div>
-                <p class="text-[#999] text-[11px] leading-[1.4]">
-                    Rules: B-level commission -10%; C-level -5% commission; D-level -2% commission
-                </p>
+                <!-- <p class="text-[#999] text-[11px] leading-[1.4]">
+                  Regras: Membros Nível 1 - comissão de {{ teamsData?.rates[tab.key] }}%; Membros Nível 2 - comissão de 5%; Membros Nível 3 - comissão de 2%.
+                </p> -->
             </div>
 
             <!-- 3. 我的团队 (My Team) -->
             <div class="team-stats bg-white rounded-[16px] p-[16px] shadow-sm mb-[16px]">
-                <div class="text-[15px] font-bold text-[#1A1A1A] mb-[16px]">My Team</div>
+                <div class="text-[15px] font-bold text-[#1A1A1A] mb-[16px]">{{t("My Team")}}</div>
                 <div class="grid grid-cols-2 gap-y-[20px]">
                     <div class="flex flex-col items-center">
                         <span class="text-[#333] text-[18px] font-bold  mb-[2px]">{{
                             userInfo.teamData.todayNewMembers }}</span>
-                        <span class="text-[#999] text-[12px]">团队总人数</span>
+                        <span class="text-[#999] text-[12px]">{{t("Total Team Members")}}</span>
                     </div>
                     <div class="flex flex-col items-center">
                         <span class="text-[#333] text-[18px] font-bold  mb-[2px]">{{
                             userInfo.teamData.vaildTeamCount }}</span>
-                        <span class="text-[#999] text-[12px]">有效团队规模</span>
+                        <span class="text-[#999] text-[12px]">{{t("Valid Team Members")}}</span>
                     </div>
                     <div class="flex flex-col items-center">
                         <span class="text-[#333] text-[18px] font-bold  mb-[2px]">{{
                             userInfo.teamData.todayNewMembers }}</span>
-                        <span class="text-[#999] text-[12px]">今日新成员</span>
+                        <span class="text-[#999] text-[12px]">{{t("Today's New Members")}}</span>
                     </div>
                     <div class="flex flex-col items-center">
                         <span class="text-[#333] text-[18px] font-bold  mb-[2px]">{{
                             userInfo.teamData.yesterdayNewMembers }}</span>
-                        <span class="text-[#999] text-[12px]">昨日新成员</span>
+                        <span class="text-[#999] text-[12px]">{{t("Yesterday's New Members")}}</span>
                     </div>
                 </div>
             </div>
@@ -111,7 +111,7 @@
                     :class="currentLevel === tab.key
                         ? 'bg-white border-[#8B5E3C] border border-solid text-[#8B5E3C]'
                         : 'bg-[#F2F2F2] border-transparent text-[#999]'">
-                    {{ tab.label }} ({{ activeIndex ? tab.unNum : tab.num }})
+                    {{ tab.label }}{{ teamsData?.rates[tab.key]||'0' }}% ({{ activeIndex ? tab.unNum : tab.num }})
                 </div>
             </div>
 
@@ -157,7 +157,7 @@ import { addCommasToNumber } from '@/utils/tool';
 const router = useRouter();
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
-
+const {t} = useI18n()
 // 筛选状态
 const filterType = ref('cancel'); // 
 const currentLevel = ref('B');
@@ -171,17 +171,17 @@ const levelStats = ref([
 
 const levelTabs = ref([
     {
-        id: 'L1', label: 'L1-10%', key: 'B',
+        id: 'L1', label: 'L1-', key: 'B',
         num: userInfo.value?.topData?.find((item) => item.generation === 1)?.vaildUserCount || 0,
         unNum: userInfo.value?.topData?.find((item) => item.generation === 1)?.noVaildUserCount || 0,
     },
     {
-        id: 'L2', label: 'L2-10%', key: 'C',
+        id: 'L2', label: 'L2-', key: 'C',
         num: userInfo.value?.topData?.find((item) => item.generation === 2)?.vaildUserCount || 0,
         unNum: userInfo.value?.topData?.find((item) => item.generation === 2)?.noVaildUserCount || 0,
     },
     {
-        id: 'L3', label: 'L3-10%', key: 'D',
+        id: 'L3', label: 'L3-', key: 'D',
         num: userInfo.value?.topData?.find((item) => item.generation === 3)?.vaildUserCount || 0,
         unNum: userInfo.value?.topData?.find((item) => item.generation === 3)?.noVaildUserCount || 0,
     },
@@ -199,8 +199,12 @@ const tableData = ref([
 const teamsData = ref({
     userList: [
         { account: '2333665', referrer: 25, maxAmount: '200' },
-
-    ]
+    ],
+    rates: {
+        B: '0',
+        C: '0',
+        D: '0',
+    }
 })
 function goBack() {
     if (router) router.back();

@@ -9,7 +9,7 @@
             <img :src="productInfo.productImage" class="w-full h-full object-cover" v-if="productInfo.productImage" />
             <!-- 空白占位 -->
             <div v-else class="w-full h-full flex items-center justify-center bg-gray-100 text-gray-300">
-                <span>Product Image</span>
+                <span>{{ t("Product Image") }}</span>
             </div>
         </div>
 
@@ -18,7 +18,7 @@
             <!-- 使用白色背景和圆角模拟截图中的卡片头部效果，或者直接放在背景上 -->
             <div class="bg-white rounded-t-[20px] pt-[20px] pb-[10px] px-20">
                 <h1 class="text-[20px] font-bold text-[#1A1A1A] leading-[1.3]">
-                    {{ productInfo.productName || 'Product Name' }}
+                    {{ productInfo.productName || '-' }}
                 </h1>
             </div>
             <div class="px-20">
@@ -189,7 +189,7 @@ import { useUserStore } from '@/stores';
 import { addCommasToNumber } from '@/utils/tool';
 import { optimizeRichText } from '@/utils/richText';
 import { showToast } from 'vant';
-import { useRect } from '@vant/use';
+
 // 假设 BottomButton 是全局组件或已注册
 // import BottomButton from '@/components/BottomButton.vue';
 const show = ref(true)
