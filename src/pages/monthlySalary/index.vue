@@ -2,13 +2,18 @@
     <div class="monthly-salary-page min-h-[100vh] bg-[#F7F7F7] flex flex-col font-sans">
 
         <!-- 内容区域 -->
-        <div class="content flex-1 px-[16px] pt-[10px] pb-[30px]">
-
+        <div class="content flex-1 px-[16px] pt-[16px] pb-[30px]">
+            <button
+                class="w-full bg-[#1A1A1A] text-white h-[48px] rounded-[12px] font-bold text-[16px] active:opacity-90 transition-opacity mb-16"
+                @click="handleClaim">
+                Claim
+            </button>
             <!-- 薪资标准表格卡片 -->
             <div class="standards-table bg-white rounded-[16px] p-[16px] mb-[24px]">
+                <div class="html" v-html="config.salaryTextMonth"></div>
 
                 <!-- 表头：三列布局 -->
-                <div
+                <div v-if="false"
                     class="flex items-center text-[#333] font-bold text-[14px] mb-[16px] pb-[12px] border-b border-[#0000000D]">
                     <!-- 第一列：左对齐 -->
                     <span class="w-[30%] text-left">Level</span>
@@ -20,8 +25,7 @@
 
                 <!-- 列表内容 -->
                 <div class="flex flex-col gap-[18px]">
-                    <div v-for="(item, index) in salaryList" :key="index" class="flex items-center text-[14px]">
-
+                    <div class="flex items-center text-[14px]" v-if="false">
                         <!-- Level 列 -->
                         <div class="w-[30%] flex items-center text-left">
                             <img :src="item.img" class="w-[20px] h-[20px] mr-[8px] object-contain" />
@@ -30,12 +34,12 @@
 
                         <!-- Weekly Pay 列 -->
                         <div class="w-[35%] text-center">
-                            <span class="text-[#333] font-medium font-din text-[15px]">{{ item.weekly }}</span>
+                            <span class="text-[#333] font-medium  text-[15px]">{{ item.weekly }}</span>
                         </div>
 
                         <!-- Team Subsidy 列 -->
                         <div class="w-[35%] text-right">
-                            <span class="text-[#333] font-medium font-din text-[15px]">{{ item.subsidy }}</span>
+                            <span class="text-[#333] font-medium  text-[15px]">{{ item.subsidy }}</span>
                         </div>
 
                     </div>
@@ -61,6 +65,8 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { month, receiveMonth } from '@/api/salary'
+import { optimizeRichText } from '@/utils/richText';
 
 // 导入图片资源
 import lv3 from '@/assets/lv/lv3.png';
@@ -81,10 +87,30 @@ const salaryList = ref([
     { lv: 'LV7', weekly: '$1,000.0', subsidy: '$115000', img: lv7 },
     { lv: 'LV8', weekly: '$3,000.0', subsidy: '$70000', img: lv8 },
 ]);
-
+const config = ref({
+    salaryTextMonth: ''
+})
 function goBack() {
     if (router) router.back();
 }
+async function getMonthConfig() {
+    const { data, code } = await month()
+    if (code == 200) {
+        config.value = data || {};
+        config.value.salaryTextMonth = optimizeRichText(data.salary_text_month || '');
+    }
+}
+async function handleClaim() {
+    console.log('Claim button clicked');
+    // TODO: 调用领取薪资 API
+    await receiveMonth()
+    await getMonthConfig()
+}
+
+onMounted(async () => {
+    await getMonthConfig()
+
+})
 </script>
 
 <route lang="json5">
@@ -97,8 +123,4 @@ function goBack() {
 }
 </route>
 
-<style scoped>
-.font-din {
-    font-family: 'DIN Alternate', 'Roboto', sans-serif;
-}
-</style>
+<style scoped></style>

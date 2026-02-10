@@ -12,6 +12,7 @@ const enumBtnText = {
   2: 'Sold out',
   3: 'Pre-sale'
 }
+
 const page = reactive({
   pageIndex: 1,
   pageSize: 10,
@@ -21,6 +22,7 @@ const listStatus = ref(1); // 1-加载中 2-成功 3-已无更多
 const stockSkeleton = ref(false);
 const stockList = ref<any>([]);
 const tabList = ref([]);
+const search = ref("")
 const userProductArr = ref([])
 const categoryId = ref();
 const getUserProArr = async () => {
@@ -38,9 +40,11 @@ const getProductList = async () => {
   if (page.pageIndex == 1) {
     stockSkeleton.value = true;
   }
+
   const { data, code } = await productList({
     classId: tabList.value[activeName.value]?.id || null,
     ...page,
+    productName: search.value || null
   });
   if (code == 200) {
     console.log(stockSkeleton.value);
@@ -86,34 +90,11 @@ const handleClickStock = (item: any) => {
   router.push(`/market/productDetail?productId=${item.productId}`);
 };
 function toSearch() {
-  router.push("/market/search");
+  page.pageIndex = 1;
+  getProductList();
 }
 
-function handleClickGrid(val: any) {
-  if (val === 0) {
-  }
-  if (val === 1) {
-    router.push(`/discount`);
-  }
-  if (val === 2) {
-    router.push({
-      path: "/fund",
-      // query: {
-      //   categoryId: activeName.value == '200' ? "202" : "198",
-      // },
-    });
-  }
-  if (val === 3) {
-    // router.push('/quotes/accountChange?type=3' + '&categoryId=' + categoryId.value)
-    router.push({
-      path: "/IPO",
-      // query: {
-      //     type: 3,
-      //     categoryId: categoryId.value,
-      // },
-    });
-  }
-}
+
 const loadMore = () => {
   page.pageIndex++;
   getProductList();
@@ -126,14 +107,38 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="market relative overflow-hidden pb-[20px] bg-[#f7f7f7] min-h-screen">
+  <div class="market relative overflow-hidden pb-[20px] bg-[#f7f7f7] min-h-screen pt-[20px]">
+    <div class=" phone-input my-16 mx-16 flex items-center px-20">
+      <svg class="w-20 h-20 flex-shrink-0" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g clip-path="url(#clip0_6869_628)">
+          <path
+            d="M13.5817 13.5817C11.0814 16.0821 7.02753 16.0821 4.5272 13.5817C2.02687 11.0814 2.02687 7.02757 4.5272 4.52724C7.02753 2.02692 11.0814 2.02692 13.5817 4.52724C16.082 7.02757 16.082 11.0814 13.5817 13.5817ZM13.5817 13.5817L16.4112 16.4113"
+            stroke="#8C91A2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </g>
+        <defs>
+          <clipPath id="clip0_6869_628">
+            <rect width="20" height="20" fill="white" />
+          </clipPath>
+        </defs>
+      </svg>
+      <inputCom :placeholder="t('Search')" v-model:value="search" :tips="''" :input-type="'search'"
+        class="flex-1 w-full">
+        <template #sendCode>
+          <div class="absolute right--20 font-size-12 h-28 flex justify-center items-center sendCode text-[#1b1b1b]"
+            @click="toSearch()">
+            {{ t("Seach") }}
+          </div>
+        </template>
+      </inputCom>
+    </div>
     <!-- Top Tabs -->
-    <div class="sticky top-0 z-50 bg-white">
-      <van-tabs v-model:active="activeName" @click-tab="tabChange" line-width="180px" color="#333"
-        title-active-color="#333" title-inactive-color="#999" class="custom-tabs">
-        <van-tab v-for="(item, index) in tabList" :title="item.name" :key="item.id">
-        </van-tab>
-      </van-tabs>
+    <div class="sticky top-0 z-50 flex  items-center px-16 gap-8 overflow-x-auto flex-wrap">
+      <div
+        class="tab-item  flex flex-1 text-nowrap  items-center justify-center text-center border text-14 border-[#E5E5E5] border-solid rounded-[16px] py-4 px-6 h-40"
+        :class="activeName == index ? 'bg-[#CED0D8] text-[#222222] font-bold' : 'text-[#999999]'"
+        v-for="(item, index) in tabList" :key="index" @click="activeName = index; getProductList()">{{ item.name
+        }}
+      </div>
     </div>
 
     <!-- Product Grid -->
@@ -155,113 +160,50 @@ onMounted(() => {
       </div>
     </div>
 
-    <div v-else class="product-list grid grid-cols-2 gap-x-[15px] gap-y-[24px] px-[16px] mt-[20px]">
-      <div v-for="(item, index) in stockList" :key="index" class="product-item" @click="handleClickStock(item)">
-        <!-- Image Box -->
-        <div
-          class="img-box relative w-full aspect-square bg-[#F5F5F5] rounded-[20px] mb-[12px] flex items-center justify-center overflow-hidden">
-          <!-- Like Icon -->
-          <div
-            class="absolute top-[12px] right-[12px] w-[32px] h-[32px] bg-white rounded-full flex items-center justify-center shadow-sm z-10">
-            <svg class="w-16 h-16" v-if="item.onlyNewUser" viewBox="0 0 16 16" fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <path d="M4.66667 6.33333V9.66666L2 6.33333V6.33599V9.66666" stroke="#1B1B1B" stroke-linecap="round"
-                stroke-linejoin="round" />
-              <path d="M6.66663 8.00001H8.66663" stroke="#1B1B1B" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M8.99996 6.336H6.66663V9.66667H8.99996" stroke="#1B1B1B" stroke-linecap="round"
-                stroke-linejoin="round" />
-              <path d="M10.6666 6.33333L11 9.66666H11.1426L12.3333 7.66666L13.524 9.66666H13.6666L14 6.33333"
-                stroke="#1B1B1B" stroke-linecap="round" stroke-linejoin="round" />
-              <path
-                d="M12.7413 4.33333C12.588 4.134 12.4253 3.94 12.2427 3.75733C9.89933 1.414 6.10067 1.414 3.75733 3.75733C3.57467 3.94 3.41267 4.134 3.25867 4.33333"
-                stroke="#1B1B1B" stroke-linecap="round" stroke-linejoin="round" />
-              <path
-                d="M3.25867 11.6667C3.412 11.866 3.57467 12.06 3.75733 12.2427C6.10067 14.586 9.89933 14.586 12.2427 12.2427C12.4253 12.06 12.5873 11.866 12.7413 11.6667"
-                stroke="#1B1B1B" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <van-icon name="like-o" size="18" color="#333" v-else />
+    <div v-else v-for="(item, index) in stockList" :key="index"
+      class="mx-[16px] my-16 product-item product-item  bg-[#fff] px-[8px] py-[14px] rounded-[20px] relative"
+      @click="handleClickStock(item)">
+      <div class="tag px-4 h-13 bg-[#FF64641A] text-[9px] color-[#FF6464] absolute right-0 top-0">
+        <!-- {{ item.tagText || 'Sold out' }} -->
+        {{ item.status == 2 ? t('Sold Out') : t('Buy Now') }}
 
-
-          </div>
-
-          <!-- Product Image -->
+      </div>
+      <div class="top flex gap-[8px] pb-[13px] border-b-solid border-b-[1px] border-b-[#F5F5F5]">
+        <div class="img w-68 h-68 flex-shrink-0 bg-[#555] rounded-[20px] overflow-hidden">
           <img v-if="item.productImage" :src="item.productImage" class="w-full h-full object-cover" />
-          <div v-else class="text-[#ccc] text-4xl">
-            <!-- Placeholder if no image -->
-            <van-icon name="photo-o" />
-          </div>
         </div>
-
-        <!-- Info -->
-        <div class="info">
-          <div class="title text-[15px] font-bold text-[#1A1A1A] leading-[1.3] mb-[6px] line-clamp-2">
+        <div class="info w-full">
+          <div class="title font-bold text-[14px] color-[#161616]">
             {{ item.productName || 'Product Name' }}
           </div>
-          <div class="bottom text-12 my-6">
-            <div class="li flex justify-between">
-              <div class="label text-[#666]">{{ $t('Cycle') }}</div>
-              <div class="value text-amber">{{ `${item.incomeCycle} ${$t('Days')}` || '- ' + $t('Days') }}</div>
-            </div>
-            <div class="li flex justify-between">
-              <div class="label text-[#666]">{{ $t('Daily') }}</div>
-              <div class="value text-amber">₹ {{ item.dailyIncome }}</div>
-            </div>
-            <div class="li flex justify-between">
-              <div class="label text-[#666]">{{ $t('Total') }}</div>
-              <div class="value text-amber">₹ {{ item.totalIncome }}</div>
+          <div class="desc text-[12px] color-[#8C91A2] font-normal">{{ item.levelLimit || 'LV1 and above' }}</div>
+          <div class="flex justify-between items-end">
+            <div class="price color-[#FF6464] font-[14px] font-bold">R$ {{ addCommasToNumber(item.discountPrice) ||
+              '0.00' }}</div>
+            <div class="button text-[14px] font-bold text-[#fff]  px-[12px] py-[6px] rounded-[8px]"
+              :class="item.status == 2 ? 'bg-[#CED0D8]' : 'bg-[#161616]'" @click="handleClickStock(item)">
+              {{ item.status == 2 ? t('Sold Out') : t('Buy Now') }}
             </div>
           </div>
-          <div class="price text-[14px] font-bold text-[#999] text-align-right mt-6 mb-6" v-if="item.discountRate"> {{
-            t(`Original Price`)
-            }}:
-            <span class="discount-price line-through text-[#999]">
-              ₹{{
-                addCommasToNumber(item.originalPrice)
-                || '0.00' }}
-            </span>
-          </div>
-          <div class="flex items-center justify-between gap-16">
-            <div class="text-14 text-gray-400">
-              {{ t(enumBtnText[item.status]) }}
-            </div>
-            <div class="price text-[16px] font-bold text-right  text-[#FF6B00] text-nowrap">
-              ₹ {{ addCommasToNumber(item.discountPrice) || '0.00' }}
-            </div>
-          </div>
-
+        </div>
+      </div>
+      <div class="bottom flex pt-[13px]">
+        <div class="item flex-1">
+          <div class="label mb-4">{{ t('Validity period') }}</div>
+          <div class="value text-left">{{ item.incomeCycle + 'D' || '0' + $t('Days') }}</div>
+        </div>
+        <div class="item flex-1">
+          <div class="label text-center mb-4">{{ t('Every other day') }}</div>
+          <div class="value text-center">R$ {{ addCommasToNumber(item.dailyIncome) || '0.00' }}</div>
+        </div>
+        <div class="item flex-1">
+          <div class="label text-right mb-4">{{ t('Total Revenue') }}</div>
+          <div class="value text-right">R$ {{ addCommasToNumber(item.totalIncome) || '0.00' }}</div>
         </div>
       </div>
     </div>
     <div class="list px-[20px] flex flex-col gap-[20px]">
-      <div class="product-item w-full bg-[#fff] px-[8px] py-[14px] rounded-[20px]">
-        <div class="top flex gap-[8px] pb-[13px] border-b-solid border-b-[1px] border-b-[#F5F5F5]">
-          <div class="img w-68 h-68 flex-shrink-0 bg-[#555] rounded-[20px]"></div>
-          <div class="info w-full">
-            <div class="title font-bold text-[14px] color-[#161616]">1231231231</div>
-            <div class="desc text-[12px] color-[#8C91A2] font-normal">LV1 and above</div>
-            <div class="flex justify-between items-end">
-              <div class="price color-[#FF6464] font-[14px] font-bold">#49</div>
-              <div class="button text-[14px] font-bold text-[#fff] bg-[#161616] px-[12px] py-[6px] rounded-[8px]">
-                {{ t('Buy Now') }}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="bottom flex pt-[13px]">
-          <div class="item flex-1">
-            <div class="label mb-4">{{ t('Validity period') }}</div>
-            <div class="value text-left">123</div>
-          </div>
-          <div class="item flex-1">
-            <div class="label text-center mb-4">{{ t('Validity period') }}</div>
-            <div class="value text-center">123</div>
-          </div>
-          <div class="item flex-1">
-            <div class="label text-right mb-4">{{ t('Validity period') }}</div>
-            <div class="value text-right">123</div>
-          </div>
-        </div>
-      </div>
+
 
     </div>
 
@@ -343,5 +285,38 @@ onMounted(() => {
   letter-spacing: 0px;
   vertical-align: middle;
 
+}
+
+.phone-input {
+  border: 1px solid #F0F0F0;
+  border-radius: 12px;
+  background: #0000000D;
+
+
+  :deep(.input-box) {
+    height: 39px;
+    margin-top: 0px;
+
+    input {
+      background: transparent;
+    }
+
+  }
+
+  :deep(.tips) {
+    margin-bottom: 0px;
+  }
+}
+
+.sendCode {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #868c9a;
+  color: #fff;
+  background: #424242;
+}
+
+.tag {
+  border-radius: 0 4px 0 4px;
 }
 </style>

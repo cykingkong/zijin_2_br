@@ -23,12 +23,31 @@ const indexInfoData = ref({
   discountBanners: [],
 });
 const lang = ref(local.getlocal('lang') || 'en')
+let pathEnum = {
+  0: 'SignIn',
+  1: 'team',
+  2: 'inviteFriends',
+  3: '',
+  4: 'weeklySalary',
+  5: 'monthlySalary',
+  6: 'yearSalary',
+  7: 'taskbonus',
+  8: 'receive',
+}
+function handleClickSeeAll() {
+  router.push({
+    path: '/faqList',
+  })
+}
 function handleClickGrid(val) {
+  if (val == 3) return
+  router.push({
+    path: pathEnum[val],
+  });
+  return
   if (val === 0) {
 
-    router.push({
-      path: "/signIn",
-    });
+
   }
   if (val === 1) {
     router.push({
@@ -123,6 +142,12 @@ const handleClickItem = (item) => {
   })
   // local.setlocal('activityDetail', item)
 }
+const handleClickNoticeDetail = () => {
+  localStorage.setItem('noticeDetail', JSON.stringify(indexInfoData.value.notice))
+  router.push({
+    path: '/noticeDetail',
+  })
+}
 const categoryId = ref();
 
 const showDatePicker = ref(false);
@@ -185,7 +210,7 @@ onMounted(() => {
       </div>
       <div class="flex justify-center items-center icon-box gap-[8px]">
         <LangSelectDropdown v-model="lang" />
-        <div class="relative" @click="handleClickGrid(2)">
+        <div class="relative" @click="handleClickGrid(8)">
           <div
             class="dot absolute bottom-[8px] right-[1px]  rounded-full bg-[#FF4E4E] color-[#fff] text-[8px] w-[5px] h-[5px] text-center"
             v-if="userInfo.productCount">
@@ -222,7 +247,8 @@ onMounted(() => {
 
     <!-- notice -->
     <div class="w-full pl-[4px] pr-[4px] my-16">
-      <div class="notice text-[12px]  w-full border-[1px] px-12 h-42  px-4 py-2 overflow-hidden flex items-center">
+      <div class="notice text-[12px]  w-full border-[1px] px-12 h-42  px-4 py-2 overflow-hidden flex items-center"
+        @click="handleClickNoticeDetail">
 
         <div class="content text-no-wrap w-full">
           <van-notice-bar scrollable :text="indexInfoData.noticeContent" background="transparent" color="#161616"
@@ -260,14 +286,14 @@ onMounted(() => {
     </div>
     <Grid @handleClickGrid="handleClickGrid" />
 
-    <div class="indicator-title px-24 font-bold text-[16px] mt-12">
+    <!-- <div class="indicator-title px-24 font-bold text-[16px] mt-12">
       {{ t("Activity Center") }}
     </div>
-    <ActivityCenter :arr="activityList" />
+    <ActivityCenter :arr="activityList" /> -->
     <div class="indicator-title px-24 font-bold text-[16px] mt-12 flex items-center justify-between">
       {{ t("FAQ") }}
-      <div class="see-all text-[14px] color-[#9CA3AF]">{{ t("See all") }} <svg width="14" height="14"
-          viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <div class="see-all text-[14px] color-[#9CA3AF]" @click="handleClickSeeAll">{{ t("See all") }} <svg width="14"
+          height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M5.19751 11.62L9.00084 7.81667C9.45001 7.3675 9.45001 6.6325 9.00084 6.18334L5.19751 2.38"
             stroke="#8C91A2" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
@@ -275,13 +301,12 @@ onMounted(() => {
     </div>
     <div class="news-list px-24 py-12 flex flex-col gap-12">
 
-      <FaqItem v-for="(item, index) in newsList" :key="index" :item="item" @click="handleClickItem" />
+      <FaqItem v-for="(item, index) in newsList" :key="index" :item="item" @click="handleClickItem(item)" />
 
       <!-- </div> -->
     </div>
-    <div class="indicator-title px-24 font-bold text-[16px] mt-12 flex items-center justify-between">
+    <!-- <div class="indicator-title px-24 font-bold text-[16px] mt-12 flex items-center justify-between">
       {{ t("News Center") }}
-      <!-- <div class="see-all text-[14px] color-[#9CA3AF]">{{ t("See all") }}</div> -->
     </div>
     <div class="news-list px-24 py-12">
       <div
@@ -293,7 +318,7 @@ onMounted(() => {
         </div>
         <div class="info color-[#111827] font-bold">{{ item.title }}</div>
       </div>
-    </div>
+    </div> -->
     <van-popup v-model:show="showDatePicker" position="center" :round="true">
       <div class="h-auto max-h-500 overflow-y-auto p-12">
         <div class="div" v-html="indexInfoData.notice" />

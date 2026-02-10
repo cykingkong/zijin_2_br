@@ -1,17 +1,18 @@
 <template>
-    <div class="deposit-success bg-white flex flex-col">
+    <div class="deposit-success bg- flex flex-col">
         <!-- 主要内容区域 -->
-        <div class=" flex flex-col items-center pt-150px  px-24px">
+        <div class="flex flex-col items-center pt-[150px] px-[24px]">
             <!-- 中央图形 -->
-            <div class="success-graphic mb-32px relative">
+            <div class="success-graphic mb-[32px] relative">
                 <!-- 外层灰色圆圈 -->
                 <div
-                    class="outer-circle w-120px h-120px rounded-full border-2px border-dashed border-#E5E7EB flex items-center justify-center">
+                    class="outer-circle w-[120px] h-[120px] rounded-full border-[2px] border-dashed border-[#E5E7EB] border flex items-center justify-center">
                     <!-- 内层白色卡片 -->
                     <div
-                        class="inner-card w-80px h-60px bg-white rounded-12px shadow-lg flex items-center justify-center relative">
+                        class="inner-card w-[80px] h-[60px] bg- rounded-[12px] shadow-lg flex items-center justify-center relative">
                         <!-- 紫色存钱罐图标 -->
-                        <div class="piggy-bank w-40px h-40px bg-#6B39F4 rounded-8px flex items-center justify-center">
+                        <div
+                            class="piggy-bank w-[40px] h-[40px] bg-[#6B39F4] rounded-[8px] flex items-center justify-center">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                 <path
                                     d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2Z"
@@ -26,17 +27,17 @@
                         </div>
 
                         <!-- 金币 -->
-                        <div class="coins absolute -top-8px -right-8px">
+                        <div class="coins absolute -top-[8px] -right-[8px]">
                             <div
-                                class="coin w-16px h-16px bg-#FFD700 rounded-full flex items-center justify-center text-8px font-bold text-white absolute top-0 right-0">
+                                class="coin w-[16px] h-[16px] bg-[#FFD700] rounded-full flex items-center justify-center text-[8px] font-bold text-white absolute top-0 right-0">
                                 $
                             </div>
                             <div
-                                class="coin w-16px h-16px bg-#FFD700 rounded-full flex items-center justify-center text-8px font-bold text-white absolute top-4px right-8px">
+                                class="coin w-[16px] h-[16px] bg-[#FFD700] rounded-full flex items-center justify-center text-[8px] font-bold text-white absolute top-[4px] right-[8px]">
                                 $
                             </div>
                             <div
-                                class="coin w-16px h-16px bg-#FFD700 rounded-full flex items-center justify-center text-8px font-bold text-white absolute top-8px right-16px">
+                                class="coin w-[16px] h-[16px] bg-[#FFD700] rounded-full flex items-center justify-center text-[8px] font-bold text-white absolute top-[8px] right-[16px]">
                                 $
                             </div>
                         </div>
@@ -45,7 +46,7 @@
 
                 <!-- 成功图标 -->
                 <div
-                    class="success-icon absolute -bottom-4px -right-4px w-32px h-32px bg-#10B981 rounded-full flex items-center justify-center">
+                    class="success-icon absolute -bottom-[4px] -right-[4px] w-[32px] h-[32px] bg-[#10B981] rounded-full flex items-center justify-center">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M3 8L7 12L13 4" stroke="white" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
@@ -54,23 +55,23 @@
             </div>
 
             <!-- 文字内容 -->
-            <div class="text-content text-center mb-28px">
-                <h1 class="title text-24px font-700 color-#0F172A mb-12px">Deposit Successful</h1>
-                <p class="subtitle text-14px color-#6B7280 leading-20px">
+            <div class="text-content text-center mb-[28px]">
+                <h1 class="title text-[24px] font-bold color-[#0F172A] mb-[12px]">Deposit Successful</h1>
+                <p class="subtitle text-[14px] color-[#6B7280] leading-[20px]">
                     Deposit are reviewed which may result in delays or funds being frozen.
                 </p>
             </div>
         </div>
 
         <!-- 底部按钮区域 -->
-        <div class="bottom-buttons px-24px pb-24px flex flex-col gap-16px mt-60px">
+        <div class="bottom-buttons px-[24px] pb-[24px] flex flex-col gap-[16px] mt-[60px]">
             <!-- 查看详情按钮 -->
-            <van-button type="primary" class="h-56px mb-16px" color="#6B39F4" block @click="handleShowDetails">
+            <van-button type="primary" class="h-[56px] mb-[16px]" color="#6B39F4" block @click="handleShowDetails">
                 Show Details
             </van-button>
 
             <!-- 完成按钮 -->
-            <van-button plain class="h-56px" color="#6B39F4" block @click="handleDone">
+            <van-button plain class="h-[56px]" color="#6B39F4" block @click="handleDone">
                 Done
             </van-button>
         </div>

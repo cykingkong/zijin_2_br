@@ -1,6 +1,9 @@
 <template>
-  <div class="fixed bottom-btn-box w-full px-[24px] left-0 flex gap-12"
+  <div class="fixed bottom-btn-box w-full px-[24px] left-0 flex gap-12 flex-wrap"
     :style="{ background: bgColor, zIndex: zIndex }">
+    <slot name='top'>
+
+    </slot>
     <van-button type="primary" class="h-[56px]" :color="color" block @click="handleClick" :loading="loading"
       :disabled="disabled">
       {{ buttonText }}

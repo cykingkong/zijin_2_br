@@ -12,7 +12,7 @@ import {
   seologin,
   logout as userLogout,
   register as userRegister,
-  totalAsset, walletInfo
+  totalAsset, walletInfo, getTeamData, getTeamInfoData
 } from '@/api/user'
 import { userCouponsList } from '@/api/product'
 const InitUserInfo = {
@@ -64,7 +64,25 @@ export const useUserStore = defineStore('user', () => {
       throw error
     }
   }
-
+  const fetchTeamData = async (form: any) => {
+    try {
+      const { data } = await getTeamData(form)
+      setInfo(data)
+    } catch (error) {
+      throw error
+    }
+  }
+  const fetchTeamInfoData = async () => {
+    try {
+      const { data } = await getTeamInfoData()
+      data.topData?.forEach((item: any) => {
+        item.allUserCount = item.vaildUserCount + item.noVaildUserCount || 0
+      })
+      setInfo(data)
+    } catch (error) {
+      throw error
+    }
+  }
   const getWalletInfo = async () => {
     try {
       const { data } = await walletInfo({})
@@ -158,7 +176,7 @@ export const useUserStore = defineStore('user', () => {
     getCode,
     register,
     getAssetsData,
-    getUserCouponList, getWalletInfo
+    getUserCouponList, getWalletInfo, fetchTeamData, fetchTeamInfoData
   }
 }, {
   persist: true,

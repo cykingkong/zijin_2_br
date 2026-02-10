@@ -10,19 +10,15 @@
                 <path d="M6.66663 16L12 10.6667" stroke="#111827" stroke-width="2" stroke-linecap="round"
                     stroke-linejoin="round" />
             </svg>
+
         </div>
         <div class="detail-image w-full px-[24px]">
-            <div class="image bg-[#f5f5f5] rounded-[16px]  w-full mb-16">
-                <img :src="info?.article_image" alt="" class="w-full block h-full object-cover rounded-[16px]">
-            </div>
-            <div class="title text-[16px] font-bold text-[#333] mb-31">{{ info?.title }}</div>
+
             <div class="w-full">
-                <div class="w-full" v-html="info?.content"></div>
+                <div class="w-full" v-html="info"></div>
             </div>
         </div>
-        <BottomButton :color="info.couponId ? '#FEC600' : '#888'" :button-text="t('Claim Coupon')"
-            v-if="info && info.couponId" @click="handleClickClaimCoupon">
-        </BottomButton>
+
     </div>
 </template>
 <script setup lang="ts">
@@ -54,21 +50,21 @@ const handleClickClaimCoupon = async () => {
 }
 
 onMounted(() => {
-    const item = local.getlocal('activityDetail')
+    const item = local.getlocal('noticeDetail')
     if (item) {
-        document.title = item.title
-        info.value = item
-        info.value.content = optimizeRichText(item.content)
-        // info.value.couponId = 5
+
+
+        info.value = optimizeRichText(item)
     }
 })
+
 </script>
 <route lang="json5">
 {
-  name: 'activityDetail',
+  name: 'NoticeDetail',
   meta: {
-    title: 'activityDetail',
-    i18n: 'activityDetail'
+    title: 'NoticeDetail',
+    i18n: 'NoticeDetail'
   },
 }
 </route>

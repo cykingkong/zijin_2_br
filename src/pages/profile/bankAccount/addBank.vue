@@ -10,6 +10,23 @@
     <div class="p-16 rounded-20 bg-[#fff] card">
 
       <div class="label font-bold text-[16px] color-[#64748B]">
+        {{ t("Phone Number") }}
+      </div>
+      <div class="phone-input my-[12px]">
+
+        <inputCom :placeholder="t('')" v-model:value="form.receivePhone" :tips="''">
+        </inputCom>
+      </div>
+
+      <div class="label font-bold text-[16px] color-[#64748B]">
+        {{ t("Realname") }}
+      </div>
+      <div class="phone-input my-[12px]">
+        <inputCom v-model:value="form.receiveName" :placeholder="t('')" :onlyRead="false" :inputType="'text'">
+        </inputCom>
+      </div>
+
+      <div class="label font-bold text-[16px] color-[#64748B]">
         {{ t("Bank") }}
       </div>
       <div class="phone-input my-[12px]">
@@ -31,13 +48,7 @@
         </inputCom>
       </div>
 
-      <div class="label font-bold text-[16px] color-[#64748B]">
-        {{ t("Name") }}
-      </div>
-      <div class="phone-input my-[12px]">
-        <inputCom v-model:value="form.receiveName" :placeholder="t('')" :onlyRead="false" :inputType="'text'">
-        </inputCom>
-      </div>
+
 
       <div class="label font-bold text-[16px] color-[#64748B]">
         {{ t("Account") }}
@@ -47,14 +58,6 @@
         </inputCom>
       </div>
 
-      <div class="label font-bold text-[16px] color-[#64748B]">
-        {{ t("Phone") }}
-      </div>
-      <div class="phone-input my-[12px]">
-
-        <inputCom :placeholder="t('')" v-model:value="form.receivePhone" :tips="''">
-        </inputCom>
-      </div>
 
       <div class="label font-bold text-[16px] color-[#64748B]">
         {{ t("login.email") }}
@@ -164,18 +167,23 @@ const getCardInfo = () => {
 const handleClickSubmit = () => {
   // 校验必填
   if (!form.receiveName) {
+    showToast(t('PleaseEnterName'))
     return;
   }
   if (!form.receivePhone) {
+    showToast(t('PleaseEnterPhone'))
     return;
   }
   if (!form.receiveEmail) {
+    showToast(t('PleaseEnterEmail'))
     return;
   }
   if (!form.receiveAccount) {
+    showToast(t('PleaseEnterAccount'))
     return;
   }
   if (!form.bankName) {
+    showToast(t('PleaseSelectBank'))
     return;
   }
 

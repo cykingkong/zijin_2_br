@@ -1,10 +1,10 @@
 <template>
-    <div class="annual-salary-page min-h-[100vh] bg-[#F7F7F7] flex flex-col font-sans">
+    <div class="annual-salary-page  bg-[#F7F7F7]">
 
-
+        <div v-html="optimizeRichText(config.salaryTextYear)" v-if="config.salaryTextYear"></div>
 
         <!-- 内容区域 -->
-        <div class="content flex-1 px-[16px] pt-[10px] pb-[30px]">
+        <div class="content flex-1 px-[16px] pt-[10px] pb-[30px]" v-if="false">
 
             <!-- 1. 年薪列表卡片 -->
             <div class="salary-list bg-white rounded-[16px] px-[16px] shadow-sm mb-[24px]">
@@ -32,7 +32,7 @@
                             </div>
                             <!-- 第二行：年薪金额 -->
                             <span class="text-[#999] text-[12px]">
-                                Annual salary: <span class="font-din">{{ item.salary }}</span>
+                                Annual salary: <span class="">{{ item.salary }}</span>
                             </span>
                         </div>
                     </div>
@@ -81,6 +81,8 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { year } from '@/api/salary'
+import { optimizeRichText } from '@/utils/richText';
 
 // 导入等级图片
 import lv1 from '@/assets/lv/lv1.png';
@@ -93,7 +95,9 @@ import lv7 from '@/assets/lv/lv7.png';
 import lv8 from '@/assets/lv/lv8.png';
 
 const router = useRouter();
-
+const config = ref({
+    salaryTextYear: ""
+})
 // 模拟年薪列表数据
 const salaryList = ref([
     { lv: 'LV1', title: 'Junior Assistant', salary: '15000.00', img: lv1 },
@@ -117,7 +121,16 @@ const giftList = ref([
 
 function goBack() {
     if (router) router.back();
+} async function getYearConfig() {
+    const { data, code } = await year()
+    if (code == 200) {
+        config.value = data || {}
+    }
 }
+onMounted(async () => {
+    await getYearConfig()
+
+})
 </script>
 
 <route lang="json5">
@@ -131,10 +144,6 @@ function goBack() {
 </route>
 
 <style scoped>
-.font-din {
-    font-family: 'DIN Alternate', 'Roboto', sans-serif;
-}
-
 .tag-bg {
     background: linear-gradient(0deg, #F0F2F8, #F0F2F8),
         linear-gradient(360deg, #E4E4E4 -30.82%, #B3B3B3 54.43%);

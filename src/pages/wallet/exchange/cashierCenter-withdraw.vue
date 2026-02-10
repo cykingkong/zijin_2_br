@@ -11,13 +11,13 @@
     <div class="info mt-32" v-if="info">
       <div class="text-[14px] mt-[57px] text-center">{{ t("Withdrawal account") }}</div>
       <div class="min-count text-[#0F172A] font-size-[24px] mx-a text-center mt-4 font-bold overflow-y-auto">
-        ₹ {{ count }}
+        R$ {{ count || '0' }}
       </div>
       <div class="min-count-fee text-[#1b1b1b] font-size-[14px] mx-a text-center mt-[4px] font-bold overflow-y-auto">
-        {{ t("Tax") }} ₹{{ fee }}
+        {{ t("Tax") }} R${{ fee }}
       </div>
       <div class="min-count-fee text-[#1b1b1b] font-size-[14px] mx-a text-center mt-[4px] font-bold overflow-y-auto">
-        {{ t('Withdrawable Amount') }} ₹ {{ addCommasToNumber(userInfo.itemBalance) }}
+        {{ t('Withdrawable Amount') }} R$ {{ addCommasToNumber(userInfo.teamBalance) }}
       </div>
 
       <div class="mt-[30px] ">
@@ -73,7 +73,8 @@
             {{ t('Extract Amount') }}
           </div>
           <div class=" phone-input">
-  <inputCom :placeholder="t('PleaseEnterAmount')" v-model="count" :tips="''" class="flex-1 w-full">
+  <inputCom :placeholder="t('PleaseEnterAmount')" v-model:value="count" :tips="''" class="flex-1 w-full"
+    inputType="digit">
   </inputCom>
 </div>
 <van-button type="primary" class="h-[56px]" color="#1b1b1b" block @click="onConfirm">
@@ -168,13 +169,22 @@ import { deposit, withdraw_info, withdraw } from "@/api/billing";
 import item from "../../../components/item.vue";
 import BottomButton from "@/components/bottom-button.vue";
 const info = ref<any>();
-const count = ref(0);
+const count = ref<any>(0);
 const showPicker = ref(false)
 const { t } = useI18n();
 const displayValue = ref("");
 const fee = computed(() => {
   return addCommasToNumber(count.value * withdrwaInfo.value.withdrawFee * 0.01);
 });
+// 【新增】监听 count 变化，强制取整
+watch(count, (newVal) => {
+  // 转换为字符串判断是否包含小数点
+  const strVal = String(newVal)
+  if (strVal.includes('.')) {
+    // 截取小数点前的部分，实现仅保留整数
+    count.value = strVal.split('.')[0]
+  }
+})
 const { proxy } = getCurrentInstance()!;
 const userStore = useUserStore();
 
@@ -236,7 +246,7 @@ const handleBuyClickOriginal = async () => {
   const { data, code } = await withdraw({
     type: "1",
     cardId: selectBank.value,
-    amount: count.value,
+    amount: Number(count.value),
   });
   if (code == 200) {
     setTimeout(() => {

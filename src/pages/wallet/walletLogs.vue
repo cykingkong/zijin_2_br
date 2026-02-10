@@ -1,9 +1,9 @@
 <template>
-  <div class="stockOrderList w-full p-24 bg-">
-    <div class="order-type-tab flex justify-center items-center mb-12 gap-[16px]">
+  <div class="stockOrderList w-full p-20 bg-">
+    <div class="order-type-tab flex justify-center items-center mb-12 gap-[4px]">
       <div
-        class="tab-item flex-1 flex items-center justify-center text-center border text-14 border-[#E5E5E5] border-solid rounded-[16px] py-4 px-6 h-40"
-        :class="activeTab == index ? 'bg-[#F5F5F5] text-[#222222] font-bold' : 'text-[#999999]'"
+        class="tab-item flex-1 flex items-center bg-[#0000000D] justify-center text-center border text-14 border-[#E5E5E5] border-solid rounded-[8px] py-4 px-6 h-28 text-[#00000033]"
+        :class="activeTab == index ? 'bg-[#CED0D8] text-[#222222] font-bold' : 'text-[#999999]'"
         v-for="(item, index) in orderTypeList" :key="index" @click="activeTab = index; getData()">{{ $t(item)
         }}
       </div>

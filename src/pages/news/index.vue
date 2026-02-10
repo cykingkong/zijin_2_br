@@ -1,5 +1,5 @@
 <template>
-    <div class="community p-16  flex flex-col ">
+    <div class="community p-16 flex flex-col">
         <!-- <item v-for="(item ,index) in logList" :key="index" :arr="item.pictureList || []" :item="item" /> -->
         <div class="detail-image w-full px-[24px]" v-if="banners.length > 0">
             <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
@@ -12,20 +12,28 @@
         </div>
         <div class="tag-li flex flex-nowrap gap-4">
             <div class="tag-item px-10 py-6.5px text-nowrap bg-[#0000000D] color-[#00000080] text-[12px] rounded-[8px]"
-                v-for="(item, index) in tags" :key="index">
+                :class="activeIndex == index ? 'active-tag' : ''" v-for="(item, index) in tags" :key="index">
                 {{ item }}
             </div>
         </div>
-
-        <div class=" phone-input mt-12 ">
-            <inputCom :placeholder="t('PleaseEnterPhoneNumber')" v-model="count" :tips="''" class="flex-1 w-full">
-            </inputCom>
+        <div class="flex mt-12 gap-12 w-full">
+            <div class=" phone-input  flex-1 items-center w-full">
+                <inputCom :placeholder="t('')" v-model="search" :input-type="'search'" :tips="''" class="flex-1 w-full">
+                    <template #sendCode>
+                        <div class="absolute right-10 font-size-12 h-28 flex justify-center items-center sendCode text-[#1b1b1b]"
+                            @click="toSearch()">
+                            {{ t("Seach") }}
+                        </div>
+                    </template>
+                </inputCom>
+            </div>
         </div>
+
 
         <div class="item w-full  p-16 rounded-16" v-for="(item, index) in logList" :key="index">
 
             <div class="content mb-12">
-                <div class="text-[#888888] text-16">{{ item?.content || '' }} </div>
+                <div class="text-[#888888] text-16 font-bold">{{ item?.title || '' }} </div>
             </div>
             <div class="picture-box">
                 <!-- 单张图片 -->
@@ -74,7 +82,7 @@
                                     stroke-linejoin="round" />
                             </svg>
 
-                            253</div>
+                            {{ item.view || 0 }}</div>
                         <div class="flex gap-4"><svg class="w-20 h-20" viewBox="0 0 20 20" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -84,7 +92,7 @@
                             </svg>
 
 
-                            253</div>
+                            {{ item.like || 0 }}</div>
                     </div>
                 </div>
 
@@ -109,20 +117,24 @@ const page = reactive({
 })
 const banners = ref([])
 const tags = ref([
-    'diamond', 'love', 'jadeite', 'gold', 'fashion jewelry'
+
 ])
+const search = ref('')
 const router = useRouter()
 const toAdd = () => {
     router.push({
         name: 'addCommunity',
     })
 }
+
 const getList = async () => {
     try {
         const { data, code } = await list({
-            ...page
+            ...page,
+            ...search.value,
         })
         if (code === 200) {
+            tags.value = data.classList || []
             if (page.pageIndex == 1) {
                 logList.value = data.rows.map((item) => ({
                     ...item,
@@ -165,7 +177,7 @@ onMounted(() => {
 </script>
 <style scoped>
 .community {
-    padding-bottom: calc(env(safe-area-inset-bottom) + 20px);
+    padding-bottom: calc(env(safe-area-inset-bottom) + 82px);
 }
 
 .phone-input {
@@ -175,7 +187,7 @@ onMounted(() => {
 
 
     :deep(.input-box) {
-        /* height: 48px; */
+        height: 39px;
         margin-top: 0px;
 
         input {
@@ -188,12 +200,25 @@ onMounted(() => {
         margin-bottom: 0px;
     }
 }
+
+.sendCode {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #868c9a;
+    color: #fff;
+    background: #424242;
+}
+
+.active-tag {
+    background: #424242;
+    color: #fff;
+}
 </style>
 <route lang="json5">
 {
-  name: 'community',
+  name: 'news',
   meta: {
-    i18n: 'Community'
+    i18n: 'News'
   },
 }
 </route>

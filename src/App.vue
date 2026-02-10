@@ -11,11 +11,11 @@ const loadingStore = useLoadingStore();
 const store: any = useStore();
 let ws = null;
 useHead({
-  title: "DDB workers",
+  title: "workers",
   meta: [
     {
       name: "description",
-      content: "An mobile web apps template based on the Vue 3 ecosystem",
+      content: "An mobile web apps ",
     },
     {
       name: "theme-color",

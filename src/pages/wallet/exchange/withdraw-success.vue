@@ -1,30 +1,22 @@
 <template>
-  <div class="deposit-success bg-white flex flex-col">
+  <div class="deposit-success bg- flex flex-col">
     <!-- 主要内容区域 -->
     <div class="flex flex-col items-center pt-[150px] px-[24px]">
       <!-- 中央图形 -->
       <div class="success-graphic mb-[32px] relative">
         <!-- 外层灰色圆圈 -->
         <div
-          class="outer-circle w-[120px] h-[120px] rounded-full border-[2px] border-dashed border-[#E5E7EB] border flex items-center justify-center"
-        >
+          class="outer-circle w-[120px] h-[120px] rounded-full border-[2px] border-dashed border-[#E5E7EB] border flex items-center justify-center">
           <!-- 内层白色卡片 -->
           <div
-            class="inner-card w-[80px] h-[60px] bg-white rounded-[12px] shadow-lg flex items-center justify-center relative"
-          >
+            class="inner-card w-[80px] h-[60px] bg-white rounded-[12px] shadow-lg flex items-center justify-center relative">
             <!-- 紫色存钱罐图标 -->
-            <div
-              class="piggy-bank w-[40px] h-[40px] bg-[#6B39F4] rounded-[8px] flex items-center justify-center"
-            >
+            <div class="piggy-bank w-[40px] h-[40px] bg-[#6B39F4] rounded-[8px] flex items-center justify-center">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2Z"
-                  fill="white"
-                />
-                <path
-                  d="M18 8H6C4.9 8 4 8.9 4 10V18C4 19.1 4.9 20 6 20H18C19.1 20 20 19.1 20 18V10C20 8.9 19.1 8 18 8Z"
-                  fill="white"
-                />
+                <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2Z"
+                  fill="white" />
+                <path d="M18 8H6C4.9 8 4 8.9 4 10V18C4 19.1 4.9 20 6 20H18C19.1 20 20 19.1 20 18V10C20 8.9 19.1 8 18 8Z"
+                  fill="white" />
                 <path d="M8 12H10V14H8V12Z" fill="white" />
                 <path d="M14 12H16V14H14V12Z" fill="white" />
                 <path d="M12 16H10V18H12V16Z" fill="white" />
@@ -34,18 +26,15 @@
             <!-- 金币 -->
             <div class="coins absolute -top-[8px] -right-[8px]">
               <div
-                class="coin w-[16px] h-[16px] bg-[#FFD700] rounded-full flex items-center justify-center text-[8px] font-bold text-white absolute top-0 right-0"
-              >
+                class="coin w-[16px] h-[16px] bg-[#FFD700] rounded-full flex items-center justify-center text-[8px] font-bold text-white absolute top-0 right-0">
                 $
               </div>
               <div
-                class="coin w-[16px] h-[16px] bg-[#FFD700] rounded-full flex items-center justify-center text-[8px] font-bold text-white absolute top-[4px] right-[8px]"
-              >
+                class="coin w-[16px] h-[16px] bg-[#FFD700] rounded-full flex items-center justify-center text-[8px] font-bold text-white absolute top-[4px] right-[8px]">
                 $
               </div>
               <div
-                class="coin w-[16px] h-[16px] bg-[#FFD700] rounded-full flex items-center justify-center text-[8px] font-bold text-white absolute top-[8px] right-[16px]"
-              >
+                class="coin w-[16px] h-[16px] bg-[#FFD700] rounded-full flex items-center justify-center text-[8px] font-bold text-white absolute top-[8px] right-[16px]">
                 $
               </div>
             </div>
@@ -54,16 +43,9 @@
 
         <!-- 成功图标 -->
         <div
-          class="success-icon absolute -bottom-[4px] -right-[4px] w-[32px] h-[32px] bg-[#10B981] rounded-full flex items-center justify-center"
-        >
+          class="success-icon absolute -bottom-[4px] -right-[4px] w-[32px] h-[32px] bg-[#10B981] rounded-full flex items-center justify-center">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path
-              d="M3 8L7 12L13 4"
-              stroke="white"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
+            <path d="M3 8L7 12L13 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </div>
       </div>
@@ -91,13 +73,7 @@
             </van-button> -->
 
       <!-- 完成按钮 -->
-      <van-button
-        plain
-        class="h-[56px]"
-        color="#6B39F4"
-        block
-        @click="handleDone"
-      >
+      <van-button plain class="h-[56px]" color="#1b1b1b" block @click="handleDone">
         {{ t("Done") }}
       </van-button>
     </div>

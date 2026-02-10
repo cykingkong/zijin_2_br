@@ -7,6 +7,9 @@ export function indexInfo(): Promise<any> {
 export function articleList(params): Promise<any> {
     return request.get('/index/articleList', { params })
 }
+export function articleInfo(params): Promise<any> {
+    return request.get('/index/articleInfo', { params })
+}
 export function appCharts(params): Promise<any> {
     return request.get('/app-api/market/appCharts', { params })
 }

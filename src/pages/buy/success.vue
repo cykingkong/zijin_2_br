@@ -1,5 +1,5 @@
 <template>
-  <div class="buy-success-content bg-white min-h-screen flex flex-col h-[100vh] overflow-hidden">
+  <div class="buy-success-content  min-h-screen flex flex-col h-[100vh] overflow-hidden">
     <div class="mid w-full flex justify-center flex-col items-center mt-238">
       <svg width="96" height="96" class="w-96 h-96 mt" viewBox="0 0 96 96" fill="none"
         xmlns="http://www.w3.org/2000/svg">

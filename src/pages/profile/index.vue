@@ -39,7 +39,8 @@
       <div class="bg-white rounded-[16px] p-[16px] flex justify-between items-center shadow-sm">
         <span class="text-[16px] font-bold text-[#1A1A1A]">我的产品</span>
         <div
-          class="bg-[#1A1A1A] text-[#fff] px-[12px] py-[6px] rounded-[8px] flex items-center gap-1 text-[12px] active:opacity-80 text-[12px]">
+          class="bg-[#1A1A1A] text-[#fff] px-[12px] py-[6px] rounded-[8px] flex items-center gap-1 text-[12px] active:opacity-80 text-[12px]"
+          @click="toReceive">
           <img src="@/assets/coin.png" alt="" class="w-16 h-16 block">
           <span>领取收入</span>
         </div>
@@ -53,11 +54,11 @@
         <div class="flex justify-between mb-[20px]">
           <div class="flex flex-col items-center flex-1">
             <span class="text-[24px] font-bold text-[#A26D47] ">{{ addCommasToNumber(userInfo.balance) || '0'
-              }}</span>
+            }}</span>
             <span class="text-[#666] text-[12px] mt-[4px]">充值钱包</span>
           </div>
           <div class="flex flex-col items-center flex-1 border-l border-[#f5f5f5]">
-            <span class="text-[24px] font-bold text-[#A26D47] ">{{ addCommasToNumber(userInfo.itemBalance) ||
+            <span class="text-[24px] font-bold text-[#A26D47] ">{{ addCommasToNumber(userInfo.teamBalance) ||
               '0' }}</span>
             <span class="text-[#666] text-[12px] mt-[4px]">余额钱包</span>
           </div>
@@ -77,31 +78,31 @@
           <div class="flex flex-col">
             <span class="text-[#999] text-[12px] mb-[2px]">总收入</span>
             <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ addCommasToNumber(userInfo.allProfit)
-              }}</span>
+            }}</span>
           </div>
           <div class="flex flex-col items-end">
             <span class="text-[#999] text-[12px] mb-[2px]">总提款</span>
             <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ addCommasToNumber(userInfo.withdrawPrice)
-              }}</span>
+            }}</span>
           </div>
           <!-- Row 2 -->
           <div class="flex flex-col">
             <span class="text-[#999] text-[12px] mb-[2px]">产品收入</span>
             <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ addCommasToNumber(userInfo.productPrice)
-              }}</span>
+            }}</span>
           </div>
           <div class="flex flex-col items-end">
             <span class="text-[#999] text-[12px] mb-[2px]">团队收入</span>
             <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ addCommasToNumber(userInfo.itemProfit)
-              }}</span>
+            }}</span>
           </div>
           <!-- Row 3 (Missing Fields Simulation) -->
           <div class="flex flex-col">
             <span class="text-[#999] text-[12px] mb-[2px]">其他收入</span>
             <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ addCommasToNumber(userInfo.otherIncome ||
-              '21.555') }}</span>
+              '0') }}</span>
           </div>
-          <div class="flex flex-col items-end">
+          <div class="flex flex-col items-end" @click="router.push('/exchange')">
             <span class="text-[#999] text-[12px] mb-[2px]">Pearl <svg class="w-14 h-14" viewBox="0 0 14 14" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
                 <g clip-path="url(#clip0_6753_24019)">
@@ -136,8 +137,9 @@
                 </defs>
               </svg>
             </span>
-            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ addCommasToNumber(userInfo.pearl ||
-              '19,356')
+            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ addCommasToNumber(userInfo.seedBalance ?
+              userInfo.seedBalance :
+              '0')
               }}</span>
           </div>
         </div>
@@ -150,7 +152,8 @@
         <div class="flex justify-between items-center mb-[16px]">
           <span class="text-[16px] font-bold text-[#1A1A1A]">我的团队</span>
           <!-- Calculator Icon Placeholder -->
-          <svg class="w-24 h-24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg class="w-24 h-24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+            @click="router.push('/team')">
             <path d="M10 22H14C19 22 21 20 21 15V9C21 4 19 2 14 2H10C5 2 3 4 3 9V15C3 20 5 22 10 22Z" stroke="#8C91A2"
               stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
             <path
@@ -209,7 +212,7 @@
           </div>
           <!-- Text -->
           <span class="text-[#333] text-[12px] font-medium" :class="{ 'text-red-500': item.isLogout }">{{ item.text
-            }}</span>
+          }}</span>
         </div>
       </div>
     </div>
@@ -293,28 +296,29 @@ const getLevelCount = (level: number) => {
 
 // --- 菜单配置 (Grid Menu) ---
 const menuList = [
-  { text: '兑换奖励', icon: iconExchange, url: '/wallet/exchange', type: 'link' },
+  { text: '兑换代码', icon: iconExchange, url: '/reward', type: 'link' },
   { text: '银行卡设置', icon: iconBank, url: '/profile/bankAccount', type: 'link' },
   { text: '资金明细', icon: iconFunds, url: '/wallet/walletLogs', type: 'link' },
   { text: '密码', icon: iconPass, url: '/forgot-password?noLogin=1', type: 'link' },
-  { text: '辞职说明', icon: iconQuit, url: '/aboutUs', type: 'link' }, // 暂定 About Us
+  { text: '辞职文章', icon: iconQuit, url: '/richTextDetail?type=czwz', type: 'link' }, // 暂定 About Us
   { text: '登出', icon: iconLogout, type: 'logout', isLogout: false }
 ];
 const myteamList = ref([
   {
     img: lv1,
     name: 'LV1',
-    num: 0
+    num: userInfo.value?.topData?.find((item: any) => item.generation === 1)?.vaildUserCount || 0
   },
   {
     img: lv2,
     name: 'LV2',
-    num: 0
+    num: userInfo.value?.topData?.find((item: any) => item.generation === 2)?.vaildUserCount || 0
+
   },
   {
     img: lv3,
     name: 'LV3',
-    num: 0
+    num: userInfo.value?.topData?.find((item: any) => item.generation === 3)?.vaildUserCount || 0
   },
 ])
 // --- 事件处理 ---
@@ -326,7 +330,9 @@ const handleHerf = (type: number) => {
     router.push("/wallet/exchange/cashierCenter-withdraw");
   }
 };
-
+const toReceive = () => {
+  router.push("/receive");
+}
 const handleClickMenu = (item: any) => {
   if (item.type === 'logout') {
     handleLogout();
@@ -375,6 +381,8 @@ const updateUserAvatar = async () => {
 onMounted(async () => {
   await userStore.getInfo();
   await userStore.getWalletInfo();
+  await userStore.fetchTeamInfoData();
+  console.log(userInfo.value, 'userInfo')
 });
 </script>
 

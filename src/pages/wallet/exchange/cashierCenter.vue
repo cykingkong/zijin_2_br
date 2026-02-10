@@ -3,14 +3,16 @@
 import { useRouter } from 'vue-router'
 import { useLoadingStore } from '@/stores/modules/loading'
 import { optimizeRichText } from '@/utils/richText';
-
+import { useUserStore } from '@/stores'
 import { deposit, rechargeConfig } from '@/api/billing'
 import item from '../../../components/item.vue'
 import BottomButton from '@/components/bottom-button.vue'
+import { addCommasToNumber } from '@/utils/tool';
 
-
+const userStore = useUserStore();
+const userInfo = computed(() => userStore.userInfo);
 const info = ref<any>()
-const count = ref(0)
+const count = ref(null)
 const displayValue = ref('')
 const { t } = useI18n()
 const { proxy } = getCurrentInstance()!
@@ -190,9 +192,10 @@ function onBack() {
     <div v-if="info" class="info mt-32">
       <div class="text-[14px] mt-[57px] text-center">{{ t("Withdrawal account") }}</div>
       <div class="min-count mx-a  overflow-y-auto text-center font-size-[24px] text-[#0F172A] font-bold">
-        R$ {{ count }}
+        R$ {{ count || '0' }}
       </div>
-      <div class="text-[14px] mt-[20px] text-center">{{ t("累计充值:") }}${{ '123' }}</div>
+      <div class="text-[14px] mt-[20px] text-center">{{ t("累计充值:") }}R$ {{ addCommasToNumber(userInfo.rechargePrice) ||
+        '0.00' }}</div>
 
       <div class="mt-[30px] ">
         <div class="px-12 py-[20px] bg-[#fff] rounded-[20px] flex-col flex gap-12 card">
@@ -200,7 +203,7 @@ function onBack() {
             {{ t('Top-up Amount') }}
           </div>
           <div class=" phone-input">
-            <inputCom :placeholder="t('PleaseEnterAmount')" v-model="count" :tips="''" class="flex-1 w-full">
+            <inputCom :placeholder="t('PleaseEnterAmount')" v-model:value="count" :tips="''" class="flex-1 w-full">
             </inputCom>
           </div>
           <div class="label mb-8 " :class="['flex items-center gap-4']"">
@@ -208,7 +211,7 @@ function onBack() {
           </div>
           <div class=" grid grid-cols-3 gap-[10px]">
             <div
-              class="grid-item rounded-[12px] h-[92px] flex flex-col justify-center items-center gap-[10px] bg-[#F7F7F7]"
+              class="grid-item rounded-[12px] h-[92px] flex flex-col justify-center items-center gap-[10px] py-12 bg-[#F7F7F7]"
               v-for="(item, index) in methodsList" :key="index" :class="{ 'active-item': selected === item.id }"
               @click="selected = item.id">
               <svg class="w-28 h-28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">

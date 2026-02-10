@@ -2,12 +2,16 @@
   <div class="close-button h-[56px] w-full flex items-center px-[24px] justify-between"
     :class="[customClass, { disabled: disabled }]">
     <!-- <div class="close-icon" :style="iconStyle" ></div> -->
-    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" @click="handleClose">
-      <rect x="0.5" y="0.5" width="39" height="39" rx="19.5" fill="white" />
-      <rect x="0.5" y="0.5" width="39" height="39" rx="19.5" stroke="#F0F0F0" />
-      <path d="M21.6667 16.6667L18.3333 20L21.6667 23.3333" stroke="#1B1B1B" stroke-width="1.5" stroke-linecap="round"
-        stroke-linejoin="round" />
-    </svg>
+    <slot name="left">
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"
+        @click="handleClose">
+        <rect x="0.5" y="0.5" width="39" height="39" rx="19.5" fill="white" />
+        <rect x="0.5" y="0.5" width="39" height="39" rx="19.5" stroke="#F0F0F0" />
+        <path d="M21.6667 16.6667L18.3333 20L21.6667 23.3333" stroke="#1B1B1B" stroke-width="1.5" stroke-linecap="round"
+          stroke-linejoin="round" />
+      </svg>
+    </slot>
+
 
     <div class="text-[16px] font-bold color-white">
       <slot name="center">{{ title }}</slot>

@@ -78,7 +78,7 @@ const currentLangLabel = computed(() => {
 });
 
 // 选择语言处理
-const onSelect = (value: string) => {
+const onSelect = (value: any) => {
     // 利用 i18n.ts 中的计算属性 setter，自动触发 setLang 逻辑
     locale.value = value;
 

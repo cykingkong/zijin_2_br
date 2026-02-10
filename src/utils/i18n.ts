@@ -29,10 +29,11 @@ const vantLocales = {
 
 export const languageColumns: PickerColumn = [
   { text: 'English', value: 'en' },
+  { text: 'Brazilian', value: 'br' },
   // { text: '繁體中文', value: 'zh-TW' },
-  { text: 'हिंदी', value: 'hi' },
-  { text: 'தமிழ்', value: 'ta' },
-  { text: 'తెలుగు', value: 'te' },
+  // { text: 'हिंदी', value: 'hi' },
+  // { text: 'தமிழ்', value: 'ta' },
+  // { text: 'తెలుగు', value: 'te' },
 ]
 
 export const i18n = setupI18n()

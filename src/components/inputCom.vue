@@ -24,6 +24,9 @@
                 <input type="number" :placeholder="placeholder" :disabled="onlyRead" :value="value"
                     class="w-full   font-size-16" @input="handleInput" @focus="handleFocus" @blur="handleBlur"
                     v-if="inputType == 'number'" />
+                <input type="search" :placeholder="placeholder" :disabled="onlyRead" :value="value"
+                    class="w-full   font-size-16" @input="handleInput" @focus="handleFocus" @blur="handleBlur"
+                    v-if="inputType == 'search'" />
                 <slot name="sendCode">
                     <van-icon name="clear" class="absolute color-blueGray closeIcon"
                         v-if="!onlyRead && (inputType == 'text' || inputType == 'password') && value != ''"
@@ -125,6 +128,7 @@ const handleBlur = () => {
     input {
         // background: #F8F9FD;
         border: none;
+        background: transparent;
 
         &::placeholder {
             color: #3C3C434D;

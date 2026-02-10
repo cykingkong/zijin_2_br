@@ -5,7 +5,8 @@
         <div class="earnings-section flex justify-between items-center px-[24px] py-[10px] h-[134px]">
             <div class="flex flex-col ">
                 <span class="text-[#666] text-[14px] mb-[4px] t1">My Earnings</span>
-                <span class="text-[#333] text-[36px] font-bold font-din">3240</span>
+                <span class="text-[#333] text-[36px] font-bold ">{{ addCommasToNumber(userInfo.teamBalance || 0)
+                }}</span>
             </div>
             <!-- 金币大图 -->
             <div class="coin-img">
@@ -48,7 +49,7 @@
                     </div>
 
                     <!-- 金额 -->
-                    <span class="font-din scale-90 block">{{ day.amount }}</span>
+                    <span class=" scale-90 block">{{ day.amount }}</span>
                 </div>
             </div>
 
@@ -79,9 +80,9 @@
                         <div class="flex items-center">
                             <!-- 不同等级不同颜色的图标占位 -->
                             <img :src="level.img" class="w-[20px] h-[20px] mr-[8px] rounded-full" />
-                            <span class="text-[#00000080]">{{ level.lv }}</span>
+                            <span class="text-[#00000080]">LV{{ level.level }}</span>
                         </div>
-                        <span class="text-[#333] font-medium font-din">{{ level.reward }}</span>
+                        <span class="text-[#333] font-medium ">{{ level.dayAmount }}</span>
                     </div>
                 </div>
             </div>
@@ -96,6 +97,9 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router'; // 假设使用了 vue-router
+import { useUserStore } from "@/stores";
+import { day, receiveDay } from '@/api/salary';
+import { addCommasToNumber } from '@/utils/tool';
 import lv1 from '@/assets/lv/lv1.png';
 import lv2 from '@/assets/lv/lv2.png';
 import lv3 from '@/assets/lv/lv3.png'; // 修正了原本代码中指向 lv1 的路径
@@ -105,30 +109,28 @@ import lv6 from '@/assets/lv/lv6.png'; // 修正路径
 import lv7 from '@/assets/lv/lv7.png'; // 修正路径
 import lv8 from '@/assets/lv/lv8.png'; // 修正路径
 const router = useRouter();
-
+const userStore = useUserStore();
+const userInfo = computed(() => userStore.userInfo);
 // 模拟签到天数数据
 // status: 'missed' | 'checked' | 'today' | 'future'
-const checkInDays = ref([
-    { label: 'Day1', amount: 20, status: 'missed' },
-    { label: 'Day2', amount: 20, status: 'checked' },
-    { label: 'Today', amount: 20, status: 'today' },
-    { label: 'Day4', amount: 20, status: 'future' },
-    { label: 'Day5', amount: 20, status: 'future' },
-    { label: 'Day6', amount: 20, status: 'future' },
-    { label: 'Day7', amount: 20, status: 'future' },
-]);
+//  tatus: 1-已领取 2-可领取 3-不可领取
+const checkInDays = ref([]);
 
 // 模拟等级奖励数据
 const rewardList = ref([
-    { lv: 'LV1', reward: '0.01', img: lv1 },
-    { lv: 'LV2', reward: '0.70', img: lv2 },
-    { lv: 'LV3', reward: '3.50', img: lv3 },
-    { lv: 'LV4', reward: '6.00', img: lv4 },
-    { lv: 'LV5', reward: '10.00', img: lv5 },
-    { lv: 'LV6', reward: '25.00', img: lv6 },
-    { lv: 'LV7', reward: '70.00', img: lv7 },
-    { lv: 'LV8', reward: '150.00', img: lv8 },
+
 ]);
+const imgEnum =
+{
+    lv1: lv1,
+    lv2: lv2,
+    lv3: lv3,
+    lv4: lv4,
+    lv5: lv5,
+    lv6: lv6,
+    lv7: lv7,
+    lv8: lv8,
+}
 
 // 根据状态返回对应的 UnoCSS 类名
 function getDayClass(day) {
@@ -155,18 +157,51 @@ function getColor(idx) {
     return colors[idx % colors.length];
 }
 
-function handleSignIn() {
+async function handleSignIn() {
     console.log('Signing in...');
     // TODO: 调用签到 API
+    const { data, code } = await receiveDay()
+    if (code == 200) {
+        console.log(data)
+        return
+        checkInDays.value = data.dayList || [];
+    }
 }
 
 function goBack() {
     if (router) router.back();
 }
+
+
+async function getDayConfig() {
+    const { data, code } = await day()
+    if (code == 200) {
+        checkInDays.value = data.days.map((item) => {
+            return {
+                ...item,
+                label: `Day${item.day}`,
+                status: item.status == 1 ? 'checked' : item.status == 2 ? 'today' : 'future',
+
+            }
+        }) || [];
+        rewardList.value = data.configs.map((el) => {
+            el.img = imgEnum[`lv${el.level}`]
+            return {
+                ...el
+            }
+        })
+        console.log(rewardList.value)
+    }
+}
+onMounted(async () => {
+    getDayConfig()
+    // await userStore.info()
+})
+
 </script>
 
 <!-- 
-  font-din 是假设你项目中可能有数字专用字体，如果没有会自动回退
+   是假设你项目中可能有数字专用字体，如果没有会自动回退
   i-carbon-chevron-left 是 unocss iconify 的写法，如果没有配置 presetIcons，可以直接换成 < 符号
 -->
 
@@ -182,9 +217,7 @@ function goBack() {
 
 <style scoped>
 /* 如果 UnoCSS 没覆盖到的细节，可以在这里补充 */
-.font-din {
-    font-family: 'DIN Alternate', 'Roboto', sans-serif;
-}
+
 
 .level {}
 </style>

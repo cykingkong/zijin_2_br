@@ -23,18 +23,18 @@ const loadingStore = useLoadingStore();
 let countryList = ref<any>([
   {
     code: "br",
-    dialCode: 60,
+    dialCode: 55,
     key: "br",
     name: "Brazil",
     img: br
   },
-  {
-    code: "us",
-    dialCode: 88,
-    key: "us",
-    name: "U.S.A",
-    img: usa
-  },
+  // {
+  //   code: "us",
+  //   dialCode: 1,
+  //   key: "us",
+  //   name: "U.S.A",
+  //   img: usa
+  // },
 ])
 let active = ref(0)
 const loading = ref(false);
@@ -50,6 +50,10 @@ const toSetLang = () => {
   router.push("/profile/languange");
 };
 function onBack() {
+  if (pageType.value == 1) {
+    pageType.value = 0
+    return
+  }
   if (window.history.state.back) history.back();
   else router.replace("/");
 }
@@ -280,11 +284,20 @@ async function login() {
   <div class="m-x-a w-full max-h-[100vh]">
     <nationalityList ref="controlChildRef" :title="t('Pick')" @getName="getName"></nationalityList>
 
-    <div class="top-image w-full bg-[#fff]">
-      <CloseButton @close="onBack">
+    <div class="top-image w-full bg-[]">
+      <CloseButton>
+        <template #left>
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" @click="onBack"
+            v-if="pageType == 1">
+            <rect x="0.5" y="0.5" width="39" height="39" rx="19.5" fill="white" />
+            <rect x="0.5" y="0.5" width="39" height="39" rx="19.5" stroke="#F0F0F0" />
+            <path d="M21.6667 16.6667L18.3333 20L21.6667 23.3333" stroke="#1B1B1B" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <div class="e" v-else></div>
+        </template>
         <template #right>
           <LangSelectDropdown v-model="lang" />
-
         </template>
       </CloseButton>
       <div class="mid-logo w-[64px] h-[64px] rounded-[12px] overflow-hidden ml-[30px]">
@@ -377,15 +390,17 @@ async function login() {
           </template>
         </inputCom>
       </div> -->
-      <!-- Invitation code -->
       <!-- <div class="label mb-8 mt-12" :class="['flex items-center gap-4']" v-if="pageType == 1">
         {{ t('Invitation code') }}
       </div>
-      <div class="phone-input" v-if="pageType == 1">
+      -->
+      <!-- Invitation code -->
+
+      <div class="phone-input mb-20" v-if="pageType == 1">
         <inputCom v-model:value="postData.inviteCode" :placeholder="t('Invitation code')" :onlyRead="false"
           :inputType="'text'">
         </inputCom>
-      </div> -->
+      </div>
       <!-- Code -->
 
       <div class="phone-input" v-if="pageType == 1">

@@ -1,7 +1,7 @@
 <template>
   <div class="changePassword-content flex flex-col  p-12">
 
-    <div class="top-image w-full bg-[#fff]">
+    <div class="top-image w-full bg-[]">
       <CloseButton @close="onBack">
         <template #right>
           <LangSelectDropdown v-model="lang" />
@@ -47,12 +47,13 @@
       </div>
       <div class="phone-input flex items-center gap-[12px]">
 
-        <inputCom class="w-full" v-model:value="form.password" :placeholder="t('NewPassword')">
+        <inputCom class="w-full" v-model:value="form.password" :input-type="'password'" :placeholder="t('NewPassword')">
         </inputCom>
       </div>
       <div class="phone-input flex items-center gap-[12px]">
 
-        <inputCom class="w-full" v-model:value="form.password" :placeholder="t('Confirm Password')">
+        <inputCom class="w-full" v-model:value="form.password_confirmation" :input-type="'password'"
+          :placeholder="t('Confirm Password')">
         </inputCom>
       </div>
     </div>
@@ -175,14 +176,15 @@ const onSubmit = async () => {
   params.code = params.code.trim();
 
   if (params.type == "phone") {
-    params.username = `${areaInfo.value.dialCode}${params.account}`;
+    params.username = `${params.account}`;
   }
-
   params.password_confirmation = params.password.trim()
   const res = await forgetPassword(params);
   if (res.code === 200) {
     showSuccessToast(t(""));
-    router.push("/login");
+    setTimeout(() => {
+      router.push("/login");
+    }, 480)
   }
 };
 

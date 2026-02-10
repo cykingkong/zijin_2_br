@@ -20,9 +20,7 @@
                 <div class="w-full" v-html="info?.content"></div>
             </div>
         </div>
-        <BottomButton :color="info.couponId ? '#FEC600' : '#888'" :button-text="t('Claim Coupon')"
-            v-if="info && info.couponId" @click="handleClickClaimCoupon">
-        </BottomButton>
+
     </div>
 </template>
 <script setup lang="ts">
@@ -30,6 +28,7 @@ import local from '@/utils/local'
 import { receiveCoupon } from '@/api/product'
 import { showSuccessToast } from 'vant'
 import { optimizeRichText } from '@/utils/richText';
+import { articleInfo } from '@/api/market'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -39,36 +38,31 @@ const handleClose = () => {
 }
 const info = ref<any>({ couponId: null })
 
-const handleClickClaimCoupon = async () => {
-    if (!info.value?.couponId) return
-
-    if (info.value) {
-        const res = await receiveCoupon({
-            couponId: info.value?.couponId
-        })
-        if (res.code == 200) {
-            showSuccessToast('Claim Coupon Success')
-        }
-
+const fetchArticleInfo = async () => {
+    const res = await articleInfo({
+        articleKey: type.value
+    })
+    if (res.code == 200) {
+        info.value = res.data
+        info.value.content = optimizeRichText(info.value.content)
     }
 }
-
+const type = ref('')
+const route = useRoute()
 onMounted(() => {
-    const item = local.getlocal('activityDetail')
-    if (item) {
-        document.title = item.title
-        info.value = item
-        info.value.content = optimizeRichText(item.content)
-        // info.value.couponId = 5
+    if (route.query.type) {
+        type.value = route.query.type as string;
+        fetchArticleInfo()
     }
+
 })
 </script>
 <route lang="json5">
 {
-  name: 'activityDetail',
+  name: 'richTextDetail',
   meta: {
-    title: 'activityDetail',
-    i18n: 'activityDetail'
+    title: 'richTextDetail',
+    i18n: 'RichTextDetail'
   },
 }
 </route>
