@@ -67,10 +67,10 @@
         </inputCom>
       </div>
       <div class="label font-bold text-[16px] color-[#64748B]">
-        {{ t("IFSC") }}
+        {{ t("CPF") }}
       </div>
       <div class="phone-input my-[12px]">
-        <inputCom :placeholder="t('')" v-model:value="form.IFSC" :tips="''">
+        <inputCom :placeholder="t('')" v-model:value="form.CPF" :tips="''">
         </inputCom>
       </div>
     </div>
@@ -130,7 +130,7 @@ const form = reactive({
   bankCode: "",
   bankName: "",
   id: "",
-  IFSC: "",
+  CPF: "",
   receivePhone: "",
   receiveEmail: "",
 });
@@ -158,7 +158,7 @@ const getCardInfo = () => {
   form.receiveAccount = res.address.receiveAccount;
   form.receivePhone = res.address.receivePhone;
   form.receiveEmail = res.address.receiveEmail;
-  form.IFSC = res.address.IFSC;
+  form.CPF = res.address.CPF;
   form.bankName = res.address.bankName;
   form.bankCode = res.address.bankCode;
   form.id = res.id;

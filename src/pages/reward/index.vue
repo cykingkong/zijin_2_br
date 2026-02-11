@@ -57,7 +57,7 @@ const handleClickExchange = async () => {
 
         if (code == 200) {
             showSuccessToast({
-          
+                message:t("Success")
             })
             getUserList()
             codes.value = ''

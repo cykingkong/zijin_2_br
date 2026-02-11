@@ -78,6 +78,10 @@ const props = defineProps({
     labelTips: {
         type: String,
         default: ""
+    },
+      formatter: {
+        type: Function,
+        default: null
     }
 })
 
@@ -88,7 +92,12 @@ const isFocused = ref(false);
 
 const handleInput = (event: Event) => {
     const target = event.target as HTMLInputElement;
-    emit('update:value', target.value);
+     let val = target.value;
+     // 如果父组件传了 formatter，就用 formatter 处理值
+    if (props.formatter) {
+        val = props.formatter(val);
+    }
+    emit('update:value', val);
 }
 
 const handleFocus = () => {

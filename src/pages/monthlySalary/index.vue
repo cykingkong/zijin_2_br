@@ -119,7 +119,7 @@ onMounted(async () => {
   name: 'monthlySalary',
   meta: {
     title: 'Monthly Salary',
-    i18n: 'monthlySalary'
+    i18n: 'Salário mensal'
   },
 }
 </route>

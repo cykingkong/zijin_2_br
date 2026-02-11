@@ -42,7 +42,7 @@ const feature = ref();
 {
   name: 'faqList',
   meta: {
-    i18n: 'faqList'
+    i18n: 'FAQ'
   },
 }
 </route>

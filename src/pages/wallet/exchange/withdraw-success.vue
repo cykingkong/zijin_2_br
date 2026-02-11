@@ -98,7 +98,9 @@ const handleShowDetails = () => {
 const handleDone = () => {
   // 返回钱包首页或指定页面
   console.log("完成");
-  router.push("/wallet");
+  router.push({
+      path:"/profile"
+  });
 };
 </script>
 

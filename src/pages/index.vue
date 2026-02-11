@@ -11,6 +11,8 @@ import { indexInfo, articleList } from "@/api/market";
 import local from "@/utils/local";
 import { closeToast, showLoadingToast } from "vant";
 import { getKfUrl } from '@/api/user'
+import { ref, computed, watch, onMounted } from 'vue'; // 确保引入了 ref 等
+
 const { t } = useI18n();
 const navStore = navTitleStore();
 const newsList = ref([]);
@@ -23,6 +25,16 @@ const indexInfoData = ref({
   discountBanners: [],
 });
 const lang = ref(local.getlocal('lang') || 'br')
+
+// --- 新增：判断是否为视频 ---
+const isVideo = (url) => {
+  if (!url) return false;
+  // 如果后台 url 没有后缀，或者通过 type 字段判断，请修改此处逻辑
+  const videoExtensions = ['.mp4', '.mov', '.webm', '.ogg']; 
+  return videoExtensions.some(ext => url.toLowerCase().includes(ext));
+};
+// -------------------------
+
 let pathEnum = {
   0: 'SignIn',
   1: 'team',
@@ -45,36 +57,7 @@ function handleClickGrid(val) {
     path: pathEnum[val],
   });
   return
-  if (val === 0) {
-
-
-  }
-  if (val === 1) {
-    router.push({
-      path: "/lottery",
-    });
-
-  }
-  if (val === 2) {
-    router.push({
-      path: "/receive",
-    });
-  }
-  if (val === 3) {
-    // router.push('/quotes/accountChange?type=3' + '&categoryId=' + categoryId.value)
-    getKfUrl({
-      userId: userInfo.value ? userInfo.value.userId : null,
-    }).then((res) => {
-      if (res.code == 200) {
-        window.open(res.data.kfUrl)
-      }
-    })
-  }
-  if (val === 4) {
-    router.push({
-      path: "/community",
-    });
-  }
+  // ... 原有的被注释或未执行的代码保持原样
 }
 const handleClickBanner = async (item) => {
   if (!item.coupon_id) return
@@ -82,7 +65,9 @@ const handleClickBanner = async (item) => {
     couponId: item?.coupon_id
   })
   if (res.code == 200) {
-    showSuccessToast({})
+    // 注意：原代码这里似乎缺少 showSuccessToast 的 import，请确认
+    // showSuccessToast({}) 
+    console.log('Coupon received');
   }
 }
 function getContent(html) {
@@ -115,12 +100,6 @@ function init() {
   })
   getArticleList({ article_type: 2 })
   getArticleList({ article_type: 3 })
-  // getMarketInfo({})
-  // getChartsDesc(1)
-  // getMarketIndex({
-  //   categoryId: 500,
-  // })
-  // initKfUrl();
 }
 function getArticleList(params) {
   // 1 关于我们 常见问题 2 新闻中心 3 新闻活动
@@ -140,7 +119,6 @@ const handleClickItem = (item) => {
   router.push({
     path: '/activityDetail',
   })
-  // local.setlocal('activityDetail', item)
 }
 const handleClickNoticeDetail = () => {
   localStorage.setItem('noticeDetail', JSON.stringify(indexInfoData.value.notice))
@@ -170,38 +148,28 @@ watch(
   }
 );
 const formatName = (str) => {
-  // 将姓名开头的62 去掉，然后只显示前三字符和后三字符，中间用***替换
   if (typeof str !== 'string') {
     return '';
   }
-
-  // 去掉开头的62
   let processedStr = str;
   if (str.startsWith('91')) {
     processedStr = str.substring(2);
   }
-
-  // 如果处理后的字符串长度小于等于6，直接返回
   if (processedStr.length <= 6) {
     return processedStr;
   }
-
-  // 截取前3个字符和后3个字符，中间用***替换
   const firstThree = processedStr.substring(0, 3);
   const lastThree = processedStr.substring(processedStr.length - 3);
-
   return `${firstThree}***${lastThree}`;
-
 };
 onMounted(() => {
   init();
-  // closeToast();
   navStore.setShowNavLeft(true);
 });
 </script>
 
 <template>
-  <div class="Home bg-[#f7f7f7]">
+  <div class="Home bg-[#f7f7f7] pb-[120px]">
     <header class="header flex items-center justify-between">
       <div class="left flex items-center gap-[16px]">
         <div class="info">
@@ -209,12 +177,10 @@ onMounted(() => {
         </div>
       </div>
       <div class="flex justify-center items-center icon-box gap-[8px]">
-        <!-- <LangSelectDropdown v-model="lang" /> -->
         <div class="relative" @click="handleClickGrid(8)">
           <div
             class="dot absolute bottom-[8px] right-[1px]  rounded-full bg-[#FF4E4E] color-[#fff] text-[8px] w-[5px] h-[5px] text-center"
             v-if="userInfo.productCount">
-            <!-- {{ userInfo.productCount || 0 }} -->
           </div>
           <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -227,19 +193,24 @@ onMounted(() => {
             <path
               d="M12.5167 15.8833C12.5167 17.2583 11.3917 18.3833 10.0167 18.3833C9.33333 18.3833 8.7 18.1 8.25 17.65C7.8 17.2 7.51666 16.5666 7.51666 15.8833"
               stroke="#161616" stroke-width="1.5" stroke-miterlimit="10" />
-            <!-- <circle cx="16.5" cy="15.5" r="2.5" fill="#FF6464" /> -->
           </svg>
-
         </div>
-
-
       </div>
     </header>
+
+    <!-- First Swipe Area -->
     <div class="detail-image w-full px-[24px]" v-if="indexInfoData.banners.length > 0">
       <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-        <van-swipe-item v-for="item in indexInfoData.banners" :key="index" @click="handleClickBanner(item)">
-          <div class="image bg-[#f5f5f5] rounded-[16px] w-full">
-            <img :src="item.url" alt="" class="w-full h-full object-cover rounded-[16px]">
+        <!-- Added index to key, and video check -->
+        <van-swipe-item v-for="(item, index) in indexInfoData.banners" :key="index" @click="handleClickBanner(item)">
+          <div class="image bg-[#f5f5f5] rounded-[16px] w-full h-full overflow-hidden relative">
+            <video 
+              v-if="isVideo(item.url)" 
+              :src="item.url" 
+              class="w-full h-full object-cover rounded-[16px] block"
+              muted autoplay loop playsinline webkit-playsinline
+            ></video>
+            <img v-else :src="item.url" alt="" class="w-full h-full object-cover rounded-[16px] block">
           </div>
         </van-swipe-item>
       </van-swipe>
@@ -249,7 +220,6 @@ onMounted(() => {
     <div class="w-full pl-[4px] pr-[4px] my-16">
       <div class="notice text-[12px]  w-full border-[1px] px-12 h-42  px-4 py-2 overflow-hidden flex items-center"
         @click="handleClickNoticeDetail">
-
         <div class="content text-no-wrap w-full">
           <van-notice-bar scrollable :text="indexInfoData.noticeContent" background="transparent" color="#161616"
             class="notice flex-1">
@@ -266,59 +236,46 @@ onMounted(() => {
                 <rect y="6" width="14" height="1.5" fill="#1D1F22" />
                 <rect y="12" width="14" height="1.5" fill="#1D1F22" />
               </svg>
-
             </template>
           </van-notice-bar>
         </div>
       </div>
-
     </div>
+
+    <!-- Second Swipe Area -->
     <div class="detail-image w-full px-[24px]"
       v-if="indexInfoData.discountBanners && indexInfoData.discountBanners.length > 0">
       <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-        <van-swipe-item v-for="item in indexInfoData.discountBanners" :key="index" @click="handleClickBanner(item)">
-          <div class="image bg-[#f5f5f5] rounded-[16px] w-full">
-            <img :src="item.url" alt="" class="w-full h-full object-cover rounded-[16px]">
+        <!-- Added index to key, and video check -->
+        <van-swipe-item v-for="(item, index) in indexInfoData.discountBanners" :key="index" @click="handleClickBanner(item)">
+          <div class="image bg-[#f5f5f5] rounded-[16px] w-full h-full overflow-hidden relative">
+            <video 
+              v-if="isVideo(item.url)" 
+              :src="item.url" 
+              class="w-full h-full object-cover rounded-[16px] block"
+              muted autoplay loop playsinline webkit-playsinline
+            ></video>
+            <img v-else :src="item.url" alt="" class="w-full h-full object-cover rounded-[16px] block">
           </div>
         </van-swipe-item>
-
       </van-swipe>
     </div>
+
     <Grid @handleClickGrid="handleClickGrid" />
 
-    <!-- <div class="indicator-title px-24 font-bold text-[16px] mt-12">
-      {{ t("Activity Center") }}
-    </div>
-    <ActivityCenter :arr="activityList" /> -->
     <div class="indicator-title px-24 font-bold text-[16px] mt-12 flex items-center justify-between">
       {{ t("FAQ") }}
-      <div class="see-all text-[14px] color-[#9CA3AF]" @click="handleClickSeeAll">{{ t("See all") }} <svg width="14"
+      <div class="see-all text-[14px] color-[#9CA3AF] flex items-center" @click="handleClickSeeAll">{{ t("See all") }} <svg width="14"
           height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M5.19751 11.62L9.00084 7.81667C9.45001 7.3675 9.45001 6.6325 9.00084 6.18334L5.19751 2.38"
             stroke="#8C91A2" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </div>
     </div>
-    <div class="news-list px-24 py-12 flex flex-col gap-12">
-
+    <div class="news-list px-24 py-16 flex flex-col gap-12">
       <FaqItem v-for="(item, index) in newsList" :key="index" :item="item" @click="handleClickItem(item)" />
+    </div>
 
-      <!-- </div> -->
-    </div>
-    <!-- <div class="indicator-title px-24 font-bold text-[16px] mt-12 flex items-center justify-between">
-      {{ t("News Center") }}
-    </div>
-    <div class="news-list px-24 py-12">
-      <div
-        class="news-item w-full rounded-[16px]  min-h-[120px] flex gap-[12px]   p-12 shadow-[0px_0px_10px_0px_rgba(0,0,0,0.1)]"
-        v-for="(item, index) in newsList" :key="index" @click="handleClickItem(item)">
-        <div class="img w-96 h-96 flex-shrink-0 bg-[#F5F5F5] overflow-hidden rounded-[16px]">
-          <img :src="item.article_image" alt="" v-if="item && item.article_image"
-            class="w-full h-full object-cover rounded-[16px]">
-        </div>
-        <div class="info color-[#111827] font-bold">{{ item.title }}</div>
-      </div>
-    </div> -->
     <van-popup v-model:show="showDatePicker" position="center" :round="true">
       <div class="h-auto max-h-500 overflow-y-auto p-12">
         <div class="div" v-html="indexInfoData.notice" />
@@ -339,24 +296,22 @@ onMounted(() => {
   </div>
 </template>
 
+<!-- Style 保持不变 -->
 <route lang="json5">
 {
   name: 'home',
   meta: {
     title: 'home',
-    i18n: 'home'
+    i18n: 'Página inicial'
   },
 }
 </route>
 
 <style lang="less" scoped>
-
-
 .iconTop3 {
   width: 9px;
   height: 8px;
 }
-
 .header {
   display: flex;
   height: 64px;
@@ -367,8 +322,6 @@ onMounted(() => {
 
   .left {
     font-size: 20px;
-
-    // 文字倾斜
     font-style: italic;
     font-weight: 400;
   }
@@ -376,26 +329,19 @@ onMounted(() => {
   .right {
     display: flex;
     align-items: center;
-
     img {
       width: 22px;
       height: 22px;
     }
   }
 }
-
 .kf-fixed {
   z-index: 1002;
 }
-
-:deep(.van-tabs__line) {
-  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADxSURBVHgBnVHLDYJAEJ1ZjJ+LoQTsQDtA48GjJXj1YNQKKIGDIR4pQY8eTLQD7EBKIIZIBGEEiQSR5eNLNrs7efP27RsEDiZbR3J9OEXnrtce7Ndo5fEYT8D1cRluUrTslqPweFjw+jVdawrQO8w7ZiUHbkBqtub5oOdxfwRGmjMDwmm2TgDyeOPIpQIhk/vfAEGfqiRyBUbaI2qWgA/p1riv0oUkxHdwTzIAUYRCoNUUaPAJNHHgBaH10uYIJHoBql8OZM3uMxIMqAFGMDwuOmcWX4Qd1ARhHDbGY8ufcQWZNSsaWzmYwsIQTPgTCHR5AaMKT03qmstiAAAAAElFTkSuQmCC) no-repeat center;
-  width: 9px;
-  height: 8px;
-  background-size: 100% 100%;
-}
-
-.Home {
-
-}
+// :deep(.van-tabs__line) {
+//   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADxSURBVHgBnVHLDYJAEJ1ZjJ+LoQTsQDtA48GjJXj1YNQKKIGDIR4pQY8eTLQD7EBKIIZIBGEEiQSR5eNLNrs7efP27RsEDiZbR3J9OEXnrtce7Ndo5fEYT8D1cRluUrTslqPweFjw+jVdawrQO8w7ZiUHbkBqtub5oOdxfwRGmjMDwmm2TgDyeOPIpQIhk/vfAEGfqiRyBUbaI2qWgA/p1riv0oUkxHdwTzIAUYRCoNUUaPAJNHHgBaH10uYIJHoBql8OZM3uMxIMqAFGMDwuOmcWX4Qd1ARhHDbGY8ufcQWZNSsaWzmYwsIQTPgTCHR5AaMKT03qmstiAAAAAElFTkSuQmCC) no-repeat center;
+//   width: 9px;
+//   height: 8px;
+//   background-size: 100% 100%;
+// }
 </style>

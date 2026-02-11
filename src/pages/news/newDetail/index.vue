@@ -39,3 +39,12 @@ import { useRoute } from 'vue-router'
 const content = ref(``)
 </script>
 <style lang="less" scoped></style>
+
+<route lang="json5">
+{
+  name: 'newsDetail',
+  meta: {
+    i18n: ''
+  },
+}
+</route>

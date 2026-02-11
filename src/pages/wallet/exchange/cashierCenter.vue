@@ -190,7 +190,7 @@ function onBack() {
       </template>
     </VanNavBar>
     <div v-if="info" class="info mt-32">
-      <div class="text-[14px] mt-[57px] text-center">{{ t("Withdrawal account") }}</div>
+      <div class="text-[14px] mt-[57px] text-center">{{ t("Deposit Amount") }}</div>
       <div class="min-count mx-a  overflow-y-auto text-center font-size-[24px] text-[#0F172A] font-bold">
         R$ {{ count || '0' }}
       </div>

@@ -107,17 +107,17 @@
 
                 <!-- 6. Commission Info (佣金信息 - 仿截图样式) -->
                 <div class="commission-section mb-[30px]">
-                    <h3 class="text-[14px] font-bold text-[#1A1A1A] mb-[8px]">B/C/D Team commission</h3>
+                    <h3 class="text-[14px] font-bold text-[#1A1A1A] mb-[8px]">L1/L2/L3 Comissão da equipe</h3>
                     <div class="text-[#666] text-[12px] leading-[1.8] ">
-                        <p>B={{ productInfo.rates.B }}% = {{ productInfo.rates.B / 100 }} * {{ productInfo.totalIncome
+                        <p>L1={{ productInfo.rates.B }}% = {{ productInfo.rates.B / 100 }} * {{ productInfo.totalIncome
                             }} = {{
                                 currencySymbol }} {{ addCommasToNumber(productInfo.rates.B / 100 * productInfo.totalIncome)
                             }}</p>
-                        <p>C={{ productInfo.rates.C }}% = {{ productInfo.rates.C / 100 }} * {{ productInfo.totalIncome
+                        <p>L2={{ productInfo.rates.C }}% = {{ productInfo.rates.C / 100 }} * {{ productInfo.totalIncome
                             }} = {{
                                 currencySymbol }} {{ addCommasToNumber(productInfo.rates.C / 100 * productInfo.totalIncome)
                             }}</p>
-                        <p>D={{ productInfo.rates.D }}% = {{ productInfo.rates.D / 100 }} * {{ productInfo.totalIncome
+                        <p>L3={{ productInfo.rates.D }}% = {{ productInfo.rates.D / 100 }} * {{ productInfo.totalIncome
                             }} = {{
                                 currencySymbol }} {{ addCommasToNumber(productInfo.rates.D / 100 * productInfo.totalIncome)
                             }}</p>
@@ -163,16 +163,16 @@
                 <div class="flex w-full flex-1">
                     <div class="payTypeBox w-full flex flex-col gap-12">
                         <div class="li-item flex items-center justify-between w-full"
-                            v-for="(item, index) in payTypeList" :key="index" @click="activePayIndex = index">
+                            v-for="(item, index) in payTypeList" :key="index" >
                             <div class="label">{{ item.name }} <span class="font-bold">R$ {{ item.num }}</span></div>
-                            <svg class="w-16 h-16 flex-shrink-0" v-if="activePayIndex == index" viewBox="0 0 16 16"
+                            <!-- <svg class="w-16 h-16 flex-shrink-0" v-if="activePayIndex == index" viewBox="0 0 16 16"
                                 fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path
                                     d="M7.99992 14.6666C11.6666 14.6666 14.6666 11.6666 14.6666 7.99992C14.6666 4.33325 11.6666 1.33325 7.99992 1.33325C4.33325 1.33325 1.33325 4.33325 1.33325 7.99992C1.33325 11.6666 4.33325 14.6666 7.99992 14.6666Z"
                                     fill="#161616" />
                                 <path d="M5.16675 7.99995L7.05341 9.88661L10.8334 6.11328" stroke="white"
                                     stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
+                            </svg> -->
                         </div>
                     </div>
                 </div>
@@ -202,13 +202,13 @@ const currencySymbol = 'R$'; // 根据截图或项目配置修改货币符号，
 const activePayIndex = ref(0)
 const activeConponIndex = ref<any>(-1)
 const payTypeList = ref([{
-    name: 'Wallet Top-Up',
-    num: 0,
-    key: '1'
+    name: 'Recarga de Carteira', // Wallet Top-Up 充值钱包
+    num: userInfo.value.balance,
+    key: 'balance'
 }, {
-    name: "Balance Wallet",
-    num: 0,
-    key: '2'
+    name: "Saldo da Carteira", // Balance Wallet 余额钱包
+    num: userInfo.value.teamBalance,
+    key: 'teamBalance'
 }])
 const couponList = computed(() => {
     // 过滤出 status != 0 的优惠券
@@ -304,6 +304,7 @@ const handlePurchase = async () => {
         const { code } = await purchase({
             productId: productInfo.value.productId,
             couponId: activeConponIndex.value == -1 ? '' : couponList.value[activeConponIndex.value].couponId, // 假设不传或传-1代表不使用优惠券
+            // payType:payTypeList.value[activePayIndex.value].key
         });
         if (code == 200) {
             showToast({ message: t('ActivateSuccess') });

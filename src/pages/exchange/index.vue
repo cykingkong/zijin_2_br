@@ -192,7 +192,7 @@ onMounted(() => {
 {
   name: 'exchange',
   meta: {
-    i18n: 'Exchange'
+    i18n: 'Troca'
   },
 }
 </route>

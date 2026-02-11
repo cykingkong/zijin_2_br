@@ -57,8 +57,8 @@ onMounted(async () => {
   if (route.query.token) {
     let t = route.query.token
     await userStore.loginByToken({ token: t })
-    localStorage.setItem("language", "en");
-    locale.value = "en";
+    localStorage.setItem("language", "br");
+    locale.value = "br";
     const { redirect, ...othersQuery } = router.currentRoute.value.query;
     router.push({
       name: "home",
@@ -240,8 +240,8 @@ async function login() {
     };
     await userStore.login(params);
     // await userStore.info()
-    localStorage.setItem("language", "en");
-    locale.value = "en";
+    localStorage.setItem("language", "br");
+    locale.value = "br";
     const { redirect, ...othersQuery } = router.currentRoute.value.query;
     router.push({
       name: "home",

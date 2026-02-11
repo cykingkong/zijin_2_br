@@ -74,7 +74,7 @@
           </div>
           <div class=" phone-input">
   <inputCom :placeholder="t('PleaseEnterAmount')" v-model:value="count" :tips="''" class="flex-1 w-full"
-    inputType="digit">
+        :formatter="digitFormatter">
   </inputCom>
 </div>
 <van-button type="primary" class="h-[56px]" color="#1b1b1b" block @click="onConfirm">
@@ -177,14 +177,14 @@ const fee = computed(() => {
   return addCommasToNumber(count.value * withdrwaInfo.value.withdrawFee * 0.01);
 });
 // 【新增】监听 count 变化，强制取整
-watch(count, (newVal) => {
-  // 转换为字符串判断是否包含小数点
-  const strVal = String(newVal)
-  if (strVal.includes('.')) {
-    // 截取小数点前的部分，实现仅保留整数
-    count.value = strVal.split('.')[0]
-  }
-})
+// watch(count, (newVal) => {
+//   // 转换为字符串判断是否包含小数点
+//   const strVal = String(newVal)
+//   if (strVal.includes('.')) {
+//     // 截取小数点前的部分，实现仅保留整数
+//     count.value = strVal.split('.')[0]
+//   }
+// })
 const { proxy } = getCurrentInstance()!;
 const userStore = useUserStore();
 
@@ -198,7 +198,19 @@ const keypadRows = [
   ["7", "8", "9"],
   [".", "0", "delete"],
 ];
-
+// 定义格式化函数：过滤非数字
+const digitFormatter = (value: string) => {
+ // 1. 先把非数字字符全部过滤掉
+  let result = value.replace(/\D/g, '');
+  // 2. 处理前导 0 的情况
+  // 逻辑：如果字符串以 0 开头，并且后面还有其他数字（例如 "01", "007"），
+  // 则把开头的 0 去掉。
+  // 注意：这样保留了单独的 "0"，防止用户想输入 0 时输入不进去，
+  // 但输入 "01" 时会自动变成 "1"。
+  result = result.replace(/^0+(?=\d)/, '');
+  
+  return result;
+};
 // 统一的按键处理方法
 const handleKeyClick = (key: string) => {
   if (key === "delete") {

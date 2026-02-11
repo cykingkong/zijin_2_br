@@ -68,7 +68,7 @@ onMounted(() => {
   name: 'activityDetail',
   meta: {
     title: 'activityDetail',
-    i18n: 'activityDetail'
+    i18n: 'Detalhe da atividade'
   },
 }
 </route>

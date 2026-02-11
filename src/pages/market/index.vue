@@ -36,6 +36,23 @@ const getUserProArr = async () => {
 
   }
 }
+const getTabList = async ()=>{
+   const { data, code } = await productList({
+
+    pageIndex:1,
+    pageSize:3,
+
+
+  });
+  if (code == 200) {
+        tabList.value = data.classList.map((e) => {
+      return {
+        name: e.class_name,
+        id: e.class_id,
+      }
+    }) || []
+  }
+}
 const getProductList = async () => {
   if (page.pageIndex == 1) {
     stockSkeleton.value = true;
@@ -100,15 +117,16 @@ const loadMore = () => {
   getProductList();
 };
 
-onMounted(() => {
-  getProductList();
+onMounted(async() => {
+  await getTabList()
+  await getProductList();
   // getUserProArr()
 });
 </script>
 
 <template>
-  <div class="market relative overflow-hidden pb-[20px] bg-[#f7f7f7] min-h-screen pt-[20px]">
-    <div class=" phone-input my-16 mx-16 flex items-center px-20">
+  <div class="market relative overflow-hidden pb-[120px] bg-[#f7f7f7] min-h-screen pt-[20px]">
+    <!-- <div class=" phone-input my-16 mx-16 flex items-center px-20">
       <svg class="w-20 h-20 flex-shrink-0" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g clip-path="url(#clip0_6869_628)">
           <path
@@ -130,7 +148,7 @@ onMounted(() => {
           </div>
         </template>
       </inputCom>
-    </div>
+    </div> -->
     <!-- Top Tabs -->
     <div class="sticky top-0 z-50 flex  items-center px-16 gap-8 overflow-x-auto flex-wrap">
       <div
@@ -206,7 +224,6 @@ onMounted(() => {
     <!-- Empty State -->
     <empty v-if="stockList && stockList.length == 0" :no-tips="true"></empty>
     <LoadMore :status="listStatus" @load-more="loadMore" />
-
   </div>
 </template>
 

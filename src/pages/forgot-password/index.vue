@@ -71,6 +71,8 @@ import local from "@/utils/local";
 import { useUserStore } from "@/stores";
 import { forgetPassword, sendCode } from "@/api/user";
 import loginTab from "@/components/tab.vue";
+
+import { showToast, showSuccessToast, showFailToast } from 'vant';
 const { t } = useI18n();
 const lang = ref(local.getlocal('lang') || 'br')
 
@@ -170,6 +172,12 @@ const hanleClickAreaPick = () => {
   // areaPopRef.value.popShow()
 };
 const onSubmit = async () => {
+  if(!form.account ){
+    showFailToast({
+      message:'Por favor, insira a conta'
+    })
+    return 
+  }
   let params = {
     ...form,
   };
@@ -178,7 +186,13 @@ const onSubmit = async () => {
   if (params.type == "phone") {
     params.username = `${params.account}`;
   }
-  params.password_confirmation = params.password.trim()
+  // params.password_confirmation = params.password.trim()
+  if(params.password_confirmation.trim() != params.password.trim()){
+    showFailToast({
+      message:'As senhas não correspondem, por favor, digite novamente'
+    })
+    return
+  }
   const res = await forgetPassword(params);
   if (res.code === 200) {
     showSuccessToast(t(""));

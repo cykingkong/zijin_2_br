@@ -11,6 +11,7 @@
             <!-- 金币大图 -->
             <div class="coin-img">
                 <img src="@/assets/coin.png" alt="Coin" class="w-[100px] h-[94px] object-contain drop-shadow-lg" />
+                
             </div>
         </div>
 
@@ -34,7 +35,7 @@
 
                     <!-- 图标或状态 -->
                     <div class="icon-area mb-[2px]">
-                        <span v-if="day.status === 'checked'" class="text-[14px]"><svg class="w-16 h-16"
+                        <span v-if="day.status == 1" class="text-[14px]"><svg class="w-16 h-16"
                                 viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path
                                     d="M6.99996 12.8333C10.2083 12.8333 12.8333 10.2083 12.8333 6.99996C12.8333 3.79163 10.2083 1.16663 6.99996 1.16663C3.79163 1.16663 1.16663 3.79163 1.16663 6.99996C1.16663 10.2083 3.79163 12.8333 6.99996 12.8333Z"
@@ -43,13 +44,13 @@
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                         </span>
-                        <img v-else-if="day.status == 'future' || day.status == 'today'" src="@/assets/signin.png"
+                        <img v-else-if="day.status  == 2" src="@/assets/signin.png"
                             class="w-[16px] h-[16px] rounded-full" />
                         <img v-else src="@/assets/unsignin.png" class="w-[16px] h-[16px] rounded-full" />
                     </div>
 
                     <!-- 金额 -->
-                    <span class=" scale-90 block">{{ day.amount }}</span>
+                    <span class=" scale-90 block">{{ day.amount }} </span>
                 </div>
             </div>
 
@@ -100,6 +101,7 @@ import { useRouter } from 'vue-router'; // 假设使用了 vue-router
 import { useUserStore } from "@/stores";
 import { day, receiveDay } from '@/api/salary';
 import { addCommasToNumber } from '@/utils/tool';
+import dayjs from 'dayjs';
 import lv1 from '@/assets/lv/lv1.png';
 import lv2 from '@/assets/lv/lv2.png';
 import lv3 from '@/assets/lv/lv3.png'; // 修正了原本代码中指向 lv1 的路径
@@ -116,7 +118,7 @@ const userInfo = computed(() => userStore.userInfo);
 // status: 'missed' | 'checked' | 'today' | 'future'
 //  tatus: 1-已领取 2-可领取 3-不可领取
 const checkInDays = ref([]);
-
+const today = ref(0)
 // 模拟等级奖励数据
 const rewardList = ref([
 
@@ -136,16 +138,20 @@ const imgEnum =
 // 根据状态返回对应的 UnoCSS 类名
 function getDayClass(day) {
     switch (day.status) {
-        case 'today':
+        case 2:
+            if(today.value == day.day){
+                return 'bg-[#1A1A1A] text-white shadow-lg';
+            }
+            return 'bg-[#F2F2F2] text-[#1b1b1b] ';
+
             // 黑色背景，白色文字，金色边框感
-            return 'bg-[#1A1A1A] text-white shadow-lg';
-        case 'checked':
+        case 1:
             // 浅黄色背景，深色文字
-            return 'bg-[#FFF6D6] text-[#DFA948]';
-        case 'missed':
+            return ' text-[#DFA948] bg-#F9D54A4D!';
+        case 3:
             // 灰色背景，淡化文字
             return 'bg-[#F2F2F2] text-[#999] opacity-80';
-        case 'future':
+        
         default:
             // 默认浅灰色背景
             return 'bg-[#F9F9F9] text-[#666]';
@@ -161,9 +167,15 @@ function getColor(idx) {
 async function handleSignIn() {
     console.log('Signing in...');
     // TODO: 调用签到 API
-    const { data, code } = await receiveDay()
+    const { data, code  } = await receiveDay()
     if (code == 200) {
         console.log(data)
+        showToast({
+            message:data.message||''
+        })
+        setTimeout(()=>{
+            getDayConfig()
+        },800)
         return
         checkInDays.value = data.dayList || [];
     }
@@ -177,13 +189,15 @@ function goBack() {
 async function getDayConfig() {
     const { data, code } = await day()
     if (code == 200) {
+            today.value = dayjs(data.today).day() 
+            if( today.value == 0 ) today.value = 7
+            // console.log(today.value,'today')
         checkInDays.value = data.days.map((item) => {
             return {
                 ...item,
                 label: `Day${item.day}`,
-                status: item.status == 1 ? 'checked' : item.status == 2 ? 'today' : 'future',
-
-            }
+                status :item.status == 3 && today.value <= item.day ? 2 :item.status
+            };
         }) || [];
         rewardList.value = data.configs.map((el) => {
             el.img = imgEnum[`lv${el.level}`]
