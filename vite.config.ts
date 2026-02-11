@@ -23,7 +23,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       proxy: {
         '/capi': {
           // target: `https://api.ddbindia.online/app-api`, // 代理接口
-          target: `https://api2.fuxing.one/app-api`, // 代理接口
+          target: `https://api.signet-jewelers-br.com/app-api`, // 代理接口
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/capi/, ''),
           ws: false,

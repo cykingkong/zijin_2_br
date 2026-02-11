@@ -52,8 +52,6 @@ const handleClickClaimCoupon = async () => {
 onMounted(() => {
     const item = local.getlocal('noticeDetail')
     if (item) {
-
-
         info.value = optimizeRichText(item)
     }
 })

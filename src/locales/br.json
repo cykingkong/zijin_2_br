@@ -240,5 +240,10 @@
   "TotalIncome": "Renda Total",
   "TotalWithdraw": "Retirada Total",
   "Deposit Amount": "Valor do Depósito",
-  "PleaseEnterAmount": "Por favor, insira o valor"
+  "PleaseEnterAmount": "Por favor, insira o valor",
+  "Don’t have an account?": "Não tem uma conta?",
+  "Log in": "Entrar",
+  "Welcome": "Bem-vindo",
+  "FAQ": "FAQ",
+  "CPF": "CPF"
 }

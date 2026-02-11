@@ -46,7 +46,7 @@ declare module 'vue-router/auto-routes' {
     'Receive': RouteRecordInfo<'Receive', '/receive', Record<never, never>, Record<never, never>>,
     'reward': RouteRecordInfo<'reward', '/reward', Record<never, never>, Record<never, never>>,
     'richTextDetail': RouteRecordInfo<'richTextDetail', '/richTextDetail', Record<never, never>, Record<never, never>>,
-    'signIn': RouteRecordInfo<'signIn', '/signIn', Record<never, never>, Record<never, never>>,
+    'Sign in': RouteRecordInfo<'Sign in', '/signIn', Record<never, never>, Record<never, never>>,
     'taskBonus': RouteRecordInfo<'taskBonus', '/taskBonus', Record<never, never>, Record<never, never>>,
     'team': RouteRecordInfo<'team', '/team', Record<never, never>, Record<never, never>>,
     'wallet': RouteRecordInfo<'wallet', '/wallet', Record<never, never>, Record<never, never>>,

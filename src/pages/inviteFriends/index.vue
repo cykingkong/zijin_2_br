@@ -75,7 +75,7 @@ import 'vant/es/toast/style';
 
 const userStore = useUserStore();
 const router = useRouter();
-
+const {t}= useI18n()
 // 使用 computed 确保 userInfo 更新时获取最新数据
 const userInfo = computed(() => userStore.userInfo || {});
 

@@ -55,11 +55,12 @@
             </div>
 
             <!-- 签到按钮 -->
-            <button
-                class="w-full bg-[#1A1A1A] text-white h-[48px] rounded-[12px] font-bold text-[16px] active:opacity-90 transition-opacity"
+            <div
+                class="w-full flex justify-center items-center text-white h-[48px] rounded-[12px] font-bold text-[16px] active:opacity-90 transition-opacity"
+                :class="todayCanSignIn?'bg-[#c2c2c2]':'bg-[#1A1A1A]'"
                 @click="handleSignIn">
                 {{t("Sign In")}}
-            </button>
+            </div>
         </div>
 
         <!-- 奖励规则列表 -->
@@ -114,9 +115,10 @@ const router = useRouter();
 const userStore = useUserStore();
 const { t } = useI18n()
 const userInfo = computed(() => userStore.userInfo);
+const todayCanSignIn = ref(true)
 // 模拟签到天数数据
 // status: 'missed' | 'checked' | 'today' | 'future'
-//  tatus: 1-已领取 2-可领取 3-不可领取
+//  status: 1-已领取 2-可领取 3-不可领取
 const checkInDays = ref([]);
 const today = ref(0)
 // 模拟等级奖励数据
@@ -166,6 +168,13 @@ function getColor(idx) {
 
 async function handleSignIn() {
     console.log('Signing in...');
+    const todayItem = checkInDays.value.find((item)=>today.value == item.day)
+    if(todayItem.status == 1){
+        showToast({
+            message:"Check-in concluído hoje"
+        })
+        return
+    }
     // TODO: 调用签到 API
     const { data, code  } = await receiveDay()
     if (code == 200) {
@@ -205,7 +214,10 @@ async function getDayConfig() {
                 ...el
             }
         })
-        console.log(rewardList.value)
+        let todayItem = data.days.find((item)=>today.value == item.day)
+
+        todayCanSignIn.value = todayItem.status == 1? true:false
+        console.log(rewardList.value,todayItem)
     }
 }
 onMounted(async () => {
@@ -222,10 +234,10 @@ onMounted(async () => {
 
 <route lang="json5">
 {
-  name: 'signIn',
+  name: 'Sign in',
   meta: {
-    title: 'SignIn',
-    i18n: 'SignIn'
+    title: 'Sign in',
+    i18n: 'Sign in'
   },
 }
 </route>

@@ -69,7 +69,7 @@ async function handleBuyClickOriginal() {
   // 这里可以添加购买确认、API调用等逻辑
   const { data, code } = await deposit({
     amount: count.value,
-    methodId: info.value.id,
+    methodId: selected.value,
   })
   if (code === 200) {
     // if (data.type == 'bank') {

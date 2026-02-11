@@ -408,9 +408,9 @@ async function login() {
         }}
       </div>
       <div :style="{ color: '#1B1B1B' }"
-        class="fixed bottom-40 left-0 font-regular w-full  items-center flex justify-center text-center  color-[#1b1b1b]! font-bold"
+        class=" font-regular w-full  items-center flex justify-center text-center  color-[#1b1b1b]! font-bold"
         block @click="changePageType()">
-        <span class="text-[#0000004D] mr-4"> {{ pageType == 0 ? t('Don’t have an account?') : '' }} </span> {{
+        <span class="text-[#0000004D] mr-4"> {{ pageType == 0 ? t("Don’t have an account?") : '' }} </span> {{
           pageType == 0 ? t("Sign Up") : t("Log in")
         }}
       </div>

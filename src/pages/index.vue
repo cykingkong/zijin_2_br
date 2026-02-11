@@ -12,6 +12,7 @@ import local from "@/utils/local";
 import { closeToast, showLoadingToast } from "vant";
 import { getKfUrl } from '@/api/user'
 import { ref, computed, watch, onMounted } from 'vue'; // 确保引入了 ref 等
+import { showToast, showSuccessToast, showFailToast } from 'vant';
 
 const { t } = useI18n();
 const navStore = navTitleStore();
@@ -24,6 +25,8 @@ const indexInfoData = ref({
   banners: [],
   discountBanners: [],
 });
+// 2. 定义 video 的 ref 引用
+const bannerVideoRef = ref(null);
 const lang = ref(local.getlocal('lang') || 'br')
 
 // --- 新增：判断是否为视频 ---
@@ -52,7 +55,12 @@ function handleClickSeeAll() {
   })
 }
 function handleClickGrid(val) {
-  if (val == 3) return
+  if (val == 3) {
+    showToast({
+      message:'Em desenvolvimento...'
+    })
+    return
+  }
   router.push({
     path: pathEnum[val],
   });
@@ -66,7 +74,7 @@ const handleClickBanner = async (item) => {
   })
   if (res.code == 200) {
     // 注意：原代码这里似乎缺少 showSuccessToast 的 import，请确认
-    // showSuccessToast({}) 
+    showSuccessToast({}) 
     console.log('Coupon received');
   }
 }
@@ -90,6 +98,28 @@ function init() {
     indexInfoData.value = res.data
     if (res.data.notice) {
       indexInfoData.value.noticeContent = getContent(indexInfoData.value.notice)
+      indexInfoData.value.banners = [{
+        url:'https://api.signet-jewelers-br.com/video.mp4'
+      }]
+      // // 3. JS 实现自动播放逻辑
+      // nextTick(() => {
+      //   // v-for 中的 ref 会自动变成数组，取第一个
+      //   const videoEl = bannerVideoRef.value?.[0]; 
+      //   if (videoEl) {
+      //     // 确保静音（浏览器策略核心）
+      //     videoEl.muted = true; 
+      //     // 尝试播放
+      //     const playPromise = videoEl.play();
+      //     videoEl.muted = false; 
+
+      //     if (playPromise !== undefined) {
+      //       playPromise.catch(error => {
+      //         console.log("Auto-play was prevented by browser:", error);
+      //         // 这里可以做降级处理，比如显示一个播放按钮
+      //       });
+      //     }
+      //   }
+      // })
       const readedNotice = local.getlocal('readedNotice')
       if (res.data.pop_status == '1') {
         local.setlocal('readedNotice', '0')
@@ -206,9 +236,13 @@ onMounted(() => {
           <div class="image bg-[#f5f5f5] rounded-[16px] w-full h-full overflow-hidden relative">
             <video 
               v-if="isVideo(item.url)" 
+              ref="bannerVideoRef"
               :src="item.url" 
               class="w-full h-full object-cover rounded-[16px] block"
-              muted autoplay loop playsinline webkit-playsinline
+              autoplay 
+              loop 
+              playsinline 
+              webkit-playsinline
             ></video>
             <img v-else :src="item.url" alt="" class="w-full h-full object-cover rounded-[16px] block">
           </div>
@@ -242,7 +276,10 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- Second Swipe Area -->
+   
+
+    <Grid @handleClickGrid="handleClickGrid" />
+ <!-- Second Swipe Area -->
     <div class="detail-image w-full px-[24px]"
       v-if="indexInfoData.discountBanners && indexInfoData.discountBanners.length > 0">
       <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
@@ -260,9 +297,6 @@ onMounted(() => {
         </van-swipe-item>
       </van-swipe>
     </div>
-
-    <Grid @handleClickGrid="handleClickGrid" />
-
     <div class="indicator-title px-24 font-bold text-[16px] mt-12 flex items-center justify-between">
       {{ t("FAQ") }}
       <div class="see-all text-[14px] color-[#9CA3AF] flex items-center" @click="handleClickSeeAll">{{ t("See all") }} <svg width="14"
