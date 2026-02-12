@@ -3,29 +3,29 @@
     <div class="list mb-16 text-left">
       <div class="list-content min-h-400 relative">
         <div
-          class="skeleton-list bg-#fff z-99 w-full h-full absolute top-0 left-0"
+          class="skeleton-list bg-[#fff] z-99 w-full h-full absolute top-0 left-0"
           v-if="notifySkeleton"
         >
           <div
-            class="list-skeleton bg-coolgray skeleton-animation w-full h-80 rounded-12px mb-12px"
+            class="list-skeleton bg-coolgray skeleton-animation w-full h-80 rounded-[12px] mb-[12px]"
             v-for="i in 5"
             :key="i"
           ></div>
         </div>
 
         <div
-          class="notify-item rounded-12px bg-#F8F9FD p-12 mb-12 text-14px text-#0F172A"
+          class="notify-item rounded-[12px] bg-[#F8F9FD] p-12 mb-12 text-[14px] text-[#0F172A]"
           v-for="(item, index) in notifyList"
           :key="index"
         >
-          <div class="title text-16px font-500 flex justify-between gap-40px">
-            <div class="li-title w-80%">
+          <div class="title text-[16px] font-medium flex justify-between gap-[40px]">
+            <div class="li-title w-[80%]">
               {{ item?.title || item?.content || item?.message || "" }}
             </div>
 
             <div class="time flex-shrink-0">{{ item.time }}</div>
           </div>
-          <div class="desc text-#6B7280 mt-12">
+          <div class="desc text-[#6B7280] mt-12">
             {{ item?.content || item?.message || "" }}
           </div>
         </div>
@@ -123,7 +123,7 @@ const loadMore = () => {
       name: 'Notify',
       meta: {
         title: 'Notify',
-        i18n: 'Notify'
+        i18n: 'Notificar'
       },
     }
 </route>

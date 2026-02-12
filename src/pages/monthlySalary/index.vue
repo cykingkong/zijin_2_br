@@ -17,11 +17,10 @@
                     <!-- 第一列：左对齐 -->
                     <span class="w-[30%] text-left">Nível</span>
                     <!-- 第二列：居中 -->
-                    <span class="w-[35%] text-center">Pagamento mensal</span>
+                    <span class="w-[35%] text-center">Salário mensal individual</span>
                     <!-- 第三列：右对齐 -->
-                    <span class="w-[35%] text-right">Subsídio para equipe</span>
+                    <span class="w-[35%] text-right">Depósito mínimo</span>
                 </div>
-
                 <!-- 列表内容 -->
                 <div class="flex flex-col gap-[18px]">
                     <div class="flex items-center text-[14px]"  v-for="item in config.configs">
@@ -44,7 +43,7 @@
                     </div>
                 </div>
             </div>
-                <div class="html" v-html="config.salaryTextMonth"></div>
+                <div class="html " v-html="config.salaryTextMonth"></div>
 
            
 
@@ -106,8 +105,13 @@ async function getMonthConfig() {
 async function handleClaim() {
     console.log('Claim button clicked');
     // TODO: 调用领取薪资 API
-    await receiveMonth()
-    await getMonthConfig()
+ const {data,code,message} =   await receiveMonth()
+ console.log(message,'message')
+ if(code == 200){
+    showToast(data.message || message || '')
+ }
+    // await getMonthConfig()
+
 }
 
 onMounted(async () => {

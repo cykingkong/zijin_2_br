@@ -1,7 +1,7 @@
 <template>
     <div class="annual-salary-page  bg-[#F7F7F7]">
 
-        <div v-html="optimizeRichText(config.salaryTextYear)" v-if="config.salaryTextYear"></div>
+        <div class="break-all w-full" v-html="optimizeRichText(config.salaryTextYear)" v-if="config.salaryTextYear"></div>
 
         <!-- 内容区域 -->
         <div class="content flex-1 px-[16px] pt-[10px] pb-[30px]" v-if="false">
@@ -138,7 +138,7 @@ onMounted(async () => {
   name: 'yearSalary',
   meta: {
     title: 'Year Salary',
-    i18n: 'yearSalary'
+    i18n: 'Salário Anual'
   },
 }
 </route>

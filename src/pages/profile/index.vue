@@ -14,7 +14,8 @@
           <!-- Hexagon Shape Simulation or Circle as fallback -->
           <div
             class="w-[36px] h-[36px] rounded-full overflow-hidden border-2 border-white shadow-sm bg-white flex items-center justify-center">
-            <img src="@/assets/lv/lv1.png" class="w-full h-full object-cover" />
+            <img :src="userInfo.avatar" class="w-full h-full object-cover" v-if="userInfo.avatar"/>
+            <img src="@/assets/lv/lv1.png" class="w-full h-full object-cover" v-else/>
           </div>
           <!-- Level Badge -->
           <div
@@ -222,7 +223,7 @@
         <div class="upload-label mb-12 flex items-center justify-center font-bold">
           {{ t('Upload Avatar') }}
         </div>
-        <van-uploader accept="image/*" :max-count="1" :after-read="(file) => handleAfterRead(file, 1)"
+        <van-uploader  accept="image/*" :max-count="1"  v-model="pictureList" :after-read="(file) => handleAfterRead(file, 1)"
           class="w-full flex justify-center">
           <div
             class="w-[120px] h-[120px] border border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center text-gray-400">
@@ -272,6 +273,7 @@ const userInfo = computed(() => userStore.userInfo);
 const uploadPopShow = ref(false);
 const canUpdateAvatar = ref(true);
 const userAvatar = ref('');
+const pictureList = ref<any[]>([])
 
 // --- 数据处理 ---
 
@@ -357,6 +359,8 @@ const handleAfterRead = async (file: any, type: any) => {
     const { data, code } = await uploadFile(formData);
     if (code == 200) {
       userAvatar.value = data.url;
+        pictureList.value = [{ url: data.url }];
+
       canUpdateAvatar.value = false;
     }
   } catch (error) {

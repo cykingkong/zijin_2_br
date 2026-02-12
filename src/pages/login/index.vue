@@ -121,7 +121,7 @@ const getCode = async () => {
       email: ''
     }
     if (params.type == 'phone') {
-      params.phone = `${areaInfo.value.dialCode}${postData.account}`
+      params.phone = `55${postData.account}`
     } else {
       params.email = postData.account
     }

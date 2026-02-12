@@ -34,10 +34,11 @@
 
             <!-- 薪资标准列表 -->
             <div class="standards-table bg-white rounded-[16px] p-[16px]  mb-[24px]">
-                <div class="html" v-html="config.salaryTextMonth"></div>
+                <div class="html w-full break-all" v-html="config.salaryTextWeek"></div>
 
 
             </div>
+
 
             <!-- 3. 规则说明 -->
             <!-- <h3 class="text-[16px] font-bold text-[#333] mb-[12px]">Rule</h3>
@@ -93,8 +94,11 @@ const salaryList = ref([
 async function handleClaim() {
     console.log('Claim button clicked');
     // TODO: 调用领取薪资 API
-    await receiveWeek()
-    await getWeekConfig()
+  const {data,code,message} =  await receiveWeek()
+ console.log(message,'message')
+ if(code == 200){
+    showToast(data.message || message || '')
+ }
 }
 
 function goBack() {
@@ -104,7 +108,7 @@ async function getWeekConfig() {
     const { data, code } = await week()
     if (code == 200) {
         config.value = data || {};
-        config.value.salaryTextWeek = optimizeRichText(data.salary_text_week || '');
+        config.value.salaryTextWeek = optimizeRichText(data.salaryTextWeek || '');
     }
 }
 onMounted(async () => {
@@ -118,7 +122,7 @@ onMounted(async () => {
   name: 'weeklySalary',
   meta: {
     title: 'Weekly Salary',
-    i18n: 'weeklySalary'
+    i18n: 'Salário Semanal'
   },
 }
 </route>

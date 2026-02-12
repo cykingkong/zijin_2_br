@@ -26,7 +26,7 @@
         </inputCom>
       </div>
 
-      <div class="label font-bold text-[16px] color-[#64748B]">
+      <!-- <div class="label font-bold text-[16px] color-[#64748B]">
         {{ t("Bank") }}
       </div>
       <div class="phone-input my-[12px]">
@@ -46,7 +46,7 @@
             </div>
           </div>
         </inputCom>
-      </div>
+      </div> -->
 
 
 
@@ -182,15 +182,15 @@ const handleClickSubmit = () => {
     showToast(t('PleaseEnterAccount'))
     return;
   }
-  if (!form.bankName) {
-    showToast(t('PleaseSelectBank'))
-    return;
-  }
+  // if (!form.bankName) {
+  //   showToast(t('PleaseSelectBank'))
+  //   return;
+  // }
 
   let params = {
     ...form,
   };
-  params.bankCode = params.bankCode + "";
+  // params.bankCode = params.bankCode + "";
   if (route.query.edit == "1") {
     userCardUpdate(params).then((res) => {
       if (res.code == 200) {

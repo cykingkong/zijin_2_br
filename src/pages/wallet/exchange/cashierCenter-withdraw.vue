@@ -235,7 +235,7 @@ const getBankList = async () => {
   const { data, code } = await bank_list({ ...{ pageIndex: 1, pageSize: 30 }, wallet_type: "auto" });
   if (code == 200) {
     if (data.rows && data.rows.length == 0) {
-      router.push({ path: '/profile/bankAccount' })
+      router.push({ path: '/profile/bankAccount' ,  replace: true,})
       return
     }
     bankList.value = data.rows;

@@ -30,7 +30,7 @@
         </div>
 
 
-        <div class="item w-full  p-16 rounded-16" v-for="(item, index) in logList" :key="index">
+        <div class="item w-full  p-16 rounded-16" v-for="(item, index) in logList" :key="index" @click="handleClickItem(item)">
 
             <div class="content mb-12">
                 <div class="text-[#888888] text-16 font-bold">{{ item?.title || '' }} </div>
@@ -126,7 +126,12 @@ const toAdd = () => {
         name: 'addCommunity',
     })
 }
-
+const handleClickItem =  (item)=>{
+        localStorage.setItem('newDetail', JSON.stringify(item))
+  router.push({
+        path: '/news/newDetail',
+    })
+}
 const getList = async () => {
     try {
         const { data, code } = await list({
@@ -163,8 +168,9 @@ const getList = async () => {
     }
 }
 const showImagePreview = (index) => {
+    let item = logList.value[index]
     previewImage({
-        images: props.arr,
+        images:item.pictureList,
         startPosition: index
     })
 }

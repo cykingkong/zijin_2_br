@@ -135,7 +135,7 @@ const getCode = async () => {
   try {
     let params = {
       type: 'phone',
-      phone: `${areaInfo.value.dialCode}${form.phone}`
+      phone: `55${form.phone}`
     };
 
     await sendCode(params);
