@@ -13,14 +13,14 @@
         <div class="relative" @click="handleClickUploadAvatar">
           <!-- Hexagon Shape Simulation or Circle as fallback -->
           <div
-            class="w-[36px] h-[36px] rounded-full overflow-hidden border-2 border-white shadow-sm bg-white flex items-center justify-center">
-            <img :src="userInfo.avatar" class="w-full h-full object-cover" v-if="userInfo.avatar" />
-            <img src="@/assets/lv/lv1.png" class="w-full h-full object-cover" v-else />
+            class="w-[36px] h-[36px] rounded-full overflow-hidden  shadow-sm  flex items-center justify-center">
+            <img :src="fakeData.user_level >0 ? imgEnum[fakeData.user_level] :imgEnum[userInfo.level]" class="w-full h-full object-cover"  />
+
           </div>
           <!-- Level Badge -->
           <div
             class="absolute -top-[4px] -right-[4px] bg-[#EBB37D] text-white text-[10px] px-[4px] py-[1px] rounded-[4px] border border-white">
-            {{ userInfo.levelName || 'LV1' }}
+            {{ fakeData.user_level >0 ?`LV${fakeData.user_level}`:userInfo.levelName || 'LV1' }}
           </div>
         </div>
 
@@ -264,9 +264,15 @@ import { uploadFile } from '@/api/tool';
 import { showFailToast, showSuccessToast } from 'vant';
 import { addCommasToNumber } from '@/utils/tool';
 import defaultAvatar from "@/assets/image/avatar.png";
-import lv1 from "@/assets/lv/lv1.png";
-import lv2 from "@/assets/lv/lv2.png";
-import lv3 from "@/assets/lv/lv3.png";
+// 复用之前的图片资源引入逻辑
+import lv1 from '@/assets/lv/lv1.png';
+import lv2 from '@/assets/lv/lv2.png';
+import lv3 from '@/assets/lv/lv3.png';
+import lv4 from '@/assets/lv/lv4.png';
+import lv5 from '@/assets/lv/lv5.png';
+import lv6 from '@/assets/lv/lv6.png';
+import lv7 from '@/assets/lv/lv7.png';
+import lv8 from '@/assets/lv/lv8.png';
 // Import Icons (Placeholders based on screenshot)
 // 实际开发请替换为对应的 cell1.png 等资源
 import iconExchange from "@/assets/profile/1.svg"; // 兑换奖励
@@ -284,10 +290,17 @@ const fakeData = ref<any>({
   team_level1_count: 0,
   team_level2_count: 0,
   team_level3_count: 0,
-
-
-
 })
+const imgEnum = {
+    1: lv1,
+    2: lv2,
+    3: lv3,
+    4: lv4,
+    5: lv5,
+    6: lv6,
+    7: lv7,
+    8: lv8,
+}
 // --- 状态变量 ---
 const uploadPopShow = ref(false);
 const canUpdateAvatar = ref(true);
