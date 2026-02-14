@@ -22,7 +22,7 @@
 
       <div class="mt-[30px] ">
         <div class="px-12 py-[20px] bg-[#fff] rounded-[20px] flex-col flex gap-12 card">
-          <div class="label  " :class="['flex items-center gap-4']"">
+          <div class="label  " :class="['flex items-center gap-4']">
             {{ t('Bank Card') }}
           </div>
         <item class="">
@@ -69,7 +69,7 @@
   </div>
 </template>
 </item>
-<div class="label  " :class="['flex items-center gap-4']"">
+<div class="label  " :class="['flex items-center gap-4']">
             {{ t('Extract Amount') }}
           </div>
           <div class=" phone-input">

@@ -30,6 +30,10 @@ export function getUserInfo() {
   return request<UserState>('user/info')
 }
 
+export function getUserFakeInfo() {
+  return request<UserState>('user/dataInfo')
+}
+
 export function getEmailCode(): Promise<any> {
   return request.get('/user/email-code')
 }

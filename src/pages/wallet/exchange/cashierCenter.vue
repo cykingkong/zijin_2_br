@@ -199,14 +199,14 @@ function onBack() {
 
       <div class="mt-[30px] ">
         <div class="px-12 py-[20px] bg-[#fff] rounded-[20px] flex-col flex gap-12 card">
-          <div class="label  " :class="['flex items-center gap-4']"">
+          <div class="label  " :class="['flex items-center gap-4']">
             {{ t('Top-up Amount') }}
           </div>
           <div class=" phone-input">
             <inputCom :placeholder="t('PleaseEnterAmount')" v-model:value="count" :tips="''" class="flex-1 w-full">
             </inputCom>
           </div>
-          <div class="label mb-8 " :class="['flex items-center gap-4']"">
+          <div class="label mb-8 " :class="['flex items-center gap-4']">
             {{ t('Top-up Amount') }}
           </div>
           <div class=" grid grid-cols-3 gap-[10px]">

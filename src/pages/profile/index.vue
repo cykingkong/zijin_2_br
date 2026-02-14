@@ -14,8 +14,8 @@
           <!-- Hexagon Shape Simulation or Circle as fallback -->
           <div
             class="w-[36px] h-[36px] rounded-full overflow-hidden border-2 border-white shadow-sm bg-white flex items-center justify-center">
-            <img :src="userInfo.avatar" class="w-full h-full object-cover" v-if="userInfo.avatar"/>
-            <img src="@/assets/lv/lv1.png" class="w-full h-full object-cover" v-else/>
+            <img :src="userInfo.avatar" class="w-full h-full object-cover" v-if="userInfo.avatar" />
+            <img src="@/assets/lv/lv1.png" class="w-full h-full object-cover" v-else />
           </div>
           <!-- Level Badge -->
           <div
@@ -54,12 +54,14 @@
         <!-- Top Balances -->
         <div class="flex justify-between mb-[20px]">
           <div class="flex flex-col items-center flex-1">
-            <span class="text-[24px] font-bold text-[#A26D47] ">{{ addCommasToNumber(userInfo.balance) || '0'
-            }}</span>
+            <span class="text-[24px] font-bold text-[#A26D47] ">{{ fakeData.balance_wallet > 0 ?
+              addCommasToNumber(fakeData.balance_wallet) : addCommasToNumber(userInfo.balance) || '0'
+              }}</span>
             <span class="text-[#666] text-[12px] mt-[4px]">{{ t("DepositWallet") }}</span>
           </div>
           <div class="flex flex-col items-center flex-1 border-l border-[#f5f5f5]">
-            <span class="text-[24px] font-bold text-[#A26D47] ">{{ addCommasToNumber(userInfo.teamBalance) ||
+            <span class="text-[24px] font-bold text-[#A26D47] ">{{ fakeData.deposit_wallet > 0 ?
+              addCommasToNumber(fakeData.deposit_wallet) : addCommasToNumber(userInfo.teamBalance) ||
               '0' }}</span>
             <span class="text-[#666] text-[12px] mt-[4px]">{{ t("TeamWallet") }}</span>
           </div>
@@ -68,9 +70,11 @@
         <!-- Action Buttons -->
         <div class="flex gap-[16px] mb-[24px]">
           <button @click="handleHerf(2)"
-            class="flex-1 bg-[#1A1A1A] text-white h-[44px] rounded-[12px] font-bold text-[15px]">{{ t("Deposit") }}</button>
+            class="flex-1 bg-[#1A1A1A] text-white h-[44px] rounded-[12px] font-bold text-[15px]">{{ t("Deposit")
+            }}</button>
           <button @click="handleHerf(1)"
-            class="flex-1 bg-[#1A1A1A] text-white h-[44px] rounded-[12px] font-bold text-[15px]">{{ t("Withdraw") }}</button>
+            class="flex-1 bg-[#1A1A1A] text-white h-[44px] rounded-[12px] font-bold text-[15px]">{{ t("Withdraw")
+            }}</button>
         </div>
 
         <!-- 6-Grid Data Stats -->
@@ -78,34 +82,39 @@
           <!-- Row 1 -->
           <div class="flex flex-col">
             <span class="text-[#999] text-[12px] mb-[2px]">{{ t("TotalIncome") }}</span>
-            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ addCommasToNumber(userInfo.allProfit)
-            }}</span>
+            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ fakeData.total_income > 0 ?
+              addCommasToNumber(fakeData.total_income) : addCommasToNumber(userInfo.allProfit)
+              }}</span>
           </div>
           <div class="flex flex-col items-end">
             <span class="text-[#999] text-[12px] mb-[2px]">{{ t("TotalWithdraw") }}</span>
-            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ addCommasToNumber(userInfo.rechargePrice)
-            }}</span>
+            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ fakeData.total_withdraw > 0 ?
+              addCommasToNumber(fakeData.total_withdraw) : addCommasToNumber(userInfo.rechargePrice)
+              }}</span>
           </div>
           <!-- Row 2 -->
           <div class="flex flex-col">
             <span class="text-[#999] text-[12px] mb-[2px]">{{ t("ProductIncome") }}</span>
-            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ addCommasToNumber(userInfo.productProfit)
-            }}</span>
+            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ fakeData.product_income > 0 ?
+              addCommasToNumber(fakeData.product_income) : addCommasToNumber(userInfo.productProfit)
+              }}</span>
           </div>
           <div class="flex flex-col items-end">
             <span class="text-[#999] text-[12px] mb-[2px]">{{ t("TeamIncome") }}</span>
-            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ addCommasToNumber(userInfo.itemProfit)
-            }}</span>
+            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ fakeData.team_income > 0 ?
+              addCommasToNumber(fakeData.team_income) : addCommasToNumber(userInfo.itemProfit)
+              }}</span>
           </div>
           <!-- Row 3 (Missing Fields Simulation) -->
           <div class="flex flex-col">
             <span class="text-[#999] text-[12px] mb-[2px]">{{ t("OtherIncome") }}</span>
-            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ addCommasToNumber(userInfo.otherIncome ||
+            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ fakeData.other_income > 0 ?
+              addCommasToNumber(fakeData.other_income) : addCommasToNumber(userInfo.otherIncome ||
               '0') }}</span>
           </div>
           <div class="flex flex-col items-end" @click="router.push('/exchange')">
-            <span class="text-[#999] text-[12px] mb-[2px]">{{t('Pearl')}} <svg class="w-14 h-14" viewBox="0 0 14 14" fill="none"
-                xmlns="http://www.w3.org/2000/svg">
+            <span class="text-[#999] text-[12px] mb-[2px]">{{ t('Pearl') }} <svg class="w-14 h-14" viewBox="0 0 14 14"
+                fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clip-path="url(#clip0_6753_24019)">
                   <path
                     d="M9.40607 0.375C11.8522 0.403498 13.7624 2.25321 13.7625 4.59082C13.7625 6.90078 11.795 8.7793 9.37677 8.7793C9.06472 8.77927 8.7516 8.75059 8.49396 8.69336L8.44611 8.68262L8.45587 8.63477L8.56818 8.07227L8.57794 8.02051L8.6297 8.0332C8.84999 8.08824 9.09886 8.11618 9.37677 8.11621C11.4349 8.11621 13.0994 6.5313 13.0994 4.59082C13.0993 2.62187 11.4907 1.06641 9.40509 1.06641C7.34724 1.06655 5.68358 2.65057 5.68341 4.59082C5.68341 4.76108 5.68381 4.9247 5.71075 5.05957L5.72052 5.11133L5.66876 5.11914L5.10529 5.20312L5.05548 5.21094L5.04865 5.16113C5.01992 4.96001 5.02032 4.75895 5.02032 4.5625C5.02059 2.25284 6.98712 0.375149 9.40509 0.375H9.40607Z"
@@ -138,9 +147,10 @@
                 </defs>
               </svg>
             </span>
-            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ addCommasToNumber(userInfo.seedBalance ?
-              userInfo.seedBalance :
-              '0')
+            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ fakeData.pearl_amount > 0 ?
+              addCommasToNumber(fakeData.pearl_amount) : addCommasToNumber(userInfo.seedBalance ?
+                userInfo.seedBalance :
+                '0')
               }}</span>
           </div>
         </div>
@@ -183,7 +193,8 @@
             <div class="flex items-center text-[12px] text-[#999] mb-[4px]">
               <img :src="i.img" class="w-17 h-17 object-cover block mr-4"></img> {{ i.name }}
             </div>
-            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ i.num }}</span>
+            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ fakeData[i.fakeKey] > 0 ?
+              addCommasToNumber(fakeData[i.fakeKey]):i.num }}</span>
           </div>
         </div>
 
@@ -211,8 +222,9 @@
             <img :src="item.icon" alt="" class="w-20 h-20 block">
           </div>
           <!-- Text -->
-          <span class="text-[#333] text-[12px] font-medium text-center" :class="{ 'text-red-500': item.isLogout }">{{ item.text
-          }}</span>
+          <span class="text-[#333] text-[12px] font-medium text-center" :class="{ 'text-red-500': item.isLogout }">{{
+            item.text
+            }}</span>
         </div>
       </div>
     </div>
@@ -223,8 +235,8 @@
         <div class="upload-label mb-12 flex items-center justify-center font-bold">
           {{ t('Upload Avatar') }}
         </div>
-        <van-uploader  accept="image/*" :max-count="1"  v-model="pictureList" :after-read="(file) => handleAfterRead(file, 1)"
-          class="w-full flex justify-center">
+        <van-uploader accept="image/*" :max-count="1" v-model="pictureList"
+          :after-read="(file) => handleAfterRead(file, 1)" class="w-full flex justify-center">
           <div
             class="w-[120px] h-[120px] border border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center text-gray-400">
             <van-icon name="photograph" size="24" />
@@ -247,7 +259,7 @@ import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useUserStore } from '@/stores';
-import { userUpdate } from '@/api/user';
+import { userUpdate, getUserFakeInfo, } from '@/api/user';
 import { uploadFile } from '@/api/tool';
 import { showFailToast, showSuccessToast } from 'vant';
 import { addCommasToNumber } from '@/utils/tool';
@@ -268,7 +280,14 @@ const router = useRouter();
 const { t } = useI18n();
 const userStore = useUserStore();
 const userInfo = computed(() => userStore.userInfo);
+const fakeData = ref<any>({
+  team_level1_count: 0,
+  team_level2_count: 0,
+  team_level3_count: 0,
 
+
+
+})
 // --- 状态变量 ---
 const uploadPopShow = ref(false);
 const canUpdateAvatar = ref(true);
@@ -306,16 +325,20 @@ const myteamList = ref([
   {
     img: lv1,
     name: 'LV1',
+    fakeKey: 'team_level1_count',
     num: userInfo.value?.topData?.find((item: any) => item.generation === 1)?.vaildUserCount || 0
   },
   {
     img: lv2,
     name: 'LV2',
+    fakeKey: 'team_level2_count',
+
     num: userInfo.value?.topData?.find((item: any) => item.generation === 2)?.vaildUserCount || 0
 
   },
   {
     img: lv3,
+    fakeKey: 'team_level3_count',
     name: 'LV3',
     num: userInfo.value?.topData?.find((item: any) => item.generation === 3)?.vaildUserCount || 0
   },
@@ -359,7 +382,7 @@ const handleAfterRead = async (file: any, type: any) => {
     const { data, code } = await uploadFile(formData);
     if (code == 200) {
       userAvatar.value = data.url;
-        pictureList.value = [{ url: data.url }];
+      pictureList.value = [{ url: data.url }];
 
       canUpdateAvatar.value = false;
     }
@@ -380,8 +403,22 @@ const updateUserAvatar = async () => {
 };
 
 onMounted(async () => {
+  await userStore.setInfo({
+    balance: 0,
+    teamBalance: 0,
+    allProfit: 0,
+    rechargePrice:"0.00",
+    seedBalance:"0.00",
+    itemProfit: "0.00",
+    todayProfit: "0.00",
+  })
   await userStore.getInfo();
-  await userStore.getWalletInfo();
+ 
+  await getUserFakeInfo().then(({ data }) => {
+    console.log(data, 'fakeData')
+    fakeData.value = data
+  })
+   await userStore.getWalletInfo();
   await userStore.fetchTeamInfoData();
   console.log(userInfo.value, 'userInfo')
 });

@@ -5,6 +5,7 @@ import { clearToken, setToken } from '@/utils/auth'
 import {
   getEmailCode,
   getUserInfo,
+  getUserFakeInfo,
   getBalancePair,
   getBalance, dataAssets,
   // resetPassword,
@@ -176,7 +177,8 @@ export const useUserStore = defineStore('user', () => {
     getCode,
     register,
     getAssetsData,
-    getUserCouponList, getWalletInfo, fetchTeamData, fetchTeamInfoData
+    getUserCouponList, getWalletInfo, fetchTeamData, fetchTeamInfoData,
+    setInfo
   }
 }, {
   persist: true,
