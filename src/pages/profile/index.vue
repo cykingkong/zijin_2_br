@@ -194,7 +194,7 @@
               <img :src="i.img" class="w-17 h-17 object-cover block mr-4"></img> {{ i.name }}
             </div>
             <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ fakeData[i.fakeKey] > 0 ?
-              addCommasToNumber(fakeData[i.fakeKey]):i.num }}</span>
+              fakeData[i.fakeKey]:i.num }}</span>
           </div>
         </div>
 
