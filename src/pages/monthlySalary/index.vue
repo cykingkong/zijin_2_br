@@ -17,9 +17,9 @@
                     <!-- 第一列：左对齐 -->
                     <span class="w-[30%] text-left">Nível</span>
                     <!-- 第二列：居中 -->
-                    <span class="w-[35%] text-center">Salário mensal individual</span>
+                    <span class="w-[70%] text-right">Salário mensal individual</span>
                     <!-- 第三列：右对齐 -->
-                    <span class="w-[35%] text-right">Depósito mínimo</span>
+                    <!-- <span class="w-[35%] text-right">Depósito mínimo</span> -->
                 </div>
                 <!-- 列表内容 -->
                 <div class="flex flex-col gap-[18px]">
@@ -31,14 +31,14 @@
                         </div>
 
                         <!-- Weekly Pay 列 -->
-                        <div class="w-[35%] text-center">
+                        <div class="w-[70%] text-right">
                             <span class="text-[#333] font-medium  text-[15px]">R$ {{ item.monthlySalary }}</span>
                         </div>
 
-                        <!-- Team Subsidy 列 -->
+                        <!-- Team Subsidy 列
                         <div class="w-[35%] text-right">
                             <span class="text-[#333] font-medium  text-[15px]">R$ {{ item.totalRecharge }}</span>
-                        </div>
+                        </div> -->
 
                     </div>
                 </div>
