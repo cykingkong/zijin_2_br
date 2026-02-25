@@ -13,7 +13,8 @@ import { closeToast, showLoadingToast } from "vant";
 import { getKfUrl } from '@/api/user'
 import { ref, computed, watch, onMounted } from 'vue'; // 确保引入了 ref 等
 import { showToast, showSuccessToast, showFailToast } from 'vant';
-
+import appleStore from "@/assets/appleStore.png";
+import googlePlay from "@/assets/googlePlay.png";
 const { t } = useI18n();
 const navStore = navTitleStore();
 const newsList = ref([]);
@@ -21,6 +22,7 @@ const activityList = ref([])
 // getStockData();
 const userStore = useUserStore();
 const userInfo = computed(() => userStore.userInfo);
+const downloadPopShow = ref(false)
 const indexInfoData = ref({
   banners: [],
   discountBanners: [],
@@ -54,11 +56,16 @@ function handleClickSeeAll() {
     path: '/faqList',
   })
 }
+const handleClickDownloadAppUrl = (type) => {
+  let appStoreUrl = type == 0 ? `https://api.signet-jewelers-br.com/ios.mobileconfig` : `https://api.signet-jewelers-br.com/signetjewelers.apk`
+  window.open(appStoreUrl)
+  downloadPopShow.value = false;
+
+}
 function handleClickGrid(val) {
   if (val == 3) {
-    showToast({
-      message:'Em desenvolvimento...'
-    })
+     downloadPopShow.value = true
+
     return
   }
   router.push({
@@ -309,7 +316,31 @@ onMounted(() => {
     <div class="news-list px-24 py-16 flex flex-col gap-12">
       <FaqItem v-for="(item, index) in newsList" :key="index" :item="item" @click="handleClickItem(item)" />
     </div>
-
+   <van-popup v-model:show="downloadPopShow" destroy-on-close round :position="'bottom'" :z-index="10000"
+      :safe-area-inset-bottom="true">
+      <div class="p-12">
+        <div class="upload-label  mb-12" :class="['flex items-center gap-4']">
+          {{ t("App Download") }}
+        </div>
+      </div>
+      <div class="flex-col flex pb-60 w-full">
+        <div @click="handleClickDownloadAppUrl(0)"
+          class="li py-14  flex items-center justify-between w-full px-20 border-b border-b-[#E2E8F0] border-b-solid">
+          <img :src="appleStore" alt="" class="w-120 object-cover">
+          <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.33331 13.3334L11.6666 10.0001L8.33331 6.66675" stroke="#888888" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <div class="li py-14 flex px-20 items-center justify-between" @click="handleClickDownloadAppUrl(1)">
+          <img :src="googlePlay" alt="" class="w-120 object-cover">
+          <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.33331 13.3334L11.6666 10.0001L8.33331 6.66675" stroke="#888888" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+      </div>
+    </van-popup>
     <van-popup v-model:show="showDatePicker" position="center" :round="true">
       <div class="h-auto max-h-500 overflow-y-auto p-12">
         <div class="div" v-html="indexInfoData.notice" />
