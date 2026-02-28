@@ -16,14 +16,11 @@
     </div>
     <div class="flex flex-col gap-[20px]">
       <div class="phone-input flex items-center gap-[12px]">
-        <!-- <div class="picker flex-shrink-0 h-[48px] rounded-[12px] flex items-center justify-center px-16"
-        @click="hanleClickAreaPick">
-        <div class="iti-flag mr-10 rounded-full" :class="areaInfo?.code" style="transform: scale(1.5)"></div>
-        <div class="num">+{{ areaInfo?.dialCode }}</div>
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M4 6L8 10L12 6" fill="#1B1B1B" />
-        </svg>
-      </div> -->
+        <div class="picker flex-shrink-0 h-[48px] rounded-[12px] flex items-center justify-center px-16">
+          <img :src="countryList[active]?.img" alt="" class="w-24 h-24 rounded-full mr-4">
+          <div class="num">+{{ countryList[active]?.dialCode }}</div>
+
+        </div>
         <inputCom :placeholder="t('PleaseEnterPhoneNumber')" v-model:value="form.account" :tips="''"
           class="flex-1 w-full">
         </inputCom>
@@ -60,6 +57,7 @@
 
     <bottom-button color="#1b1b1b" :button-text="t('Confirm')" @click="onSubmit"></bottom-button>
 
+
   </div>
 </template>
 <script setup lang="ts">
@@ -67,6 +65,7 @@ import { ref, reactive } from "vue";
 import inputCom from "@/components/inputCom.vue";
 
 import local from "@/utils/local";
+import br from '@/assets/br.png'
 
 import { useUserStore } from "@/stores";
 import { forgetPassword, sendCode } from "@/api/user";
@@ -101,6 +100,22 @@ function onBack() {
   if (window.history.state.back) history.back();
   else router.replace("/");
 }
+let countryList = ref<any>([
+  {
+    code: "br",
+    dialCode: 55,
+    key: "br",
+    name: "Brazil",
+    img: br
+  },
+  // {
+  //   code: "us",
+  //   dialCode: 1,
+  //   key: "us",
+  //   name: "U.S.A",
+  //   img: usa
+  // },
+])
 const toSetLang = () => {
   router.push("/profile/languange");
 };
@@ -135,7 +150,7 @@ const getCode = async () => {
   try {
     let params = {
       type: 'phone',
-      phone: `55${form.phone}`
+      phone: `55${form.account}`
     };
 
     await sendCode(params);
@@ -172,11 +187,11 @@ const hanleClickAreaPick = () => {
   // areaPopRef.value.popShow()
 };
 const onSubmit = async () => {
-  if(!form.account ){
+  if (!form.account) {
     showFailToast({
-      message:'Por favor, insira a conta'
+      message: 'Por favor, insira a conta'
     })
-    return 
+    return
   }
   let params = {
     ...form,
@@ -187,9 +202,9 @@ const onSubmit = async () => {
     params.username = `${params.account}`;
   }
   // params.password_confirmation = params.password.trim()
-  if(params.password_confirmation.trim() != params.password.trim()){
+  if (params.password_confirmation.trim() != params.password.trim()) {
     showFailToast({
-      message:'As senhas não correspondem, por favor, digite novamente'
+      message: 'As senhas não correspondem, por favor, digite novamente'
     })
     return
   }
