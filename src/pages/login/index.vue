@@ -257,7 +257,7 @@ async function login() {
 
 <template>
   <div class="m-x-a w-full max-h-[100vh]">
-    <nationalityList ref="controlChildRef" :title="t('Pick')" @getName="getName"></nationalityList>
+
 
     <div class="top-image w-full bg-[]">
       <CloseButton>
@@ -275,7 +275,7 @@ async function login() {
           <!-- <LangSelectDropdown v-model="lang" /> -->
         </template>
       </CloseButton>
-      <div class="mid-logo h-[64px] rounded-[12px] overflow-hidden ml-[16px]">
+      <div class="mid-logo h-[64px] rounded-[12px] overflow-hidden ml-[16px] mt-76">
         <img src="@/assets/Logo.png" alt="" class="w-auto h-full">
       </div>
       <div class="text-left m-x-a mt-[16px] color-white px-30">
@@ -285,158 +285,22 @@ async function login() {
       </div>
     </div>
     <div class="login-form p-24">
-      <div class="type-box flex gap-[10px] mb-[20px]">
-        <div
-          class="type-item text-[#424242] text-[14px] rounded-[8px] h-26 px-14 flex justify-center items-center bg-[#0000000D]"
-          v-for="(item, index) in countryList" :key="index" :class="active == index ? 'item-active' : ''"
-          @click="handleClickType(index)">
-          {{
-            t(item.name)
-          }}
-        </div>
-      </div>
       <div class="phone-input flex items-center gap-[12px] mb-20">
-        <div class="picker flex-shrink-0 h-[48px] rounded-[12px] flex items-center justify-center px-16"
-          @click="hanleClickAreaPick">
-          <img :src="countryList[active]?.img" alt="" class="w-24 h-24 rounded-full mr-4">
-          <div class="num">+{{ countryList[active]?.dialCode }}</div>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 6L8 10L12 6" fill="#1B1B1B" />
-          </svg>
-        </div>
-        <inputCom :placeholder="t('PleaseEnterPhoneNumber')" v-model:value="postData.account" :tips="''"
+        <inputCom :placeholder="t('PleaseEnterDeviceCode')" v-model:value="postData.account" :tips="''"
           class="flex-1 w-full">
         </inputCom>
       </div>
 
-      <div class="phone-input mb-20">
-        <inputCom v-model:value="postData.password" :placeholder="t('Password')" :onlyRead="false"
-          :inputType="inputType">
-          <template #sendCode>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-              @click="changeInputType" v-if="inputType == 'text'">
-              <path d="M3 3L21 21" stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-              <path
-                d="M10.584 10.587C10.2087 10.962 9.99775 11.4708 9.99756 12.0013C9.99737 12.5318 10.2079 13.0407 10.583 13.416C10.958 13.7913 11.4667 14.0022 11.9973 14.0024C12.5278 14.0026 13.0367 13.792 13.412 13.417"
-                stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-              <path
-                d="M9.363 5.365C10.2204 5.11972 11.1082 4.99684 12 5C16 5 19.333 7.333 22 12C21.222 13.361 20.388 14.524 19.497 15.488M17.357 17.349C15.726 18.449 13.942 19 12 19C8 19 4.667 16.667 2 12C3.369 9.605 4.913 7.825 6.632 6.659"
-                stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-              v-if="inputType == 'password'" @click="changeInputType">
-              <path
-                d="M12 14C13.1046 14 14 13.1046 14 12C14 10.8954 13.1046 10 12 10C10.8954 10 10 10.8954 10 12C10 13.1046 10.8954 14 12 14Z"
-                stroke="#0F172A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-              <path
-                d="M22 12C19.333 16.667 16 19 12 19C8 19 4.667 16.667 2 12C4.667 7.333 8 5 12 5C16 5 19.333 7.333 22 12Z"
-                stroke="#0F172A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </template>
-        </inputCom>
-      </div>
-      <!-- Confirm password -->
-      <!-- <div class="label mb-8 mt-12" :class="['flex items-center gap-4']" v-if="pageType == 1">
-        {{ t('Confirm password') }}
-      </div> -->
-      <!-- <div class="phone-input mb-20" v-if="pageType == 1">
-        <inputCom v-model:value="postData.passwordConfirmation" :placeholder="t('Password')" :onlyRead="false"
-          :inputType="inputType">
-          <template #sendCode>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-              @click="changeInputType" v-if="inputType == 'text'">
-              <path d="M3 3L21 21" stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-              <path
-                d="M10.584 10.587C10.2087 10.962 9.99775 11.4708 9.99756 12.0013C9.99737 12.5318 10.2079 13.0407 10.583 13.416C10.958 13.7913 11.4667 14.0022 11.9973 14.0024C12.5278 14.0026 13.0367 13.792 13.412 13.417"
-                stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-              <path
-                d="M9.363 5.365C10.2204 5.11972 11.1082 4.99684 12 5C16 5 19.333 7.333 22 12C21.222 13.361 20.388 14.524 19.497 15.488M17.357 17.349C15.726 18.449 13.942 19 12 19C8 19 4.667 16.667 2 12C3.369 9.605 4.913 7.825 6.632 6.659"
-                stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-              v-if="inputType == 'password'" @click="changeInputType">
-              <path
-                d="M12 14C13.1046 14 14 13.1046 14 12C14 10.8954 13.1046 10 12 10C10.8954 10 10 10.8954 10 12C10 13.1046 10.8954 14 12 14Z"
-                stroke="#0F172A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-              <path
-                d="M22 12C19.333 16.667 16 19 12 19C8 19 4.667 16.667 2 12C4.667 7.333 8 5 12 5C16 5 19.333 7.333 22 12Z"
-                stroke="#0F172A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </template>
-        </inputCom>
-      </div> -->
-      <!-- <div class="label mb-8 mt-12" :class="['flex items-center gap-4']" v-if="pageType == 1">
-        {{ t('Invitation code') }}
-      </div>
-      -->
-      <!-- Invitation code -->
+    
+     
 
-      <div class="phone-input mb-20" v-if="pageType == 1">
-        <inputCom v-model:value="postData.inviteCode" :placeholder="t('Invitation code')" :onlyRead="false"
-          :inputType="'text'">
-        </inputCom>
-      </div>
-      <!-- Code -->
-
-      <div class="phone-input" v-if="pageType == 1">
-        <inputCom v-model:value="postData.code" :placeholder="t('Code')" :onlyRead="false" :inputType="'text'">
-          <template #sendCode>
-            <div class="absolute right-0 font-size-12 h-18 flex justify-center items-center sendCode"
-              :class="countdown > 0 ? 'text-gray-400' : 'text-[#000]'" @click="getCode">
-              {{ countdown > 0 ? `${countdown}s` : t("Get") }}
-            </div>
-          </template>
-        </inputCom>
-      </div>
-
-      <div class="flex justify-between items-center mt-[16px] mb-[24px] gap-16">
-        <div class="left flex font-size-[14px] font-medium flex-shrink-0 gap-[12px] flex-shrink-0">
-          <!-- <div class="radio w-[16px] h-[16px] rounded-[4px] border" :class="remember ? 'radio-active' : ''"
-            @click="remember = !remember"></div>
-          {{ t("Remember me") }} -->
-        </div>
-        <div class="right color-[#1b1b1b] font-size-[14px] font-bold cursor-pointer flex-shrink-0"
-          @click="toForgotPassword()">
-          {{ t("Forgot Password") }}
-        </div>
-      </div>
+    
       <van-button type="primary" color="#1B1B1B" class="login-btn h-[48px]!" block
-        @click="pageType == 0 ? login() : signUp()">{{
-          pageType == 0 ? t("Login") : t("Sign Up")
+        @click=" login()">{{
+          t("Log in")
         }}</van-button>
-      <div class="or">{{ '©2026 Signet Jewelers. Este site é utilizado sob autorização, todos os direitos reservados.'
-        }}
-      </div>
-      <div :style="{ color: '#1B1B1B' }"
-        class=" font-regular w-full  items-center flex justify-center text-center  color-[#1b1b1b]! font-bold"
-        block @click="changePageType()">
-        <span class="text-[#0000004D] mr-4"> {{ pageType == 0 ? t("Don’t have an account?") : '' }} </span> {{
-          pageType == 0 ? t("Sign Up") : t("Log in")
-        }}
-      </div>
-      <!--  <div class="tips my-24px">Or sign in with</div>
-       <div class="flex gap-16px ">
-        <div
-          class="plain-btn w-full flex-1 border-1px border-solid h-56px border-#E2E8F0 rounded-12px color-#0F172A flex items-center justify-center gap-8px">
-          <img :src="Apple" alt="" class="w-24px h-24px"> {{
-            t("Apple")
-          }}
-        </div>
-        <div
-          class="plain-btn w-full flex-1 border-1px border-solid h-56px border-#E2E8F0 rounded-12px color-#0F172A flex items-center justify-center gap-8px">
-
-          <img :src="Google" alt="" class="w-24px h-24px">
-          {{
-            t("Google")
-          }}
-        </div>
-      </div> -->
-      <!-- <div class="mt-[36px] justify-center text-center">
-        {{ t("Don't have an account?")
-        }}<span @click="changePageType()" class="ml-[4px] color-[#6b39f4]">
-          {{ $t("Sign Up") }}
-        </span>
-      </div> -->
+      
+     
     </div>
   </div>
 </template>

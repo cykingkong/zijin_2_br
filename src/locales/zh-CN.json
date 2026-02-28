@@ -8,6 +8,7 @@
     "pleaseEnterPassword": "请输入密码"
   },
   "PleaseEnterPhoneNumber": "请输入手机号码",
+  "PleaseEnterDeviceCode": "请输入设备ID编码",
   "Please Enter Account": "请输入账号",
   "Please Enter Password": "请输入密码",
   "Please Enter Code": "请输入验证码",

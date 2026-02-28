@@ -19,7 +19,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
     mode: env.VITE_USER_NODE_ENV,
     server: {
       host: true,
-      port: 3345,
+      port: 2341,
       proxy: {
         '/capi': {
           // target: `https://api.ddbindia.online/app-api`, // 代理接口

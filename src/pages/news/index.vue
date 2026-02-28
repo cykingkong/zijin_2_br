@@ -13,24 +13,14 @@
         <div class="tag-li flex flex-nowrap gap-4">
             <div class="tag-item px-10 py-6.5px text-nowrap bg-[#0000000D] color-[#00000080] text-[12px] rounded-[8px]"
                 :class="activeIndex == index ? 'active-tag' : ''" v-for="(item, index) in tags" :key="index">
-                {{ item }}
-            </div>
-        </div>
-        <div class="flex mt-12 gap-12 w-full">
-            <div class=" phone-input  flex-1 items-center w-full">
-                <inputCom :placeholder="t('')" v-model="search" :input-type="'search'" :tips="''" class="flex-1 w-full">
-                    <template #sendCode>
-                        <div class="absolute right-10 font-size-12 h-28 flex justify-center items-center sendCode text-[#1b1b1b]"
-                            @click="toSearch()">
-                            {{ t("Search") }}
-                        </div>
-                    </template>
-                </inputCom>
+                {{ item.label }}
             </div>
         </div>
 
 
-        <div class="item w-full  p-16 rounded-16" v-for="(item, index) in logList" :key="index" @click="handleClickItem(item)">
+
+        <div class="item w-full  p-16 rounded-16" v-for="(item, index) in logList" :key="index"
+            @click="handleClickItem(item)">
 
             <div class="content mb-12">
                 <div class="text-[#888888] text-16 font-bold">{{ item?.title || '' }} </div>
@@ -116,8 +106,21 @@ const page = reactive({
     pageSize: 10,
 })
 const banners = ref([])
+const activeIndex = ref(0)
 const tags = ref([
+    {
+        label: "Pass",
+        key: 0,
+    },
+    {
+        label: 'Under review',
+        key: 1,
 
+    },
+    {
+        label: "Reject",
+        key: 2
+    }
 ])
 const search = ref('')
 const router = useRouter()
@@ -126,9 +129,9 @@ const toAdd = () => {
         name: 'addCommunity',
     })
 }
-const handleClickItem =  (item)=>{
-        localStorage.setItem('newDetail', JSON.stringify(item))
-  router.push({
+const handleClickItem = (item) => {
+    localStorage.setItem('newDetail', JSON.stringify(item))
+    router.push({
         path: '/news/newDetail',
     })
 }
@@ -139,7 +142,7 @@ const getList = async () => {
             ...search.value,
         })
         if (code === 200) {
-            tags.value = data.classList || []
+            // tags.value = data.classList || []
             if (page.pageIndex == 1) {
                 logList.value = data.rows.map((item) => ({
                     ...item,
@@ -170,7 +173,7 @@ const getList = async () => {
 const showImagePreview = (index) => {
     let item = logList.value[index]
     previewImage({
-        images:item.pictureList,
+        images: item.pictureList,
         startPosition: index
     })
 }
