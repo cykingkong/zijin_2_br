@@ -36,16 +36,16 @@ const getUserProArr = async () => {
 
   }
 }
-const getTabList = async ()=>{
-   const { data, code } = await productList({
+const getTabList = async () => {
+  const { data, code } = await productList({
 
-    pageIndex:1,
-    pageSize:3,
+    pageIndex: 1,
+    pageSize: 3,
 
 
   });
   if (code == 200) {
-        tabList.value = data.classList.map((e) => {
+    tabList.value = data.classList.map((e) => {
       return {
         name: e.class_name,
         id: e.class_id,
@@ -117,7 +117,7 @@ const loadMore = () => {
   getProductList();
 };
 
-onMounted(async() => {
+onMounted(async () => {
   await getTabList()
   await getProductList();
   // getUserProArr()
@@ -147,8 +147,8 @@ onMounted(async() => {
             {{ t("Search") }}
           </div>
         </template>
-      </inputCom>
-    </div> -->
+</inputCom>
+</div> -->
     <!-- Top Tabs -->
     <div class="sticky top-0 z-50 flex  items-center px-16 gap-8 overflow-x-auto flex-wrap">
       <div
@@ -170,17 +170,16 @@ onMounted(async() => {
           <div class="w-full h-full bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200"></div>
         </div>
 
-       
+
       </div>
     </div>
 
     <div v-else v-for="(item, index) in stockList" :key="index"
       class="mx-[16px] my-16 product-item product-item  bg-[#fff] px-[8px] py-[14px] rounded-[20px] relative"
       @click="handleClickStock(item)">
-      <div class="tag px-4 h-13 bg-[#FF64641A] text-[9px] color-[#FF6464] absolute right-0 top-0">
+      <div class="tag px-4 h-13 bg-[#FF64641A] text-[9px] color-[#FF6464] absolute right-0 top-0" v-if="item.promote">
         <!-- {{ item.tagText || 'Sold out' }} -->
-        {{ item.status == 2 ? t('Sold Out') : t('Buy Now') }}
-
+        {{ item.promote }}
       </div>
       <div class="top flex gap-[8px] pb-[13px] border-b-solid border-b-[1px] border-b-[#F5F5F5]">
         <div class="img w-68 h-68 flex-shrink-0 bg-[#555] rounded-[20px] overflow-hidden">
@@ -217,8 +216,6 @@ onMounted(async() => {
       </div>
     </div>
     <div class="list px-[20px] flex flex-col gap-[20px]">
-
-
     </div>
 
     <!-- Empty State -->
