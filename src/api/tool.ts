@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
-export function uploadFile(data: any): Promise<any> {
-    return request.post('/user/uploadImage', data)
+export function upload(data: any): Promise<any> {
+    return request.post('auth/upload', data)
+}
+export function uploadImage(data: any): Promise<any> {
+    return request.post('user/uploadImage', data)
 }

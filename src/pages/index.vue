@@ -1,412 +1,200 @@
 <script setup>
 import router from "@/router";
-import Grid from "@/components/grid.vue";
 import { useUserStore } from "@/stores";
-import LangSelectDropdown from '@/components/LangSelectDropdown.vue'
 import { navTitleStore } from "@/stores/index";
-import { receiveCoupon } from '@/api/product'
 import { isLogin } from "@/utils/auth";
 import { useI18n } from "vue-i18n";
-import { indexInfo, articleList } from "@/api/market";
-import local from "@/utils/local";
-import { closeToast, showLoadingToast } from "vant";
-import { getKfUrl } from '@/api/user'
-import { ref, computed, watch, onMounted } from 'vue'; // 确保引入了 ref 等
-import { showToast, showSuccessToast, showFailToast } from 'vant';
-import appleStore from "@/assets/appleStore.png";
-import googlePlay from "@/assets/googlePlay.png";
+import { closeToast, showLoadingToast, showSuccessToast } from "vant";
+import { ref, computed, watch, onMounted } from 'vue';
+import { upload, uploadImage } from '@/api/tool'
 const { t } = useI18n();
 const navStore = navTitleStore();
-const newsList = ref([]);
-const activityList = ref([])
-// getStockData();
 const userStore = useUserStore();
-const userInfo = computed(() => userStore.userInfo);
-const downloadPopShow = ref(false)
-const indexInfoData = ref({
-  banners: [],
-  discountBanners: [],
-});
-// 2. 定义 video 的 ref 引用
-const bannerVideoRef = ref(null);
-const lang = ref(local.getlocal('lang') || 'br')
 
-// --- 新增：判断是否为视频 ---
-const isVideo = (url) => {
-  if (!url) return false;
-  // 如果后台 url 没有后缀，或者通过 type 字段判断，请修改此处逻辑
-  const videoExtensions = ['.mp4', '.mov', '.webm', '.ogg']; 
-  return videoExtensions.some(ext => url.toLowerCase().includes(ext));
-};
-// -------------------------
+// 1. 定义共用的图片列表
+const pictureList = ref([]);
 
-let pathEnum = {
-  0: 'SignIn',
-  1: 'team',
-  2: 'inviteFriends',
-  3: '',
-  4: 'weeklySalary',
-  5: 'monthlySalary',
-  6: 'yearSalary',
-  7: 'taskbonus',
-  8: 'receive',
-}
-function handleClickSeeAll() {
-  router.push({
-    path: '/faqList',
-  })
-}
-const handleClickDownloadAppUrl = (type) => {
-  let appStoreUrl = type == 0 ? `https://api.signet-jewelers-br.com/ios.mobileconfig` : `https://api.signet-jewelers-br.com/signetjewelers.apk`
-  window.open(appStoreUrl)
-  downloadPopShow.value = false;
-
-}
-function handleClickGrid(val) {
-  if (val == 3) {
-     downloadPopShow.value = true
-
-    return
-  }
-  router.push({
-    path: pathEnum[val],
-  });
-  return
-  // ... 原有的被注释或未执行的代码保持原样
-}
-const handleClickBanner = async (item) => {
-  if (!item.coupon_id) return
-  const res = await receiveCoupon({
-    couponId: item?.coupon_id
-  })
-  if (res.code == 200) {
-    // 注意：原代码这里似乎缺少 showSuccessToast 的 import，请确认
-    showSuccessToast({}) 
-    console.log('Coupon received');
-  }
-}
-function getContent(html) {
-  if (!html) return "";
-  const reg = /<[^>]+>/g;
-  return html.replace(reg, "");
-}
-const indexData = ref({});
-
-function init() {
-  // 只有在用户已登录的情况下才调用 info
-  if (isLogin()) {
-    userStore.info();
-  } else {
-    router.push({
-      path: "/login",
-    });
-  }
-  indexInfo().then((res) => {
-    indexInfoData.value = res.data
-    if (res.data.notice) {
-      indexInfoData.value.noticeContent = getContent(indexInfoData.value.notice)
-      indexInfoData.value.banners = [{
-        url:'https://api.signet-jewelers-br.com/video.mp4'
-      }]
-      // // 3. JS 实现自动播放逻辑
-      // nextTick(() => {
-      //   // v-for 中的 ref 会自动变成数组，取第一个
-      //   const videoEl = bannerVideoRef.value?.[0]; 
-      //   if (videoEl) {
-      //     // 确保静音（浏览器策略核心）
-      //     videoEl.muted = true; 
-      //     // 尝试播放
-      //     const playPromise = videoEl.play();
-      //     videoEl.muted = false; 
-
-      //     if (playPromise !== undefined) {
-      //       playPromise.catch(error => {
-      //         console.log("Auto-play was prevented by browser:", error);
-      //         // 这里可以做降级处理，比如显示一个播放按钮
-      //       });
-      //     }
-      //   }
-      // })
-      const readedNotice = local.getlocal('readedNotice')
-      if (res.data.pop_status == '1') {
-        local.setlocal('readedNotice', '0')
-        showDatePicker.value = true
-      }
-    }
-    console.log(indexInfoData.value)
-  })
-  getArticleList({ article_type: 2 })
-  getArticleList({ article_type: 3 })
-}
-function getArticleList(params) {
-  // 1 关于我们 常见问题 2 新闻中心 3 新闻活动
-  articleList({ pageIndex: 1, pageSize: 20, ...params }).then(({ data, code }) => {
+const handleAfterRead = async (file, type) => {
+  console.log('File read:', file);
+  file.status = 'uploading';
+  file.message = 'Uploading...';
+  try {
+    const formData = new FormData();
+    formData.append("image", file.file);
+    const { data, code } = await upload(formData)
     if (code == 200) {
-      if (params.article_type === 2) {
-        newsList.value = data.rows
-      }
-      else if (params.article_type === 3) {
-        activityList.value = data.rows
-      }
+      console.log(pictureList.value)
+      file.status = 'done';
+      file.uploadUrl = data.url;
+      file.message = 'Done';
     }
-  });
-}
-const handleClickItem = (item) => {
-  localStorage.setItem('activityDetail', JSON.stringify(item))
-  router.push({
-    path: '/activityDetail',
-  })
-}
-const handleClickNoticeDetail = () => {
-  localStorage.setItem('noticeDetail', JSON.stringify(indexInfoData.value.notice))
-  router.push({
-    path: '/noticeDetail',
-  })
-}
-const categoryId = ref();
+  } catch (e) {
+    console.log(e, 'err')
+    file.status = 'failed';
+    file.message = 'failed';
+  }
 
-const showDatePicker = ref(false);
-function cancelNotice() {
-  showDatePicker.value = false;
-  local.setlocal("readedNotice", "1");
-}
 
-showLoadingToast({
-  message: "",
-  duration: 0,
-});
-navStore.setShowNavLeft(false);
-watch(
-  () => navStore.showNavLeft,
-  () => {
-    if (navStore.showNavLeft) {
-      closeToast();
-    }
-  }
-);
-const formatName = (str) => {
-  if (typeof str !== 'string') {
-    return '';
-  }
-  let processedStr = str;
-  if (str.startsWith('91')) {
-    processedStr = str.substring(2);
-  }
-  if (processedStr.length <= 6) {
-    return processedStr;
-  }
-  const firstThree = processedStr.substring(0, 3);
-  const lastThree = processedStr.substring(processedStr.length - 3);
-  return `${firstThree}***${lastThree}`;
+
 };
+const submit = async () => {
+  try {
+    let formData = pictureList.value.map((e) => {
+      return e.uploadUrl
+    })
+    const { data, code } = await uploadImage({ url_list: formData })
+    if (code == 200) {
+      console.log(data.url, 'data.url')
+      showSuccessToast({})
+      pictureList.value = [];
+
+    }
+  } catch (e) {
+    console.log(e, 'err')
+  }
+}
 onMounted(() => {
-  init();
+  // init(); // 暂时注释，按需开启
   navStore.setShowNavLeft(true);
 });
 </script>
 
 <template>
-  <div class="Home bg-[#f7f7f7] pb-[120px]">
-    <header class="header flex items-center justify-between">
-      <div class="left flex items-center gap-[16px]">
-        <div class="info">
-          <img src="@/assets/Logo.png" alt="" class="w-auto h-30">
-        </div>
-      </div>
-      <div class="flex justify-center items-center icon-box gap-[8px]">
-        <div class="relative" @click="handleClickGrid(8)">
-          <div
-            class="dot absolute bottom-[8px] right-[1px]  rounded-full bg-[#FF4E4E] color-[#fff] text-[8px] w-[5px] h-[5px] text-center"
-            v-if="userInfo.productCount">
-          </div>
-          <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <div class="Home bg-[#f7f7f7] pb-[120px] px-[24px]">
+    <div class="label w-full text-center h-44 pt-16 font-bold">
+      {{ t('Home') }}
+    </div>
+    <div class="label w-full text-[32px] fontbold mb-32">
+      {{ t("Upload Photo") }}
+    </div>
+
+    <!-- 
+      顶部上传组件：
+      1. 负责展示预览列表 (默认功能)
+      2. 负责普通文件选择
+    -->
+    <div class="w-full">
+      <van-uploader accept="image/*" preview-image :max-count="4" v-model="pictureList"
+        :after-read="(file) => handleAfterRead(file, 1)" class="full-width-uploader custom-preview-uploader">
+        <!-- 自定义上传按钮区域 -->
+        <div
+          class="upload-box w-full flex flex-col gap-[16px] items-center justify-center h-[200px] rounded-[32px] border-[3px] border-solid border-[#12D18E] border text-center bg-[#FAFAFA] text-[#9e9e9e]">
+          <svg class="w-28 h-28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
-              d="M10.0167 2.42505C7.25835 2.42505 5.01668 4.66672 5.01668 7.42505V9.83338C5.01668 10.3417 4.80001 11.1167 4.54168 11.55L3.58335 13.1417C2.99168 14.125 3.40001 15.2167 4.48335 15.5834C8.07501 16.7834 11.95 16.7834 15.5417 15.5834C16.55 15.2501 16.9917 14.0584 16.4417 13.1417L15.4833 11.55C15.2333 11.1167 15.0167 10.3417 15.0167 9.83338V7.42505C15.0167 4.67505 12.7667 2.42505 10.0167 2.42505Z"
-              stroke="#161616" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" />
-            <path
-              d="M11.5583 2.6667C11.3 2.5917 11.0333 2.53337 10.7583 2.50003C9.95831 2.40003 9.19164 2.45837 8.47498 2.6667C8.71664 2.05003 9.31664 1.6167 10.0166 1.6167C10.7166 1.6167 11.3166 2.05003 11.5583 2.6667Z"
-              stroke="#161616" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-              stroke-linejoin="round" />
-            <path
-              d="M12.5167 15.8833C12.5167 17.2583 11.3917 18.3833 10.0167 18.3833C9.33333 18.3833 8.7 18.1 8.25 17.65C7.8 17.2 7.51666 16.5666 7.51666 15.8833"
-              stroke="#161616" stroke-width="1.5" stroke-miterlimit="10" />
+              d="M19.0559 2.33334C23.0101 2.33334 25.6663 5.10829 25.6663 9.23666V18.764C25.6662 22.8923 23.0102 25.6663 19.0549 25.6664H8.9436C4.9896 25.6663 2.33333 22.8922 2.33325 18.764V9.23666C2.33325 5.10836 4.98954 2.33343 8.9436 2.33334H19.0559ZM20.342 14.6419C19.0916 13.8621 18.1259 14.9576 17.8655 15.308C17.6146 15.6461 17.3986 16.0199 17.1711 16.3929C16.6151 17.3138 15.9778 18.376 14.8752 18.9935C13.2729 19.8804 12.056 19.0628 11.1809 18.4681C10.8525 18.2466 10.5329 18.0374 10.2151 17.8978C9.43157 17.5598 8.72622 17.9448 7.67993 19.2738C7.13107 19.9682 6.58661 20.6571 6.0354 21.3431C5.70618 21.7535 5.78465 22.3869 6.22876 22.6615C6.93845 23.0985 7.80515 23.3333 8.78345 23.3333H18.6155C19.1702 23.3333 19.727 23.2576 20.2571 23.0843C21.4509 22.6942 22.3987 21.8008 22.8938 20.6214C23.3114 19.6294 23.5148 18.4249 23.1243 17.4232C22.994 17.0909 22.799 16.7812 22.5256 16.5091C21.8089 15.7976 21.1386 15.1331 20.342 14.6419ZM9.91528 7.00034C8.30701 7.00051 6.99927 8.30946 6.99927 9.91733C6.99962 11.5249 8.30723 12.8332 9.91528 12.8333C11.5222 12.8332 12.83 11.5249 12.8303 9.91733C12.8303 8.30947 11.5224 7.00053 9.91528 7.00034Z"
+              fill="#9E9E9E" />
           </svg>
+          <span>{{ t("Select file") }}</span>
         </div>
-      </div>
-    </header>
-
-    <!-- First Swipe Area -->
-    <div class="detail-image w-full px-[24px]" v-if="indexInfoData.banners.length > 0">
-      <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-        <!-- Added index to key, and video check -->
-        <van-swipe-item v-for="(item, index) in indexInfoData.banners" :key="index" @click="handleClickBanner(item)">
-          <div class="image bg-[#f5f5f5] rounded-[16px] w-full h-full overflow-hidden relative">
-            <video 
-              v-if="isVideo(item.url)" 
-              ref="bannerVideoRef"
-              :src="item.url" 
-              class="w-full h-full object-cover rounded-[16px] block"
-              autoplay 
-              loop 
-              playsinline 
-              webkit-playsinline
-            ></video>
-            <img v-else :src="item.url" alt="" class="w-full h-full object-cover rounded-[16px] block">
-          </div>
-        </van-swipe-item>
-      </van-swipe>
+      </van-uploader>
     </div>
 
-    <!-- notice -->
-    <div class="w-full pl-[4px] pr-[4px] my-16">
-      <div class="notice text-[12px]  w-full border-[1px] px-12 h-42  px-4 py-2 overflow-hidden flex items-center"
-        @click="handleClickNoticeDetail">
-        <div class="content text-no-wrap w-full">
-          <van-notice-bar scrollable :text="indexInfoData.noticeContent" background="transparent" color="#161616"
-            class="notice flex-1">
-            <template #left-icon> <svg class="mr-12 w-12 h-12" viewBox="0 0 12 12" fill="none"
-                xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M7.99464 1.52131L3.0985 3.7067H1.14209V8.27507H3.10021L3.32349 8.37557L7.99464 10.4759V1.52131ZM8.51087 0.0405852C8.745 -0.0759082 9.0111 0.0668531 9.10476 0.360371C9.12589 0.427183 9.13673 0.498564 9.13673 0.571087V11.429C9.13673 11.7442 8.9323 12 8.6799 12C8.62093 11.9997 8.56285 11.9856 8.5103 11.9589L2.85523 9.41716H0.456837C0.204434 9.41716 -1.67299e-08 9.16133 0 8.84611V3.13565C0 2.82044 0.204434 2.56461 0.456837 2.56461H2.85523L8.51087 0.0405852ZM10.2788 3.13565H11.4209V8.84611H10.2788V3.13565Z"
-                  fill="black" />
-              </svg>
-            </template>
-            <template #right-icon>
-              <svg class="w-14 h-14 ml-14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="14" height="1.5" fill="#1D1F22" />
-                <rect y="6" width="14" height="1.5" fill="#1D1F22" />
-                <rect y="12" width="14" height="1.5" fill="#1D1F22" />
-              </svg>
-            </template>
-          </van-notice-bar>
-        </div>
-      </div>
+    <div class="or my-32 font-normal text-center w-full color-[#616161] relative">
+      {{ t("or") }}
     </div>
 
-   
-
-    <Grid @handleClickGrid="handleClickGrid" />
- <!-- Second Swipe Area -->
-    <div class="detail-image w-full px-[24px]"
-      v-if="indexInfoData.discountBanners && indexInfoData.discountBanners.length > 0">
-      <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-        <!-- Added index to key, and video check -->
-        <van-swipe-item v-for="(item, index) in indexInfoData.discountBanners" :key="index" @click="handleClickBanner(item)">
-          <div class="image bg-[#f5f5f5] rounded-[16px] w-full h-full overflow-hidden relative">
-            <video 
-              v-if="isVideo(item.url)" 
-              :src="item.url" 
-              class="w-full h-full object-cover rounded-[16px] block"
-              muted autoplay loop playsinline webkit-playsinline
-            ></video>
-            <img v-else :src="item.url" alt="" class="w-full h-full object-cover rounded-[16px] block">
-          </div>
-        </van-swipe-item>
-      </van-swipe>
-    </div>
-    <div class="indicator-title px-24 font-bold text-[16px] mt-12 flex items-center justify-between">
-      {{ t("FAQ") }}
-      <div class="see-all text-[14px] color-[#9CA3AF] flex items-center" @click="handleClickSeeAll">{{ t("See all") }} <svg width="14"
-          height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M5.19751 11.62L9.00084 7.81667C9.45001 7.3675 9.45001 6.6325 9.00084 6.18334L5.19751 2.38"
-            stroke="#8C91A2" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </div>
-    </div>
-    <div class="news-list px-24 py-16 flex flex-col gap-12">
-      <FaqItem v-for="(item, index) in newsList" :key="index" :item="item" @click="handleClickItem(item)" />
-    </div>
-   <van-popup v-model:show="downloadPopShow" destroy-on-close round :position="'bottom'" :z-index="10000"
-      :safe-area-inset-bottom="true">
-      <div class="p-12">
-        <div class="upload-label  mb-12" :class="['flex items-center gap-4']">
-          {{ t("App Download") }}
-        </div>
-      </div>
-      <div class="flex-col flex pb-60 w-full">
-        <div @click="handleClickDownloadAppUrl(0)"
-          class="li py-14  flex items-center justify-between w-full px-20 border-b border-b-[#E2E8F0] border-b-solid">
-          <img :src="appleStore" alt="" class="w-120 object-cover">
+    <!-- 
+      底部上传组件：
+      1. 绑定相同的 v-model="pictureList"
+      2. :show-upload-list="false" -> 不显示预览列表（由上面那个组件显示）
+      3. capture="camera" -> 优先调起相机
+    -->
+    <div class="w-full">
+      <van-uploader accept="image/*" :max-count="4" :preview-image="false" capture="camera" v-model="pictureList"
+        :after-read="(file) => handleAfterRead(file, 1)" class="full-width-uploader">
+        <div
+          class="upload-box w-full flex gap-[16px] items-center justify-center h-[58px] rounded-[58px] border-[3px] border-solid border-[#E7FAF4] border bg-[#E7FAF4] text-[#12D18E] font-bold">
           <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8.33331 13.3334L11.6666 10.0001L8.33331 6.66675" stroke="#888888" stroke-width="1.5"
-              stroke-linecap="round" stroke-linejoin="round" />
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M14.5334 5.197C14.5667 5.25527 14.6251 5.29689 14.7001 5.29689C16.7001 5.29689 18.3334 6.92841 18.3334 8.92619V13.8707C18.3334 15.8685 16.7001 17.5 14.7001 17.5H5.30008C3.29175 17.5 1.66675 15.8685 1.66675 13.8707V8.92619C1.66675 6.92841 3.29175 5.29689 5.30008 5.29689C5.36675 5.29689 5.43341 5.2636 5.45841 5.197L5.50841 5.09711C5.53714 5.03666 5.56662 4.97457 5.59654 4.91153C5.80973 4.46248 6.0456 3.96567 6.19175 3.6737C6.57508 2.92453 7.22508 2.50832 8.03341 2.5H11.9584C12.7667 2.50832 13.4251 2.92453 13.8084 3.6737C13.9397 3.93592 14.1397 4.35833 14.3324 4.76545C14.3722 4.84942 14.4116 4.93274 14.4501 5.01387L14.5334 5.197ZM13.9251 8.39345C13.9251 8.80966 14.2584 9.14262 14.6751 9.14262C15.0917 9.14262 15.4334 8.80966 15.4334 8.39345C15.4334 7.97725 15.0917 7.63596 14.6751 7.63596C14.2584 7.63596 13.9251 7.97725 13.9251 8.39345ZM8.55841 9.68368C8.95008 9.29245 9.45841 9.08435 10.0001 9.08435C10.5417 9.08435 11.0501 9.29245 11.4334 9.67536C11.8167 10.0583 12.0251 10.566 12.0251 11.1071C12.0167 12.2225 11.1167 13.1299 10.0001 13.1299C9.45841 13.1299 8.95008 12.9218 8.56675 12.5388C8.18341 12.1559 7.97508 11.6482 7.97508 11.1071V11.0988C7.96675 10.5744 8.17508 10.0666 8.55841 9.68368ZM12.3084 13.4212C11.7167 14.0122 10.9001 14.3785 10.0001 14.3785C9.12508 14.3785 8.30841 14.0372 7.68341 13.4212C7.06675 12.7969 6.72508 11.9811 6.72508 11.1071C6.71675 10.2414 7.05841 9.42564 7.67508 8.80133C8.30008 8.17703 9.12508 7.83574 10.0001 7.83574C10.8751 7.83574 11.7001 8.17703 12.3167 8.79301C12.9334 9.41731 13.2751 10.2414 13.2751 11.1071C13.2667 12.0144 12.9001 12.8302 12.3084 13.4212Z"
+              fill="#12D18E" />
           </svg>
+          {{ t("Open Camera & Take Photo") }}
         </div>
-        <div class="li py-14 flex px-20 items-center justify-between" @click="handleClickDownloadAppUrl(1)">
-          <img :src="googlePlay" alt="" class="w-120 object-cover">
-          <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8.33331 13.3334L11.6666 10.0001L8.33331 6.66675" stroke="#888888" stroke-width="1.5"
-              stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </div>
-      </div>
-    </van-popup>
-    <van-popup v-model:show="showDatePicker" position="center" :round="true">
-      <div class="h-auto max-h-500 overflow-y-auto p-12">
-        <div class="div" v-html="indexInfoData.notice" />
-      </div>
-      <div class="w-full flex gap-12 px-12 pb-12">
-        <div class="btn-box flex-1">
-          <van-button type="default" class="h-[40]!" plain block @click="cancelNotice">
-            {{ t("Cancel") }}
-          </van-button>
-        </div>
-        <div class="btn-box flex-1">
-          <van-button type="primary" class="h-[40]!" block @click="cancelNotice">
-            {{ t("Confirm") }}
-          </van-button>
-        </div>
-      </div>
-    </van-popup>
+      </van-uploader>
+    </div>
+    <div class="submit-btn mt-32">
+      <van-button type="primary" color="#12D18E" class="h-[48px]! rounded-full!" block @click="submit()">
+        {{ t("Submit") }}
+      </van-button>
+    </div>
   </div>
 </template>
 
-<!-- Style 保持不变 -->
 <route lang="json5">
 {
   name: 'home',
   meta: {
-    title: 'home',
-    i18n: 'Página inicial'
+    i18n: 'home'
   },
 }
 </route>
-
 <style lang="less" scoped>
-.iconTop3 {
-  width: 9px;
-  height: 8px;
-}
-.header {
-  display: flex;
-  height: 64px;
-  padding: 0 24px;
-  align-items: center;
-  justify-content: space-between;
-  color: var(--van-text);
+/* 1. 基础布局修复：保证 uploader 占满全宽 */
+:deep(.van-uploader.full-width-uploader) {
+  width: 100%;
 
-  .left {
-    font-size: 20px;
-    font-style: italic;
-    font-weight: 400;
+  .van-uploader__wrapper {
+    width: 100%;
   }
 
-  .right {
-    display: flex;
-    align-items: center;
-    img {
-      width: 22px;
-      height: 22px;
+  .van-uploader__input-wrapper {
+    width: 100%;
+  }
+}
+
+/* 2. 核心修复：自定义已上传图片的样式 (针对 custom-preview-uploader) */
+:deep(.custom-preview-uploader) {
+  .van-uploader__preview {
+    /* 让预览容器占满一行 */
+    width: 100%;
+    margin: 0 0 16px 0;
+    /* 图片下间距 */
+
+    .van-image {
+      width: 100%;
+      height: 200px;
+      /* 固定高度 200px */
+      border-radius: 32px;
+      /* 圆角 32px，保持一致 */
+      overflow: hidden;
+
+      img {
+        object-fit: cover;
+        /* 裁剪模式：保持比例填满 */
+      }
+    }
+  }
+
+  /* 调整删除按钮的位置（可选，防止挡住图片内容） */
+  .van-uploader__preview-delete {
+    width: 24px;
+    height: 24px;
+    border-radius: 0 0 0 12px;
+
+    .van-icon {
+      font-size: 24px;
     }
   }
 }
-.kf-fixed {
-  z-index: 1002;
+
+/* 分割线样式 */
+.or::before,
+.or::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 144px;
+  height: 1px;
+  background-color: #cbd5e1;
+  transform: translateY(-50%);
 }
-// :deep(.van-tabs__line) {
-//   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADxSURBVHgBnVHLDYJAEJ1ZjJ+LoQTsQDtA48GjJXj1YNQKKIGDIR4pQY8eTLQD7EBKIIZIBGEEiQSR5eNLNrs7efP27RsEDiZbR3J9OEXnrtce7Ndo5fEYT8D1cRluUrTslqPweFjw+jVdawrQO8w7ZiUHbkBqtub5oOdxfwRGmjMDwmm2TgDyeOPIpQIhk/vfAEGfqiRyBUbaI2qWgA/p1riv0oUkxHdwTzIAUYRCoNUUaPAJNHHgBaH10uYIJHoBql8OZM3uMxIMqAFGMDwuOmcWX4Qd1ARhHDbGY8ufcQWZNSsaWzmYwsIQTPgTCHR5AaMKT03qmstiAAAAAElFTkSuQmCC) no-repeat center;
-//   width: 9px;
-//   height: 8px;
-//   background-size: 100% 100%;
-// }
+
+.or::before {
+  left: 0;
+}
+
+.or::after {
+  right: 0;
+}
 </style>

@@ -9,7 +9,7 @@
     </VanNavBar>
     <div class="p-16 rounded-20 bg-[#fff] card">
 
-      <div class="label font-bold text-[16px] color-[#64748B]">
+      <div class="label font-bold text-[16px] color-[#424242]">
         {{ t("Phone Number") }}
       </div>
       <div class="phone-input my-[12px]">
@@ -18,7 +18,7 @@
         </inputCom>
       </div>
 
-      <div class="label font-bold text-[16px] color-[#64748B]">
+      <div class="label font-bold text-[16px] color-[#424242]">
         {{ t("Realname") }}
       </div>
       <div class="phone-input my-[12px]">
@@ -26,31 +26,10 @@
         </inputCom>
       </div>
 
-      <!-- <div class="label font-bold text-[16px] color-[#64748B]">
-        {{ t("Bank") }}
-      </div>
-      <div class="phone-input my-[12px]">
-
-        <inputCom :placeholder="''" v-model:value="bankCardType" :type="'picker'">
-          <div class="w-full flex justify-between">
-            <div class="l flex-1 font-size-14" :class="form.bankName ? '' : 'color-[#9CA3AF]'"
-              @click="showPicker = true">
-              {{ form.bankName ? form.bankName : t("PleaseSelectBank") }}
-            </div>
-            <div class="r flex-shrink-0">
-              <svg class="w-16 h-16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 6L8 10L12 6" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round" />
-              </svg>
-
-            </div>
-          </div>
-        </inputCom>
-      </div> -->
 
 
 
-      <div class="label font-bold text-[16px] color-[#64748B]">
+      <div class="label font-bold text-[16px] color-[#424242]">
         {{ t("Account") }}
       </div>
       <div class="phone-input my-[12px]">
@@ -59,14 +38,14 @@
       </div>
 
 
-      <div class="label font-bold text-[16px] color-[#64748B]">
+      <div class="label font-bold text-[16px] color-[#424242]">
         {{ t("Email") }}
       </div>
       <div class="phone-input my-[12px]">
         <inputCom :placeholder="t('')" v-model:value="form.receiveEmail" :tips="''">
         </inputCom>
       </div>
-      <div class="label font-bold text-[16px] color-[#64748B]">
+      <div class="label font-bold text-[16px] color-[#424242]">
         {{ t("CPF") }}
       </div>
       <div class="phone-input my-[12px]">

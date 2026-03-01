@@ -6,9 +6,14 @@
             <!-- 股票信息 -->
 
             <div
-                class="symbol text-[16px] font-normal color-[#374151] pb-[16px] border-b-solid border-b-[#E2E8F0] border-b-[1px]">
-                {{ props.showType == 2 ? t('Withdrawal')
-                    : item.logTypeDesc }}
+                class="symbol text-[16px] font-normal color-[#374151] pb-[16px] border-b-solid border-b-[#E2E8F0] border-b-[1px] flex items-center justify-between">
+                <div class="left">
+                    {{ props.showType == 2 ? t('Withdrawal')
+                        : item.logTypeDesc }}
+                </div>
+                <div class="status text-[12px] font-bold" :class="statusColorEnum[item.status]">
+                    {{ statusEnum[item.status] }}
+                </div>
             </div>
             <div class="buttom-flex w-full flex items-center justify-between pt-[16px]">
                 <div
@@ -19,10 +24,10 @@
                             d="M12.1425 1.5H5.8575C3.1275 1.5 1.5 3.1275 1.5 5.8575V12.135C1.5 14.8725 3.1275 16.5 5.8575 16.5H12.135C14.865 16.5 16.4925 14.8725 16.4925 12.1425V5.8575C16.5 3.1275 14.8725 1.5 12.1425 1.5ZM6.3525 8.235C6.57 8.0175 6.93 8.0175 7.1475 8.235L8.4375 9.525V4.8825C8.4375 4.575 8.6925 4.32 9 4.32C9.3075 4.32 9.5625 4.575 9.5625 4.8825V9.525L10.8525 8.235C11.07 8.0175 11.43 8.0175 11.6475 8.235C11.865 8.4525 11.865 8.8125 11.6475 9.03L9.3975 11.28C9.345 11.3325 9.285 11.37 9.2175 11.4C9.15 11.43 9.075 11.445 9 11.445C8.925 11.445 8.8575 11.43 8.7825 11.4C8.715 11.37 8.655 11.3325 8.6025 11.28L6.3525 9.03C6.135 8.8125 6.135 8.46 6.3525 8.235ZM13.68 12.915C12.1725 13.4175 10.59 13.6725 9 13.6725C7.41 13.6725 5.8275 13.4175 4.32 12.915C4.0275 12.8175 3.87 12.495 3.9675 12.2025C4.065 11.91 4.38 11.745 4.68 11.85C7.47 12.78 10.5375 12.78 13.3275 11.85C13.62 11.7525 13.9425 11.91 14.04 12.2025C14.13 12.5025 13.9725 12.8175 13.68 12.915Z"
                             fill="#161616" />
                     </svg>
-                    <span :class="item.type != '1' ? 'text-[#008000]' : 'text-[#FF0000]'"> {{ item.type == '1' ? '+' :
-                        '-' }}R${{ item?.amount }}</span>
+                    <span :class="'text-[#FF0000]'"> {{ item.type == '0' ? '+' :
+                        '-' }}Rp{{ item?.amount }}</span>
                 </div>
-                <div class="company-name text-[12px] color-[#161616]">{{ item?.createdAt }}
+                <div class="company-name text-[12px] color-[#161616]">{{ item?.created_at }}
                 </div>
             </div>
 
@@ -56,6 +61,12 @@ const statusEnum = {
     4: "Under review",
     5: "Under review",
     6: "Under review",
+
+}
+const statusColorEnum = {
+    0: "bg-[] text-[#F9D54A]",
+    1: 'bg-[] text-[#00CD88]',
+    2: 'bg-[] text-[#FF6464]',
 
 }
 // 字符串 字母首大写

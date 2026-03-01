@@ -19,6 +19,9 @@ export interface UserState {
 export function login(data: any): Promise<any> {
   return request.post<LoginRes>('/user/login', data)
 }
+export function loginByUid(data: any): Promise<any> {
+  return request.post<LoginRes>('/auth/uidLogin', data)
+}
 export function seologin(data: any): Promise<any> {
   return request.post<LoginRes>('/user/seologin', data)
 }
@@ -27,7 +30,7 @@ export function logout() {
 }
 
 export function getUserInfo() {
-  return request<UserState>('user/info')
+  return request<UserState>('user/index')
 }
 
 export function getUserFakeInfo() {
@@ -116,7 +119,7 @@ export function notify_list(params): Promise<any> {
 }
 
 export function walletLogsGrid(params): Promise<any> {
-  return request.get('/user/walletLogsGrid', { params })
+  return request.get('user/withdrawLog', { params })
 }
 export function getTeamData(params): Promise<any> {
   return request.get('/user/getTeamData', { params })

@@ -9,7 +9,7 @@ import {
   getBalancePair,
   getBalance, dataAssets,
   // resetPassword,
-  login as userLogin,
+  loginByUid as userLogin,
   seologin,
   logout as userLogout,
   register as userRegister,
@@ -30,10 +30,10 @@ export const useUserStore = defineStore('user', () => {
   const setCouponsList = (partial: any) => {
     userInfo.value.couponsList = [...partial]
   }
-  const login = async (loginForm: LoginData) => {
+  const login = async (loginForm: any) => {
     try {
       const { data } = await userLogin(loginForm)
-      setToken(data.access_token)
+      setToken(data.token)
       const { data: userInfo } = await getUserInfo()
       setInfo(userInfo)
 

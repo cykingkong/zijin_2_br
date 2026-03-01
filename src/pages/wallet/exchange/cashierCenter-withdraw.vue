@@ -11,80 +11,62 @@
     <div class="info mt-32" v-if="info">
       <div class="text-[14px] mt-[57px] text-center">{{ t("Withdrawal account") }}</div>
       <div class="min-count text-[#0F172A] font-size-[24px] mx-a text-center mt-4 font-bold overflow-y-auto">
-        R$ {{ count || '0' }}
+        Rp {{ addCommasToNumber(count) || '0' }}
+      </div>
+      <!-- <div class="min-count-fee text-[#1b1b1b] font-size-[14px] mx-a text-center mt-[4px] font-bold overflow-y-auto">
+        {{ t("Tax") }} Rp{{ fee }}
       </div>
       <div class="min-count-fee text-[#1b1b1b] font-size-[14px] mx-a text-center mt-[4px] font-bold overflow-y-auto">
-        {{ t("Tax") }} R${{ fee }}
-      </div>
-      <div class="min-count-fee text-[#1b1b1b] font-size-[14px] mx-a text-center mt-[4px] font-bold overflow-y-auto">
-        {{ t('Withdrawable Amount') }} R$ {{ addCommasToNumber(userInfo.teamBalance) }}
-      </div>
+        {{ t('Withdrawable Amount') }} Rp {{ addCommasToNumber(userInfo.teamBalance) }}
+      </div> -->
 
       <div class="mt-[30px] ">
         <div class="px-12 py-[20px] bg-[#fff] rounded-[20px] flex-col flex gap-12 card">
+          <div class="label font-bold text-[16px] color-[#64748B]">
+            {{ t("Realname") }}
+          </div>
+          <div class="phone-input my-[12px]">
+            <inputCom v-model:value="form.receiveName" :placeholder="t('')" :onlyRead="false" :inputType="'text'">
+            </inputCom>
+          </div>
+          <div class="label font-bold text-[16px] color-[#64748B]">
+            {{ t("Bank") }}
+          </div>
+          <div class="phone-input my-[12px]">
+            <inputCom :placeholder="''" v-model:value="form.bankName" :inputType="'text'">
+
+            </inputCom>
+          </div>
+          <div class="label font-bold text-[16px] color-[#64748B]">
+            {{ t("Bank Account Number") }}
+          </div>
+          <div class="phone-input my-[12px]">
+            <inputCom :placeholder="''" v-model:value="form.bankCode" :inputType="'text'">
+
+            </inputCom>
+          </div>
           <div class="label  " :class="['flex items-center gap-4']">
-            {{ t('Bank Card') }}
-          </div>
-        <item class="">
-            <template #left>
-              <div class=" left h-[46px] flex items-center gap-[16px]">
-            <div class="w-40 h-40 flex items-center justify-center flex-shrink-0 block bg-[#F8F9FD] rounded-full"
-              alt="">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g clip-path="url(#clip0_5701_58995)">
-                  <rect width="28" height="28" rx="8" fill="blue" fill-opacity="0.15" />
-                  <path
-                    d="M16 16.3333C16 18.7267 14.06 20.6667 11.6667 20.6667C9.27337 20.6667 7.33337 18.7267 7.33337 16.3333C7.33337 13.94 9.27337 12 11.6667 12C11.78 12 11.9 12.0067 12.0134 12.0133C14.1267 12.18 15.82 13.8733 15.9867 15.9867C15.9934 16.1 16 16.22 16 16.3333Z"
-                    fill="#161616" />
-                  <path opacity="0.4"
-                    d="M20.6667 11.6668C20.6667 14.0602 18.7267 16.0002 16.3333 16.0002C16.22 16.0002 16.1 15.9935 15.9867 15.9868C15.82 13.8735 14.1267 12.1802 12.0133 12.0135C12.0067 11.9002 12 11.7802 12 11.6668C12 9.2735 13.94 7.3335 16.3333 7.3335C18.7267 7.3335 20.6667 9.2735 20.6667 11.6668Z"
-                    fill="#161616" />
-                  <path
-                    d="M9.7267 7.3335H8.00004C7.63337 7.3335 7.33337 7.6335 7.33337 8.00016V9.72683C7.33337 10.3202 8.05337 10.6202 8.47337 10.2002L10.2 8.4735C10.6134 8.0535 10.32 7.3335 9.7267 7.3335Z"
-                    fill="#161616" />
-                  <path
-                    d="M18.2733 20.6667H20C20.3666 20.6667 20.6666 20.3667 20.6666 20V18.2733C20.6666 17.68 19.9466 17.38 19.5266 17.8L17.8 19.5267C17.3866 19.9467 17.68 20.6667 18.2733 20.6667Z"
-                    fill="#161616" />
-                </g>
-                <defs>
-                  <clipPath id="clip0_5701_58995">
-                    <rect width="28" height="28" fill="white" />
-                  </clipPath>
-                </defs>
-              </svg>
-            </div>
-            <div class="info h-[46px] flex flex-col justify-between">
-              <div class="name text-[#0F172A] text-[14px] font-bold">
-                {{ info.address.receiveName }}
-              </div>
-              <div class="name2 text-[#64748B] text-[12px]">
-                {{ info.address.bankName }}
-              </div>
-            </div>
-          </div>
-</template>
-<template #right>
-  <div class="color-[#1b1b1b] text-[14px] font-bold text-nowrap" @click="onSelect">
-    {{ t("Picker") }}
-  </div>
-</template>
-</item>
-<div class="label  " :class="['flex items-center gap-4']">
             {{ t('Extract Amount') }}
           </div>
           <div class=" phone-input">
-  <inputCom :placeholder="t('PleaseEnterAmount')" v-model:value="count" :tips="''" class="flex-1 w-full"
-        :formatter="digitFormatter">
-  </inputCom>
-</div>
-<van-button type="primary" class="h-[56px]" color="#1b1b1b" block @click="onConfirm">
-  {{ t(`Withdraw Preview`) }}
-</van-button>
-</div>
-</div>
-</div>
+            <inputCom :placeholder="t('PleaseEnterAmount')" v-model:value="count" :tips="''" class="flex-1 w-full"
+              :formatter="digitFormatter">
+              <template #sendCode>
+                <div class="px-8 py-6 color-[#424242] bg-[#0000000D] rounded-[12px] fontbold">
+                  Rp
+                </div>
+              </template>
+            </inputCom>
+          </div>
+          <div class="color-[#FF6464] text-[12px]">The minimum withdrawal amount is only Rp11</div>
+          <van-button type="primary" class="h-[56px]" color="#1b1b1b" block @click="onConfirm">
+            {{ t(`Withdraw`) }}
+          </van-button>
+        </div>
+      </div>
+    </div>
 
-<!-- <div class="input-box px-12 mt-[20px]">
+    <!-- <div class="input-box px-12 mt-[20px]">
       <div class="keypad">
         <div class="keypad-row flex gap-[8px] mb-[8px]" v-for="row in keypadRows" :key="row.join('')">
           <div v-for="key in row" :key="key" @click="handleKeyClick(key)"
@@ -110,51 +92,52 @@
         </div>
       </div>
     </div> -->
-<div class="v-html" v-html="optimizeRichText(withdrwaInfo.withdrawContent)"></div>
+    <div class="v-html" v-html="optimizeRichText(withdrwaInfo.withdrawContent)"></div>
 
-<!-- <BottomButton :button-text="t(`Withdraw Preview`)" color="#1B1B1B" @click="onConfirm" /> -->
-<van-popup v-model:show="showPicker" destroy-on-close round :position="'bottom'" :safe-area-inset-bottom="true">
-  <div class="p-12">
+    <!-- <BottomButton :button-text="t(`Withdraw Preview`)" color="#1B1B1B" @click="onConfirm" /> -->
+    <van-popup v-model:show="showPicker" destroy-on-close round :position="'bottom'" :safe-area-inset-bottom="true">
+      <div class="p-12">
 
-    <div
-      class="add-bank-li mb-12 h-52 border border-[#f0f0f0] border-solid rounded-[16px] p-[12px] flex justify-between items-center"
-      @click="handleClickAddBank" v-if="bankList && bankList.length < 1">
-      <div class="name flex items-center gap-12 text-[#0F172A] text-[14px] font-bold">
-        <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M11.6641 3.33325C11.9648 3.33325 12.2598 3.41457 12.5181 3.56862C12.7763 3.72266 12.988 3.94367 13.1308 4.20825L13.5358 4.95825C13.6786 5.22283 13.8903 5.44385 14.1485 5.59789C14.4067 5.75193 14.7018 5.83326 15.0025 5.83325H16.6666C17.1087 5.83325 17.5326 6.00885 17.8451 6.32141C18.1577 6.63397 18.3333 7.05789 18.3333 7.49992V14.9999C18.3333 15.4419 18.1577 15.8659 17.8451 16.1784C17.5326 16.491 17.1087 16.6666 16.6666 16.6666H3.33329C2.89127 16.6666 2.46734 16.491 2.15478 16.1784C1.84222 15.8659 1.66663 15.4419 1.66663 14.9999V7.49992C1.66663 7.05789 1.84222 6.63397 2.15478 6.32141C2.46734 6.00885 2.89127 5.83325 3.33329 5.83325H4.99746C5.29781 5.83327 5.59258 5.75212 5.85061 5.59839C6.10864 5.44466 6.32033 5.22406 6.46329 4.95992L6.87079 4.20659C7.01376 3.94244 7.22545 3.72184 7.48347 3.56811C7.7415 3.41438 8.03627 3.33324 8.33663 3.33325H11.6641Z"
-            stroke="#1B1B1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-          <path
-            d="M9.99996 13.3333C11.3807 13.3333 12.5 12.214 12.5 10.8333C12.5 9.45254 11.3807 8.33325 9.99996 8.33325C8.61925 8.33325 7.49996 9.45254 7.49996 10.8333C7.49996 12.214 8.61925 13.3333 9.99996 13.3333Z"
-            stroke="#1B1B1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-        {{ t("Add Bank Account") }}
+        <div
+          class="add-bank-li mb-12 h-52 border border-[#f0f0f0] border-solid rounded-[16px] p-[12px] flex justify-between items-center"
+          @click="handleClickAddBank" v-if="bankList && bankList.length < 1">
+          <div class="name flex items-center gap-12 text-[#0F172A] text-[14px] font-bold">
+            <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M11.6641 3.33325C11.9648 3.33325 12.2598 3.41457 12.5181 3.56862C12.7763 3.72266 12.988 3.94367 13.1308 4.20825L13.5358 4.95825C13.6786 5.22283 13.8903 5.44385 14.1485 5.59789C14.4067 5.75193 14.7018 5.83326 15.0025 5.83325H16.6666C17.1087 5.83325 17.5326 6.00885 17.8451 6.32141C18.1577 6.63397 18.3333 7.05789 18.3333 7.49992V14.9999C18.3333 15.4419 18.1577 15.8659 17.8451 16.1784C17.5326 16.491 17.1087 16.6666 16.6666 16.6666H3.33329C2.89127 16.6666 2.46734 16.491 2.15478 16.1784C1.84222 15.8659 1.66663 15.4419 1.66663 14.9999V7.49992C1.66663 7.05789 1.84222 6.63397 2.15478 6.32141C2.46734 6.00885 2.89127 5.83325 3.33329 5.83325H4.99746C5.29781 5.83327 5.59258 5.75212 5.85061 5.59839C6.10864 5.44466 6.32033 5.22406 6.46329 4.95992L6.87079 4.20659C7.01376 3.94244 7.22545 3.72184 7.48347 3.56811C7.7415 3.41438 8.03627 3.33324 8.33663 3.33325H11.6641Z"
+                stroke="#1B1B1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              <path
+                d="M9.99996 13.3333C11.3807 13.3333 12.5 12.214 12.5 10.8333C12.5 9.45254 11.3807 8.33325 9.99996 8.33325C8.61925 8.33325 7.49996 9.45254 7.49996 10.8333C7.49996 12.214 8.61925 13.3333 9.99996 13.3333Z"
+                stroke="#1B1B1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            {{ t("Add Bank Account") }}
+          </div>
+          <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.33325 13.3334L11.6666 10.0001L8.33325 6.66675" stroke="#888888" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+
+        <div
+          class="add-bank-li mb-12 h-52 border border-[#f0f0f0] border-solid rounded-[16px] p-[12px] flex justify-between items-center"
+          v-for="(item, index) in bankList" :key="index" @click="selectBank = item.id; showPicker = false; info = item">
+          <div class="name text-[#0F172A] text-[14px] font-bold">
+            {{ item.address.receiveName }}
+          </div>
+          <div
+            class="picker border border-[#f0f0f0] border-solid rounded-[4px] w-16 h-16 flex justify-center items-center"
+            :class="selectBank == item.id ? 'bg-[#1b1b1b]' : ''">
+            <svg v-if="selectBank == item.id" class="w-10 h-10" viewBox="0 0 10 10" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path d="M8.33341 2.70825L3.75008 7.29159L1.66675 5.20825" stroke="white" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+
+          </div>
+        </div>
       </div>
-      <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M8.33325 13.3334L11.6666 10.0001L8.33325 6.66675" stroke="#888888" stroke-width="1.5"
-          stroke-linecap="round" stroke-linejoin="round" />
-      </svg>
-    </div>
-
-    <div
-      class="add-bank-li mb-12 h-52 border border-[#f0f0f0] border-solid rounded-[16px] p-[12px] flex justify-between items-center"
-      v-for="(item, index) in bankList" :key="index" @click="selectBank = item.id; showPicker = false; info = item">
-      <div class="name text-[#0F172A] text-[14px] font-bold">
-        {{ item.address.receiveName }}
-      </div>
-      <div class="picker border border-[#f0f0f0] border-solid rounded-[4px] w-16 h-16 flex justify-center items-center"
-        :class="selectBank == item.id ? 'bg-[#1b1b1b]' : ''">
-        <svg v-if="selectBank == item.id" class="w-10 h-10" viewBox="0 0 10 10" fill="none"
-          xmlns="http://www.w3.org/2000/svg">
-          <path d="M8.33341 2.70825L3.75008 7.29159L1.66675 5.20825" stroke="white" stroke-width="1.5"
-            stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-
-      </div>
-    </div>
+    </van-popup>
   </div>
-</van-popup>
-</div>
 </template>
 <script setup lang="ts">
 import { addCommasToNumber } from "@/utils/tool";
@@ -185,6 +168,17 @@ const fee = computed(() => {
 //     count.value = strVal.split('.')[0]
 //   }
 // })
+const form = reactive({
+  type: "bank_card",
+  receiveName: "",
+  receiveAccount: "",
+  bankCode: "",
+  bankName: "",
+  id: "",
+  CPF: "",
+  receivePhone: "",
+  receiveEmail: "",
+});
 const { proxy } = getCurrentInstance()!;
 const userStore = useUserStore();
 
@@ -200,7 +194,7 @@ const keypadRows = [
 ];
 // 定义格式化函数：过滤非数字
 const digitFormatter = (value: string) => {
- // 1. 先把非数字字符全部过滤掉
+  // 1. 先把非数字字符全部过滤掉
   let result = value.replace(/\D/g, '');
   // 2. 处理前导 0 的情况
   // 逻辑：如果字符串以 0 开头，并且后面还有其他数字（例如 "01", "007"），
@@ -208,7 +202,7 @@ const digitFormatter = (value: string) => {
   // 注意：这样保留了单独的 "0"，防止用户想输入 0 时输入不进去，
   // 但输入 "01" 时会自动变成 "1"。
   result = result.replace(/^0+(?=\d)/, '');
-  
+
   return result;
 };
 // 统一的按键处理方法
@@ -235,9 +229,19 @@ const getBankList = async () => {
   const { data, code } = await bank_list({ ...{ pageIndex: 1, pageSize: 30 }, wallet_type: "auto" });
   if (code == 200) {
     if (data.rows && data.rows.length == 0) {
-      router.push({ path: '/profile/bankAccount' ,  replace: true,})
-      return
+      // router.push({ path: '/profile/bankAccount', replace: true, })
+      // return
     }
+    let firstBankInfo = data.rows[0]
+    form.receiveName = firstBankInfo.address.receiveName;
+
+    form.receiveAccount = firstBankInfo.address.receiveAccount;
+    form.receivePhone = firstBankInfo.address.receivePhone;
+    form.receiveEmail = firstBankInfo.address.receiveEmail;
+    form.CPF = firstBankInfo.address.CPF;
+    form.bankName = firstBankInfo.address.bankName;
+    form.bankCode = firstBankInfo.address.bankCode;
+    form.id = firstBankInfo.id;
     bankList.value = data.rows;
     info.value = data.rows[0]
     selectBank.value = data.rows[0].id

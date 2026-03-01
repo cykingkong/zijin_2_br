@@ -204,39 +204,24 @@ async function signUp() {
     localStorage.setItem("language", "br");
     locale.value = "br";
     const { redirect, ...othersQuery } = router.currentRoute.value.query;
-    router.push({
-      name: "home",
-      query: {
-        ...othersQuery,
-      },
-    });
+    router.push('/');
   } catch (e) {
     console.log(e)
   }
 }
 async function login() {
-  if (!postData.password) {
+  if (!postData.account) {
     showToast("PleaseEnter");
     return;
   }
 
-  // 处理记住密码功能
-  if (remember.value) {
-    localStorage.setItem("remember", JSON.stringify(postData));
-  } else {
-    localStorage.removeItem("remember");
-  }
+
 
   try {
     loading.value = true;
     let area = countryList.value[active.value]?.dialCode;
     let params = {
-      account:
-        postData.type == "phone"
-          ? `${area}${postData.account}`
-          : postData.account,
-      password: postData.password,
-      type: postData.type,
+      uuid: postData.account,
     };
     await userStore.login(params);
     // await userStore.info()
@@ -291,16 +276,15 @@ async function login() {
         </inputCom>
       </div>
 
-    
-     
 
-    
-      <van-button type="primary" color="#1B1B1B" class="login-btn h-[48px]!" block
-        @click=" login()">{{
-          t("Log in")
+
+
+
+      <van-button type="primary" color="#1B1B1B" class="login-btn h-[48px]!" block @click=" login()">{{
+        t("Log in")
         }}</van-button>
-      
-     
+
+
     </div>
   </div>
 </template>

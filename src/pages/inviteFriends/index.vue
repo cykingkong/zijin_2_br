@@ -1,64 +1,77 @@
 <template>
-    <div class="invite-friends-page min-h-[100vh] bg-[#F7F7F7] flex flex-col font-sans">
+    <div class="team-page min-h-[100vh] pt-[40px] bg-[#F7F7F7] flex flex-col">
+
+  <img src="@/assets/reward.png" alt="" class="w-200 h-170 block m-x-auto mb-30 mt-]">
+
         <!-- 内容区域 -->
-        <div class="content flex-1 px-[16px] pt-[10px] pb-[30px]">
+        <div class="content flex-1 px-[16px] pb-[30px]">
 
-            <!-- 主要卡片 -->
-            <div class="main-card bg-white rounded-[16px] p-[20px] shadow-sm flex flex-col items-center">
 
-                <!-- 1. 邀请码输入框 -->
-                <div
-                    class="w-full border border-[#EAEAEA] border-solid rounded-[12px] px-[16px] py-[14px] flex justify-between items-center mb-[16px] bg-white">
-                    <span class="text-[#333] font-bold text-[15px]">{{ userInfo.inviteCode || '-' }}</span>
-                    <!-- 复制图标按钮 -->
-                    <div class="cursor-pointer active:opacity-70 p-2 -mr-2" @click="copyText(userInfo.inviteCode)">
-                        <svg class="w-20 h-20 flex-shrink-0" viewBox="0 0 20 20" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M16.6665 1.66602H8.33317C7.414 1.66602 6.6665 2.41352 6.6665 3.33268V6.66602H3.33317C2.414 6.66602 1.6665 7.41352 1.6665 8.33268V16.666C1.6665 17.5852 2.414 18.3327 3.33317 18.3327H11.6665C12.5857 18.3327 13.3332 17.5852 13.3332 16.666V13.3327H16.6665C17.5857 13.3327 18.3332 12.5852 18.3332 11.666V3.33268C18.3332 2.41352 17.5857 1.66602 16.6665 1.66602ZM3.33317 16.666V8.33268H11.6665L11.6682 16.666H3.33317ZM16.6665 11.666H13.3332V8.33268C13.3332 7.41352 12.5857 6.66602 11.6665 6.66602H8.33317V3.33268H16.6665V11.666Z"
-                                fill="#8C91A2" />
-                        </svg>
+            <!-- 2. 等级概览 (Level Cards) -->
+            <div class="level-overview bg-white rounded-[16px] p-[16px] shadow-sm mb-[16px]">
+                <div class="flex justify-between gap-[10px] mb-[16px]">
+                    <div v-for="(lv, index) in levelStats" :key="index"
+                        class="flex-1 border border-[#F2F2F2] border-solid rounded-[12px] py-[12px] flex flex-col items-center">
+                        <div class="flex items-center mb-[4px]">
+                            <!-- 小图标占位 -->
+
+                            <img :src="lv.img" alt="" class="w-18 h-18 object-cover mr-4">
+
+                            <span class="text-[#00000080] text-[12px] font-bold">{{ lv.name }}</span>
+                        </div>
+                        <span class="text-[#333] text-[16px] font-bold ">{{ lv.count }}</span>
                     </div>
                 </div>
+              <div class="commission-section mb-[30px]">
+                    <h3 class="text-[14px] font-bold text-[#1A1A1A] mb-[8px]">L1/L2/L3 Comissão da equipe</h3>
+                    <div class="text-[#666] text-[12px] leading-[1.8] ">
+                        <p>B-level commission-{{ teamsData.rates.B }}%  </p>
+                        <p>C-level commission-{{ teamsData.rates.C }}%  </p>
+                        <p>D=-level commission-{{ teamsData.rates.D }}%  </p>
 
-                <!-- 2. 邀请链接输入框 -->
-                <div
-                    class="w-full border border-[#EAEAEA] border-solid rounded-[12px] px-[16px] py-[14px] flex justify-between items-center mb-[24px] bg-white text-left">
-                    <span class="text-[#333] text-[13px] break-all mr-[10px] leading-[1.4] line-clamp-1">{{ inviteLink
-                    }}</span>
-                    <!-- 复制图标按钮 -->
-                    <div class="cursor-pointer active:opacity-70 p-2 -mr-2" @click="copyText(inviteLink)">
-                        <svg class="w-20 h-20 flex-shrink-0" viewBox="0 0 20 20" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M16.6665 1.66602H8.33317C7.414 1.66602 6.6665 2.41352 6.6665 3.33268V6.66602H3.33317C2.414 6.66602 1.6665 7.41352 1.6665 8.33268V16.666C1.6665 17.5852 2.414 18.3327 3.33317 18.3327H11.6665C12.5857 18.3327 13.3332 17.5852 13.3332 16.666V13.3327H16.6665C17.5857 13.3327 18.3332 12.5852 18.3332 11.666V3.33268C18.3332 2.41352 17.5857 1.66602 16.6665 1.66602ZM3.33317 16.666V8.33268H11.6665L11.6682 16.666H3.33317ZM16.6665 11.666H13.3332V8.33268C13.3332 7.41352 12.5857 6.66602 11.6665 6.66602H8.33317V3.33268H16.6665V11.666Z"
-                                fill="#8C91A2" />
-                        </svg>
                     </div>
                 </div>
-
-                <!-- 3. 警告/说明文字 -->
-                <p class="text-[#8C91A2] text-[12px] text-left leading-[1.3] mb-[16px] px-[4px]">
-                    {{ t('Please do not invite fake accounts to join. Each person can only have one account in our company to make money.')}}
-                </p>
-
-                <!-- 4. 二维码区域 -->
-                <!-- 容器样式：居中 flex 布局，确保二维码居中显示 -->
-                <div
-                    class="qr-container p-[16px] bg-[#F7F7F7] rounded-[28px] w-200 h-200 shadow-[0_4px_20px_rgba(0,0,0,0.06)] mb-[16px] border border-[#0000000D] border-solid flex justify-center items-center">
-                    <!-- 使用 qrcode.vue 组件 -->
-                    <!-- value: 二维码内容 -->
-                    <!-- size: 尺寸，容器是200px(假设w-200是px)，padding是16px，所以最大内容约168px -->
-                    <!-- level: 纠错等级 H (High) -->
-                    <!-- render-as: 渲染为 svg 清晰度更高 -->
-                    <QrcodeVue v-if="inviteLink" :value="inviteLink" :size="200" level="H" render-as="svg" :margin="0"
-                        background="#F7F7F7" foreground="#000000" />
-                </div>
-
-                <!-- 5. 底部提示 -->
-                <span class="text-[#AAA] text-[12px]">{{ t('Long press the image to save') }}</span>
-
             </div>
+
+
+
+            <!-- 等级 Tab 切换 -->
+            <div class="flex gap-[12px] mb-[16px]">
+                <div v-for="tab in levelTabs" :key="tab.id" @click="currentLevel = tab.key; fetchTeamData()"
+                    class="flex-1 py-[8px] text-[12px]  rounded-[8px] border transition-all text-center font-bold"
+                    :class="currentLevel === tab.key
+                        ? 'bg-white border-[#8B5E3C] border border-solid text-[#1b1b1b]'
+                        : 'bg-[#F2F2F2] border-transparent text-[#00000033]'">
+                    {{ tab.label }}{{ teamsData?.rates[tab.key]||'0' }}% ({{ activeIndex ? tab.unNum : tab.num }})
+                </div>
+            </div>
+
+            <!-- 5. 数据列表 -->
+            <div class="data-table bg-white rounded-[16px] px-[16px] pb-[16px] shadow-sm min-h-[200px]">
+                <!-- Header -->
+                <div class="flex py-[14px] border-b border-[#F5F5F5]">
+                    <div class="w-[30%] text-[12px] text-[#333] font-medium">{{ $t('Account') }}</div>
+                    <div class="w-[30%] text-[12px] text-[#333] font-medium text-center">{{ $t('Today Upload') }}
+                    </div>
+                    <div class="w-[40%] text-[12px] text-[#333] font-medium text-right">{{ $t('Upload Success Count') }}
+                    </div>
+                </div>
+
+                <!-- Rows -->
+                <div class="flex flex-col">
+                    <div v-for="(row, idx) in teamsData?.userList" :key="idx"
+                        class="flex py-[14px] items-center border-b border-[#F9F9F9] last:border-0">
+                        <div class="w-[30%] text-[14px] text-wrap text-[#1A1A1A]">{{ row.account }}</div>
+                        <div class="w-[30%] text-[14px] text-[#1A1A1A] text-center">{{ row.chilrenCount }}</div>
+                        <div class="w-[40%] text-[14px] text-[#1A1A1A] text-right">R$ {{ row.productPrice }}</div>
+                    </div>
+                </div>
+                <!-- Empty State Placeholder -->
+                <div v-if="teamsData?.userList?.length === 0" class="py-[40px] text-center text-[#999] text-[12px]">
+                    No Data
+                </div>
+            </div>
+
         </div>
     </div>
 </template>
@@ -66,91 +79,101 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import lv1 from '@/assets/lv/lv1.png';
+import lv2 from '@/assets/lv/lv2.png';
+import lv3 from '@/assets/lv/lv3.png';
 import { useUserStore } from '@/stores';
-// 1. 引入 qrcode 组件
-import QrcodeVue from 'qrcode.vue';
-// 2. 引入 Vant 的 Toast 组件（如果项目中已自动引入可忽略）
-import { showToast, showSuccessToast, showFailToast } from 'vant';
-import 'vant/es/toast/style';
-
-const userStore = useUserStore();
+import { getTeamData } from '@/api/user'
+import { addCommasToNumber } from '@/utils/tool';
 const router = useRouter();
-const {t}= useI18n()
-// 使用 computed 确保 userInfo 更新时获取最新数据
-const userInfo = computed(() => userStore.userInfo || {});
+const userStore = useUserStore()
+const userInfo = computed(() => userStore.userInfo)
+const {t} = useI18n()
+// 筛选状态
+const filterType = ref('cancel'); // 
+const currentLevel = ref('B');
 
-// 3. 将 inviteLink 改为 computed，确保依赖 inviteCode 变化时自动更新
-const inviteLink = computed(() => {
-    const code = userInfo.value.inviteCode || '';
-    return `${location.origin}/#/login?loginType=1&inviteCode=${code}`;
-});
+// 模拟数据
+const levelStats = ref([
+    { name: 'LV1', count: userInfo.value?.topData?.find((item) => item.generation === 1)?.allUserCount || 0, img: lv1 },
+    { name: 'LV2', count: userInfo.value?.topData?.find((item) => item.generation === 2)?.allUserCount || 0, img: lv2 },
+    { name: 'LV3', count: userInfo.value?.topData?.find((item) => item.generation === 3)?.allUserCount || 0, img: lv3 },
+]);
 
-// 4. 优化后的复制功能
-const copyText = async (text) => {
-    if (!text) {
-        showFailToast('No content to copy');
-        return;
+const levelTabs = ref([
+    {
+        id: 'L1', label: 'L1-', key: 'B',
+        num: userInfo.value?.topData?.find((item) => item.generation === 1)?.vaildUserCount || 0,
+        unNum: userInfo.value?.topData?.find((item) => item.generation === 1)?.noVaildUserCount || 0,
+    },
+    {
+        id: 'L2', label: 'L2-', key: 'C',
+        num: userInfo.value?.topData?.find((item) => item.generation === 2)?.vaildUserCount || 0,
+        unNum: userInfo.value?.topData?.find((item) => item.generation === 2)?.noVaildUserCount || 0,
+    },
+    {
+        id: 'L3', label: 'L3-', key: 'D',
+        num: userInfo.value?.topData?.find((item) => item.generation === 3)?.vaildUserCount || 0,
+        unNum: userInfo.value?.topData?.find((item) => item.generation === 3)?.noVaildUserCount || 0,
+    },
+
+]);
+
+// 模拟列表数据
+const tableData = ref([
+    { account: '2333665', referrer: 25, maxAmount: '200' },
+    { account: '2333665', referrer: 12, maxAmount: '200' },
+    { account: '2333665', referrer: 124, maxAmount: '4574' },
+    { account: '2333665', referrer: 4533, maxAmount: '4452' },
+    { account: '2333665', referrer: 744, maxAmount: '1214' },
+]);
+const teamsData = ref({
+    userList: [
+        { account: '2333665', referrer: 25, maxAmount: '200' },
+    ],
+    rates: {
+        B: '0',
+        C: '0',
+        D: '0',
     }
-
-    // 兼容性处理
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        try {
-            await navigator.clipboard.writeText(text);
-            showSuccessToast('Copied successfully');
-        } catch (err) {
-            console.error('Failed to copy: ', err);
-            fallbackCopy(text);
-        }
-    } else {
-        // Fallback for older browsers or non-secure contexts
-        fallbackCopy(text);
-    }
-};
-
-// 降级复制方案
-const fallbackCopy = (text) => {
-    const textArea = document.createElement("textarea");
-    textArea.value = text;
-    // 避免页面滚动
-    textArea.style.position = "fixed";
-    textArea.style.left = "-9999px";
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-
-    try {
-        const successful = document.execCommand('copy');
-        if (successful) {
-            showSuccessToast('Copied successfully');
-        } else {
-            showFailToast('Copy failed');
-        }
-    } catch (err) {
-        showFailToast('Copy failed');
-    }
-    document.body.removeChild(textArea);
-};
-
+})
 function goBack() {
     if (router) router.back();
 }
+const fetchTeamData = async () => {
+    // level B=1代, C=2代, D=3代
+    const res = await getTeamData({
+        level: currentLevel.value
+        , pageIndex: 1
+        , pageSize: 100,
+        onlyValid: activeIndex.value == 0 ? 1 : 2 // onlyValid: -1全部 1有效 2无效
+    });
+    console.log(res, 'asdasd')
+    if (res.code == 200) {
+        teamsData.value = res.data || {};
+        console.log(teamsData.value, 'asdasd')
+
+    }
+}
+
+const activeIndex = ref(0);
+const typeList = ref([
+    'Membros ativos',
+    'Membro inativo',
+])
+onMounted(async () => {
+    await fetchTeamData()
+    await userStore.fetchTeamInfoData()
+
+})
 </script>
 
 <route lang="json5">
 {
-  name: 'inviteFriends',
+  name: 'team',
   meta: {
-    title: 'Invite Friends',
-    i18n: 'inviteFriends'
+    title: 'Team',
+    i18n: 'Team'
   },
 }
 </route>
-
-<style scoped>
-/* 
- * 模拟截图中的二维码外框柔和阴影 
- */
-.qr-container {
-    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.05);
-}
-</style>

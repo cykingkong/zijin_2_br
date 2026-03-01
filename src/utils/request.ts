@@ -102,6 +102,12 @@ function requestHandler(config: InternalAxiosRequestConfig): InternalAxiosReques
     // 或者显式设置：
     config.headers['Content-Type'] = 'multipart/form-data';
   }
+  if (config.method?.toLowerCase() === 'post' && config.data instanceof FormData) {
+    // 删除 Content-Type 让浏览器自动设置，或者显式设置为 multipart/form-data
+    // delete config.headers['Content-Type'];
+    // 或者显式设置：
+    config.headers['Content-Type'] = 'multipart/form-data';
+  }
   return config
 }
 

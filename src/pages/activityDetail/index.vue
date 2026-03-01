@@ -12,22 +12,18 @@
             </svg>
         </div>
         <div class="detail-image w-full px-[24px]">
-            <div class="image bg-[#f5f5f5] rounded-[16px]  w-full mb-16">
-                <img :src="info?.article_image" alt="" class="w-full block h-full object-cover rounded-[16px]">
-            </div>
+
             <div class="title text-[16px] font-bold text-[#333] mb-31">{{ info?.title }}</div>
             <div class="w-full">
                 <div class="w-full" v-html="info?.content"></div>
             </div>
         </div>
-        <BottomButton :color="info.couponId ? '#FEC600' : '#888'" :button-text="'Resgatar Cupom'"
-            v-if="info && info.couponId" @click="handleClickClaimCoupon">
-        </BottomButton>
+
     </div>
 </template>
 <script setup lang="ts">
 import local from '@/utils/local'
-import { receiveCoupon } from '@/api/product'
+import { activityDetail } from '@/api/image'
 import { showSuccessToast } from 'vant'
 import { optimizeRichText } from '@/utils/richText';
 
@@ -39,28 +35,27 @@ const handleClose = () => {
 }
 const info = ref<any>({ couponId: null })
 
-const handleClickClaimCoupon = async () => {
-    if (!info.value?.couponId) return
+const getActivityDetail = async (id: any) => {
 
-    if (info.value) {
-        const res = await receiveCoupon({
-            couponId: info.value?.couponId
-        })
-        if (res.code == 200) {
-            showSuccessToast('Claim Coupon Success')
-        }
 
+
+    const res = await activityDetail({
+        id
+    })
+    if (res.code == 200) {
+        showSuccessToast('Claim Coupon Success')
+        info.value = res.data
+        info.value.content = optimizeRichText(info.value.content)
     }
+
+
 }
-
+const route = useRoute()
 onMounted(() => {
-    const item = local.getlocal('activityDetail')
-    if (item) {
-        document.title = item.title
-        info.value = item
-        info.value.content = optimizeRichText(item.content)
-        // info.value.couponId = 5
+    if (route.query.id) {
+        getActivityDetail(route.query.id)
     }
+
 })
 </script>
 <route lang="json5">
