@@ -54,7 +54,8 @@
 
                     <!-- Daily Income -->
                     <div class="flex justify-between items-center py-[12px] border-b border-[#F5F5F5]">
-                        <span class="text-[#999] text-[14px]">{{ t("Daily Income") }}</span>
+                        <span class="text-[#999] text-[14px]">{{
+                            renderLabel(productInfo.productType, productInfo.incomeReleaseCycle) }}</span>
                         <span class="text-[#333] text-[15px] font-bold ">
                             {{ currencySymbol }} {{ addCommasToNumber(productInfo.dailyIncome) }}
                         </span>
@@ -229,6 +230,8 @@ const productInfo = ref<any>({
     discountPrice: 0,
     dailyIncome: 0,
     incomeCycle: 0,
+    incomeReleaseCycle: 0,
+    productType: 0,
     purchaseLimit: 1,
     purchaseCount: 0, // 当前购买数
     status: 1,
@@ -244,7 +247,16 @@ const productInfo = ref<any>({
 });
 
 // 模拟的奖励数据 (如果接口没有返回，暂时使用计算值或固定值)
+const renderLabel = (productType: number, incomeReleaseCycle: any) => {
+    if (productType == 1) {
+        return 'Dias alternados'
+    } else if (productType == 2) {
+        return `Cada ${incomeReleaseCycle} Dias`
+    } else if (productType == 3) {
+        return `Cada ${incomeReleaseCycle} Horas`
+    }
 
+}
 const enumBtnText = {
     0: 'Sold out',
     1: 'Buy Now', // 截图上没显示按钮文字，改为通用购买文字
