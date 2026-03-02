@@ -85,13 +85,15 @@
                 </div>
 
                 <!-- 5. Rewards Info (奖励信息 - 仿截图样式) -->
-                <h3 class="text-[15px] font-bold text-[#1A1A1A] mb-[12px]">About Rewards</h3>
-                <div
+                <h3 class="text-[15px] font-bold text-[#1A1A1A] mb-[12px]"
+                    v-if="productInfo.seedReward && productInfo.shareReward">About Rewards</h3>
+                <div v-if="productInfo.seedReward && productInfo.shareReward"
                     class="rewards-card bg-white rounded-[12px] border border-[#F2F2F2] border-solid shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-[16px] mb-[24px]">
-                    <div class="flex justify-between items-center py-[10px] border-b border-[#F5F5F5]">
+                    <div class="flex justify-between items-center py-[10px] border-b border-[#F5F5F5]"
+                        v-if="productInfo.shareReward">
                         <span class="text-[#666] text-[13px]">{{ t("Referral reward") }}</span>
                         <span class="text-[#333] text-[14px] font-bold ">{{ currencySymbol }} {{ productInfo.shareReward
-                        }}</span>
+                            }}</span>
                     </div>
                     <!-- <div class="flex justify-between items-center py-[10px] border-b border-[#F5F5F5]">
                         <span class="text-[#666] text-[13px]">{{ t("Upgrade reward") }}</span>
@@ -99,10 +101,10 @@
                             productInfo.repurchaseReward
                         }}</span>
                     </div> -->
-                    <div class="flex justify-between items-center py-[10px]">
+                    <div class="flex justify-between items-center py-[10px]" v-if="productInfo.seedReward">
                         <span class="text-[#666] text-[13px]">{{ t("Upgrade Diamonds") }}</span>
                         <span class="text-[#333] text-[14px] font-bold ">{{ currencySymbol }} {{ productInfo.seedReward
-                        }}</span>
+                            }}</span>
                     </div>
                 </div>
 
@@ -111,15 +113,15 @@
                     <h3 class="text-[14px] font-bold text-[#1A1A1A] mb-[8px]">L1/L2/L3 Comissão da equipe</h3>
                     <div class="text-[#666] text-[12px] leading-[1.8] ">
                         <p>L1={{ productInfo.rates.B }}% = {{ productInfo.rates.B / 100 }} * {{ productInfo.totalIncome
-                        }} = {{
+                            }} = {{
                                 currencySymbol }} {{ addCommasToNumber(productInfo.rates.B / 100 * productInfo.totalIncome)
                             }}</p>
                         <p>L2={{ productInfo.rates.C }}% = {{ productInfo.rates.C / 100 }} * {{ productInfo.totalIncome
-                        }} = {{
+                            }} = {{
                                 currencySymbol }} {{ addCommasToNumber(productInfo.rates.C / 100 * productInfo.totalIncome)
                             }}</p>
                         <p>L3={{ productInfo.rates.D }}% = {{ productInfo.rates.D / 100 }} * {{ productInfo.totalIncome
-                        }} = {{
+                            }} = {{
                                 currencySymbol }} {{ addCommasToNumber(productInfo.rates.D / 100 * productInfo.totalIncome)
                             }}</p>
                     </div>
