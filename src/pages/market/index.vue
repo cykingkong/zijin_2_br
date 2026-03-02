@@ -8,11 +8,25 @@ const activeName = ref(0);
 const searchMarkShow = ref(false);
 const enumBtnText = {
   0: 'Sold out',
-  1: 'Activate',
+  1: 'Buy Now',
   2: 'Sold out',
   3: 'Pre-sale'
 }
+const productTypeEnum = {
+  1: "Dias alternados", // 隔天
+  2: "Cada Dias", // 每天
+  3: "Cada Horas" // 每小时
+}
+const renderLabel = (productType: number, incomeReleaseCycle: any) => {
+  if (productType == 1) {
+    return 'Dias alternados'
+  } else if (productType == 2) {
+    return `Cada ${incomeReleaseCycle} Dias`
+  } else if (productType == 3) {
+    return `Cada ${incomeReleaseCycle} Horas`
+  }
 
+}
 const page = reactive({
   pageIndex: 1,
   pageSize: 10,
@@ -195,18 +209,18 @@ onMounted(async () => {
               '0.00' }}</div>
             <div class="button text-[14px] font-bold text-[#fff]  px-[12px] py-[6px] rounded-[8px]"
               :class="item.status == 2 ? 'bg-[#CED0D8]' : 'bg-[#161616]'" @click="handleClickStock(item)">
-              {{ item.status == 2 ? t('Sold Out') : t('Buy Now') }}
+              {{ t(enumBtnText[item.status]) }}
             </div>
           </div>
         </div>
       </div>
       <div class="bottom flex pt-[13px]">
         <div class="item flex-1">
-          <div class="label mb-4">{{ t('Validity period') }}</div>
-          <div class="value text-left">{{ item.incomeCycle + 'D' || '0' + $t('Days') }}</div>
+          <div class="label mb-4">Ciclo</div>
+          <div class="value text-left">{{ item.incomeCycle || '0' }}</div>
         </div>
         <div class="item flex-1">
-          <div class="label text-center mb-4">{{ t('Every other day') }}</div>
+          <div class="label text-center mb-4">{{ renderLabel(item.productType, item.incomeReleaseCycle) }}</div>
           <div class="value text-center">R$ {{ addCommasToNumber(item.dailyIncome) || '0.00' }}</div>
         </div>
         <div class="item flex-1">

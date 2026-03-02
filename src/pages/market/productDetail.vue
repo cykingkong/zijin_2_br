@@ -46,9 +46,9 @@
 
                     <!-- Validity period -->
                     <div class="flex justify-between items-center py-[12px] border-b border-[#F5F5F5]">
-                        <span class="text-[#999] text-[14px]">{{ t("Validity period") }}</span>
+                        <span class="text-[#999] text-[14px]">Ciclo</span>
                         <span class="text-[#333] text-[15px] font-bold ">
-                            {{ productInfo.incomeCycle }} {{ t("Days") }}
+                            {{ productInfo.incomeCycle }}
                         </span>
                     </div>
 
@@ -90,7 +90,7 @@
                     <div class="flex justify-between items-center py-[10px] border-b border-[#F5F5F5]">
                         <span class="text-[#666] text-[13px]">{{ t("Referral reward") }}</span>
                         <span class="text-[#333] text-[14px] font-bold ">{{ currencySymbol }} {{ productInfo.shareReward
-                            }}</span>
+                        }}</span>
                     </div>
                     <!-- <div class="flex justify-between items-center py-[10px] border-b border-[#F5F5F5]">
                         <span class="text-[#666] text-[13px]">{{ t("Upgrade reward") }}</span>
@@ -101,7 +101,7 @@
                     <div class="flex justify-between items-center py-[10px]">
                         <span class="text-[#666] text-[13px]">{{ t("Upgrade Diamonds") }}</span>
                         <span class="text-[#333] text-[14px] font-bold ">{{ currencySymbol }} {{ productInfo.seedReward
-                            }}</span>
+                        }}</span>
                     </div>
                 </div>
 
@@ -110,15 +110,15 @@
                     <h3 class="text-[14px] font-bold text-[#1A1A1A] mb-[8px]">L1/L2/L3 Comissão da equipe</h3>
                     <div class="text-[#666] text-[12px] leading-[1.8] ">
                         <p>L1={{ productInfo.rates.B }}% = {{ productInfo.rates.B / 100 }} * {{ productInfo.totalIncome
-                            }} = {{
+                        }} = {{
                                 currencySymbol }} {{ addCommasToNumber(productInfo.rates.B / 100 * productInfo.totalIncome)
                             }}</p>
                         <p>L2={{ productInfo.rates.C }}% = {{ productInfo.rates.C / 100 }} * {{ productInfo.totalIncome
-                            }} = {{
+                        }} = {{
                                 currencySymbol }} {{ addCommasToNumber(productInfo.rates.C / 100 * productInfo.totalIncome)
                             }}</p>
                         <p>L3={{ productInfo.rates.D }}% = {{ productInfo.rates.D / 100 }} * {{ productInfo.totalIncome
-                            }} = {{
+                        }} = {{
                                 currencySymbol }} {{ addCommasToNumber(productInfo.rates.D / 100 * productInfo.totalIncome)
                             }}</p>
                     </div>
@@ -163,7 +163,7 @@
                 <div class="flex w-full flex-1">
                     <div class="payTypeBox w-full flex flex-col gap-12">
                         <div class="li-item flex items-center justify-between w-full"
-                            v-for="(item, index) in payTypeList" :key="index" >
+                            v-for="(item, index) in payTypeList" :key="index">
                             <div class="label">{{ item.name }} <span class="font-bold">R$ {{ item.num }}</span></div>
                             <!-- <svg class="w-16 h-16 flex-shrink-0" v-if="activePayIndex == index" viewBox="0 0 16 16"
                                 fill="none" xmlns="http://www.w3.org/2000/svg">
