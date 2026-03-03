@@ -9,24 +9,21 @@ const show = computed(() => route.name && routeWhiteList.includes(route.name));
 const tabList = [
   {
     name: "Home",
-    path: "/",
-  },
-  {
-    name: "Product",
-    path: "/market",
-  },
-  {
-    name: "TaskBonus",
-    path: "/taskBonus",
-  },
-  {
-    name: "News",
     path: "/news",
   },
   {
-    name: "Profile",
+    name: "Product",
+    path: "/",
+  },
+  {
+    name: "TaskBonus",
     path: "/profile",
   },
+  {
+    name: "News",
+    path: "/help",
+  },
+
 ];
 </script>
 
@@ -54,28 +51,27 @@ const tabList = [
         </svg>
 
         <!-- Product -->
-
-        <svg class="w-24 h-24" :class="props.active ? 'active-icon' : ''" v-if="item.name == 'Product'"
-          viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <mask id="mask0_5701_57910" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="7" y="2" width="10"
-            height="9">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.21094 2H16.2729V10.3057H7.21094V2Z" fill="white" />
-          </mask>
-          <g mask="url(#mask0_5701_57910)">
-            <path fill-rule="evenodd" clip-rule="evenodd"
-              d="M15.5229 10.3057C15.1089 10.3057 14.7729 9.9697 14.7729 9.5557V6.52369C14.7729 4.85669 13.4179 3.49969 11.7509 3.49969C10.9399 3.52769 10.1799 3.80769 9.60594 4.37569C9.03194 4.94469 8.71394 5.70169 8.71094 6.50869V9.5557C8.71094 9.9697 8.37494 10.3057 7.96094 10.3057C7.54694 10.3057 7.21094 9.9697 7.21094 9.5557V6.52369C7.21594 5.29469 7.69094 4.16069 8.54994 3.31069C9.40794 2.45969 10.5599 2.03469 11.7539 1.99969C14.2449 1.99969 16.2729 4.0297 16.2729 6.52369V9.5557C16.2729 9.9697 15.9369 10.3057 15.5229 10.3057Z"
-              fill="#8C91A2" />
-          </g>
-          <mask id="mask1_5701_57910" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="2" y="6" width="20"
-            height="16">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M2 6.47461H21.4998V21.9996H2V6.47461Z" fill="white" />
-          </mask>
-          <g mask="url(#mask1_5701_57910)">
-            <path fill-rule="evenodd" clip-rule="evenodd"
-              d="M7.00776 7.97461C5.07376 7.97461 3.49976 9.54661 3.49976 11.4796V16.9956C3.49976 18.9276 5.07376 20.4996 7.00776 20.4996H16.4918C18.4258 20.4996 19.9998 18.9276 19.9998 16.9956V11.4796C19.9998 9.54661 18.4258 7.97461 16.4918 7.97461H7.00776ZM16.4918 21.9996H7.00776C4.24676 21.9996 1.99976 19.7546 1.99976 16.9956V11.4796C1.99976 8.71961 4.24676 6.47461 7.00776 6.47461H16.4918C19.2538 6.47461 21.4998 8.71961 21.4998 11.4796V16.9956C21.4998 19.7546 19.2538 21.9996 16.4918 21.9996Z"
-              fill="#8C91A2" />
-          </g>
+        <svg class="w-24 h-24" v-if="item.name == 'Product'" viewBox="0 0 24 24" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M9 10C10.1046 10 11 9.10457 11 8C11 6.89543 10.1046 6 9 6C7.89543 6 7 6.89543 7 8C7 9.10457 7.89543 10 9 10Z"
+            :stroke="props.active ? '#fff' : '#8C91A2'" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round" />
+          <path d="M12 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22H15C20 22 22 20 22 15V11"
+            :stroke="props.active ? '#fff' : '#8C91A2'" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round" />
+          <path
+            d="M16.12 5.11002C15.79 4.07002 16.18 2.78002 17.26 2.43002C17.83 2.25002 18.54 2.40002 18.94 2.95002C19.32 2.38002 20.05 2.24002 20.62 2.43002C21.71 2.78002 22.1 4.07002 21.77 5.11002C21.25 6.75002 19.45 7.61002 18.95 7.61002C18.44 7.61002 16.65 6.77002 16.12 5.11002Z"
+            :stroke="props.active ? '#fff' : '#8C91A2'" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round" />
+          <path
+            d="M2.66998 18.9501L7.59998 15.6401C8.38998 15.1101 9.52998 15.1701 10.24 15.7801L10.57 16.0701C11.35 16.7401 12.61 16.7401 13.39 16.0701L17.55 12.5001C18.33 11.8301 19.59 11.8301 20.37 12.5001L22 13.9001"
+            :stroke="props.active ? '#fff' : '#8C91A2'" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round" />
         </svg>
+
+
+
 
         <!-- News -->
 

@@ -122,7 +122,7 @@ export function walletLogsGrid(params): Promise<any> {
   return request.get('user/withdrawLog', { params })
 }
 export function getTeamData(params): Promise<any> {
-  return request.get('/user/getTeamData', { params })
+  return request.get('user/team', { params })
 }
 export function getTeamInfoData(): Promise<any> {
   return request.get('/user/getTeamInfoData', {})

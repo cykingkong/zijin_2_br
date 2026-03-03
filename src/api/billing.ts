@@ -16,5 +16,5 @@ export function deposit(data): Promise<any> {
     return request.post<any>('/recharge/recharge', data)
 }
 export function withdraw(data): Promise<any> {
-    return request.post<any>('/withdraw/withdraw', data)
+    return request.post<any>('/user/withdraw', data)
 }

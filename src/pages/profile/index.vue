@@ -40,12 +40,12 @@
       <div class="bg-white rounded-[16px] p-[16px]  shadow-sm text-center flex-wrap">
         <div class="flex w-full">
           <div class="flex-1">
-            <div class="value font-bold mb-4 font-20 color-[#A26D47]">88</div>
-            <div class="label font-bold mb-4 font-12 color-[#161616]">{{ t('Total Submit') }}</div>
+            <div class="value font-bold mb-4 font-20 color-[#A26D47]">{{ userInfo.today_income || 0 }}</div>
+            <div class="label font-bold mb-4 font-12 color-[#161616]">{{ t('Today Income') }}</div>
           </div>
           <div class="flex-1">
-            <div class="value font-bold mb-4 font-20 color-[#A26D47]">88</div>
-            <div class="label font-bold mb-4 font-12 color-[#161616]">{{ t('Total Submit') }}</div>
+            <div class="value font-bold mb-4 font-20 color-[#A26D47]">{{ userInfo.total_income }}</div>
+            <div class="label font-bold mb-4 font-12 color-[#161616]">{{ t('Total Income') }}</div>
           </div>
         </div>
         <button @click="handleHerf(1)"
@@ -57,7 +57,7 @@
     </div>
     <!-- 3. Bottom Grid Menu (Replacs old Cell List) -->
     <div class="px-[16px] mb-16">
-      <div class="bg-white rounded-[16px] p-[16px] shadow-sm grid grid-cols-4 gap-y-[24px]">
+      <div class="bg-white rounded-[16px] p-[16px] shadow-sm grid grid-cols-3 gap-y-[24px]">
         <div v-for="(item, index) in menuList" :key="index" class="flex flex-col items-center"
           @click="handleClickMenu(item)">
           <!-- Icon Box -->
@@ -67,7 +67,7 @@
           <!-- Text -->
           <span class="text-[#333] text-[12px] font-medium text-center" :class="{ 'text-red-500': item.isLogout }">{{
             item.text
-          }}</span>
+            }}</span>
         </div>
       </div>
     </div>
@@ -179,9 +179,9 @@ const getLevelCount = (level: number) => {
 // --- 菜单配置 (Grid Menu) ---
 const menuList = [
 
-  { text: t('Bank Account'), icon: iconBank, url: '/profile/bankAccount', type: 'link' },
-  { text: t('Fund Details'), icon: iconFunds, url: '/wallet/walletLogs', type: 'link' },
-  { text: t('Quit Article'), icon: iconQuit, url: '/richTextDetail?type=czwz', type: 'link' }, // 暂定 About Us
+  { text: t('Bank Account'), icon: iconBank, url: '/profile/bankAccount/addBank', type: 'link' },
+
+  { text: t('inviteFriends'), icon: iconQuit, url: '/richTextDetail?type=czwz', type: 'link' }, // 暂定 About Us
   { text: t('Logout'), icon: iconLogout, type: 'logout', isLogout: false }
 ];
 const myteamList = ref([
@@ -255,7 +255,7 @@ onMounted(async () => {
 
 
 
-  // await userStore.getWalletInfo();
+  await userStore.info();
   // await userStore.fetchTeamInfoData();
   console.log(userInfo.value, 'userInfo')
 });

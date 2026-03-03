@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 export function bank_list(params): Promise<any> {
-    return request.get<any>('/user/userCardGrid', { params })
+    return request.get<any>('/user/userCard', { params })
 }
 
 export function bank_info(params): Promise<any> {

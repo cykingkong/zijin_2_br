@@ -1,7 +1,7 @@
 <template>
     <div class="team-page min-h-[100vh] pt-[40px] bg-[#F7F7F7] flex flex-col">
 
-  <img src="@/assets/reward.png" alt="" class="w-200 h-170 block m-x-auto mb-30 mt-]">
+        <img src="@/assets/reward.png" alt="" class="w-200 h-170 block m-x-auto mb-30 mt-]">
 
         <!-- 内容区域 -->
         <div class="content flex-1 px-[16px] pb-[30px]">
@@ -9,30 +9,14 @@
 
             <!-- 2. 等级概览 (Level Cards) -->
             <div class="level-overview bg-white rounded-[16px] p-[16px] shadow-sm mb-[16px]">
-                <div class="flex justify-between gap-[10px] mb-[16px]">
-                    <div v-for="(lv, index) in levelStats" :key="index"
-                        class="flex-1 border border-[#F2F2F2] border-solid rounded-[12px] py-[12px] flex flex-col items-center">
-                        <div class="flex items-center mb-[4px]">
-                            <!-- 小图标占位 -->
-
-                            <img :src="lv.img" alt="" class="w-18 h-18 object-cover mr-4">
-
-                            <span class="text-[#00000080] text-[12px] font-bold">{{ lv.name }}</span>
-                        </div>
-                        <span class="text-[#333] text-[16px] font-bold ">{{ lv.count }}</span>
-                    </div>
-                </div>
-              <div class="commission-section mb-[30px]">
-                    <h3 class="text-[14px] font-bold text-[#1A1A1A] mb-[8px]">L1/L2/L3 Comissão da equipe</h3>
+                <div class="commission-section">
                     <div class="text-[#666] text-[12px] leading-[1.8] ">
-                        <p>B-level commission-{{ teamsData.rates.B }}%  </p>
-                        <p>C-level commission-{{ teamsData.rates.C }}%  </p>
-                        <p>D=-level commission-{{ teamsData.rates.D }}%  </p>
-
+                        <div>B-level commission-{{ teamsData.commission.v1_commission }}% </div>
+                        <div>C-level commission-{{ teamsData.commission.v2_commission }}% </div>
+                        <div>D=-level commission-{{ teamsData.commission.v3_commission }}% </div>
                     </div>
                 </div>
             </div>
-
 
 
             <!-- 等级 Tab 切换 -->
@@ -42,7 +26,9 @@
                     :class="currentLevel === tab.key
                         ? 'bg-white border-[#8B5E3C] border border-solid text-[#1b1b1b]'
                         : 'bg-[#F2F2F2] border-transparent text-[#00000033]'">
-                    {{ tab.label }}{{ teamsData?.rates[tab.key]||'0' }}% ({{ activeIndex ? tab.unNum : tab.num }})
+                    {{ tab.label }}{{ teamsData?.commission[tab.key] || '0' }}% ({{ teamsData?.userNum[tab.numKey] ||
+                        0
+                    }})
                 </div>
             </div>
 
@@ -53,7 +39,7 @@
                     <div class="w-[30%] text-[12px] text-[#333] font-medium">{{ $t('Account') }}</div>
                     <div class="w-[30%] text-[12px] text-[#333] font-medium text-center">{{ $t('Today Upload') }}
                     </div>
-                    <div class="w-[40%] text-[12px] text-[#333] font-medium text-right">{{ $t('Upload Success Count') }}
+                    <div class="w-[40%] text-[12px] text-[#333] font-medium text-right">{{ $t('Upload Success') }}
                     </div>
                 </div>
 
@@ -61,9 +47,9 @@
                 <div class="flex flex-col">
                     <div v-for="(row, idx) in teamsData?.userList" :key="idx"
                         class="flex py-[14px] items-center border-b border-[#F9F9F9] last:border-0">
-                        <div class="w-[30%] text-[14px] text-wrap text-[#1A1A1A]">{{ row.account }}</div>
-                        <div class="w-[30%] text-[14px] text-[#1A1A1A] text-center">{{ row.chilrenCount }}</div>
-                        <div class="w-[40%] text-[14px] text-[#1A1A1A] text-right">R$ {{ row.productPrice }}</div>
+                        <div class="w-[30%] text-[14px] text-wrap text-[#1A1A1A]">{{ row.uuid }}</div>
+                        <div class="w-[30%] text-[14px] text-[#1A1A1A] text-center">{{ row.todayImgNum }}</div>
+                        <div class="w-[40%] text-[14px] text-[#1A1A1A] text-right">{{ row.totalImgNum }}</div>
                     </div>
                 </div>
                 <!-- Empty State Placeholder -->
@@ -88,10 +74,10 @@ import { addCommasToNumber } from '@/utils/tool';
 const router = useRouter();
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
-const {t} = useI18n()
+const { t } = useI18n()
 // 筛选状态
 const filterType = ref('cancel'); // 
-const currentLevel = ref('B');
+const currentLevel = ref('v1_commission');
 
 // 模拟数据
 const levelStats = ref([
@@ -102,22 +88,25 @@ const levelStats = ref([
 
 const levelTabs = ref([
     {
-        id: 'L1', label: 'L1-', key: 'B',
-        num: userInfo.value?.topData?.find((item) => item.generation === 1)?.vaildUserCount || 0,
-        unNum: userInfo.value?.topData?.find((item) => item.generation === 1)?.noVaildUserCount || 0,
+        id: 'L1', label: 'L1-', key: 'v1_commission', numKey: "v1_num",
+
     },
     {
-        id: 'L2', label: 'L2-', key: 'C',
-        num: userInfo.value?.topData?.find((item) => item.generation === 2)?.vaildUserCount || 0,
-        unNum: userInfo.value?.topData?.find((item) => item.generation === 2)?.noVaildUserCount || 0,
+        id: 'L2', label: 'L2-', key: 'v2_commission', numKey: "v2_num",
+
     },
     {
-        id: 'L3', label: 'L3-', key: 'D',
-        num: userInfo.value?.topData?.find((item) => item.generation === 3)?.vaildUserCount || 0,
-        unNum: userInfo.value?.topData?.find((item) => item.generation === 3)?.noVaildUserCount || 0,
+        id: 'L3', label: 'L3-', key: 'v3_commission', numKey: "v3_num",
+
+
     },
 
 ]);
+let levelEnum = {
+    v1_commission: '1',
+    v2_commission: '2',
+    v3_commission: '3',
+}
 
 // 模拟列表数据
 const tableData = ref([
@@ -128,14 +117,19 @@ const tableData = ref([
     { account: '2333665', referrer: 744, maxAmount: '1214' },
 ]);
 const teamsData = ref({
-    userList: [
-        { account: '2333665', referrer: 25, maxAmount: '200' },
-    ],
-    rates: {
-        B: '0',
-        C: '0',
-        D: '0',
-    }
+    "commission": {
+        "v1_commission": "0",
+        "v2_commission": "0",
+        "v3_commission": "0"
+    },
+    "userNum": {
+        "v1_num": 0,
+        "v2_num": 0,
+        "v3_num": 0
+    },
+    "userList": [
+
+    ]
 })
 function goBack() {
     if (router) router.back();
@@ -143,9 +137,9 @@ function goBack() {
 const fetchTeamData = async () => {
     // level B=1代, C=2代, D=3代
     const res = await getTeamData({
-        level: currentLevel.value
-        , pageIndex: 1
-        , pageSize: 100,
+        level: levelEnum[currentLevel.value]
+        , page: 1
+        , size: 100,
         onlyValid: activeIndex.value == 0 ? 1 : 2 // onlyValid: -1全部 1有效 2无效
     });
     console.log(res, 'asdasd')
@@ -163,17 +157,17 @@ const typeList = ref([
 ])
 onMounted(async () => {
     await fetchTeamData()
-    await userStore.fetchTeamInfoData()
+    // await userStore.fetchTeamInfoData()
 
 })
 </script>
 
 <route lang="json5">
 {
-  name: 'team',
+  name: 'inviteFriends',
   meta: {
-    title: 'Team',
-    i18n: 'Team'
+    title: 'Invite Friends',
+    i18n: 'Invite Friends'
   },
 }
 </route>

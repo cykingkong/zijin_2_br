@@ -75,8 +75,9 @@ import {
 } from "@/api/payment";
 import { useStore } from "@/stores/modules/index";
 import { showToast, showSuccessToast, allowMultipleToast } from "vant";
+import { bank_list } from "@/api/payment";
 
-import { bankList } from "@/api/user";
+
 import local from "@/utils/local";
 import nationalityList from "@/components/nationality-list/nationalityList.vue";
 import { useI18n } from "vue-i18n";
@@ -88,17 +89,13 @@ const isEdit = ref(false);
 const pickerValue = ref([]);
 const columns = ref([]);
 const getBankList = async () => {
-  const { data, code } = await bankList({});
+  const { data, code } = await bank_list({});
+  console.log(data, 'dadas')
   if (code == 200) {
-    columns.value =
-      data && data.length
-        ? data.map((item: any) => {
-          return {
-            text: item.bank_name,
-            value: item.bank_code,
-          };
-        })
-        : [];
+    const { bank_card_address } = data
+    form.receiveName = bank_card_address.real_name;
+    form.receivePhone = bank_card_address.bank_account_number;
+    form.bankName = bank_card_address.bank_name;
   }
 };
 const bankCardType = ref("");

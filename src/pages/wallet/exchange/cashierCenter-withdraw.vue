@@ -8,7 +8,7 @@
         </div>
       </template>
     </VanNavBar>
-    <div class="info mt-32" v-if="info">
+    <div class="info mt-32">
       <div class="text-[14px] mt-[57px] text-center">{{ t("Withdrawal account") }}</div>
       <div class="min-count text-[#0F172A] font-size-[24px] mx-a text-center mt-4 font-bold overflow-y-auto">
         Rp {{ addCommasToNumber(count) || '0' }}
@@ -232,19 +232,8 @@ const getBankList = async () => {
       // router.push({ path: '/profile/bankAccount', replace: true, })
       // return
     }
-    let firstBankInfo = data.rows[0]
-    form.receiveName = firstBankInfo.address.receiveName;
+    let firstBankInfo = data.bank_card_address
 
-    form.receiveAccount = firstBankInfo.address.receiveAccount;
-    form.receivePhone = firstBankInfo.address.receivePhone;
-    form.receiveEmail = firstBankInfo.address.receiveEmail;
-    form.CPF = firstBankInfo.address.CPF;
-    form.bankName = firstBankInfo.address.bankName;
-    form.bankCode = firstBankInfo.address.bankCode;
-    form.id = firstBankInfo.id;
-    bankList.value = data.rows;
-    info.value = data.rows[0]
-    selectBank.value = data.rows[0].id
   }
 };
 const handleBuyClickOriginal = async () => {
@@ -260,14 +249,19 @@ const handleBuyClickOriginal = async () => {
   // localStorage.setItem("withdrawInfo", JSON.stringify(dataInfo));
   // router.push('/wallet/exchange/withdraw-preview')
   const { data, code } = await withdraw({
-    type: "1",
-    cardId: selectBank.value,
+
+    "real_name": "123",
+    "bank_name": "111",
+    "bank_account_number": "123123123",
     amount: Number(count.value),
   });
   if (code == 200) {
+    showSuccessToast({
+      message: t("Withdrawal request submitted successfully"),
+    })
     setTimeout(() => {
-      router.push("/wallet/exchange/withdraw-success");
-    }, 400);
+      router.push("/profile");
+    }, 1500);
   }
 };
 const onConfirm = proxy!.$throttle(handleBuyClickOriginal, 1000, {
@@ -340,7 +334,7 @@ const getWithdrawInfo = async () => {
 onMounted(() => {
   // 初始获取localStorage中的dataInfo
   // updateInfo();
-  getWithdrawInfo();
+
   getBankList()
   // 监听localStorage变化
   window.addEventListener("storage", (e) => {
