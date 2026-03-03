@@ -21,24 +21,25 @@
         <div class="standards-table bg-white rounded-[16px] p-[16px]  mb-[24px]">
             <!-- 表头 -->
             <div
-                class="flex justify-between text-[#333] font-bold text-[14px] mb-[16px] pb-[12px] border-b-solid border-b-[1px] border-b-[#0000000D] border">
+                class="flex justify-between text-[#333]   font-bold text-[14px] mb-[16px] pb-[12px] border-b-solid border-b-[1px] border-b-[#0000000D] border">
                 <span class=" flex-1">{{ t('Level') }}</span>
-                <span class=" flex-1">{{ t('Rate') }}</span>
+                <span class=" flex-1 text-center">{{ 'Pérolas' }}</span>
+                <span class=" flex-1 text-right">{{ 'Resgatável' }}</span>
             </div>
 
             <!-- 列表内容 -->
             <div class="flex flex-col gap-[18px]">
 
-                <div v-for="(item, index) in seedConfigData?.exchangeRates" :key="index"
-                    class="flex justify-between items-center text-[14px] ">
+                <div v-for="(item, index) in 8" :key="index" class="flex justify-between items-center text-[14px] ">
                     <div class="flex items-center flex-1">
                         <!-- 图标 -->
-                        <img :src="imgEnum[item.level]" class="w-[20px] h-[20px] mr-[8px] object-contain" />
+                        <img :src="imgEnum[index + 1]" class="w-[20px] h-[20px] mr-[8px] object-contain" />
                         <!-- 等级文字 -->
-                        <span class="text-[#00000080]">{{ t('Lv') }}{{ item.level }}</span>
+                        <span class="text-[#00000080]">{{ t('Lv') }}{{ index + 1 }}</span>
                     </div>
                     <!-- 金额 -->
-                    <span class="text-[#333] font-medium  text-[15px] flex-1">{{ item.seedRadio }} %</span>
+                    <span class="text-[#333] font-medium text-center  text-[15px] flex-1">10</span>
+                    <span class="text-[#333] font-medium  text-[15px] flex-1 text-right">{{ index + 3 }} R$</span>
                 </div>
             </div>
         </div>
@@ -87,13 +88,31 @@ const imgEnum = {
 }
 // 注意：截图是从 LV2 开始的
 const salaryList = ref([
-    { lv: 'LV2', amount: '$7.00', img: lv2 },
-    { lv: 'LV3', amount: '$20.00', img: lv3 },
-    { lv: 'LV4', amount: '$45.00', img: lv4 },
-    { lv: 'LV5', amount: '$120.00', img: lv5 },
-    { lv: 'LV6', amount: '$300.00', img: lv6 },
-    { lv: 'LV7', amount: '$1,000.00', img: lv7 },
-    { lv: 'LV8', amount: '$3,000.00', img: lv8 },
+    {
+        "level": 1,
+        "levelName": "VIP1",
+        "seedRadio": "10",
+        "exchangeAmount": "3"
+    },
+    {
+        "level": 2,
+        "levelName": "VIP2",
+        "seedRadio": "10",
+        "exchangeAmount": "4"
+    },
+    {
+        "level": 3,
+        "levelName": "VIP3",
+        "seedRadio": "10",
+        "exchangeAmount": "4"
+    },
+    {
+        "level": 4,
+        "levelName": "VIP4",
+        "seedRadio": "10",
+        "exchangeAmount": "5"
+    },
+
 ]);
 const handleClickExchange = async () => {
     if (!codes.value) {

@@ -13,6 +13,8 @@ import { closeToast, showLoadingToast } from "vant";
 import { getKfUrl } from '@/api/user'
 import { ref, computed, watch, onMounted } from 'vue'; // 确保引入了 ref 等
 import { showToast, showSuccessToast, showFailToast } from 'vant';
+import { optimizeRichText } from '@/utils/richText';
+
 import appleStore from "@/assets/appleStore.png";
 import googlePlay from "@/assets/googlePlay.png";
 const { t } = useI18n();
@@ -35,7 +37,7 @@ const lang = ref(local.getlocal('lang') || 'br')
 const isVideo = (url) => {
   if (!url) return false;
   // 如果后台 url 没有后缀，或者通过 type 字段判断，请修改此处逻辑
-  const videoExtensions = ['.mp4', '.mov', '.webm', '.ogg']; 
+  const videoExtensions = ['.mp4', '.mov', '.webm', '.ogg'];
   return videoExtensions.some(ext => url.toLowerCase().includes(ext));
 };
 // -------------------------
@@ -64,7 +66,7 @@ const handleClickDownloadAppUrl = (type) => {
 }
 function handleClickGrid(val) {
   if (val == 3) {
-     downloadPopShow.value = true
+    downloadPopShow.value = true
 
     return
   }
@@ -81,7 +83,7 @@ const handleClickBanner = async (item) => {
   })
   if (res.code == 200) {
     // 注意：原代码这里似乎缺少 showSuccessToast 的 import，请确认
-    showSuccessToast({}) 
+    showSuccessToast({})
     console.log('Coupon received');
   }
 }
@@ -105,8 +107,9 @@ function init() {
     indexInfoData.value = res.data
     if (res.data.notice) {
       indexInfoData.value.noticeContent = getContent(indexInfoData.value.notice)
+      indexInfoData.value.pop_content = optimizeRichText(indexInfoData.value.pop_content)
       indexInfoData.value.banners = [{
-        url:'https://api.signet-jewelers-br.com/video.mp4'
+        url: 'https://api.signet-jewelers-br.com/video.mp4'
       }]
       // // 3. JS 实现自动播放逻辑
       // nextTick(() => {
@@ -241,16 +244,9 @@ onMounted(() => {
         <!-- Added index to key, and video check -->
         <van-swipe-item v-for="(item, index) in indexInfoData.banners" :key="index" @click="handleClickBanner(item)">
           <div class="image bg-[#f5f5f5] rounded-[16px] w-full h-full overflow-hidden relative">
-            <video 
-              v-if="isVideo(item.url)" 
-              ref="bannerVideoRef"
-              :src="item.url" 
-              class="w-full h-full object-cover rounded-[16px] block"
-              autoplay 
-              loop 
-              playsinline 
-              webkit-playsinline
-            ></video>
+            <video v-if="isVideo(item.url)" ref="bannerVideoRef" :src="item.url"
+              class="w-full h-full object-cover rounded-[16px] block" autoplay loop playsinline
+              webkit-playsinline></video>
             <img v-else :src="item.url" alt="" class="w-full h-full object-cover rounded-[16px] block">
           </div>
         </van-swipe-item>
@@ -283,22 +279,19 @@ onMounted(() => {
       </div>
     </div>
 
-   
+
 
     <Grid @handleClickGrid="handleClickGrid" />
- <!-- Second Swipe Area -->
+    <!-- Second Swipe Area -->
     <div class="detail-image w-full px-[24px]"
       v-if="indexInfoData.discountBanners && indexInfoData.discountBanners.length > 0">
       <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
         <!-- Added index to key, and video check -->
-        <van-swipe-item v-for="(item, index) in indexInfoData.discountBanners" :key="index" @click="handleClickBanner(item)">
+        <van-swipe-item v-for="(item, index) in indexInfoData.discountBanners" :key="index"
+          @click="handleClickBanner(item)">
           <div class="image bg-[#f5f5f5] rounded-[16px] w-full h-full overflow-hidden relative">
-            <video 
-              v-if="isVideo(item.url)" 
-              :src="item.url" 
-              class="w-full h-full object-cover rounded-[16px] block"
-              muted autoplay loop playsinline webkit-playsinline
-            ></video>
+            <video v-if="isVideo(item.url)" :src="item.url" class="w-full h-full object-cover rounded-[16px] block"
+              muted autoplay loop playsinline webkit-playsinline></video>
             <img v-else :src="item.url" alt="" class="w-full h-full object-cover rounded-[16px] block">
           </div>
         </van-swipe-item>
@@ -306,8 +299,8 @@ onMounted(() => {
     </div>
     <div class="indicator-title px-24 font-bold text-[16px] mt-12 flex items-center justify-between">
       {{ t("FAQ") }}
-      <div class="see-all text-[14px] color-[#9CA3AF] flex items-center" @click="handleClickSeeAll">{{ t("See all") }} <svg width="14"
-          height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <div class="see-all text-[14px] color-[#9CA3AF] flex items-center" @click="handleClickSeeAll">{{ t("See all") }}
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M5.19751 11.62L9.00084 7.81667C9.45001 7.3675 9.45001 6.6325 9.00084 6.18334L5.19751 2.38"
             stroke="#8C91A2" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
@@ -316,7 +309,7 @@ onMounted(() => {
     <div class="news-list px-24 py-16 flex flex-col gap-12">
       <FaqItem v-for="(item, index) in newsList" :key="index" :item="item" @click="handleClickItem(item)" />
     </div>
-   <van-popup v-model:show="downloadPopShow" destroy-on-close round :position="'bottom'" :z-index="10000"
+    <van-popup v-model:show="downloadPopShow" destroy-on-close round :position="'bottom'" :z-index="10000"
       :safe-area-inset-bottom="true">
       <div class="p-12">
         <div class="upload-label  mb-12" :class="['flex items-center gap-4']">
@@ -343,7 +336,7 @@ onMounted(() => {
     </van-popup>
     <van-popup v-model:show="showDatePicker" position="center" :round="true">
       <div class="h-auto max-h-500 overflow-y-auto p-12">
-        <div class="div" v-html="indexInfoData.notice" />
+        <div class="div" v-html="indexInfoData.pop_content" />
       </div>
       <div class="w-full flex gap-12 px-12 pb-12">
         <div class="btn-box flex-1">
@@ -377,6 +370,7 @@ onMounted(() => {
   width: 9px;
   height: 8px;
 }
+
 .header {
   display: flex;
   height: 64px;
@@ -394,19 +388,21 @@ onMounted(() => {
   .right {
     display: flex;
     align-items: center;
+
     img {
       width: 22px;
       height: 22px;
     }
   }
 }
+
 .kf-fixed {
   z-index: 1002;
 }
+
 // :deep(.van-tabs__line) {
 //   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADxSURBVHgBnVHLDYJAEJ1ZjJ+LoQTsQDtA48GjJXj1YNQKKIGDIR4pQY8eTLQD7EBKIIZIBGEEiQSR5eNLNrs7efP27RsEDiZbR3J9OEXnrtce7Ndo5fEYT8D1cRluUrTslqPweFjw+jVdawrQO8w7ZiUHbkBqtub5oOdxfwRGmjMDwmm2TgDyeOPIpQIhk/vfAEGfqiRyBUbaI2qWgA/p1riv0oUkxHdwTzIAUYRCoNUUaPAJNHHgBaH10uYIJHoBql8OZM3uMxIMqAFGMDwuOmcWX4Qd1ARhHDbGY8ufcQWZNSsaWzmYwsIQTPgTCHR5AaMKT03qmstiAAAAAElFTkSuQmCC) no-repeat center;
 //   width: 9px;
 //   height: 8px;
 //   background-size: 100% 100%;
-// }
-</style>
+// }</style>
