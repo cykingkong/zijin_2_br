@@ -89,7 +89,7 @@
           <div class="flex flex-col items-end">
             <span class="text-[#999] text-[12px] mb-[2px]">{{ t("TotalWithdraw") }}</span>
             <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ fakeData.total_withdraw > 0 ?
-              addCommasToNumber(fakeData.total_withdraw) : addCommasToNumber(userInfo.rechargePrice)
+              addCommasToNumber(fakeData.total_withdraw) : addCommasToNumber(userInfo.withdrawPrice)
               }}</span>
           </div>
           <!-- Row 2 -->

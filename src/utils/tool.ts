@@ -25,6 +25,7 @@ const throttleAfterCompletion = <T extends (...args: any[]) => Promise<any>>(
 }
 
 // 定义一个函数，用于将数字添加逗号
+// ... existing code ...
 const addCommasToNumber = (number, shouldToFixed = true, noshowZero = false) => {
 
     // 如果数字为空或未定义或为0，则返回0
@@ -45,7 +46,7 @@ const addCommasToNumber = (number, shouldToFixed = true, noshowZero = false) => 
                 if (noshowZero) return '';
                 return '0';
             }
-            // [integerPart, decimalPart] = num.toFixed(2).split('.');
+            // [integerPart,decimalPart] = num.toFixed(2).split('.');
             // 将数字转换为字符串进行处理
             const numStr = num.toString();
             const parts = numStr.split('.');
@@ -67,11 +68,12 @@ const addCommasToNumber = (number, shouldToFixed = true, noshowZero = false) => 
         integerPart = parts[0];
         decimalPart = parts.length > 1 ? parts[1] : '';
     }
-    // 将整数部分中的每三位数字添加逗号
-    const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    // 如果有小数部分，则返回整数部分和小数部分，否则只返回整数部分
-    return decimalPart ? `${formattedInteger}.${decimalPart}` : formattedInteger;
+    // 将整数部分中的每三位数字添加小数点（原逗号）
+    const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    // 如果有小数部分，则返回整数部分和小数部分，使用逗号作为小数分隔符
+    return decimalPart ? `${formattedInteger},${decimalPart}` : formattedInteger;
 }
+// ... existing code ...
 export {
     addCommasToNumber,
     throttleAfterCompletion
