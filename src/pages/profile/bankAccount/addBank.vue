@@ -70,8 +70,8 @@
         {{ t("CPF") }}
       </div>
       <div class="phone-input my-[12px]">
-        <inputCom :placeholder="t('')" v-model:value="form.CPF" :tips="''">
-        </inputCom>
+        <inputCom :placeholder="t('PleaseEnterOnlyDigits')" v-model:value="form.CPF" :tips="t('Only11DigitsAllowed')"
+          inputType="number" :formatter="cpfFormatter" />
       </div>
     </div>
 
@@ -164,7 +164,23 @@ const getCardInfo = () => {
   form.id = res.id;
 
 };
+
+const cpfFormatter = (val: string) => {
+  // 1. 过滤非数字字符
+  let cleaned = val.replace(/[^0-9]/g, '');
+
+  // 2. 限制11位（可视化展示，但允许临时超过）
+  if (cleaned.length > 11) {
+    cleaned = cleaned.substring(0, 11);
+  }
+
+  return cleaned;
+};
 const handleClickSubmit = () => {
+  if (!/^[0-9]{11}$/.test(form.CPF)) {
+    showToast(t('CPFRequires11Digits'));
+    return;
+  }
   // 校验必填
   if (!form.receiveName) {
     showToast(t('PleaseEnterName'))
@@ -182,6 +198,7 @@ const handleClickSubmit = () => {
     showToast(t('PleaseEnterAccount'))
     return;
   }
+
   // if (!form.bankName) {
   //   showToast(t('PleaseSelectBank'))
   //   return;

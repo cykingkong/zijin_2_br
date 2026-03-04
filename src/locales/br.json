@@ -245,5 +245,6 @@
   "Log in": "Entrar",
   "Welcome": "Bem-vindo",
   "FAQ": "FAQ",
-  "CPF": "CPF"
+  "CPF": "CPF",
+  "CPFRequires11Digits": "CPF Requer 11 Dígitos"
 }
