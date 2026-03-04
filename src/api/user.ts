@@ -82,7 +82,7 @@ export function kyc(data): Promise<any> {
   return request.post('/api/user/kyc', data)
 }
 export function getKfUrl(params): Promise<any> {
-  return request.get('/user/getKfUrl', { params })
+  return request.get('/auth/setting', { params })
 }
 // 用户信息相关
 // 获取可用余额（全部）
@@ -109,7 +109,7 @@ export function resetPassword(data): Promise<any> {
 }
 // 获取客服链接
 export function getKfUrlNew(): Promise<any> {
-  return request.get('/api/auth/kf_url',)
+  return request.get('/auth/setting',)
 }
 export function getArticleList(params): Promise<any> {
   return request.get('/api/article_list', { params })
