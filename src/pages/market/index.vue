@@ -10,7 +10,8 @@ const enumBtnText = {
   0: 'Sold out',
   1: 'Buy Now',
   2: 'Sold out',
-  3: 'Pre-sale'
+  3: 'Pre-sale',
+  4: 'Não p. comprar'
 }
 const productTypeEnum = {
   1: "Dias alternados", // 隔天
