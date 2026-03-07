@@ -1,236 +1,200 @@
-<template>
-    <div class="community p-16 flex flex-col">
-        <div class="flex w-full text-center pb-20 border-b-solid border-b-[1px] border-b-[#0000000D] mb-20">
-            <div class="flex-1">
-                <div class="value font-bold mb-4">{{ imageObj.images_today }}</div>
-                <div class="label font-bold mb-4">{{ t('Today Submit') }}</div>
-            </div>
-            <div class="flex-1">
-                <div class="value font-bold mb-4">{{ imageObj.images_total }}</div>
-                <div class="label font-bold mb-4">{{ t('Total Pass') }}</div>
-            </div>
-        </div>
-
-        <div class="item w-full p-16 rounded-16" v-for="(item, index) in logList" :key="index"
-            @click="handleClickItem(item)">
-            <div class="content mb-12">
-                <!-- 移除了原本堆砌在此处的冗长 SVG，保持 DOM 干净 -->
-                <div class="text-[#888888] text-16 font-bold flex items-center gap-[4px]">
-                    ID:{{ item?.order_id || '' }}
-                </div>
-            </div>
-            <div class="picture-box">
-                <!-- 单张图片 -->
-                <div class="w-full min-h-[120px] rounded-[16px] overflow-hidden bg-[#f5f5f5] relative"
-                    v-if="item.images.length == 1" v-for="(imgItem, imgIndex) in item.images" :key="imgIndex">
-                    <van-image :src="imgItem.image" fit="cover" class="w-full h-full object-cover"
-                        @click.stop="showImagePreview(index, imgIndex)"></van-image>
-                    <!-- 蒙版层 (图片状态) -->
-                    <div :style="{ background: statusIconMap[imgItem.status].bg }"
-                        class="absolute bottom-0 h-[30px] w-full color-white pointer-events-none flex px-2 gap-4 z-10 justify-center items-center text-nowrap">
-                        <div class="text-12 font-bold">{{ statusIconMap[imgItem.status].label || '' }}</div>
-                        <svg v-if="statusIconMap[imgItem.status]" class="w-16 h-16 flex-shrink-0" viewBox="0 0 20 20"
-                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path :d="statusIconMap[imgItem.status].path" :fill="'#FFF'" />
-                        </svg>
-                    </div>
-                </div>
-
-                <!-- 两张图片、三张图片 -->
-                <div class="w-full grid grid-cols-3 gap-8" v-if="[2, 3].includes(item.images.length)">
-                    <div class="w-full h-120 rounded-[16px] overflow-hidden bg-[#f5f5f5] flex-1 relative"
-                        v-for="(imgItem, imgIndex) in item.images" :key="imgIndex">
-                        <van-image :src="imgItem.image" fit="cover" class="w-full h-full object-cover"
-                            @click.stop="showImagePreview(index, imgIndex)"></van-image>
-
-                        <!-- 蒙版层 (图片状态) -->
-                        <div :style="{ background: statusIconMap[imgItem.status].bg }"
-                            class="absolute bottom-0 h-[30px] w-full color-white pointer-events-none flex px-2 gap-4 z-10 justify-center items-center text-nowrap">
-                            <div class="text-12 font-bold">{{ statusIconMap[imgItem.status].label || '' }}</div>
-                            <svg v-if="statusIconMap[imgItem.status]" class="w-16 h-16 flex-shrink-0"
-                                viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path :d="statusIconMap[imgItem.status].path" :fill="'#FFF'" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 四张图片 -->
-                <div class="w-full grid grid-cols-2 gap-8" v-if="item.images.length == 4">
-                    <div class="w-full h-120 rounded-[16px] overflow-hidden bg-[#f5f5f5] flex-1 relative"
-                        v-for="(imgItem, imgIndex) in item.images" :key="imgIndex">
-                        <van-image :src="imgItem.image" fit="cover" class="w-full h-full object-cover"
-                            @click.stop="showImagePreview(index, imgIndex)"></van-image>
-
-                        <!-- 蒙版层 (图片状态) -->
-                        <div :style="{ background: statusIconMap[imgItem.status].bg }"
-                            class="absolute bottom-0 h-[30px] w-full color-white pointer-events-none flex px-2 gap-4 z-10 justify-center items-center text-nowrap">
-                            <div class="text-12 font-bold">{{ statusIconMap[imgItem.status].label || '' }}</div>
-                            <svg v-if="statusIconMap[imgItem.status]" class="w-16 h-16 flex-shrink-0"
-                                viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path :d="statusIconMap[imgItem.status].path" :fill="'#FFF'" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="info w-full flex gap-8 justify-start mt-12">
-                <div class="detail flex flex justify-between w-full items-center">
-                    <div class="time text-[#888888] text-14">{{ dayjs(item?.createdAt).format('YYYY-MM-DD') || '' }}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <empty v-if="logList?.length == 0" :no-tips="true"></empty>
-        <LoadMore :status="listStatus" @load-more="loadMore" />
-    </div>
-</template>
-
 <script setup>
-import itemCom from './com/item.vue'; // 为避免与变量 item 冲突，建议将引入名改为 itemCom
-import { imageList as list } from '@/api/image'
-import dayjs from 'dayjs'
-// import { showImagePreview as vantShowImagePreview } from 'vant'; // 假设你使用的是 Vant 预览，如果没有请忽略
-
+import router from "@/router";
+import { useUserStore } from "@/stores";
+import { navTitleStore } from "@/stores/index";
+import { isLogin } from "@/utils/auth";
+import { useI18n } from "vue-i18n";
+import { closeToast, showLoadingToast, showSuccessToast } from "vant";
+import { ref, computed, watch, onMounted } from 'vue';
+import { upload, uploadImage } from '@/api/tool'
 const { t } = useI18n();
-const logList = ref([])
-const imageObj = ref({
-    images_today: 0,
-    images_total: 0
-})
-const listStatus = ref(1);
-const page = reactive({
-    pageIndex: 1,
-    pageSize: 10,
-})
-const banners = ref([])
-const activeIndex = ref(0)
-const tags = ref([
-    { label: "Pass", key: 0 },
-    { label: 'Under review', key: 1 },
-    { label: "Reject", key: 2 }
-])
-const search = ref('')
-const router = useRouter()
+const navStore = navTitleStore();
+const userStore = useUserStore();
 
-// ===== 核心优化点：提取 SVG 状态映射表 =====
-// 0: 审核中(黄) 1: 通过(绿) 2: 已拒绝(红)
-const statusIconMap = {
-    0: {
-        color: '#FFAA37',
-        path: 'M9.99999 1.66666C5.40832 1.66666 1.66666 5.40832 1.66666 9.99999C1.66666 14.5917 5.40832 18.3333 9.99999 18.3333C14.5917 18.3333 18.3333 14.5917 18.3333 9.99999C18.3333 5.40832 14.5917 1.66666 9.99999 1.66666ZM13.625 12.975C13.5083 13.175 13.3 13.2833 13.0833 13.2833C12.975 13.2833 12.8667 13.2583 12.7667 13.1917L10.1833 11.65C9.54166 11.2667 9.06666 10.425 9.06666 9.68332V6.26666C9.06666 5.92499 9.34999 5.64166 9.69166 5.64166C10.0333 5.64166 10.3167 5.92499 10.3167 6.26666V9.68332C10.3167 9.98332 10.5667 10.425 10.825 10.575L13.4083 12.1167C13.7083 12.2917 13.8083 12.675 13.625 12.975Z'
-        , label: t('Waiting'),
-        bg: 'rgba(255, 170, 55, 0.8)', // 蒙版背景色 (黄色, 80%不透明) 
-    },
-    1: {
-        color: '#34C759',
-        path: 'M17.9667 8.95L16.8333 7.63333C16.6167 7.38333 16.4417 6.91667 16.4417 6.58333V5.16666C16.4417 4.28333 15.7167 3.55833 14.8333 3.55833H13.4167C13.0917 3.55833 12.6167 3.38333 12.3667 3.16666L11.05 2.03333C10.475 1.54166 9.53334 1.54166 8.95 2.03333L7.64167 3.175C7.39167 3.38333 6.91667 3.55833 6.59167 3.55833H5.15C4.26667 3.55833 3.54167 4.28333 3.54167 5.16666V6.59166C3.54167 6.91666 3.36667 7.38333 3.15834 7.63333L2.03334 8.95833C1.55 9.53333 1.55 10.4667 2.03334 11.0417L3.15834 12.3667C3.36667 12.6167 3.54167 13.0833 3.54167 13.4083V14.8333C3.54167 15.7167 4.26667 16.4417 5.15 16.4417H6.59167C6.91667 16.4417 7.39167 16.6167 7.64167 16.8333L8.95834 17.9667C9.53334 18.4583 10.475 18.4583 11.0583 17.9667L12.375 16.8333C12.625 16.6167 13.0917 16.4417 13.425 16.4417H14.8417C15.725 16.4417 16.45 15.7167 16.45 14.8333V13.4167C16.45 13.0917 16.625 12.6167 16.8417 12.3667L17.975 11.05C18.4583 10.475 18.4583 9.525 17.9667 8.95ZM13.4667 8.425L9.44167 12.45C9.325 12.5667 9.16667 12.6333 9 12.6333C8.83334 12.6333 8.675 12.5667 8.55834 12.45L6.54167 10.4333C6.3 10.1917 6.3 9.79167 6.54167 9.55C6.78334 9.30833 7.18334 9.30833 7.425 9.55L9 11.125L12.5833 7.54167C12.825 7.3 13.225 7.3 13.4667 7.54167C13.7083 7.78333 13.7083 8.18333 13.4667 8.425Z'
-        , label: t('Success'), bg: 'rgba(52, 199, 89, 0.8)',  // 蒙版背景色 (绿色, 80%不透明)
-    },
-    2: {
-        color: '#FF6464',
-        path: 'M13.4917 1.66669H6.50832C3.47499 1.66669 1.66666 3.47502 1.66666 6.50835V13.4834C1.66666 16.525 3.47499 18.3334 6.50832 18.3334H13.4833C16.5167 18.3334 18.325 16.525 18.325 13.4917V6.50835C18.3333 3.47502 16.525 1.66669 13.4917 1.66669ZM12.8 11.9167C13.0417 12.1584 13.0417 12.5584 12.8 12.8C12.675 12.925 12.5167 12.9834 12.3583 12.9834C12.2 12.9834 12.0417 12.925 11.9167 12.8L9.99999 10.8834L8.08332 12.8C7.95832 12.925 7.79999 12.9834 7.64166 12.9834C7.48332 12.9834 7.32499 12.925 7.19999 12.8C6.95832 12.5584 6.95832 12.1584 7.19999 11.9167L9.11666 10L7.19999 8.08335C6.95832 7.84169 6.95832 7.44169 7.19999 7.20002C7.44166 6.95835 7.84166 6.95835 8.08332 7.20002L9.99999 9.11669L11.9167 7.20002C12.1583 6.95835 12.5583 6.95835 12.8 7.20002C13.0417 7.44169 13.0417 7.84169 12.8 8.08335L10.8833 10L12.8 11.9167Z'
-        , label: t('Rejection'), bg: 'rgba(255, 100, 100, 0.8)',// 蒙版背景色 (红色, 80%不透明)
+// 1. 定义共用的图片列表
+const pictureList = ref([]);
+
+const handleAfterRead = async (file, type) => {
+  console.log('File read:', file);
+  file.status = 'uploading';
+  file.message = 'Uploading...';
+  try {
+    const formData = new FormData();
+    formData.append("image", file.file);
+    const { data, code } = await upload(formData)
+    if (code == 200) {
+      console.log(pictureList.value)
+      file.status = 'done';
+      file.uploadUrl = data.url;
+      file.message = 'Done';
     }
-}
+  } catch (e) {
+    console.log(e, 'err')
+    file.status = 'failed';
+    file.message = 'failed';
+  }
 
-const toAdd = () => {
-    router.push({ name: 'addCommunity' })
-}
 
-const handleClickItem = (item) => {
-    localStorage.setItem('newDetail', JSON.stringify(item))
-    router.push({ path: '/news/newDetail' })
-}
 
-const getList = async () => {
-    try {
-        const { data, code } = await list({ ...page, ...search.value })
-        if (code === 200) {
-            imageObj.value = {
-                images_today: data.images_today,
-                images_total: data.images_total
-            }
-            if (page.pageIndex == 1) {
-                logList.value = data.list.map((item) => ({ ...item }));
-            } else {
-                logList.value = [...logList.value, ...data.list.map((item) => ({ ...item }))]
-            }
-
-            if (data.length >= data.total) {
-                listStatus.value = 3
-            }
-            if (!data.row || data.list.length == 0) {
-                listStatus.value = 3
-                return
-            }
-            listStatus.value = 2
-        }
-    } catch (err) {
-        console.log(err, 'error')
-    }
-}
-
-// 修改这里：修复预览图片的索引传递，避免越界或不对应
-const showImagePreview = (listIndex, imgIndex) => {
-    let item = logList.value[listIndex]
-    // 假设你引入了预览方法，此处需根据你的实际预览 API 传递
-    previewImage({
-        images: item.pictureList,
-        startPosition: imgIndex // 修正此处，使用内部图片的索引
+};
+const submit = async () => {
+  try {
+    let formData = pictureList.value.map((e) => {
+      return e.uploadUrl
     })
-}
+    const { data, code } = await uploadImage({ url_list: formData })
+    if (code == 200) {
+      console.log(data.url, 'data.url')
+      showSuccessToast({})
+      pictureList.value = [];
 
+    }
+  } catch (e) {
+    console.log(e, 'err')
+  }
+}
 onMounted(() => {
-    getList()
-})
+  // init(); // 暂时注释，按需开启
+  navStore.setShowNavLeft(true);
+});
 </script>
 
-<style scoped>
-/* 样式保留你的原版即可 */
-.community {
-    padding-bottom: calc(env(safe-area-inset-bottom) + 82px);
-}
+<template>
+  <div class="Home bg-[#f7f7f7] pb-[120px] px-[24px]">
+    <div class="label w-full text-center h-44 pt-16 font-bold">
+    
+    </div>
+    <div class="label w-full text-[32px] fontbold mb-32">
+      {{ t("Upload Photo") }}
+    </div>
 
-.phone-input {
-    border: 1px solid #F0F0F0;
-    border-radius: 12px;
-    background: #0000000D;
+    <!-- 
+      顶部上传组件：
+      1. 负责展示预览列表 (默认功能)
+      2. 负责普通文件选择
+    -->
+    <div class="w-full">
+      <van-uploader accept="image/*" preview-image :max-count="4" v-model="pictureList"
+        :after-read="(file) => handleAfterRead(file, 1)" class="full-width-uploader custom-preview-uploader">
+        <!-- 自定义上传按钮区域 -->
+        <div
+          class="upload-box w-full flex flex-col gap-[16px] items-center justify-center h-[200px] rounded-[32px] border-[3px] border-solid border-[#12D18E] border text-center bg-[#FAFAFA] text-[#9e9e9e]">
+          <svg class="w-28 h-28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M19.0559 2.33334C23.0101 2.33334 25.6663 5.10829 25.6663 9.23666V18.764C25.6662 22.8923 23.0102 25.6663 19.0549 25.6664H8.9436C4.9896 25.6663 2.33333 22.8922 2.33325 18.764V9.23666C2.33325 5.10836 4.98954 2.33343 8.9436 2.33334H19.0559ZM20.342 14.6419C19.0916 13.8621 18.1259 14.9576 17.8655 15.308C17.6146 15.6461 17.3986 16.0199 17.1711 16.3929C16.6151 17.3138 15.9778 18.376 14.8752 18.9935C13.2729 19.8804 12.056 19.0628 11.1809 18.4681C10.8525 18.2466 10.5329 18.0374 10.2151 17.8978C9.43157 17.5598 8.72622 17.9448 7.67993 19.2738C7.13107 19.9682 6.58661 20.6571 6.0354 21.3431C5.70618 21.7535 5.78465 22.3869 6.22876 22.6615C6.93845 23.0985 7.80515 23.3333 8.78345 23.3333H18.6155C19.1702 23.3333 19.727 23.2576 20.2571 23.0843C21.4509 22.6942 22.3987 21.8008 22.8938 20.6214C23.3114 19.6294 23.5148 18.4249 23.1243 17.4232C22.994 17.0909 22.799 16.7812 22.5256 16.5091C21.8089 15.7976 21.1386 15.1331 20.342 14.6419ZM9.91528 7.00034C8.30701 7.00051 6.99927 8.30946 6.99927 9.91733C6.99962 11.5249 8.30723 12.8332 9.91528 12.8333C11.5222 12.8332 12.83 11.5249 12.8303 9.91733C12.8303 8.30947 11.5224 7.00053 9.91528 7.00034Z"
+              fill="#9E9E9E" />
+          </svg>
+          <span>{{ t("Select file") }}</span>
+        </div>
+      </van-uploader>
+    </div>
 
-    :deep(.input-box) {
-        height: 39px;
-        margin-top: 0px;
+    <div class="or my-32 font-normal text-center w-full color-[#616161] relative">
+      {{ t("or") }}
+    </div>
 
-        input {
-            background: transparent;
-        }
-    }
-
-    :deep(.tips) {
-        margin-bottom: 0px;
-    }
-}
-
-.sendCode {
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #868c9a;
-    color: #fff;
-    background: #424242;
-}
-
-.active-tag {
-    background: #424242;
-    color: #fff;
-}
-</style>
+    <!-- 
+      底部上传组件：
+      1. 绑定相同的 v-model="pictureList"
+      2. :show-upload-list="false" -> 不显示预览列表（由上面那个组件显示）
+      3. capture="camera" -> 优先调起相机
+    -->
+    <div class="w-full">
+      <van-uploader accept="image/*" :max-count="4" :preview-image="false" capture="camera" v-model="pictureList"
+        :after-read="(file) => handleAfterRead(file, 1)" class="full-width-uploader">
+        <div
+          class="upload-box w-full flex gap-[16px] items-center justify-center h-[58px] rounded-[58px] border-[3px] border-solid border-[#E7FAF4] border bg-[#E7FAF4] text-[#12D18E] font-bold">
+          <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M14.5334 5.197C14.5667 5.25527 14.6251 5.29689 14.7001 5.29689C16.7001 5.29689 18.3334 6.92841 18.3334 8.92619V13.8707C18.3334 15.8685 16.7001 17.5 14.7001 17.5H5.30008C3.29175 17.5 1.66675 15.8685 1.66675 13.8707V8.92619C1.66675 6.92841 3.29175 5.29689 5.30008 5.29689C5.36675 5.29689 5.43341 5.2636 5.45841 5.197L5.50841 5.09711C5.53714 5.03666 5.56662 4.97457 5.59654 4.91153C5.80973 4.46248 6.0456 3.96567 6.19175 3.6737C6.57508 2.92453 7.22508 2.50832 8.03341 2.5H11.9584C12.7667 2.50832 13.4251 2.92453 13.8084 3.6737C13.9397 3.93592 14.1397 4.35833 14.3324 4.76545C14.3722 4.84942 14.4116 4.93274 14.4501 5.01387L14.5334 5.197ZM13.9251 8.39345C13.9251 8.80966 14.2584 9.14262 14.6751 9.14262C15.0917 9.14262 15.4334 8.80966 15.4334 8.39345C15.4334 7.97725 15.0917 7.63596 14.6751 7.63596C14.2584 7.63596 13.9251 7.97725 13.9251 8.39345ZM8.55841 9.68368C8.95008 9.29245 9.45841 9.08435 10.0001 9.08435C10.5417 9.08435 11.0501 9.29245 11.4334 9.67536C11.8167 10.0583 12.0251 10.566 12.0251 11.1071C12.0167 12.2225 11.1167 13.1299 10.0001 13.1299C9.45841 13.1299 8.95008 12.9218 8.56675 12.5388C8.18341 12.1559 7.97508 11.6482 7.97508 11.1071V11.0988C7.96675 10.5744 8.17508 10.0666 8.55841 9.68368ZM12.3084 13.4212C11.7167 14.0122 10.9001 14.3785 10.0001 14.3785C9.12508 14.3785 8.30841 14.0372 7.68341 13.4212C7.06675 12.7969 6.72508 11.9811 6.72508 11.1071C6.71675 10.2414 7.05841 9.42564 7.67508 8.80133C8.30008 8.17703 9.12508 7.83574 10.0001 7.83574C10.8751 7.83574 11.7001 8.17703 12.3167 8.79301C12.9334 9.41731 13.2751 10.2414 13.2751 11.1071C13.2667 12.0144 12.9001 12.8302 12.3084 13.4212Z"
+              fill="#12D18E" />
+          </svg>
+          {{ t("Open Camera & Take Photo") }}
+        </div>
+      </van-uploader>
+    </div>
+    <div class="submit-btn mt-32">
+      <van-button type="primary" color="#12D18E" class="h-[48px]! rounded-full!" block @click="submit()">
+        {{ t("Submit") }}
+      </van-button>
+    </div>
+  </div>
+</template>
 
 <route lang="json5">
 {
-  name: 'news',
+  name: 'home',
   meta: {
-    i18n: 'List'
+    i18n: 'home'
   },
 }
 </route>
+<style lang="less" scoped>
+/* 1. 基础布局修复：保证 uploader 占满全宽 */
+:deep(.van-uploader.full-width-uploader) {
+  width: 100%;
+
+  .van-uploader__wrapper {
+    width: 100%;
+  }
+
+  .van-uploader__input-wrapper {
+    width: 100%;
+  }
+}
+
+/* 2. 核心修复：自定义已上传图片的样式 (针对 custom-preview-uploader) */
+:deep(.custom-preview-uploader) {
+  .van-uploader__preview {
+    /* 让预览容器占满一行 */
+    width: 100%;
+    margin: 0 0 16px 0;
+    /* 图片下间距 */
+
+    .van-image {
+      width: 100%;
+      height: 200px;
+      /* 固定高度 200px */
+      border-radius: 32px;
+      /* 圆角 32px，保持一致 */
+      overflow: hidden;
+
+      img {
+        object-fit: cover;
+        /* 裁剪模式：保持比例填满 */
+      }
+    }
+  }
+
+  /* 调整删除按钮的位置（可选，防止挡住图片内容） */
+  .van-uploader__preview-delete {
+    width: 24px;
+    height: 24px;
+    border-radius: 0 0 0 12px;
+
+    .van-icon {
+      font-size: 24px;
+    }
+  }
+}
+
+/* 分割线样式 */
+.or::before,
+.or::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 144px;
+  height: 1px;
+  background-color: #cbd5e1;
+  transform: translateY(-50%);
+}
+
+.or::before {
+  left: 0;
+}
+
+.or::after {
+  right: 0;
+}
+</style>

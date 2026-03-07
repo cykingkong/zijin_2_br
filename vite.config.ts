@@ -23,7 +23,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       proxy: {
         '/capi': {
           // target: `https://api.ddbindia.online/app-api`, // 代理接口
-          target: `http://192.168.31.153/api`, // 代理接口
+          target: `https://rpzj.astellanfl.com/api`, // 代理接口
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/capi/, ''),
           ws: false,

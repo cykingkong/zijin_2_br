@@ -9,11 +9,11 @@ const show = computed(() => route.name && routeWhiteList.includes(route.name));
 const tabList = [
   {
     name: "Home",
-    path: "/news",
+    path: "/",
   },
   {
     name: "Product",
-    path: "/",
+    path: "/news",
   },
   {
     name: "TaskBonus",
@@ -91,7 +91,7 @@ const tabList = [
           </g>
         </svg>
         <!-- TaskBonus -->
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+        <svg  class="w-24 h-24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
           v-if="item.name == 'TaskBonus'">
           <path
             d="M10.7516 16.8604V18.8904C10.7516 20.6104 9.15158 22.0004 7.18158 22.0004C5.21158 22.0004 3.60156 20.6104 3.60156 18.8904V16.8604C3.60156 18.5804 5.20158 19.8004 7.18158 19.8004C9.15158 19.8004 10.7516 18.5704 10.7516 16.8604Z"
