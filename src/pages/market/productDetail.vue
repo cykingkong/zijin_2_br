@@ -263,7 +263,9 @@ const enumBtnText = {
     0: 'Sold out',
     1: 'Buy Now', // 截图上没显示按钮文字，改为通用购买文字
     2: 'Sold out',
-    3: 'Pre-sale'
+    3: 'Pre-sale',
+  4: 'Presente grátis'
+
 };
 
 // 计算总收益: 日收益 * 周期

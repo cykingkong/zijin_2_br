@@ -11,7 +11,7 @@ const enumBtnText = {
   1: 'Buy Now',
   2: 'Sold out',
   3: 'Pre-sale',
-  4: 'Não p. comprar'
+  4: 'Presente grátis'
 }
 const productTypeEnum = {
   1: "Dias alternados", // 隔天
@@ -53,11 +53,8 @@ const getUserProArr = async () => {
 }
 const getTabList = async () => {
   const { data, code } = await productList({
-
     pageIndex: 1,
     pageSize: 3,
-
-
   });
   if (code == 200) {
     tabList.value = data.classList.map((e) => {
