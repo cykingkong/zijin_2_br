@@ -65,6 +65,7 @@ onMounted(async () => {
       query: {
         ...othersQuery,
       },
+      replace:true,
     });
     return
   }
@@ -233,6 +234,8 @@ async function login() {
       query: {
         ...othersQuery,
       },
+           replace:true,
+
     });
   } finally {
     loading.value = false;

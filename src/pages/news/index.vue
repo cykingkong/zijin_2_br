@@ -6,14 +6,14 @@ import { isLogin } from "@/utils/auth";
 import { useI18n } from "vue-i18n";
 import { closeToast, showLoadingToast, showSuccessToast } from "vant";
 import { ref, computed, watch, onMounted } from 'vue';
-import { upload, uploadImage } from '@/api/tool'
+import { upload, uploadImage ,getUserImagesNum} from '@/api/tool'
 const { t } = useI18n();
 const navStore = navTitleStore();
 const userStore = useUserStore();
 
 // 1. 定义共用的图片列表
 const pictureList = ref([]);
-
+const limit =ref(1)
 const handleAfterRead = async (file, type) => {
   console.log('File read:', file);
   file.status = 'uploading';
@@ -47,7 +47,7 @@ const submit = async () => {
       console.log(data.url, 'data.url')
       showSuccessToast({})
       pictureList.value = [];
-
+        router.push({ path: "/" })
     }
   } catch (e) {
     console.log(e, 'err')
@@ -56,6 +56,11 @@ const submit = async () => {
 onMounted(() => {
   // init(); // 暂时注释，按需开启
   navStore.setShowNavLeft(true);
+  getUserImagesNum().then((res) => {
+    if (res.code == 200) {
+      limit.value = res.data.num
+    }
+  })
 });
 </script>
 
@@ -74,7 +79,7 @@ onMounted(() => {
       2. 负责普通文件选择
     -->
     <div class="w-full">
-      <van-uploader accept="image/*" preview-image :max-count="4" v-model="pictureList"
+      <van-uploader accept="image/*" preview-image :max-count="limit" v-model="pictureList"
         :after-read="(file) => handleAfterRead(file, 1)" class="full-width-uploader custom-preview-uploader">
         <!-- 自定义上传按钮区域 -->
         <div
@@ -89,7 +94,7 @@ onMounted(() => {
       </van-uploader>
     </div>
 
-    <div class="or my-32 font-normal text-center w-full color-[#616161] relative">
+    <div class="or my-32 font-normal text-center w-full color-[#616161] relative block" :class="{'hidden': pictureList.length == limit}">
       {{ t("or") }}
     </div>
 
@@ -100,7 +105,7 @@ onMounted(() => {
       3. capture="camera" -> 优先调起相机
     -->
     <div class="w-full">
-      <van-uploader accept="image/*" :max-count="4" :preview-image="false" capture="camera" v-model="pictureList"
+      <van-uploader accept="image/*" :max-count="limit" :preview-image="false" capture="camera" v-model="pictureList"
         :after-read="(file) => handleAfterRead(file, 1)" class="full-width-uploader">
         <div
           class="upload-box w-full flex gap-[16px] items-center justify-center h-[58px] rounded-[58px] border-[3px] border-solid border-[#E7FAF4] border bg-[#E7FAF4] text-[#12D18E] font-bold">

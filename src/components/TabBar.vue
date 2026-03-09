@@ -12,15 +12,15 @@ const tabList = [
     path: "/",
   },
   {
-    name: "Product",
+    name: "Picture",
     path: "/news",
   },
   {
-    name: "TaskBonus",
+    name: "Wallet",
     path: "/profile",
   },
   {
-    name: "News",
+    name: "Help",
     path: "/help",
   },
 
@@ -33,6 +33,7 @@ const tabList = [
   <van-tabbar v-if="show" v-model="active" route z-index="9999" class="custom-floating-tabbar">
     <van-tabbar-item replace :to="item.path" v-for="(item, k) in tabList" :key="k">
       <!-- 移除 {{ t(item.name) }} 文字，仅保留图标以符合设计图 -->
+
       <template #icon="props">
 
         <!-- Home -->
@@ -51,7 +52,7 @@ const tabList = [
         </svg>
 
         <!-- Product -->
-        <svg class="w-24 h-24" v-if="item.name == 'Product'" viewBox="0 0 24 24" fill="none"
+        <svg class="w-24 h-24" v-if="item.name == 'Picture'" viewBox="0 0 24 24" fill="none"
           xmlns="http://www.w3.org/2000/svg">
           <path
             d="M9 10C10.1046 10 11 9.10457 11 8C11 6.89543 10.1046 6 9 6C7.89543 6 7 6.89543 7 8C7 9.10457 7.89543 10 9 10Z"
@@ -75,7 +76,7 @@ const tabList = [
 
         <!-- News -->
 
-        <svg class="w-24 h-24" :class="props.active ? 'active-icon' : ''" v-if="item.name == 'News'" viewBox="0 0 24 24"
+        <svg class="w-24 h-24" :class="props.active ? 'active-icon' : ''" v-if="item.name == 'Help'" viewBox="0 0 24 24"
           fill="none" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" clip-rule="evenodd"
             d="M11.2113 11.2119L10.1643 14.5589L13.5103 13.5109L14.5583 10.1639L11.2113 11.2119ZM9.02033 16.4519C8.82433 16.4519 8.63233 16.3749 8.48933 16.2329C8.29233 16.0349 8.22033 15.7439 8.30433 15.4789L9.89733 10.3899C9.97033 10.1539 10.1543 9.97089 10.3883 9.89789L15.4773 8.30489C15.7443 8.21989 16.0343 8.29289 16.2323 8.48989C16.4293 8.68789 16.5013 8.97889 16.4173 9.24389L14.8253 14.3329C14.7523 14.5679 14.5673 14.7519 14.3333 14.8249L9.24433 16.4179C9.17033 16.4409 9.09433 16.4519 9.02033 16.4519Z"
@@ -92,7 +93,7 @@ const tabList = [
         </svg>
         <!-- TaskBonus -->
         <svg  class="w-24 h-24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-          v-if="item.name == 'TaskBonus'">
+          v-if="item.name == 'Wallet'">
           <path
             d="M10.7516 16.8604V18.8904C10.7516 20.6104 9.15158 22.0004 7.18158 22.0004C5.21158 22.0004 3.60156 20.6104 3.60156 18.8904V16.8604C3.60156 18.5804 5.20158 19.8004 7.18158 19.8004C9.15158 19.8004 10.7516 18.5704 10.7516 16.8604Z"
             :stroke="props.active ? '#fff' : '#8C91A2'" stroke-width="1.3" stroke-linecap="round"
@@ -127,6 +128,7 @@ const tabList = [
             fill="#8C91A2" />
         </svg>
       </template>
+      {{ t(item.name) }}
     </van-tabbar-item>
   </van-tabbar>
 </template>
@@ -141,7 +143,7 @@ const tabList = [
   bottom: calc(env(safe-area-inset-bottom) + 24px); // 距离底部的悬浮高度
   width: calc(100% - 48px); // 左右留出间距
   max-width: 600px; // 在大屏上限制最大宽度
-  height: 72px; // 增加高度以容纳更大的圆形按钮
+  height: 82px; // 增加高度以容纳更大的圆形按钮
   border-radius: 999px; // 胶囊圆角
   background-color: #ffffff;
   border-top: none; // 移除默认的边框
@@ -155,7 +157,8 @@ const tabList = [
     // 选中态时的图标容器样式 (黑色圆圈)
     &--active {
       background: transparent;
-
+      color:#1B1B1B;
+      font-weight: bold;
       .van-tabbar-item__icon {
         background-color: #1B1B1B; // 选中时的黑色背景
         width: 54px; // 圆圈宽度
@@ -167,6 +170,7 @@ const tabList = [
         margin-bottom: 0; // 移除图标下方的默认间距
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); // 圆圈的阴影
         transition: all 0.3s ease; // 添加平滑过渡动画
+
       }
     }
 

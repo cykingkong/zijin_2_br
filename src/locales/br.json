@@ -228,5 +228,13 @@
   "Total weekly salary": "Total weekly salary",
   "Details": "Details",
   "Log in": "Log in",
-  "Welcome": "Welcome"
+  "Welcome": "Welcome",
+  "Please select cryptocurrency": "Por favor, selecione a criptomoeda",
+  "Network": "Rede",
+  "Please select network": "Por favor, selecione a Rede",
+  "Address": "Endereço",
+  "Please enter wallet address": "Por favor, selecione a Endereço",
+  "PleaseEnterAmount": "Por favor, insira o valor",
+  "Select Cryptocurrency": "Selecionar Criptomoeda",
+  "Select Network": "Selecionar Rede"
 }

@@ -1,9 +1,9 @@
 <template>
-  <div class="profile-page min-h-screen bg-[#F7F7F7] pb-[100px] ">
+  <div class="profile-page min-h-screen bg-[#bcdce1] pb-[100px] ">
 
     <!-- 1. Header Title -->
     <div class="pt-[10px] pb-[10px] text-center">
-      <h1 class="text-[18px] font-bold text-[#1A1A1A]">{{ t("Profile") }}</h1>
+      <h1 class="text-[18px] font-bold text-[#1A1A1A]">{{ t("Wallet") }}</h1>
     </div>
 
     <!-- 2. User Info Card -->
@@ -13,9 +13,8 @@
         <div class="relative" @click="handleClickUploadAvatar">
           <!-- Hexagon Shape Simulation or Circle as fallback -->
           <div class="w-[36px] h-[36px] rounded-full overflow-hidden  shadow-sm  flex items-center justify-center">
-            <img :src="fakeData.user_level > 0 ? imgEnum[fakeData.user_level] : imgEnum[userInfo.level]"
+            <img :src="fakeData.user_level > 0 ? imgEnum[fakeData.user_level] : imgEnum[userInfo.vip]"
               class="w-full h-full object-cover" />
-
           </div>
           <!-- Level Badge -->
 
@@ -25,12 +24,16 @@
           <div class="flex items-center gap-2">
             <div
               class="-top-[4px] -right-[4px] bg-[#FECF90] text-[#A26D47] text-[10px] px-[4px] py-[1px] rounded-[4px] border border-white">
-              {{ fakeData.user_level > 0 ? `LV${fakeData.user_level}` : userInfo.levelName || 'LV1' }}
+              {{ 'LV '+userInfo.vip || 'LV1' }}
+            
             </div>
-
+            <div class="ml-[14px] tag relative text-[10px] color-[#fff] rounded-[15px] h-[15px] pl-[13px] pr-[6px]" :class="lvBorderStartColors[userInfo.vip ]">
+                <img src="@/assets/lv/shield.png" alt="" class="w-[17px] h-[19px] absolute left-[-4px] top-[-4px]">
+                {{ userInfo.vip_name }}
+              </div>
           </div>
           <!-- Missing Field: ID -->
-          <div class="text-[#161616] text-[14px] font-bold">ID: {{ formatName(userInfo.username) }}</div>
+          <div class="text-[#161616] text-[14px] font-bold">ID: {{userInfo.uuid }}</div>
         </div>
       </div>
     </div>
@@ -142,6 +145,16 @@ const fakeData = ref<any>({
   team_level2_count: 0,
   team_level3_count: 0,
 })
+const lvBorderStartColors = {                                                                                                                                                                 
+    1: 'bg-#8BADC7',                                                                                                                                                                               
+    2: 'bg-#9B7CB8',                                                                                                                                                                               
+    3: 'bg-#4A8B7C',                                                                                                                                                                               
+    4: 'bg-#D88A8A',
+    5: 'bg-#E67A6A',
+    6: 'bg-#D4A853',
+    7: 'bg-#E8C06F',
+    8: 'bg-#D4A853'
+  }
 const imgEnum = {
   1: lv1,
   2: lv2,
@@ -152,6 +165,7 @@ const imgEnum = {
   7: lv7,
   8: lv8,
 }
+
 // --- 状态变量 ---
 const uploadPopShow = ref(false);
 const canUpdateAvatar = ref(true);
@@ -268,7 +282,7 @@ onMounted(async () => {
   name: 'profile',
   meta: {
     title: 'My Profile',
-    i18n: 'profile'
+    i18n: 'Wallet'
   },
 }
 </route>

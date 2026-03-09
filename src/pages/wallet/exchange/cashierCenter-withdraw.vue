@@ -9,7 +9,9 @@
       </template>
     </VanNavBar>
     <div class="info mt-32">
-      <div class="text-[14px] mt-[57px] text-center">{{ t("Withdrawal account") }}</div>
+     
+
+      <div class="text-[14px] text-center mt-[57px]">{{ t("Withdrawal account") }}</div>
       <div class="min-count text-[#0F172A] font-size-[24px] mx-a text-center mt-4 font-bold overflow-y-auto">
         Rp {{ addCommasToNumber(count) || '0' }}
       </div>
@@ -19,32 +21,86 @@
       <div class="min-count-fee text-[#1b1b1b] font-size-[14px] mx-a text-center mt-[4px] font-bold overflow-y-auto">
         {{ t('Withdrawable Amount') }} Rp {{ addCommasToNumber(userInfo.teamBalance) }}
       </div> -->
-
+ <!-- Tab 切换 -->
+      <div class="tabs-container mt-[24px] mb-16 px-12">
+        <div class="flex gap-8">
+          <div
+            v-for="(type, index) in typeList"
+            :key="index"
+            class="flex-1 text-center py-12 rounded-[12px] cursor-pointer transition-all"
+            :class="typeActive === index ? 'bg-[#1B1B1B] text-white font-bold' : 'bg-[#F1F5F9] text-[#64748B]'"
+            @click="handleTabChange(index)"
+          >
+            {{ type === 'bank' ? t('Bank Card') : t('Crypto') }}
+          </div>
+        </div>
+      </div>
       <div class="mt-[30px] ">
         <div class="px-12 py-[20px] bg-[#fff] rounded-[20px] flex-col flex gap-12 card">
-          <div class="label font-bold text-[16px] color-[#64748B]">
-            {{ t("Realname") }}
-          </div>
-          <div class="phone-input my-[12px]">
-            <inputCom v-model:value="form.receiveName" :placeholder="t('')" :onlyRead="false" :inputType="'text'">
-            </inputCom>
-          </div>
-          <div class="label font-bold text-[16px] color-[#64748B]">
-            {{ t("Bank") }}
-          </div>
-          <div class="phone-input my-[12px]">
-            <inputCom :placeholder="''" v-model:value="form.bankName" :inputType="'text'">
+          <!-- Bank Card 模式 -->
+          <template v-if="typeActive === 0">
+            <div class="label font-bold text-[16px] color-[#64748B]">
+              {{ t("Realname") }}
+            </div>
+            <div class="phone-input my-[12px]">
+              <inputCom v-model:value="form.receiveName" :placeholder="t('')" :onlyRead="false" :inputType="'text'">
+              </inputCom>
+            </div>
+            <div class="label font-bold text-[16px] color-[#64748B]">
+              {{ t("Bank") }}
+            </div>
+            <div class="phone-input my-[12px]">
+              <inputCom :placeholder="''" v-model:value="form.bankName" :inputType="'text'">
+              </inputCom>
+            </div>
+            <div class="label font-bold text-[16px] color-[#64748B]">
+              {{ t("Bank Account Number") }}
+            </div>
+            <div class="phone-input my-[12px]">
+              <inputCom :placeholder="''" v-model:value="form.bankCode" :inputType="'text'">
+              </inputCom>
+            </div>
+          </template>
 
-            </inputCom>
-          </div>
-          <div class="label font-bold text-[16px] color-[#64748B]">
-            {{ t("Bank Account Number") }}
-          </div>
-          <div class="phone-input my-[12px]">
-            <inputCom :placeholder="''" v-model:value="form.bankCode" :inputType="'text'">
+          <!-- Crypto 模式 -->
+          <template v-else>
+            <div class="label font-bold text-[16px] color-[#64748B]">
+              {{ t("Cryptocurrency") }}
+            </div>
+            <div class="phone-input my-[12px] p-12 flex justify-between items-center cursor-pointer" @click="showCryptoTypePicker = true">
+              <span :class="cryptoForm.type ? 'text-[#0F172A]' : 'text-[#94A3B8]'">
+                {{ cryptoForm.type || t('Please select cryptocurrency') }}
+              </span>
+              <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8.33325 13.3334L11.6666 10.0001L8.33325 6.66675" stroke="#888888" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
 
-            </inputCom>
-          </div>
+            <div class="label font-bold text-[16px] color-[#64748B]">
+              {{ t("Network") }}
+            </div>
+            <div class="phone-input my-[12px] p-12 flex justify-between items-center cursor-pointer"
+              :class="!cryptoForm.type ? 'opacity-50 cursor-not-allowed' : ''"
+              @click="cryptoForm.type && (showCryptoNetworkPicker = true)">
+              <span :class="cryptoForm.network ? 'text-[#0F172A]' : 'text-[#94A3B8]'">
+                {{ cryptoForm.network || t('Please select network') }}
+              </span>
+              <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8.33325 13.3334L11.6666 10.0001L8.33325 6.66675" stroke="#888888" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+
+            <div class="label font-bold text-[16px] color-[#64748B]">
+              {{ t("Address") }}
+            </div>
+            <div class="phone-input my-[12px]">
+              <inputCom :placeholder="t('Please enter wallet address')" v-model:value="cryptoForm.address" :inputType="'text'">
+              </inputCom>
+            </div>
+          </template>
+
           <div class="label  " :class="['flex items-center gap-4']">
             {{ t('Extract Amount') }}
           </div>
@@ -94,7 +150,27 @@
     </div> -->
     <div class="v-html" v-html="optimizeRichText(withdrwaInfo.withdrawContent)"></div>
 
-    <!-- <BottomButton :button-text="t(`Withdraw Preview`)" color="#1B1B1B" @click="onConfirm" /> -->
+    <!-- Crypto 类型选择 -->
+    <van-popup v-model:show="showCryptoTypePicker" destroy-on-close round :position="'bottom'" :safe-area-inset-bottom="true">
+      <van-picker
+        :title="t('Select Cryptocurrency')"
+        :columns="cryptoTypeColumns"
+        @confirm="onCryptoTypeConfirm"
+        @cancel="showCryptoTypePicker = false"
+      />
+    </van-popup>
+
+    <!-- Crypto 网络选择 -->
+    <van-popup v-model:show="showCryptoNetworkPicker" destroy-on-close round :position="'bottom'" :safe-area-inset-bottom="true">
+      <van-picker
+        :title="t('Select Network')"
+        :columns="cryptoNetworkColumns"
+        @confirm="onCryptoNetworkConfirm"
+        @cancel="showCryptoNetworkPicker = false"
+      />
+    </van-popup>
+
+    <!-- 银行卡选择 -->
     <van-popup v-model:show="showPicker" destroy-on-close round :position="'bottom'" :safe-area-inset-bottom="true">
       <div class="p-12">
 
@@ -181,10 +257,67 @@ const form = reactive({
 });
 const { proxy } = getCurrentInstance()!;
 const userStore = useUserStore();
-
+const typeActive = ref(0)
+const typeList = ref(["bank", "crypto"])
+const cryptoList = ref([
+  {
+    label:'USDT',
+    value:['USDT-TRC20'],
+  },
+  {
+    label:'ETH',
+    value:['ETH','USDT-ERC20','USDC-ERC20'],
+  },
+  {
+    label:'BTC',
+    value:['BTC']
+  }
+])
 const userInfo = computed(() => userStore.userInfo);
 const loadingStore = useLoadingStore();
 const selectBank = ref(0)
+
+// Crypto 相关数据
+const cryptoForm = reactive({
+  type: '',
+  network: '',
+  address: ''
+})
+const showCryptoTypePicker = ref(false)
+const showCryptoNetworkPicker = ref(false)
+
+// 加密货币类型列列选项（从cryptoList生成）
+const cryptoTypeColumns = computed(() => {
+  return cryptoList.value.map(item => ({
+    text: item.label,
+    value: item.label
+  }))
+})
+
+// 网络选项（根据选择的加密货币类型动态生成）
+const cryptoNetworkColumns = computed(() => {
+  if (!cryptoForm.type) return []
+  const selectedCrypto = cryptoList.value.find(item => item.label === cryptoForm.type)
+  if (!selectedCrypto) return []
+  return selectedCrypto.value.map(network => ({
+    text: network,
+    value: network
+  }))
+})
+
+// 选择加密货币类型
+const onCryptoTypeConfirm = ({ selectedValues }: any) => {
+  cryptoForm.type = selectedValues[0]
+  // 切换类型时，清空网络选择
+  cryptoForm.network = ''
+  showCryptoTypePicker.value = false
+}
+
+// 选择网络
+const onCryptoNetworkConfirm = ({ selectedValues }: any) => {
+  cryptoForm.network = selectedValues[0]
+  showCryptoNetworkPicker.value = false
+}
 // 数字键盘布局数据
 const keypadRows = [
   ["1", "2", "3"],
@@ -226,38 +359,79 @@ const onSelect = () => {
 };
 const bankList = ref([])
 const getBankList = async () => {
-  const { data, code } = await bank_list({ ...{ pageIndex: 1, pageSize: 30 }, wallet_type: "auto" });
+  const { data, code } = await bank_list({ ...{ pageIndex: 1, pageSize: 30 }, type: typeList.value[typeActive.value] });
   if (code == 200) {
     if (data.rows && data.rows.length == 0) {
       // router.push({ path: '/profile/bankAccount', replace: true, })
       // return
     }
-    let firstBankInfo = data.bank_card_address
+    if (typeActive.value == 0) {
+      if(JSON.stringify(data) == '{}')return
+      form.receiveName = data.bank_card_address.real_name
+      form.bankName = data.bank_card_address.bank_name
+      form.bankCode = data.bank_card_address.bank_account_number
+
+    } else {
+      if(JSON.stringify(data) == '{}')return
+      cryptoForm.type = data.crypto_address.chain
+      cryptoForm.network = data.crypto_address.protocol
+      cryptoForm.address = data.crypto_address.address
+    }
 
   }
+};
+
+// Tab 切换处理
+const handleTabChange = (index: number) => {
+  if (typeActive.value === index) return;
+  typeActive.value = index;
+  // 清空表单
+  form.receiveName = '';
+  form.bankName = '';
+  form.bankCode = '';
+  bankList.value = [];
+  // 清空crypto表单
+  cryptoForm.type = '';
+  cryptoForm.network = '';
+  cryptoForm.address = '';
+  // 重新获取银行列表
+  getBankList();
 };
 const handleBuyClickOriginal = async () => {
   // 处理购买逻辑
   console.log("购买金额:", count.value);
   console.log("购买信息:", info.value);
-  // 将数据整合到一起，存进localStorage
-  const dataInfo = {
-    amount: count.value,
-    fee: fee.value,
-    info: info.value,
-  };
+   let params = {}
+  if (typeActive.value ){
+    params = {
+      type: 'crypto',
+      card_json:JSON.stringify({
+        chain: cryptoForm.type,
+        protocol:cryptoForm.network,
+        address: cryptoForm.address,
+      }),
+    }
+  }else{
+    params = {
+      type: 'bank',
+      card_json:JSON.stringify({
+        "real_name":form.receiveName,
+        "bank_name": form.bankName,
+        "bank_account_number": form.bankCode,
+      }),
+    }
+  }
+
   // localStorage.setItem("withdrawInfo", JSON.stringify(dataInfo));
   // router.push('/wallet/exchange/withdraw-preview')
   const { data, code } = await withdraw({
 
-    "real_name": "123",
-    "bank_name": "111",
-    "bank_account_number": "123123123",
+    ...params,
     amount: Number(count.value),
   });
   if (code == 200) {
     showSuccessToast({
-      message: t("Withdrawal request submitted successfully"),
+      message:"",
     })
     setTimeout(() => {
       router.push("/profile");

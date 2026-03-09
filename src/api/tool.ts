@@ -6,3 +6,6 @@ export function upload(data: any): Promise<any> {
 export function uploadImage(data: any): Promise<any> {
     return request.post('user/uploadImage', data)
 }
+export function getUserImagesNum(): Promise<any> {
+    return request.get('user/getUserImagesNum',)
+}
