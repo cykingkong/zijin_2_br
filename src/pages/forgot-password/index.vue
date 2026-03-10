@@ -199,7 +199,7 @@ const onSubmit = async () => {
   params.code = params.code.trim();
 
   if (params.type == "phone") {
-    params.username = `${params.account}`;
+    params.username = `55${params.account}`;
   }
   // params.password_confirmation = params.password.trim()
   if (params.password_confirmation.trim() != params.password.trim()) {
