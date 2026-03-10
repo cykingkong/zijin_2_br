@@ -1,6 +1,13 @@
 <template>
-    <div class="community p-16 flex flex-col">
-        <div class="flex w-full text-center pb-20 border-b-solid border-b-[1px] border-b-[#0000000D] mb-20">
+    <div class="community px-16  flex flex-col">
+    <div class="label w-full text-right h-44 pt-16 font-bold  relative">
+    <div class="absolute transition-all duration-300 left-1/2 -translate-x-1/2">{{ t('List') }}</div>
+                    <LangSelectDropdown v-model="lang" />
+
+    </div>
+
+   
+        <div class="flex mt-[20px] w-full text-center pb-20 border-b-solid border-b-[1px] border-b-[#0000000D] mb-20">
             <div class="flex-1">
                 <div class="value font-bold mb-4">{{ imageObj.images_today }}</div>
                 <div class="label font-bold mb-4">{{ t('Today Submit') }}</div>
@@ -10,7 +17,6 @@
                 <div class="label font-bold mb-4">{{ t('Total Pass') }}</div>
             </div>
         </div>
-
         <div class="item w-full p-16 rounded-16" v-for="(item, index) in logList" :key="index"
             @click="handleClickItem(item)">
             <div class="content mb-12">
@@ -24,7 +30,7 @@
                 <div class="w-full min-h-[120px] rounded-[16px] overflow-hidden bg-[#f5f5f5] relative"
                     v-if="item.images.length == 1" v-for="(imgItem, imgIndex) in item.images" :key="imgIndex">
                     <van-image :src="imgItem.image" fit="cover" class="w-full h-full object-cover"
-                        @click.stop="showImagePreview(index, imgIndex)"></van-image>
+                        @click.stop="handleClickPicture(index, imgIndex)"></van-image>
                     <!-- 蒙版层 (图片状态) -->
                     <div :style="{ background: statusIconMap[imgItem.status].bg }"
                         class="absolute bottom-0 h-[30px] w-full color-white pointer-events-none flex px-2 gap-4 z-10 justify-center items-center text-nowrap">
@@ -41,7 +47,7 @@
                     <div class="w-full h-120 rounded-[16px] overflow-hidden bg-[#f5f5f5] flex-1 relative"
                         v-for="(imgItem, imgIndex) in item.images" :key="imgIndex">
                         <van-image :src="imgItem.image" fit="cover" class="w-full h-full object-cover"
-                            @click.stop="showImagePreview(index, imgIndex)"></van-image>
+                            @click.stop="handleClickPicture(index, imgIndex)"></van-image>
 
                         <!-- 蒙版层 (图片状态) -->
                         <div :style="{ background: statusIconMap[imgItem.status].bg }"
@@ -60,7 +66,7 @@
                     <div class="w-full h-120 rounded-[16px] overflow-hidden bg-[#f5f5f5] flex-1 relative"
                         v-for="(imgItem, imgIndex) in item.images" :key="imgIndex">
                         <van-image :src="imgItem.image" fit="cover" class="w-full h-full object-cover"
-                            @click.stop="showImagePreview(index, imgIndex)"></van-image>
+                            @click.stop="handleClickPicture(index, imgIndex)"></van-image>
 
                         <!-- 蒙版层 (图片状态) -->
                         <div :style="{ background: statusIconMap[imgItem.status].bg }"
@@ -91,9 +97,8 @@
 import itemCom from '@/pages/news/com/item.vue'; // 为避免与变量 item 冲突，建议将引入名改为 itemCom
 import { imageList as list } from '@/api/image'
 import dayjs from 'dayjs'
-// import { showImagePreview as vantShowImagePreview } from 'vant'; // 假设你使用的是 Vant 预览，如果没有请忽略
-
-const { t } = useI18n();
+import { showImagePreview } from 'vant';
+const { t, locale } = useI18n();
 const logList = ref([])
 const imageObj = ref({
     images_today: 0,
@@ -113,6 +118,7 @@ const tags = ref([
 ])
 const search = ref('')
 const router = useRouter()
+
 
 // ===== 核心优化点：提取 SVG 状态映射表 =====
 // 0: 审核中(黄) 1: 通过(绿) 2: 已拒绝(红)
@@ -140,8 +146,8 @@ const toAdd = () => {
 }
 
 const handleClickItem = (item) => {
-    localStorage.setItem('newDetail', JSON.stringify(item))
-    router.push({ path: '/news/newDetail' })
+    // localStorage.setItem('newDetail', JSON.stringify(item))
+    // router.push({ path: '/news/newDetail' })
 }
 
 const getList = async () => {
@@ -173,14 +179,26 @@ const getList = async () => {
 }
 
 // 修改这里：修复预览图片的索引传递，避免越界或不对应
-const showImagePreview = (listIndex, imgIndex) => {
+const handleClickPicture = (listIndex, imgIndex) => {
     let item = logList.value[listIndex]
+    console.log(item,'')
+    let images = item.images.map((el) => {
+       return el.image
+    })
     // 假设你引入了预览方法，此处需根据你的实际预览 API 传递
-    previewImage({
-        images: item.pictureList,
+    showImagePreview({
+        images: images,
         startPosition: imgIndex // 修正此处，使用内部图片的索引
     })
 }
+
+const loadMore = () => {
+    if (listStatus.value === 2) {
+        page.pageIndex++
+        getList()
+    }
+}
+
 
 onMounted(() => {
     getList()
@@ -224,6 +242,7 @@ onMounted(() => {
     background: #424242;
     color: #fff;
 }
+
 </style>
 
 <route lang="json5">

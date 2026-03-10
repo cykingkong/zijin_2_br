@@ -7,55 +7,126 @@
         </div>
       </template>
     </VanNavBar>
-    <div class="p-16 rounded-20 bg-[#fff] card">
 
-      <div class="label font-bold text-[16px] color-[#424242]">
-        {{ t("Phone Number") }}
-      </div>
-      <div class="phone-input my-[12px]">
-
-        <inputCom :placeholder="t('')" v-model:value="form.receivePhone" :tips="''">
-        </inputCom>
-      </div>
-
-      <div class="label font-bold text-[16px] color-[#424242]">
-        {{ t("Realname") }}
-      </div>
-      <div class="phone-input my-[12px]">
-        <inputCom v-model:value="form.receiveName" :placeholder="t('')" :onlyRead="false" :inputType="'text'">
-        </inputCom>
-      </div>
-
-
-
-
-      <div class="label font-bold text-[16px] color-[#424242]">
-        {{ t("Account") }}
-      </div>
-      <div class="phone-input my-[12px]">
-        <inputCom v-model:value="form.receiveAccount" :placeholder="t('')" :onlyRead="false" :inputType="'text'">
-        </inputCom>
-      </div>
-
-
-      <div class="label font-bold text-[16px] color-[#424242]">
-        {{ t("Email") }}
-      </div>
-      <div class="phone-input my-[12px]">
-        <inputCom :placeholder="t('')" v-model:value="form.receiveEmail" :tips="''">
-        </inputCom>
-      </div>
-      <div class="label font-bold text-[16px] color-[#424242]">
-        {{ t("CPF") }}
-      </div>
-      <div class="phone-input my-[12px]">
-        <inputCom :placeholder="t('')" v-model:value="form.CPF" :tips="''">
-        </inputCom>
+    <!-- Tab 切换 -->
+    <div class="tabs-container mt-[24px] mb-16 px-12">
+      <div class="flex gap-8">
+        <div
+          v-for="(type, index) in typeList"
+          :key="index"
+          class="flex-1 text-center py-12 rounded-[12px] cursor-pointer transition-all"
+          :class="typeActive === index ? 'bg-[#1B1B1B] text-white font-bold' : 'bg-[#F1F5F9] text-[#64748B]'"
+          @click="handleTabChange(index)"
+        >
+          {{ type === 'bank' ? t('Bank Card') : t('Crypto') }}
+        </div>
       </div>
     </div>
 
-    <BottomButton color="#1B1B1B" :button-text="t('Submit')" @click="handleClickSubmit"></BottomButton>
+    <div class="p-16 rounded-20 bg-[#fff] card">
+      <!-- Bank Card 模式 -->
+      <template v-if="typeActive === 0">
+        <div class="label font-bold text-[16px] color-[#424242]">
+          {{ t("Phone Number") }}
+        </div>
+        <div class="phone-input my-[12px]">
+          <inputCom :placeholder="t('')" v-model:value="form.receivePhone" :tips="''">
+          </inputCom>
+        </div>
 
+        <div class="label font-bold text-[16px] color-[#424242]">
+          {{ t("Realname") }}
+        </div>
+        <div class="phone-input my-[12px]">
+          <inputCom v-model:value="form.receiveName" :placeholder="t('')" :onlyRead="false" :inputType="'text'">
+          </inputCom>
+        </div>
+
+    <div class="label font-bold text-[16px] color-[#424242]">
+          {{ t("Account") }}
+        </div>
+        <div class="phone-input my-[12px]">
+          <inputCom v-model:value="form.receiveAccount" :placeholder="t('')" :onlyRead="false" :inputType="'text'">
+          </inputCom>
+        </div>
+
+        <div class="label font-bold text-[16px] color-[#424242]">
+          {{ t("Email") }}
+        </div>
+        <div class="phone-input my-[12px]">
+          <inputCom :placeholder="t('')" v-model:value="form.receiveEmail" :tips="''">
+          </inputCom>
+        </div>
+
+        <div class="label font-bold text-[16px] color-[#424242]">
+          {{ t("CPF") }}
+        </div>
+        <div class="phone-input my-[12px]">
+          <inputCom :placeholder="t('')" v-model:value="form.CPF" :tips="''">
+          </inputCom>
+        </div>
+      </template>
+
+      <!-- Crypto 模式 -->
+      <template v-else>
+        <div class="label font-bold text-[16px] color-[#424242]">
+          {{ t("Cryptocurrency") }}
+        </div>
+        <div class="phone-input my-[12px] p-12 flex justify-between items-center cursor-pointer" @click="showCryptoTypePicker = true">
+          <span :class="cryptoForm.type ? 'text-[#0F172A]' : 'text-[#94A3B8]'">
+            {{ cryptoForm.type || t('Please select cryptocurrency') }}
+          </span>
+          <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.33325 13.3334L11.6666 10.0001L8.33325 6.66675" stroke="#888888" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+
+        <div class="label font-bold text-[16px] color-[#424242]">
+          {{ t("Network") }}
+        </div>
+        <div class="phone-input my-[12px] p-12 flex justify-between items-center cursor-pointer "
+          :class="!cryptoForm.type ? 'opacity-50 cursor-not-allowed' : ''"
+          @click="cryptoForm.type && (showCryptoNetworkPicker = true)">
+          <span :class="cryptoForm.network ? 'text-[#0F172A]' : 'text-[#94A3B8]'" >
+            {{ cryptoForm.network || t('Please select network') }}
+          </span>
+          <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.33325 13.3334L11.6666 10.0001L8.33325 6.66675" stroke="#888888" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+
+        <div class="label font-bold text-[16px] color-[#424242]">
+          {{ t("Address") }}
+        </div>
+        <div class="phone-input my-[12px]">
+          <inputCom :placeholder="t('Please enter wallet address')" v-model:value="cryptoForm.address" :inputType="'text'">
+          </inputCom>
+        </div>
+      </template>
+    </div>
+
+
+    <!-- Crypto 类型选择 -->
+    <van-popup v-model:show="showCryptoTypePicker" destroy-on-close round :position="'bottom'" :safe-area-inset-bottom="true">
+      <van-picker
+        :title="t('Select Cryptocurrency')"
+        :columns="cryptoTypeColumns"
+        @confirm="onCryptoTypeConfirm"
+        @cancel="showCryptoTypePicker = false"
+      />
+    </van-popup>
+
+    <!-- Crypto 网络选择 -->
+    <van-popup v-model:show="showCryptoNetworkPicker" destroy-on-close round :position="'bottom'" :safe-area-inset-bottom="true">
+      <van-picker
+        :title="t('Select Network')"
+        :columns="cryptoNetworkColumns"
+        @confirm="onCryptoNetworkConfirm"
+        @cancel="showCryptoNetworkPicker = false"
+      />
+    </van-popup>
 
     <van-popup v-model:show="showPicker" destroy-on-close position="bottom">
       <van-picker :columns="columns" :model-value="[form.bankCode]" @confirm="onConfirm" @cancel="showPicker = false" />
@@ -89,16 +160,49 @@ const isEdit = ref(false);
 const pickerValue = ref([]);
 const columns = ref([]);
 const getBankList = async () => {
-  const { data, code } = await bank_list({});
+  const { data, code } = await bank_list({ ...{ pageIndex: 1, pageSize: 30 }, type: typeList.value[typeActive.value] });
   console.log(data, 'dadas')
   if (code == 200) {
-    const { bank_card_address } = data
-    form.receiveName = bank_card_address.real_name;
-    form.receivePhone = bank_card_address.bank_account_number;
-    form.bankName = bank_card_address.bank_name;
+    if (typeActive.value == 0) {
+      // Bank Card 模式
+      if (JSON.stringify(data) == '{}') return
+      const { bank_card_address } = data
+      if (bank_card_address) {
+        form.receiveName = bank_card_address.real_name;
+        form.receivePhone = bank_card_address.bank_account_number;
+        form.bankName = bank_card_address.bank_name;
+        form.bankCode = bank_card_address.bank_account_number;
+      }
+    } else {
+      // Crypto 模式
+      if (JSON.stringify(data) == '{}') return
+      const { crypto_address } = data
+      if (crypto_address) {
+        cryptoForm.type = crypto_address.chain;
+        cryptoForm.network = crypto_address.protocol;
+        cryptoForm.address = crypto_address.address;
+      }
+    }
   }
 };
 const bankCardType = ref("");
+const typeActive = ref(0);
+const typeList = ref(["bank", "crypto"]);
+const cryptoList = ref([
+  {
+    label: 'USDT',
+    value: ['USDT-TRC20'],
+  },
+  {
+    label: 'ETH',
+    value: ['ETH', 'USDT-ERC20', 'USDC-ERC20'],
+  },
+  {
+    label: 'BTC',
+    value: ['BTC']
+  }
+]);
+
 const form = reactive({
   type: "bank_card",
   receiveName: "",
@@ -110,6 +214,34 @@ const form = reactive({
   receivePhone: "",
   receiveEmail: "",
 });
+
+// Crypto 相关数据
+const cryptoForm = reactive({
+  type: '',
+  network: '',
+  address: ''
+});
+const showCryptoTypePicker = ref(false);
+const showCryptoNetworkPicker = ref(false);
+
+// 加密货币类型列选项（从cryptoList生成）
+const cryptoTypeColumns = computed(() => {
+  return cryptoList.value.map(item => ({
+    text: item.label,
+    value: item.label
+  }))
+});
+
+// 网络选项（根据选择的加密货币类型动态生成）
+const cryptoNetworkColumns = computed(() => {
+  if (!cryptoForm.type) return []
+  const selectedCrypto = cryptoList.value.find(item => item.label === cryptoForm.type)
+  if (!selectedCrypto) return []
+  return selectedCrypto.value.map(network => ({
+    text: network,
+    value: network
+  }))
+});
 const route = useRoute();
 const router = useRouter();
 const onConfirm = ({ selectedValues, selectedOptions }) => {
@@ -119,6 +251,41 @@ const onConfirm = ({ selectedValues, selectedOptions }) => {
   form.bankCode = selectedOptions[0]?.value;
   showPicker.value = false;
 };
+
+// 选择加密货币类型
+const onCryptoTypeConfirm = ({ selectedValues }) => {
+  cryptoForm.type = selectedValues[0];
+  // 切换类型时，清空网络选择
+  cryptoForm.network = '';
+  showCryptoTypePicker.value = false;
+};
+
+// 选择网络
+const onCryptoNetworkConfirm = ({ selectedValues }) => {
+  cryptoForm.network = selectedValues[0];
+  showCryptoNetworkPicker.value = false;
+};
+
+// Tab 切换处理
+const handleTabChange = (index) => {
+  if (typeActive.value === index) return;
+  typeActive.value = index;
+  // 清空表单
+  form.receiveName = '';
+  form.receiveAccount = '';
+  form.receivePhone = '';
+  form.receiveEmail = '';
+  form.CPF = '';
+  form.bankName = '';
+  form.bankCode = '';
+  // 清空crypto表单
+  cryptoForm.type = '';
+  cryptoForm.network = '';
+  cryptoForm.address = '';
+  // 重新获取数据
+  getBankList();
+};
+
 const areaInfo = ref({
   code: "br",
   dialCode: 55,
