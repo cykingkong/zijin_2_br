@@ -49,14 +49,12 @@ const loadMore = () => {
 const getData = () => {
   orderListData.value = [];
 
-  if (activeTab.value == 2) {
-    getWithdrawalOrderList()
-  } else {
+
     getWalletLogsList()
-  }
+
 }
 const handleClickItem = (item: any) => {
-  router.push("/activityDetail?id=" + item.id);
+  router.push("/aboutUs?id=" + item.id);
 }
 // 获取股票订单列表
 const getWalletLogsList = async () => {
@@ -111,8 +109,8 @@ const handleClickStockDetail = (item: any) => {
     {
       name: 'help',
       meta: {
-        title: 'help',
-        i18n: 'help',
+        title: 'Help',
+        i18n: 'Help',
       },
     }
 </route>

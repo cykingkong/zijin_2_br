@@ -64,8 +64,8 @@
         <div v-for="(item, index) in menuList" :key="index" class="flex flex-col items-center"
           @click="handleClickMenu(item)">
           <!-- Icon Box -->
-          <div class="w-[20px] h-[20px] mb-[8px] flex items-center justify-center">
-            <img :src="item.icon" alt="" class="w-20 h-20 block">
+          <div class="w-[40px] h-[40px] mb-[8px] flex items-center justify-center">
+            <img :src="item.img" alt="" class="w-40 h-40 block">
           </div>
           <!-- Text -->
           <span class="text-[#333] text-[12px] font-medium text-center" :class="{ 'text-red-500': item.isLogout }">{{
@@ -118,6 +118,9 @@ import { showFailToast, showSuccessToast } from 'vant';
 import walletLogs from '../wallet/walletLogs.vue';
 import { addCommasToNumber } from '@/utils/tool';
 import defaultAvatar from "@/assets/image/avatar.png";
+import inviteFriends from '@/assets/tabbar/inviteFriends.png'
+import logout from '@/assets/tabbar/logout.png'
+import pay from '@/assets/tabbar/pay.jpg'
 // 复用之前的图片资源引入逻辑
 import lv1 from '@/assets/lv/lv1.png';
 import lv2 from '@/assets/lv/lv2.png';
@@ -193,10 +196,10 @@ const getLevelCount = (level: number) => {
 // --- 菜单配置 (Grid Menu) ---
 const menuList = [
 
-  { text: t('Bank Account'), icon: iconBank, url: '/profile/bankAccount/addBank', type: 'link' },
+  { text: t('Bank Account'), icon: iconBank, url: '/profile/bankAccount/addBank', type: 'link' ,img:pay},
 
-  { text: t('inviteFriends'), icon: iconQuit, url: '/richTextDetail?type=czwz', type: 'link' }, // 暂定 About Us
-  { text: t('Logout'), icon: iconLogout, type: 'logout', isLogout: false }
+  { text: t('inviteFriends'), icon: iconQuit, url: '/inviteFriends', type: 'link' ,img:inviteFriends}, // 暂定 About Us
+  { text: t('Logout'), icon: iconLogout, type: 'logout', isLogout: false,img:logout }
 ];
 const myteamList = ref([
   {

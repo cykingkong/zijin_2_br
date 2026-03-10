@@ -28,23 +28,18 @@ const orderListData = ref([]);
 const router = useRouter();
 const listStatus = ref(0); // 0: 初始, 1: 加载中, 2: 可加载更多, 3: 没有更多
 const page = reactive({
-  pageIndex: 1,
-  pageSize: 10,
+  page: 1,
+  size: 10,
 });
 
 // 加载更多
 const loadMore = () => {
-  page.pageIndex++;
+  page.page++;
   getData();
 };
 const getData = () => {
   orderListData.value = [];
-
-  if (activeTab.value == 2) {
-    getWithdrawalOrderList()
-  } else {
     getWalletLogsList()
-  }
 }
 const getWithdrawalOrderList = async () => {
   try {
@@ -59,7 +54,7 @@ const getWithdrawalOrderList = async () => {
       return;
     }
 
-    if (page.pageIndex === 1) {
+    if (page.page === 1) {
       // 第一页，直接替换数据
       orderListData.value = data.rows || [];
     } else {
@@ -73,7 +68,7 @@ const getWithdrawalOrderList = async () => {
       return;
     }
 
-    listStatus.value = 2; // 可以加载更多
+    listStatus.value = 3; // 可以加载更多
 
   } catch (error) {
     console.error("获取订单列表失败:", error);
@@ -94,18 +89,14 @@ const getWalletLogsList = async () => {
       return;
     }
 
-    if (page.pageIndex === 1) {
+    if (page.page === 1) {
       // 第一页，直接替换数据
       orderListData.value = data || [];
     } else {
       // 后续页面，追加数据
       orderListData.value = orderListData.value.concat(data || []);
     }
-
-
-
-    listStatus.value = 2; // 可以加载更多
-
+    listStatus.value =3; // 可以加载更多
   } catch (error) {
     console.error("获取订单列表失败:", error);
     listStatus.value = 3; // 出错时设置为没有更多
