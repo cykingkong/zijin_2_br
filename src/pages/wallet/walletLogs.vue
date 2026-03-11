@@ -22,7 +22,8 @@ import { withdrawOrderGrid } from '@/api/withdraw'
 const { proxy } = getCurrentInstance()!;
 import stockItem from "@/components/stock-item.vue";
 
-const orderTypeList = ref(['All', 'Deposit', 'Withdrawal'])
+const { t } = useI18n();
+const orderTypeList = computed(() => [t('All'), t('Deposit'), t('Withdrawal')])
 const activeTab = ref(2)
 const orderListData = ref([]);
 const router = useRouter();

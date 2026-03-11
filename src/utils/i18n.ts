@@ -11,7 +11,7 @@ import en from '@/locales/en-US.json'
 import { Locale } from 'vant'
 import type { PickerColumn } from 'vant'
 
-const FALLBACK_LOCALE = 'br'
+const FALLBACK_LOCALE = 'en'
 
 
 const vantLocales = {
@@ -25,11 +25,7 @@ const vantLocales = {
 
 export const languageColumns: PickerColumn = [
   { text: 'English', value: 'en' },
-  // { text: 'Brazil', value: 'br' },
-  // { text: '繁體中文', value: 'zh-TW' },
-  // { text: 'हिंदी', value: 'hi' },
-  // { text: 'தமிழ்', value: 'ta' },
-  // { text: 'తెలుగు', value: 'te' },
+  { text: 'Bahasa Indonesia', value: 'id' },
 ]
 
 export const i18n = setupI18n()
@@ -72,8 +68,8 @@ async function loadLocaleMsg(locale: string, i18n: I18n) {
     case 'en':
       messages = await import(`../locales/en-US.json`)
       break
-    case 'br':
-      messages = await import(`../locales/br.json`)
+    case 'id':
+      messages = await import(`../locales/id.json`)
       break
   }
   i18n.global.setLocaleMessage(locale, messages.default)

@@ -114,7 +114,7 @@
               </template>
             </inputCom>
           </div>
-          <div class="color-[#FF6464] text-[12px]">The minimum withdrawal amount is only Rp11</div>
+          <div class="color-[#FF6464] text-[12px]">{{ t("Minimum withdrawal amount") }}</div>
           <van-button type="primary" class="h-[56px]" color="#1b1b1b" block @click="onConfirm">
             {{ t(`Withdraw`) }}
           </van-button>

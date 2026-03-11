@@ -112,9 +112,9 @@ const page = reactive({
 const banners = ref([])
 const activeIndex = ref(0)
 const tags = ref([
-    { label: "Pass", key: 0 },
-    { label: 'Under review', key: 1 },
-    { label: "Reject", key: 2 }
+    { label: t("Success"), key: 0 },
+    { label: t('Under review'), key: 1 },
+    { label: t("Rejection"), key: 2 }
 ])
 const search = ref('')
 const router = useRouter()

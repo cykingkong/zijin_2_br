@@ -11,9 +11,9 @@
             <div class="level-overview bg-white rounded-[16px] p-[16px] shadow-sm mb-[16px]">
                 <div class="commission-section">
                     <div class="text-[#666] text-[12px] leading-[1.8] ">
-                        <div>B-level commission-{{ teamsData.commission.v1_commission }}% </div>
-                        <div>C-level commission-{{ teamsData.commission.v2_commission }}% </div>
-                        <div>D=-level commission-{{ teamsData.commission.v3_commission }}% </div>
+                        <div>{{ t('B-level commission') }}-{{ teamsData.commission.v1_commission }}% </div>
+                        <div>{{ t('C-level commission') }}-{{ teamsData.commission.v2_commission }}% </div>
+                        <div>{{ t('D-level commission') }}-{{ teamsData.commission.v3_commission }}% </div>
                     </div>
                 </div>
             </div>
@@ -54,7 +54,7 @@
                 </div>
                 <!-- Empty State Placeholder -->
                 <div v-if="teamsData?.userList?.length === 0" class="py-[40px] text-center text-[#999] text-[12px]">
-                    No Data
+                    {{ t('No Data') }}
                 </div>
             </div>
 
@@ -151,9 +151,9 @@ const fetchTeamData = async () => {
 }
 
 const activeIndex = ref(0);
-const typeList = ref([
-    'Membros ativos',
-    'Membro inativo',
+const typeList = computed(() => [
+    t('Active Members'),
+    t('Inactive Members'),
 ])
 onMounted(async () => {
     await fetchTeamData()

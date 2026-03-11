@@ -17,7 +17,7 @@ const limit =ref(1)
 const handleAfterRead = async (file, type) => {
   console.log('File read:', file);
   file.status = 'uploading';
-  file.message = 'Uploading...';
+  file.message = t('Uploading');
   try {
     const formData = new FormData();
     formData.append("image", file.file);
@@ -26,12 +26,12 @@ const handleAfterRead = async (file, type) => {
       console.log(pictureList.value)
       file.status = 'done';
       file.uploadUrl = data.url;
-      file.message = 'Done';
+      file.message = t('Done');
     }
   } catch (e) {
     console.log(e, 'err')
     file.status = 'failed';
-    file.message = 'failed';
+    file.message = t('failed');
   }
 
 
