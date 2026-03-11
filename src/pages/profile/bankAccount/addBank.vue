@@ -7,8 +7,35 @@
         </div>
       </template>
     </VanNavBar>
-    <div class="p-16 rounded-20 bg-[#fff] card">
+ <!-- 优化后的提示卡片 -->
+    <div class="notice-card rounded-16 mb-12 p-12 flex gap-10 overflow-hidden relative bg-[#FEF2F2] border border-[#FECACA] border-solid">
+      <!-- 左侧装饰条：增加视觉锚点 -->
+      <div class="absolute left-0 top-0 bottom-0 w-[4px] bg-[#EF4444]"></div>
+      
+      <!-- 图标区域：使用 SVG 提升专业感 -->
+      <div class="flex-shrink-0 mt-[2px]">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 8V12" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 16H12.01" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
 
+      <!-- 文本内容区域：清晰的层级结构 -->
+      <div class="flex-1">
+        <div class="text-[14px] font-bold text-[#991B1B] mb-[4px] leading-tight">
+          Apenas recebimento via chave PIX
+        </div>
+        <div class="text-[12px] text-[#7F1D1D] leading-[18px] font-normal">
+          <p class="">As transferências serão feitas </p>
+          <p class="mb-[4px] font-semibold text-[#991B1B] text-[14px]">exclusivamente por chave PIX</p>
+          <p>(CPF, e-mail ou telefone). Você deve consultar no app do seu banco se a chave está vinculada à conta que deseja usar. O valor será depositado na conta associada à chave.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-16 rounded-20 bg-[#fff] card">
+     
       <div class="label font-bold text-[16px] color-[#64748B]">
         {{ t("Phone Number") }}
       </div>
@@ -49,23 +76,15 @@
       </div> -->
 
 
-
+<!-- 
       <div class="label font-bold text-[16px] color-[#64748B]">
         {{ t("Account") }}
       </div>
       <div class="phone-input my-[12px]">
         <inputCom v-model:value="form.receiveAccount" :placeholder="t('')" :onlyRead="false" :inputType="'text'">
         </inputCom>
-      </div>
+      </div> -->
 
-
-      <div class="label font-bold text-[16px] color-[#64748B]">
-        {{ t("Email") }}
-      </div>
-      <div class="phone-input my-[12px]">
-        <inputCom :placeholder="t('')" v-model:value="form.receiveEmail" :tips="''">
-        </inputCom>
-      </div>
       <div class="label font-bold text-[16px] color-[#64748B]">
         {{ t("CPF") }}
       </div>
@@ -73,6 +92,14 @@
         <inputCom :placeholder="t('PleaseEnterOnlyDigits')" v-model:value="form.CPF" :tips="t('Only11DigitsAllowed')"
           inputType="number" :formatter="cpfFormatter" />
       </div>
+      <div class="label font-bold text-[16px] color-[#64748B]">
+        {{ t("Email") }}
+      </div>
+      <div class="phone-input my-[12px]">
+        <inputCom :placeholder="t('')" v-model:value="form.receiveEmail" :tips="''">
+        </inputCom>
+      </div>
+  
     </div>
 
     <BottomButton color="#1B1B1B" :button-text="t('Submit')" @click="handleClickSubmit"></BottomButton>
@@ -194,10 +221,7 @@ const handleClickSubmit = () => {
     showToast(t('PleaseEnterEmail'))
     return;
   }
-  if (!form.receiveAccount) {
-    showToast(t('PleaseEnterAccount'))
-    return;
-  }
+
 
   // if (!form.bankName) {
   //   showToast(t('PleaseSelectBank'))
@@ -206,6 +230,7 @@ const handleClickSubmit = () => {
 
   let params = {
     ...form,
+    receiveAccount:form.CPF
   };
   // params.bankCode = params.bankCode + "";
   if (route.query.edit == "1") {
