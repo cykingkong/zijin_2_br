@@ -4,38 +4,67 @@ import { useUserStore } from "@/stores";
 import { navTitleStore } from "@/stores/index";
 import { isLogin } from "@/utils/auth";
 import { useI18n } from "vue-i18n";
-import { closeToast, showLoadingToast, showSuccessToast } from "vant";
+import { closeToast, showLoadingToast, showSuccessToast, showToast } from "vant";
 import { ref, computed, watch, onMounted } from 'vue';
-import { upload, uploadImage ,getUserImagesNum} from '@/api/tool'
+import { upload, uploadImage, getUserImagesNum } from '@/api/tool'
 const { t } = useI18n();
 const navStore = navTitleStore();
 const userStore = useUserStore();
 
 // 1. 定义共用的图片列表
 const pictureList = ref([]);
-const limit =ref(1)
-const handleAfterRead = async (file, type) => {
-  console.log('File read:', file);
-  file.status = 'uploading';
-  file.message = t('Uploading');
-  try {
-    const formData = new FormData();
-    formData.append("image", file.file);
-    const { data, code } = await upload(formData)
-    if (code == 200) {
-      console.log(pictureList.value)
-      file.status = 'done';
-      file.uploadUrl = data.url;
-      file.message = t('Done');
+const limit = ref(1)
+
+// 计算剩余可上传数量
+const remainingCount = computed(() => {
+  return limit.value - pictureList.value.length;
+});
+
+// 选择文件前的验证
+const beforeRead = (file) => {
+  const files = Array.isArray(file) ? file : [file];
+  const currentCount = pictureList.value.length;
+  const newCount = files.length;
+
+  // 检查是否超过限制
+  if (currentCount + newCount > limit.value) {
+    // 如果超过限制，只接受能容纳的数量
+    const allowedCount = limit.value - currentCount;
+    if (allowedCount > 0) {
+      return files.slice(0, allowedCount);
     }
-  } catch (e) {
-    console.log(e, 'err')
-    file.status = 'failed';
-    file.message = t('failed');
+    return false;
   }
 
+  return true;
+};
 
+const handleAfterRead = async (file, type) => {
+  console.log('File read:', file);
 
+  // 判断是单个文件还是多个文件
+  const files = Array.isArray(file) ? file : [file];
+
+  // 循环上传每个文件
+  for (const item of files) {
+    item.status = 'uploading';
+    item.message = t('Uploading');
+    try {
+      const formData = new FormData();
+      formData.append("image", item.file);
+      const { data, code } = await upload(formData)
+      if (code == 200) {
+        console.log(pictureList.value)
+        item.status = 'done';
+        item.uploadUrl = data.url;
+        item.message = t('Done');
+      }
+    } catch (e) {
+      console.log(e, 'err')
+      item.status = 'failed';
+      item.message = t('failed');
+    }
+  }
 };
 const submit = async () => {
   try {
@@ -47,7 +76,7 @@ const submit = async () => {
       console.log(data.url, 'data.url')
       showSuccessToast({})
       pictureList.value = [];
-        router.push({ path: "/" })
+      router.push({ path: "/" })
     }
   } catch (e) {
     console.log(e, 'err')
@@ -67,10 +96,15 @@ onMounted(() => {
 <template>
   <div class="Home bg-[#f7f7f7] pb-[120px] px-[24px]">
     <div class="label w-full text-center h-44 pt-16 font-bold">
-    
+
     </div>
     <div class="label w-full text-[32px] fontbold mb-32">
       {{ t("Upload Photo") }}
+    </div>
+
+    <!-- 显示剩余可上传数量 -->
+    <div v-if="pictureList.length > 0" class="text-[14px] text-[#616161] mb-16 text-center">
+      {{ pictureList.length }} / {{ limit }} {{ t("uploaded") }}
     </div>
 
     <!-- 
@@ -79,8 +113,9 @@ onMounted(() => {
       2. 负责普通文件选择
     -->
     <div class="w-full">
-      <van-uploader accept="image/*" preview-image :max-count="limit" v-model="pictureList"
-        :after-read="(file) => handleAfterRead(file, 1)" class="full-width-uploader custom-preview-uploader">
+      <van-uploader accept="image/*" multiple preview-image :max-count="limit" v-model="pictureList"
+        :before-read="beforeRead" :after-read="(file) => handleAfterRead(file, 1)"
+        class="full-width-uploader custom-preview-uploader">
         <!-- 自定义上传按钮区域 -->
         <div
           class="upload-box w-full flex flex-col gap-[16px] items-center justify-center h-[200px] rounded-[32px] border-[3px] border-solid border-[#12D18E] border text-center bg-[#FAFAFA] text-[#9e9e9e]">
@@ -94,7 +129,8 @@ onMounted(() => {
       </van-uploader>
     </div>
 
-    <div class="or my-32 font-normal text-center w-full color-[#616161] relative block" :class="{'hidden': pictureList.length == limit}">
+    <div class="or my-32 font-normal text-center w-full color-[#616161] relative block"
+      :class="{ 'hidden': pictureList.length == limit }">
       {{ t("or") }}
     </div>
 
@@ -105,8 +141,9 @@ onMounted(() => {
       3. capture="camera" -> 优先调起相机
     -->
     <div class="w-full">
-      <van-uploader accept="image/*" :max-count="limit" :preview-image="false" capture="camera" v-model="pictureList"
-        :after-read="(file) => handleAfterRead(file, 1)" class="full-width-uploader">
+      <van-uploader accept="image/*" multiple :max-count="limit" :preview-image="false" capture="camera"
+        v-model="pictureList" :before-read="beforeRead" :after-read="(file) => handleAfterRead(file, 1)"
+        class="full-width-uploader">
         <div
           class="upload-box w-full flex gap-[16px] items-center justify-center h-[58px] rounded-[58px] border-[3px] border-solid border-[#E7FAF4] border bg-[#E7FAF4] text-[#12D18E] font-bold">
           <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">

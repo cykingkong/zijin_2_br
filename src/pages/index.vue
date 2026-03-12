@@ -1,12 +1,12 @@
 <template>
     <div class="community px-16  flex flex-col">
-    <div class="label w-full text-right h-44 pt-16 font-bold  relative">
-    <div class="absolute transition-all duration-300 left-1/2 -translate-x-1/2">{{ t('List') }}</div>
-                    <LangSelectDropdown v-model="lang" />
+        <div class="label w-full text-right h-44 pt-16 font-bold  relative">
+            <div class="absolute transition-all duration-300 left-1/2 -translate-x-1/2">{{ t('List') }}</div>
+            <LangSelectDropdown v-model="lang" />
 
-    </div>
+        </div>
 
-   
+
         <div class="flex mt-[20px] w-full text-center pb-20 border-b-solid border-b-[1px] border-b-[#0000000D] mb-20">
             <div class="flex-1">
                 <div class="value font-bold mb-4">{{ imageObj.images_today }}</div>
@@ -81,12 +81,12 @@
                 </div>
             </div>
 
-            <div class="info w-full flex gap-8 justify-start mt-12">
+            <!-- <div class="info w-full flex gap-8 justify-start mt-12">
                 <div class="detail flex flex justify-between w-full items-center">
                     <div class="time text-[#888888] text-14">{{ dayjs(item?.createdAt).format('YYYY-MM-DD') || '' }}
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         <empty v-if="logList?.length == 0" :no-tips="true"></empty>
         <LoadMore :status="listStatus" @load-more="loadMore" />
@@ -181,9 +181,9 @@ const getList = async () => {
 // 修改这里：修复预览图片的索引传递，避免越界或不对应
 const handleClickPicture = (listIndex, imgIndex) => {
     let item = logList.value[listIndex]
-    console.log(item,'')
+    console.log(item, '')
     let images = item.images.map((el) => {
-       return el.image
+        return el.image
     })
     // 假设你引入了预览方法，此处需根据你的实际预览 API 传递
     showImagePreview({
@@ -242,7 +242,6 @@ onMounted(() => {
     background: #424242;
     color: #fff;
 }
-
 </style>
 
 <route lang="json5">
