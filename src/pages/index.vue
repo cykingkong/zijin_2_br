@@ -81,12 +81,12 @@
                 </div>
             </div>
 
-            <!-- <div class="info w-full flex gap-8 justify-start mt-12">
+            <div class="info w-full flex gap-8 justify-start mt-12">
                 <div class="detail flex flex justify-between w-full items-center">
                     <div class="time text-[#888888] text-14">{{ dayjs(item?.createdAt).format('YYYY-MM-DD') || '' }}
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
         <empty v-if="logList?.length == 0" :no-tips="true"></empty>
         <LoadMore :status="listStatus" @load-more="loadMore" />

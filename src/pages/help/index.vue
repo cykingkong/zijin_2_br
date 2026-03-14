@@ -13,7 +13,7 @@
         class="order-item flex items-center justify-between px-[16px] h-[46px] py-6 rounded-[12px] bg-[#FFFFFF]">
         <div class="left h-full flex-col flex justify-between">
           <div class="title text-[12px] font-bold">{{ item.title }}</div>
-          <div class="content text-[10px] text-[#666666]">{{ item.created_at }}</div>
+          <!-- <div class="content text-[10px] text-[#666666]">{{ item.created_at }}</div> -->
         </div>
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M5.93994 13.28L10.2866 8.93333C10.7999 8.42 10.7999 7.58 10.2866 7.06667L5.93994 2.72"
@@ -50,7 +50,7 @@ const getData = () => {
   orderListData.value = [];
 
 
-    getWalletLogsList()
+  getWalletLogsList()
 
 }
 const handleClickItem = (item: any) => {
