@@ -11,7 +11,7 @@ import { languageColumns, locale } from "@/utils/i18n";
 import { sendCode, register } from "@/api/user";
 import local from "@/utils/local";
 
-const lang = ref(local.getlocal('lang') || 'en')
+const lang = ref(local.getlocal('lang') || 'id')
 
 const pageType = ref(0) // 0 login 1 register 2 changePwd
 const { t } = useI18n();
@@ -65,7 +65,7 @@ onMounted(async () => {
       query: {
         ...othersQuery,
       },
-      replace:true,
+      replace: true,
     });
     return
   }
@@ -202,8 +202,8 @@ async function signUp() {
       "password": postData.password
     }
     await userStore.register(params);
-    localStorage.setItem("language", "br");
-    locale.value = "br";
+    localStorage.setItem("language", "id");
+    locale.value = "id";
     const { redirect, ...othersQuery } = router.currentRoute.value.query;
     router.push('/');
   } catch (e) {
@@ -226,15 +226,15 @@ async function login() {
     };
     await userStore.login(params);
     // await userStore.info()
-    localStorage.setItem("language", "br");
-    locale.value = "br";
+    localStorage.setItem("language", "id");
+    locale.value = "id";
     const { redirect, ...othersQuery } = router.currentRoute.value.query;
     router.push({
       name: "home",
       query: {
         ...othersQuery,
       },
-           replace:true,
+      replace: true,
 
     });
   } finally {

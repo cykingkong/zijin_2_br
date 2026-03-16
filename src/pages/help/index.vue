@@ -11,7 +11,7 @@
     <div class="order-list pb-[16px] flex-col flex gap-[16px]">
       <div v-for="(item, index) in orderListData" :key="index" @click="handleClickItem(item)"
         class="order-item flex items-center justify-between px-[16px] h-[46px] py-6 rounded-[12px] bg-[#FFFFFF]">
-        <div class="left h-full flex-col flex justify-between">
+        <div class="left h-full flex flex items-center justify-between">
           <div class="title text-[12px] font-bold">{{ item.title }}</div>
           <!-- <div class="content text-[10px] text-[#666666]">{{ item.created_at }}</div> -->
         </div>

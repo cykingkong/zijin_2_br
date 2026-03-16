@@ -11,7 +11,7 @@ import en from '@/locales/en-US.json'
 import { Locale } from 'vant'
 import type { PickerColumn } from 'vant'
 
-const FALLBACK_LOCALE = 'en'
+const FALLBACK_LOCALE = 'id'
 
 
 const vantLocales = {
@@ -24,8 +24,8 @@ const vantLocales = {
 
 
 export const languageColumns: PickerColumn = [
-  { text: 'English', value: 'en' },
-  { text: 'Bahasa Indonesia', value: 'id' },
+  { text: 'EN', value: 'en' },
+  { text: 'IDN', value: 'id' },
 ]
 
 export const i18n = setupI18n()

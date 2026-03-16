@@ -24,16 +24,17 @@
           <div class="flex items-center gap-2">
             <div
               class="-top-[4px] -right-[4px] bg-[#FECF90] text-[#A26D47] text-[10px] px-[4px] py-[1px] rounded-[4px] border border-white">
-              {{ 'LV '+userInfo.vip || 'LV1' }}
-            
+              {{ 'LV ' + userInfo.vip || 'LV1' }}
+
             </div>
-            <div class="ml-[14px] tag relative text-[10px] color-[#fff] rounded-[15px] h-[15px] pl-[13px] pr-[6px]" :class="lvBorderStartColors[userInfo.vip ]">
-                <img src="@/assets/lv/shield.png" alt="" class="w-[17px] h-[19px] absolute left-[-4px] top-[-4px]">
-                {{ userInfo.vip_name }}
-              </div>
+            <div class="ml-[14px] tag relative text-[10px] color-[#fff] rounded-[15px] h-[15px] pl-[13px] pr-[6px]"
+              :class="lvBorderStartColors[userInfo.vip]">
+              <img src="@/assets/lv/shield.png" alt="" class="w-[17px] h-[19px] absolute left-[-4px] top-[-4px]">
+              {{ userInfo.vip_name }}
+            </div>
           </div>
           <!-- Missing Field: ID -->
-          <div class="text-[#161616] text-[14px] font-bold">ID: {{userInfo.uuid }}</div>
+          <div class="text-[#161616] text-[14px] font-bold">ID: {{ userInfo.uuid }}</div>
         </div>
       </div>
     </div>
@@ -42,12 +43,12 @@
     <div class="px-[16px] mb-[16px] ">
       <div class="bg-white rounded-[16px] p-[16px]  shadow-sm text-center flex-wrap">
         <div class="flex w-full">
-          <div class="flex-1">
-            <div class="value font-bold mb-4 font-20 color-[#A26D47]">{{ userInfo.today_income || 0 }}</div>
+          <div class="flex-1 ">
+            <div class="value font-bold mb-4 font-20 color-[#A26D47]">Rp {{ userInfo.today_income || 0 }}</div>
             <div class="label font-bold mb-4 font-12 color-[#161616]">{{ t('Today Income') }}</div>
           </div>
           <div class="flex-1">
-            <div class="value font-bold mb-4 font-20 color-[#A26D47]">{{ userInfo.total_income }}</div>
+            <div class="value font-bold mb-4 font-20 color-[#A26D47]">Rp {{ userInfo.total_income || 0 }}</div>
             <div class="label font-bold mb-4 font-12 color-[#161616]">{{ t('Total Income') }}</div>
           </div>
         </div>
@@ -148,16 +149,16 @@ const fakeData = ref<any>({
   team_level2_count: 0,
   team_level3_count: 0,
 })
-const lvBorderStartColors = {                                                                                                                                                                 
-    1: 'bg-#8BADC7',                                                                                                                                                                               
-    2: 'bg-#9B7CB8',                                                                                                                                                                               
-    3: 'bg-#4A8B7C',                                                                                                                                                                               
-    4: 'bg-#D88A8A',
-    5: 'bg-#E67A6A',
-    6: 'bg-#D4A853',
-    7: 'bg-#E8C06F',
-    8: 'bg-#D4A853'
-  }
+const lvBorderStartColors = {
+  1: 'bg-#8BADC7',
+  2: 'bg-#9B7CB8',
+  3: 'bg-#4A8B7C',
+  4: 'bg-#D88A8A',
+  5: 'bg-#E67A6A',
+  6: 'bg-#D4A853',
+  7: 'bg-#E8C06F',
+  8: 'bg-#D4A853'
+}
 const imgEnum = {
   1: lv1,
   2: lv2,
@@ -196,10 +197,10 @@ const getLevelCount = (level: number) => {
 // --- 菜单配置 (Grid Menu) ---
 const menuList = [
 
-  { text: t('Bank Account'), icon: iconBank, url: '/profile/bankAccount/addBank', type: 'link' ,img:pay},
+  { text: t('Bank Account'), icon: iconBank, url: '/profile/bankAccount/addBank', type: 'link', img: pay },
 
-  { text: t('inviteFriends'), icon: iconQuit, url: '/inviteFriends', type: 'link' ,img:inviteFriends}, // 暂定 About Us
-  { text: t('Logout'), icon: iconLogout, type: 'logout', isLogout: false,img:logout }
+  { text: t('inviteFriends'), icon: iconQuit, url: '/inviteFriends', type: 'link', img: inviteFriends }, // 暂定 About Us
+  { text: t('Logout'), icon: iconLogout, type: 'logout', isLogout: false, img: logout }
 ];
 const myteamList = ref([
   {
