@@ -13,7 +13,7 @@
         <div class="relative" @click="handleClickUploadAvatar">
           <!-- Hexagon Shape Simulation or Circle as fallback -->
           <div class="w-[36px] h-[36px] rounded-full overflow-hidden  shadow-sm  flex items-center justify-center">
-            <img :src="fakeData.user_level > 0 ? imgEnum[fakeData.user_level] : imgEnum[userInfo.vip]"
+            <img :src="userInfo.avatar || (fakeData.user_level > 0 ? imgEnum[fakeData.user_level] : imgEnum[userInfo.vip])"
               class="w-full h-full object-cover" />
           </div>
           <!-- Level Badge -->
@@ -44,11 +44,13 @@
       <div class="bg-white rounded-[16px] p-[16px]  shadow-sm text-center flex-wrap">
         <div class="flex w-full">
           <div class="flex-1 ">
-            <div class="value font-bold mb-4 font-20 color-[#A26D47]">Rp {{ userInfo.today_income || 0 }}</div>
+            <div class="value font-bold mb-4 font-20 color-[#A26D47]">{{ formatRupiah(userInfo.today_income || 0) }}
+            </div>
             <div class="label font-bold mb-4 font-12 color-[#161616]">{{ t('Today Income') }}</div>
           </div>
           <div class="flex-1">
-            <div class="value font-bold mb-4 font-20 color-[#A26D47]">Rp {{ userInfo.total_income || 0 }}</div>
+            <div class="value font-bold mb-4 font-20 color-[#A26D47]">{{ formatRupiah(userInfo.total_income || 0) }}
+            </div>
             <div class="label font-bold mb-4 font-12 color-[#161616]">{{ t('Total Income') }}</div>
           </div>
         </div>
@@ -71,7 +73,7 @@
           <!-- Text -->
           <span class="text-[#333] text-[12px] font-medium text-center" :class="{ 'text-red-500': item.isLogout }">{{
             item.text
-            }}</span>
+          }}</span>
         </div>
       </div>
     </div>
@@ -114,6 +116,8 @@ import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useUserStore } from '@/stores';
 import { userUpdate, getUserFakeInfo, } from '@/api/user';
+import { upload } from '@/api/tool';
+import { formatRupiah } from '@/utils/tool';
 
 import { showFailToast, showSuccessToast } from 'vant';
 import walletLogs from '../wallet/walletLogs.vue';
@@ -252,16 +256,32 @@ const handleLogout = () => {
 // --- 头像上传逻辑 (保持原有逻辑) ---
 const handleClickUploadAvatar = () => {
   uploadPopShow.value = true;
+  userAvatar.value = '';
   canUpdateAvatar.value = true;
 };
 
 const handleAfterRead = async (file: any, type: any) => {
-
+  const item = Array.isArray(file) ? file[0] : file;
+  item.status = 'uploading';
+  item.message = t('Uploading');
+  try {
+    const formData = new FormData();
+    formData.append('image', item.file);
+    const { data, code } = await upload(formData);
+    if (code == 200) {
+      item.status = 'done';
+      userAvatar.value = data.url;
+      canUpdateAvatar.value = false;
+    }
+  } catch (e) {
+    item.status = 'failed';
+    item.message = t('failed');
+  }
 };
 
 const updateUserAvatar = async () => {
   if (!userAvatar.value) return;
-  const res = await userUpdate({ avatar: userAvatar.value });
+  const res = await userUpdate({ image_url: userAvatar.value });
   if (res.code === 200) {
     showSuccessToast(t("Update successful"));
     userStore.info(); // 刷新用户信息

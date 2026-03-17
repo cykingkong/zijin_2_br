@@ -129,7 +129,7 @@ onMounted(() => {
       </van-uploader>
     </div>
 
-    <div class="or my-32 font-normal text-center w-full color-[#616161] relative block"
+    <div class="or my-32 font-normal w-full color-[#616161]"
       :class="{ 'hidden': pictureList.length == limit }">
       {{ t("or") }}
     </div>
@@ -221,22 +221,17 @@ onMounted(() => {
 }
 
 /* 分割线样式 */
+.or {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .or::before,
 .or::after {
   content: "";
-  position: absolute;
-  top: 50%;
-  width: 144px;
+  flex: 1;
   height: 1px;
   background-color: #cbd5e1;
-  transform: translateY(-50%);
-}
-
-.or::before {
-  left: 0;
-}
-
-.or::after {
-  right: 0;
 }
 </style>

@@ -260,5 +260,12 @@
   "Select Language": "Pilih Bahasa",
   "Home": "Beranda",
   "Picture": "Gambar",
-  "Help": "Bantuan"
+  "Help": "Bantuan",
+  "Network": "Jaringan",
+  "Please select cryptocurrency": "Silakan pilih mata uang kripto",
+  "Please select network": "Silakan pilih jaringan",
+  "Please enter wallet address": "Silakan masukkan alamat dompet",
+  "PleaseEnterAmount": "Silakan masukkan jumlah",
+  "Select Cryptocurrency": "Pilih Mata Uang Kripto",
+  "Select Network": "Pilih Jaringan"
 }

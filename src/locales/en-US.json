@@ -258,5 +258,12 @@
   "failed": "Failed",
   "Home": "Home",
   "Picture": "Picture",
-  "Help": "Help"
+  "Help": "Help",
+  "Network": "Network",
+  "Please select cryptocurrency": "Please select cryptocurrency",
+  "Please select network": "Please select network",
+  "Please enter wallet address": "Please enter wallet address",
+  "PleaseEnterAmount": "Please enter amount",
+  "Select Cryptocurrency": "Select Cryptocurrency",
+  "Select Network": "Select Network"
 }

@@ -80,7 +80,13 @@ export function createVitePlugins(mode: string) {
     }),
 
     legacy({
-      targets: ['defaults', 'not IE 11'],
+      targets: ['Android >= 7.0', 'iOS >= 12', 'Chrome >= 69', 'not IE 11'],
+
+      // 补充 async/await 等运行时所需的 polyfill，防止 Android 9 报错 regeneratorRuntime is not defined
+      additionalLegacyPolyfills: ['regenerator-runtime/runtime'],
+
+      renderLegacyChunks: true, // 必须生成 legacy 包
+      modernPolyfills: true,    // 为现代浏览器补齐一些 API
     }),
 
     // https://github.com/antfu/unocss

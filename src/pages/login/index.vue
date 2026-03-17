@@ -244,10 +244,9 @@ async function login() {
 </script>
 
 <template>
-  <div class="m-x-a w-full max-h-[100vh]">
-
-
-    <div class="top-image w-full bg-[]">
+  <div class="login-container">
+    <!-- 原 top-image w-full bg-[] 转换为 .top-section -->
+    <div class="top-section">
       <CloseButton>
         <template #left>
           <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" @click="onBack"
@@ -263,27 +262,30 @@ async function login() {
           <LangSelectDropdown v-model="lang" />
         </template>
       </CloseButton>
-      <div class="mid-logo h-[64px] rounded-[12px] overflow-hidden ml-[16px] mt-76">
-        <img src="@/assets/Logo.png" alt="" class="w-auto h-full">
+      <!-- 原 mid-logo h-[64px] rounded-[12px] overflow-hidden ml-[16px] mt-76 转换为 .logo-wrapper -->
+      <div class="logo-wrapper">
+        <img src="@/assets/Logo.png" alt="" class="logo-img">
       </div>
-      <div class="text-left m-x-a mt-[16px] color-white px-30">
-        <div class="t font-size-[24px] font-semibold m-b-[4px] color-[#1B1B1B]">
+      <!-- 原 text-left m-x-a mt-[16px] color-white px-30 转换为 .welcome-text -->
+      <div class="welcome-text">
+        <!-- 原 t font-size-[24px] font-semibold m-b-[4px] color-[#1B1B1B] 转换为 .welcome-title -->
+        <div class="welcome-title">
           {{ t("Welcome") }}
         </div>
       </div>
     </div>
-    <div class="login-form p-24">
-      <div class="phone-input flex items-center gap-[12px] mb-20">
+
+    <!-- 原 login-form p-24 (已在style中保留并增强) -->
+    <div class="login-form">
+      <!-- 原 phone-input flex items-center gap-[12px] mb-20 (已在style中合并增强) -->
+      <div class="phone-input">
         <inputCom :placeholder="t('PleaseEnterDeviceCode')" v-model:value="postData.account" :tips="''"
-          class="flex-1 w-full">
+          class="input-full">
         </inputCom>
       </div>
 
-
-
-
-
-      <van-button type="primary" color="#1B1B1B" class="login-btn h-[48px]!" block @click=" login()">{{
+      <!-- 原 login-btn h-[48px]! (已在style中增强) -->
+      <van-button type="primary" color="#1B1B1B" class="login-btn" block @click=" login()">{{
         t("Log in")
         }}</van-button>
 
@@ -300,22 +302,108 @@ async function login() {
   },
 }
 </route>
+
 <style lang="less" scoped>
-.login-btn {
-  margin-top: 24px;
+/* 新增转换后的 UnoCSS 样式 */
+
+.login-container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  max-height: 100vh;
 }
+
+.top-section {
+  width: 100%;
+}
+
+.logo-wrapper {
+  height: 64px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-left: 16px;
+  margin-top: 76px;
+  display: flex;
+  /* 为了img居中或撑开 */
+
+  .logo-img {
+    width: auto;
+    height: 100%;
+  }
+}
+
+.welcome-text {
+  text-align: left;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 16px;
+  color: #ffffff;
+  /* 保留原 color-white */
+  padding: 0 30px;
+  /* 原 px-30 */
+}
+
+.welcome-title {
+  font-size: 24px;
+  /* 原 font-size-[24px] */
+  font-weight: 600;
+  /* 原 font-semibold */
+  margin-bottom: 4px;
+  /* 原 m-b-[4px] */
+  color: #1B1B1B;
+  /* 原 color-[#1B1B1B] */
+}
+
+.login-form {
+  padding: 24px;
+  /* 原 p-24 */
+}
+
+.phone-input {
+  display: flex;
+  /* 原 flex */
+  align-items: center;
+  /* 原 items-center */
+  gap: 12px;
+  /* 原 gap-[12px] */
+  margin-bottom: 20px;
+  /* 原 mb-20 */
+
+  /* 合并原有的 .phone-input 样式 */
+  border: 1px solid #F0F0F0;
+  border-radius: 12px;
+  padding: 0 10px;
+  /* 补充一点内边距防止输入框贴边 */
+
+  :deep(.input-box) {
+    margin-top: 0px;
+  }
+
+  :deep(.tips) {
+    margin-bottom: 0px;
+  }
+}
+
+.input-full {
+  flex: 1;
+  /* 原 flex-1 */
+  width: 100%;
+  /* 原 w-full */
+}
+
+.login-btn {
+  height: 48px !important;
+  /* 原 h-[48px]! */
+  margin-top: 24px;
+  /* 原有样式保留 */
+}
+
+/* --- 以下为原有保留样式 --- */
 
 .signUpBtn {
   :deep(.van-button--primary) {
     color: #1B1B1B;
   }
-}
-</style>
-<style scoped>
-@import "@/components/nationality-list/intl.css";
-
-.radio {
-  border: 1px solid #cbd5e1;
 }
 
 .tips {
@@ -344,6 +432,10 @@ async function login() {
 
 .tips::after {
   right: 0;
+}
+
+.radio {
+  border: 1px solid #cbd5e1;
 }
 
 .radio.radio-active {
@@ -377,22 +469,6 @@ async function login() {
   border-color: #6b39f4;
 }
 
-.phone-input {
-  border: 1px solid #F0F0F0;
-  border-radius: 12px;
-
-  :deep(.input-box) {
-    /* height: 48px; */
-    margin-top: 0px;
-
-
-  }
-
-  :deep(.tips) {
-    margin-bottom: 0px;
-  }
-}
-
 .or {
   margin: 20px 0;
   font-size: 12px;
@@ -416,3 +492,5 @@ async function login() {
   color: #fff
 }
 </style>
+
+<style scoped></style>

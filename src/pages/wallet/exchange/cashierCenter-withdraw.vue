@@ -9,11 +9,11 @@
       </template>
     </VanNavBar>
     <div class="info mt-32">
-     
+
 
       <div class="text-[14px] text-center mt-[57px]">{{ t("Withdrawal account") }}</div>
       <div class="min-count text-[#0F172A] font-size-[24px] mx-a text-center mt-4 font-bold overflow-y-auto">
-        Rp {{ addCommasToNumber(count) || '0' }}
+        {{ formatRupiah(userInfo.balance,) || '0' }}
       </div>
       <!-- <div class="min-count-fee text-[#1b1b1b] font-size-[14px] mx-a text-center mt-[4px] font-bold overflow-y-auto">
         {{ t("Tax") }} Rp{{ fee }}
@@ -21,16 +21,13 @@
       <div class="min-count-fee text-[#1b1b1b] font-size-[14px] mx-a text-center mt-[4px] font-bold overflow-y-auto">
         {{ t('Withdrawable Amount') }} Rp {{ addCommasToNumber(userInfo.teamBalance) }}
       </div> -->
- <!-- Tab 切换 -->
+      <!-- Tab 切换 -->
       <div class="tabs-container mt-[24px] mb-16 px-12">
         <div class="flex gap-8">
-          <div
-            v-for="(type, index) in typeList"
-            :key="index"
+          <div v-for="(type, index) in typeList" :key="index"
             class="flex-1 text-center py-12 rounded-[12px] cursor-pointer transition-all"
             :class="typeActive === index ? 'bg-[#1B1B1B] text-white font-bold' : 'bg-[#F1F5F9] text-[#64748B]'"
-            @click="handleTabChange(index)"
-          >
+            @click="handleTabChange(index)">
             {{ type === 'bank' ? t('Bank Card') : t('Crypto') }}
           </div>
         </div>
@@ -67,7 +64,8 @@
             <div class="label font-bold text-[16px] color-[#64748B]">
               {{ t("Cryptocurrency") }}
             </div>
-            <div class="phone-input my-[12px] p-12 flex justify-between items-center cursor-pointer" @click="showCryptoTypePicker = true">
+            <div class="phone-input my-[12px] p-12 flex justify-between items-center cursor-pointer"
+              @click="showCryptoTypePicker = true">
               <span :class="cryptoForm.type ? 'text-[#0F172A]' : 'text-[#94A3B8]'">
                 {{ cryptoForm.type || t('Please select cryptocurrency') }}
               </span>
@@ -96,7 +94,8 @@
               {{ t("Address") }}
             </div>
             <div class="phone-input my-[12px]">
-              <inputCom :placeholder="t('Please enter wallet address')" v-model:value="cryptoForm.address" :inputType="'text'">
+              <inputCom :placeholder="t('Please enter wallet address')" v-model:value="cryptoForm.address"
+                :inputType="'text'">
               </inputCom>
             </div>
           </template>
@@ -151,23 +150,17 @@
     <div class="v-html" v-html="optimizeRichText(withdrwaInfo.withdrawContent)"></div>
 
     <!-- Crypto 类型选择 -->
-    <van-popup v-model:show="showCryptoTypePicker" destroy-on-close round :position="'bottom'" :safe-area-inset-bottom="true">
-      <van-picker
-        :title="t('Select Cryptocurrency')"
-        :columns="cryptoTypeColumns"
-        @confirm="onCryptoTypeConfirm"
-        @cancel="showCryptoTypePicker = false"
-      />
+    <van-popup v-model:show="showCryptoTypePicker" destroy-on-close round :position="'bottom'"
+      :safe-area-inset-bottom="true">
+      <van-picker :title="t('Select Cryptocurrency')" :columns="cryptoTypeColumns" @confirm="onCryptoTypeConfirm"
+        @cancel="showCryptoTypePicker = false" />
     </van-popup>
 
     <!-- Crypto 网络选择 -->
-    <van-popup v-model:show="showCryptoNetworkPicker" destroy-on-close round :position="'bottom'" :safe-area-inset-bottom="true">
-      <van-picker
-        :title="t('Select Network')"
-        :columns="cryptoNetworkColumns"
-        @confirm="onCryptoNetworkConfirm"
-        @cancel="showCryptoNetworkPicker = false"
-      />
+    <van-popup v-model:show="showCryptoNetworkPicker" destroy-on-close round :position="'bottom'"
+      :safe-area-inset-bottom="true">
+      <van-picker :title="t('Select Network')" :columns="cryptoNetworkColumns" @confirm="onCryptoNetworkConfirm"
+        @cancel="showCryptoNetworkPicker = false" />
     </van-popup>
 
     <!-- 银行卡选择 -->
@@ -216,13 +209,14 @@
   </div>
 </template>
 <script setup lang="ts">
-import { addCommasToNumber } from "@/utils/tool";
+import { addCommasToNumber, formatRupiah } from "@/utils/tool";
 import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useLoadingStore } from "@/stores/modules/loading";
 import { bank_list } from "@/api/payment";
 import { optimizeRichText } from '@/utils/richText';
 import { useUserStore } from "@/stores";
+
 
 import { deposit, withdraw_info, withdraw } from "@/api/billing";
 import item from "../../../components/item.vue";
@@ -235,6 +229,7 @@ const displayValue = ref("");
 const fee = computed(() => {
   return addCommasToNumber(count.value * withdrwaInfo.value.withdrawFee * 0.01);
 });
+
 // 【新增】监听 count 变化，强制取整
 // watch(count, (newVal) => {
 //   // 转换为字符串判断是否包含小数点
@@ -261,16 +256,16 @@ const typeActive = ref(0)
 const typeList = ref(["bank", "crypto"])
 const cryptoList = ref([
   {
-    label:'USDT',
-    value:['USDT-TRC20'],
+    label: 'USDT',
+    value: ['USDT-TRC20'],
   },
   {
-    label:'ETH',
-    value:['ETH','USDT-ERC20','USDC-ERC20'],
+    label: 'ETH',
+    value: ['ETH', 'USDT-ERC20', 'USDC-ERC20'],
   },
   {
-    label:'BTC',
-    value:['BTC']
+    label: 'BTC',
+    value: ['BTC']
   }
 ])
 const userInfo = computed(() => userStore.userInfo);
@@ -366,13 +361,13 @@ const getBankList = async () => {
       // return
     }
     if (typeActive.value == 0) {
-      if(JSON.stringify(data) == '{}')return
+      if (JSON.stringify(data) == '{}') return
       form.receiveName = data.bank_card_address.real_name
       form.bankName = data.bank_card_address.bank_name
       form.bankCode = data.bank_card_address.bank_account_number
 
     } else {
-      if(JSON.stringify(data) == '{}')return
+      if (JSON.stringify(data) == '{}') return
       cryptoForm.type = data.crypto_address.chain
       cryptoForm.network = data.crypto_address.protocol
       cryptoForm.address = data.crypto_address.address
@@ -401,21 +396,21 @@ const handleBuyClickOriginal = async () => {
   // 处理购买逻辑
   console.log("购买金额:", count.value);
   console.log("购买信息:", info.value);
-   let params = {}
-  if (typeActive.value ){
+  let params = {}
+  if (typeActive.value) {
     params = {
       type: 'crypto',
-      card_json:JSON.stringify({
+      card_json: JSON.stringify({
         chain: cryptoForm.type,
-        protocol:cryptoForm.network,
+        protocol: cryptoForm.network,
         address: cryptoForm.address,
       }),
     }
-  }else{
+  } else {
     params = {
       type: 'bank',
-      card_json:JSON.stringify({
-        "real_name":form.receiveName,
+      card_json: JSON.stringify({
+        "real_name": form.receiveName,
         "bank_name": form.bankName,
         "bank_account_number": form.bankCode,
       }),
@@ -431,7 +426,7 @@ const handleBuyClickOriginal = async () => {
   });
   if (code == 200) {
     showSuccessToast({
-      message:"",
+      message: "",
     })
     setTimeout(() => {
       router.push("/profile");
@@ -510,6 +505,7 @@ onMounted(() => {
   // updateInfo();
 
   getBankList()
+  userStore.info()
   // 监听localStorage变化
   window.addEventListener("storage", (e) => {
     if (e.key === "dataInfo") {

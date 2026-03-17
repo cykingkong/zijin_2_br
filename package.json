@@ -4,6 +4,14 @@
   "version": "3.8.0",
   "description": "An mobile web apps template based on the Vue 3 ecosystem",
   "license": "MIT",
+  "browserslist": [
+    "Android >= 7.0",
+    "iOS >= 12",
+    "Chrome >= 69",
+    "> 0.5%",
+    "not dead",
+    "not op_mini all"
+  ],
   "scripts": {
     "dev": "cross-env MOCK_SERVER_PORT=8086  vite --open ",
     "build:dev": "vite build --mode development --outDir=devDist",

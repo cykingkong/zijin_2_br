@@ -5,7 +5,8 @@ import type { ConfigEnv, UserConfig } from 'vite'
 import { createVitePlugins } from './build/vite'
 import { exclude, include } from './build/vite/optimize'
 import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import vue from '@vitejs/plugin-vue';
+import legacy from '@vitejs/plugin-legacy'
 import { resolve } from 'path'
 
 
@@ -46,7 +47,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
     },
 
     build: {
-      cssCodeSplit: false,
+      cssCodeSplit: true,
       // chunkSizeWarningLimit: 4048,
       outDir: env.VITE_APP_OUT_DIR || 'dist',
       minify: 'terser',

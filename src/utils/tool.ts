@@ -72,9 +72,28 @@ const addCommasToNumber = (number, shouldToFixed = true, noshowZero = false) => 
     // 如果有小数部分，则返回整数部分和小数部分，否则只返回整数部分
     return decimalPart ? `${formattedInteger}.${decimalPart}` : formattedInteger;
 }
+// 格式化方法
+const formatRupiah = (amount) => {
+    const num = Number(amount) || 0
+
+    if (num < 1000000) {
+        return `Rp ${addCommasToNumber(num, false)}`
+    }
+
+    // 截断到一位小数，不四舍五入
+    const jutaValue = Math.floor(num / 100000) / 10
+
+    // 如果是整数则不显示小数
+    const formattedJuta = jutaValue % 1 === 0
+        ? jutaValue.toString()
+        : jutaValue.toFixed(1)
+
+    return `${formattedJuta} juta`
+}
 export {
     addCommasToNumber,
-    throttleAfterCompletion
+    throttleAfterCompletion,
+    formatRupiah
 }
 
 // 使用示例：

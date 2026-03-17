@@ -128,5 +128,5 @@ export function getTeamInfoData(): Promise<any> {
   return request.get('/user/getTeamInfoData', {})
 }
 export function userUpdate(data): Promise<any> {
-  return request.post('/user/userUpdate', data)
+  return request.post('/user/updateAvatar', data)
 }
