@@ -129,7 +129,7 @@ onMounted(() => {
       </van-uploader>
     </div>
 
-    <div class="or my-32 font-normal w-full color-[#616161]"
+    <div class="or my-32 font-normal w-full color-[#616161] text-center w-full justify-center"
       :class="{ 'hidden': pictureList.length == limit }">
       {{ t("or") }}
     </div>
@@ -225,13 +225,5 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-
-.or::before,
-.or::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background-color: #cbd5e1;
 }
 </style>

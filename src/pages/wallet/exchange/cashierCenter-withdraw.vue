@@ -152,14 +152,24 @@
     <!-- Crypto 类型选择 -->
     <van-popup v-model:show="showCryptoTypePicker" destroy-on-close round :position="'bottom'"
       :safe-area-inset-bottom="true">
-      <van-picker :title="t('Select Cryptocurrency')" :columns="cryptoTypeColumns" @confirm="onCryptoTypeConfirm"
+      <van-picker
+        :title="t('Select Cryptocurrency')"
+        :columns="cryptoTypeColumns"
+        :confirm-button-text="t('Confirm')"
+        :cancel-button-text="t('Cancel')"
+        @confirm="onCryptoTypeConfirm"
         @cancel="showCryptoTypePicker = false" />
     </van-popup>
 
     <!-- Crypto 网络选择 -->
     <van-popup v-model:show="showCryptoNetworkPicker" destroy-on-close round :position="'bottom'"
       :safe-area-inset-bottom="true">
-      <van-picker :title="t('Select Network')" :columns="cryptoNetworkColumns" @confirm="onCryptoNetworkConfirm"
+      <van-picker
+        :title="t('Select Network')"
+        :columns="cryptoNetworkColumns"
+        :confirm-button-text="t('Confirm')"
+        :cancel-button-text="t('Cancel')"
+        @confirm="onCryptoNetworkConfirm"
         @cancel="showCryptoNetworkPicker = false" />
     </van-popup>
 
