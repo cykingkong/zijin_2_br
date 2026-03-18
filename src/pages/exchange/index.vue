@@ -1,13 +1,13 @@
 <template>
     <div class="exchange-content p-16">
-        <div class="mt-32 font-bold text-24 text-center">R$ {{ seedConfigData?.seedBalance }}</div>
+        <div class="mt-32 font-bold text-24 text-center">{{ seedConfigData?.seedBalance }}</div>
         <div class="tips text-[#424242] text-center mb-32">{{ t('Number of pearls') }}</div>
         <div class="bg-white p-16 rounded-[16px] mb-16 card">
             <div class="input-box flex flex-col gap-8 w-full">
                 <div class="input-content h-48 w-full">
                     <input type="number" :placeholder="t('Enter your Exchange Amount')" v-model="codes">
                 </div>
-                <div class="text-14 text-[#424242] mb-12">{{ t('Redeemable Amount:') }}{{ canExchangeNum }} </div>
+                <div class="text-14 text-[#424242] mb-12">{{ t('Redeemable Amount:') }} {{ canExchangeNum }} </div>
                 <div class="button border b-solid border flex-shrink-0 bg-[#1b1b1b] text-white px-12 h-48 rounded-16 flex items-center justify-center"
                     @click="handleClickExchange">
                     {{ t('Exchange') }}</div>
