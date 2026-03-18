@@ -79,7 +79,7 @@ onMounted(async () => {
       postData.password = parsedInfo.password || "";
       // postData.type = parsedInfo.type || 'phone';
     } catch (error) {
-      console.error("解析保存的登录信息失败:", error);
+      console.error(":", error);
       localStorage.removeItem("remember");
     }
   }
@@ -212,7 +212,7 @@ async function signUp() {
 }
 async function login() {
   if (!postData.account) {
-    showToast("PleaseEnter");
+    showToast(t('PleaseEnterDeviceCode'))
     return;
   }
 
@@ -287,7 +287,7 @@ async function login() {
       <!-- 原 login-btn h-[48px]! (已在style中增强) -->
       <van-button type="primary" color="#1B1B1B" class="login-btn" block @click=" login()">{{
         t("Log in")
-        }}</van-button>
+      }}</van-button>
 
 
     </div>

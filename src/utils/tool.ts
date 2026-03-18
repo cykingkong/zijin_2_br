@@ -80,15 +80,13 @@ const formatRupiah = (amount) => {
         return `Rp ${addCommasToNumber(num, false)}`
     }
 
-    // 截断到一位小数，不四舍五入
-    const jutaValue = Math.floor(num / 100000) / 10
+    // 直接除以1000000得到juta值
+    const jutaValue = num / 1000000
 
-    // 如果是整数则不显示小数
-    const formattedJuta = jutaValue % 1 === 0
-        ? jutaValue.toString()
-        : jutaValue.toFixed(1)
+    // 保留两位小数，然后去掉末尾的0
+    const formattedJuta = jutaValue.toFixed(2).replace(/\.?0+$/, '')
 
-    return `${formattedJuta} juta`
+    return `Rp ${formattedJuta} juta`
 }
 export {
     addCommasToNumber,

@@ -79,6 +79,25 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- 多张图片（大于4张） -->
+                <div class="w-full grid grid-cols-3 gap-8" v-if="item.images.length > 4">
+                    <div class="w-full h-120 rounded-[16px] overflow-hidden bg-[#f5f5f5] flex-1 relative"
+                        v-for="(imgItem, imgIndex) in item.images" :key="imgIndex">
+                        <van-image :src="imgItem.image" fit="cover" class="w-full h-full object-cover"
+                            @click.stop="handleClickPicture(index, imgIndex)"></van-image>
+
+                        <!-- 蒙版层 (图片状态) -->
+                        <div :style="{ background: statusIconMap[imgItem.status].bg }"
+                            class="absolute bottom-0 h-[30px] w-full color-white pointer-events-none flex px-2 gap-4 z-10 justify-center items-center text-nowrap">
+                            <div class="text-12 font-bold">{{ statusIconMap[imgItem.status].label || '' }}</div>
+                            <svg v-if="statusIconMap[imgItem.status]" class="w-16 h-16 flex-shrink-0"
+                                viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path :d="statusIconMap[imgItem.status].path" :fill="'#FFF'" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="info w-full flex gap-8 justify-start mt-12">
