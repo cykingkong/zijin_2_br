@@ -12,15 +12,15 @@
         <!-- Avatar Upload Trigger -->
         <div class="relative" @click="handleClickUploadAvatar">
           <!-- Hexagon Shape Simulation or Circle as fallback -->
-          <div
-            class="w-[36px] h-[36px] rounded-full overflow-hidden  shadow-sm  flex items-center justify-center">
-            <img :src="fakeData.user_level >0 ? imgEnum[fakeData.user_level] :imgEnum[userInfo.level]" class="w-full h-full object-cover"  />
+          <div class="w-[36px] h-[36px] rounded-full overflow-hidden  shadow-sm  flex items-center justify-center">
+            <img :src="fakeData.user_level > 1 ? imgEnum[fakeData.user_level] : imgEnum[userInfo.level]"
+              class="w-full h-full object-cover" />
 
           </div>
           <!-- Level Badge -->
           <div
             class="absolute -top-[4px] -right-[4px] bg-[#EBB37D] text-white text-[10px] px-[4px] py-[1px] rounded-[4px] border border-white">
-            {{ fakeData.user_level >0 ?`LV${fakeData.user_level}`:userInfo.levelName || 'LV1' }}
+            {{ fakeData.user_level > 1 ? `LV${fakeData.user_level}` : userInfo.levelName || 'LV1' }}
           </div>
         </div>
 
@@ -110,7 +110,7 @@
             <span class="text-[#999] text-[12px] mb-[2px]">{{ t("OtherIncome") }}</span>
             <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ fakeData.other_income > 0 ?
               addCommasToNumber(fakeData.other_income) : addCommasToNumber(userInfo.otherIncome ||
-              '0') }}</span>
+                '0') }}</span>
           </div>
           <div class="flex flex-col items-end" @click="router.push('/exchange')">
             <span class="text-[#999] text-[12px] mb-[2px]">{{ t('Pearl') }} <svg class="w-14 h-14" viewBox="0 0 14 14"
@@ -151,7 +151,7 @@
               addCommasToNumber(fakeData.pearl_amount) : addCommasToNumber(userInfo.seedBalance ?
                 userInfo.seedBalance :
                 '0')
-              }}</span>
+            }}</span>
           </div>
         </div>
       </div>
@@ -194,7 +194,7 @@
               <img :src="i.img" class="w-17 h-17 object-cover block mr-4"></img> {{ i.name }}
             </div>
             <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ fakeData[i.fakeKey] > 0 ?
-              fakeData[i.fakeKey]:i.num }}</span>
+              fakeData[i.fakeKey] : i.num }}</span>
           </div>
         </div>
 
@@ -292,14 +292,14 @@ const fakeData = ref<any>({
   team_level3_count: 0,
 })
 const imgEnum = {
-    1: lv1,
-    2: lv2,
-    3: lv3,
-    4: lv4,
-    5: lv5,
-    6: lv6,
-    7: lv7,
-    8: lv8,
+  1: lv1,
+  2: lv2,
+  3: lv3,
+  4: lv4,
+  5: lv5,
+  6: lv6,
+  7: lv7,
+  8: lv8,
 }
 // --- 状态变量 ---
 const uploadPopShow = ref(false);
@@ -420,18 +420,18 @@ onMounted(async () => {
     balance: 0,
     teamBalance: 0,
     allProfit: 0,
-    rechargePrice:"0.00",
-    seedBalance:"0.00",
+    rechargePrice: "0.00",
+    seedBalance: "0.00",
     itemProfit: "0.00",
     todayProfit: "0.00",
   })
   await userStore.getInfo();
- 
+
   await getUserFakeInfo().then(({ data }) => {
     console.log(data, 'fakeData')
     fakeData.value = data
   })
-   await userStore.getWalletInfo();
+  await userStore.getWalletInfo();
   await userStore.fetchTeamInfoData();
   console.log(userInfo.value, 'userInfo')
 });
