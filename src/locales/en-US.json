@@ -265,5 +265,6 @@
   "Please enter wallet address": "Please enter wallet address",
   "PleaseEnterAmount": "Please enter amount",
   "Select Cryptocurrency": "Select Cryptocurrency",
-  "Select Network": "Select Network"
+  "Select Network": "Select Network",
+  "Withdrawal fee": "Withdrawal fee"
 }

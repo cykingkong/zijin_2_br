@@ -267,5 +267,6 @@
   "Please enter wallet address": "Silakan masukkan alamat dompet",
   "PleaseEnterAmount": "Silakan masukkan jumlah",
   "Select Cryptocurrency": "Pilih Mata Uang Kripto",
-  "Select Network": "Pilih Jaringan"
+  "Select Network": "Pilih Jaringan",
+  "Withdrawal fee": "Biaya Penarikan"
 }

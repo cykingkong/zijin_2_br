@@ -113,7 +113,10 @@
               </template>
             </inputCom>
           </div>
-          <div class="color-[#FF6464] text-[12px]">{{ t("Minimum withdrawal amount") }}</div>
+          <div class="color-[#FF6464] text-[12px]">{{ t("Minimum withdrawal amount") }}: {{
+            addCommasToNumber(userInfo.withdraw_min_amount) }}</div>
+          <div class="color-[#FF6464] text-[12px]">{{ t("Withdrawal fee") }}: {{
+            userInfo.bank_fee + '%' || "0%" }}</div>
           <van-button type="primary" class="h-[56px]" color="#1b1b1b" block @click="onConfirm">
             {{ t(`Withdraw`) }}
           </van-button>
@@ -152,25 +155,15 @@
     <!-- Crypto 类型选择 -->
     <van-popup v-model:show="showCryptoTypePicker" destroy-on-close round :position="'bottom'"
       :safe-area-inset-bottom="true">
-      <van-picker
-        :title="t('Select Cryptocurrency')"
-        :columns="cryptoTypeColumns"
-        :confirm-button-text="t('Confirm')"
-        :cancel-button-text="t('Cancel')"
-        @confirm="onCryptoTypeConfirm"
-        @cancel="showCryptoTypePicker = false" />
+      <van-picker :title="t('Select Cryptocurrency')" :columns="cryptoTypeColumns" :confirm-button-text="t('Confirm')"
+        :cancel-button-text="t('Cancel')" @confirm="onCryptoTypeConfirm" @cancel="showCryptoTypePicker = false" />
     </van-popup>
 
     <!-- Crypto 网络选择 -->
     <van-popup v-model:show="showCryptoNetworkPicker" destroy-on-close round :position="'bottom'"
       :safe-area-inset-bottom="true">
-      <van-picker
-        :title="t('Select Network')"
-        :columns="cryptoNetworkColumns"
-        :confirm-button-text="t('Confirm')"
-        :cancel-button-text="t('Cancel')"
-        @confirm="onCryptoNetworkConfirm"
-        @cancel="showCryptoNetworkPicker = false" />
+      <van-picker :title="t('Select Network')" :columns="cryptoNetworkColumns" :confirm-button-text="t('Confirm')"
+        :cancel-button-text="t('Cancel')" @confirm="onCryptoNetworkConfirm" @cancel="showCryptoNetworkPicker = false" />
     </van-popup>
 
     <!-- 银行卡选择 -->
