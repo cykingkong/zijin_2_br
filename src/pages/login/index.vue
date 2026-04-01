@@ -169,9 +169,16 @@ const handleClickType = (index: any) => {
   active.value = index
 
 }
+const validateAccountInput = (account: string) => /^[A-Za-z0-9]+$/.test(account)
+const accountFormatter = (value: string) => value.replace(/[^A-Za-z0-9]/g, '')
+
 // 校验帐号密码必填
 const validateAccountPassword = () => {
   if (!postData.account) {
+    showToast(t('Please Enter Account'))
+    return false
+  }
+  if (!validateAccountInput(postData.account)) {
     showToast(t('Please Enter Account'))
     return false
   }
@@ -304,7 +311,7 @@ async function login() {
             <path d="M4 6L8 10L12 6" fill="#1B1B1B" />
           </svg>
         </div>
-        <inputCom :placeholder="t('PleaseEnterPhoneNumber')" v-model:value="postData.account" :tips="''"
+        <inputCom :placeholder="t('PleaseEnterPhoneNumber')" v-model:value="postData.account" :formatter="accountFormatter" :tips="''"
           class="flex-1 w-full">
         </inputCom>
       </div>
