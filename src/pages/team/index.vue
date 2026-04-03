@@ -15,7 +15,7 @@
                 </div>
 
                 <!-- Total Amount -->
-                <div class="text-[28px] font-bold text-[#1A1A1A]  mb-[4px]">R$ {{ '0' }}</div>
+                <div class="text-[28px] font-bold text-[#1A1A1A]  mb-[4px]">R$ {{  addCommasToNumber(userInfo.rechargeData.allRecharge) ||'0' }}</div>
                 <div class="text-[12px] text-[#666] mb-[24px]">{{t("Total Team Top-up")}}</div>
 
                 <!-- 4-Grid Stats -->

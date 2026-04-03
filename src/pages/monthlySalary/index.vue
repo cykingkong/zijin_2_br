@@ -3,6 +3,9 @@
 
         <!-- 内容区域 -->
         <div class="content flex-1 px-[16px] pt-[16px] pb-[30px]">
+              <!-- Total Amount -->
+                <div class="text-[28px] font-bold text-[#1A1A1A]  mb-[4px] text-center">R$ {{  addCommasToNumber(userInfo.rechargePrice) ||'0' }}</div>
+                <div class="text-[12px] text-[#666] mb-[24px] text-center">{{t("Valor Total de Recarga")}}</div>
             <button
                 class="w-full bg-[#1A1A1A] text-white h-[48px] rounded-[12px] font-bold text-[16px] active:opacity-90 transition-opacity mb-16"
                 @click="handleClaim">
@@ -56,6 +59,8 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { month, receiveMonth } from '@/api/salary'
 import { optimizeRichText } from '@/utils/richText';
+import { useUserStore } from "@/stores";
+import { addCommasToNumber } from '@/utils/tool';
 
 // 导入图片资源
 import lv1 from '@/assets/lv/lv1.png';
@@ -66,7 +71,8 @@ import lv5 from '@/assets/lv/lv5.png';
 import lv6 from '@/assets/lv/lv6.png';
 import lv7 from '@/assets/lv/lv7.png';
 import lv8 from '@/assets/lv/lv8.png';
-
+const userStore = useUserStore();
+const userInfo = computed(() => userStore.userInfo)
 const router = useRouter();
 const  {t} = useI18n()
 // 模拟列表数据 (根据截图 LV3 - LV8)
@@ -116,6 +122,7 @@ async function handleClaim() {
 
 onMounted(async () => {
     await getMonthConfig()
+  await userStore.getWalletInfo();
 
 })
 </script>
