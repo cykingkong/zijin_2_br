@@ -89,7 +89,7 @@
                 </div>
             </div>
         </div>
-
+        <div class="html " v-html="config.salaryTextDay"></div>
         <!-- 底部留白，防止被手机Home条遮挡 -->
         <div class="h-[30px]"></div>
 
@@ -102,6 +102,7 @@ import { useRouter } from 'vue-router'; // 假设使用了 vue-router
 import { useUserStore } from "@/stores";
 import { day, receiveDay } from '@/api/salary';
 import { addCommasToNumber } from '@/utils/tool';
+import { optimizeRichText } from '@/utils/richText';
 import dayjs from 'dayjs';
 import lv1 from '@/assets/lv/lv1.png';
 import lv2 from '@/assets/lv/lv2.png';
@@ -116,6 +117,10 @@ const userStore = useUserStore();
 const { t } = useI18n()
 const userInfo = computed(() => userStore.userInfo);
 const todayCanSignIn = ref(true)
+const config = ref({
+    salaryTextDay: '',
+    configs:[]
+})
 // 模拟签到天数数据
 // status: 'missed' | 'checked' | 'today' | 'future'
 //  status: 1-已领取 2-可领取 3-不可领取
@@ -215,7 +220,7 @@ async function getDayConfig() {
             }
         })
         let todayItem = data.days.find((item)=>today.value == item.day)
-
+        config.value.salaryTextDay = optimizeRichText(data.salaryTextDay || '')
         todayCanSignIn.value = todayItem.status == 1? true:false
         console.log(rewardList.value,todayItem)
     }

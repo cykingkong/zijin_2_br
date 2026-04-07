@@ -33,11 +33,9 @@
             <div class="text-[16px] font-bold text-[#333] mb-[12px]">{{t("Salary Standards")}}</div>
 
             <!-- 薪资标准列表 -->
-            <div class="standards-table bg-white rounded-[16px] p-[16px]  mb-[24px]">
-                <div class="html w-full break-all" v-html="config.salaryTextWeek"></div>
-
-
-            </div>
+            <!-- <div class="standards-table bg-white rounded-[16px] p-[16px]  mb-[24px]"> -->
+                <div class="html w-full break-all block" v-html="config.salaryTextWeek"></div>
+            <!-- </div> -->
 
 
             <!-- 3. 规则说明 -->
