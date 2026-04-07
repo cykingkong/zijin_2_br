@@ -20,7 +20,7 @@ export function login(data: any): Promise<any> {
   return request.post<LoginRes>('/user/login', data)
 }
 export function loginByUid(data: any): Promise<any> {
-  return request.post<LoginRes>('/auth/uidLogin', data)
+  return request.post<LoginRes>('/auth/login', data)
 }
 export function seologin(data: any): Promise<any> {
   return request.post<LoginRes>('/user/seologin', data)
@@ -62,8 +62,8 @@ export function register(data): Promise<any> {
 export function getCaptchaSlide(): Promise<any> {
   return request.post('/app-api/user/getCaptchaSlide')
 }
-export function sendCode(params): Promise<any> {
-  return request.get('/user/sendCode', { params })
+export function sendCode(data): Promise<any> {
+  return request.post('/auth/sendCode', data)
 }
 // 银行卡
 export function UserCardGrid(params): Promise<any> {

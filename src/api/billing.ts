@@ -18,3 +18,6 @@ export function deposit(data): Promise<any> {
 export function withdraw(data): Promise<any> {
     return request.post<any>('/user/withdraw', data)
 }
+export function rechargeMethods(params): Promise<any> {
+    return request.get<any>('billing/rechargeMethods', { params })
+}

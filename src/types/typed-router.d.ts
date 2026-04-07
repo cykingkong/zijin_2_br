@@ -31,6 +31,7 @@ declare module 'vue-router/auto-routes' {
     'profile': RouteRecordInfo<'profile', '/profile', Record<never, never>, Record<never, never>>,
     'BankAccount': RouteRecordInfo<'BankAccount', '/profile/bankAccount', Record<never, never>, Record<never, never>>,
     'addBank': RouteRecordInfo<'addBank', '/profile/bankAccount/addBank', Record<never, never>, Record<never, never>>,
+    '/wallet/exchange/cashierCenter': RouteRecordInfo<'/wallet/exchange/cashierCenter', '/wallet/exchange/cashierCenter', Record<never, never>, Record<never, never>>,
     '/wallet/exchange/cashierCenter-withdraw': RouteRecordInfo<'/wallet/exchange/cashierCenter-withdraw', '/wallet/exchange/cashierCenter-withdraw', Record<never, never>, Record<never, never>>,
     'walletLogs': RouteRecordInfo<'walletLogs', '/wallet/walletLogs', Record<never, never>, Record<never, never>>,
   }

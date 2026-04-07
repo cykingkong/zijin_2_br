@@ -94,8 +94,8 @@ const getCode = async () => {
   try {
     await sendCode({
       type: 'email',
-      phone: '',
-      email: postData.account
+
+      account: postData.account
     })
     startCountdown()
   } catch (e) {
@@ -151,12 +151,13 @@ async function signUp() {
   try {
     let params = {
       "type": 'email',
-      "email": postData.account,
+      "account": postData.account,
       "code": postData.code,
-      "inviteCode": postData.inviteCode,
+      "invite_code": postData.inviteCode,
       "password": postData.password
     }
     await userStore.register(params);
+    // pageType.value = 0
     localStorage.setItem("language", "br");
     locale.value = "br";
     const { redirect, ...othersQuery } = router.currentRoute.value.query;
@@ -186,7 +187,7 @@ async function login() {
     let params = {
       account: postData.account,
       password: postData.password,
-      type: 'email',
+      // type: 'email',
     };
     await userStore.login(params);
     localStorage.setItem("language", "br");
@@ -234,7 +235,8 @@ async function login() {
     </div>
     <div class="login-form p-24">
       <div class="phone-input mb-20">
-        <inputCom :placeholder="t('PleaseEnterEmail')" v-model:value="postData.account" :tips="''" class="flex-1 w-full">
+        <inputCom :placeholder="t('PleaseEnterEmail')" v-model:value="postData.account" :tips="''"
+          class="flex-1 w-full">
         </inputCom>
       </div>
 
@@ -334,7 +336,7 @@ async function login() {
           pageType == 0 ? t("Login") : t("Sign Up")
         }}</van-button>
       <div class="or">{{ '©2026 Signet Jewelers. Este site é utilizado sob autorização, todos os direitos reservados.'
-      }}
+        }}
       </div>
       <div :style="{ color: '#1B1B1B' }"
         class=" font-regular w-full  items-center flex justify-center text-center  color-[#1b1b1b]! font-bold" block

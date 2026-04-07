@@ -58,7 +58,7 @@ export const useUserStore = defineStore('user', () => {
   const register = async (form: any) => {
     try {
       const { data } = await userRegister(form)
-      setToken(data.access_token)
+      setToken(data.token)
     }
     catch (error) {
       clearToken()
