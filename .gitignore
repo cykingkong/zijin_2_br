@@ -13,7 +13,7 @@ devDist
 dist-ssr
 *.local
 stats.html
-
+/claude-files
 # Editor directories and files
 .idea
 *.suo

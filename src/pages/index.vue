@@ -51,7 +51,13 @@ let pathEnum = {
   5: 'monthlySalary',
   6: 'yearSalary',
   7: 'taskbonus',
-  8: 'receive',
+  8: 'treasure',
+  9: 'prize',
+}
+function handleClickNotify() {
+  router.push({
+    path: 'receive',
+  });
 }
 function handleClickSeeAll() {
   router.push({
@@ -217,7 +223,7 @@ onMounted(() => {
         </div>
       </div>
       <div class="flex justify-center items-center icon-box gap-[8px]">
-        <div class="relative" @click="handleClickGrid(8)">
+        <div class="relative" @click="handleClickNotify">
           <div
             class="dot absolute bottom-[8px] right-[1px]  rounded-full bg-[#FF4E4E] color-[#fff] text-[8px] w-[5px] h-[5px] text-center"
             v-if="userInfo.productCount">
