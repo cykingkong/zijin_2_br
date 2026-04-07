@@ -1,12 +1,12 @@
 <template>
   <div class="grid-box w-full px-[20px] mt-[24px]">
-    <div class="grid  gap-8 grid-cols-4 ">
-      <div class="grid-item flex-1 text-center" v-for="(item, index) in gridList" :key="index"
+    <div class="grid gap-x-[4px] gap-y-[14px] grid-cols-4">
+      <div class="grid-item flex-1 text-center min-w-0" v-for="(item, index) in gridList" :key="index"
         @click="handleClickItem(index)">
-        <div class="w-[54px] h-[54px] mx-auto block svg flex items-center justify-center">
-          <img :src="item.image" alt="" class="w-[24px] h-[24px] mx-auto block" />
+        <div class="w-[44px] h-[44px] mx-auto block svg flex items-center justify-center">
+          <img :src="item.image" alt="" class="w-[22px] h-[22px] mx-auto block" />
         </div>
-        <p class="text-[11px]  text-[#161616] mt-[12px] text-nowrap">{{ item.name }}</p>
+        <p class="grid-label mt-[10px]">{{ item.name }}</p>
       </div>
     </div>
   </div>
@@ -20,6 +20,8 @@ import grid5 from "@/assets/grid/grid5.svg";
 import grid6 from "@/assets/grid/grid6.svg";
 import grid7 from "@/assets/grid/grid7.svg";
 import grid8 from "@/assets/grid/grid8.svg";
+import grid9 from "@/assets/grid/grid9.svg";
+import grid10 from "@/assets/grid/grid10.svg";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 const props = defineProps({
@@ -62,6 +64,14 @@ const gridList = ref([
     name: t("Task Bonus"),
     image: grid8,
   },
+  // {
+  //   name: t("One Yuan Treasure"),
+  //   image: grid9,
+  // },
+  // {
+  //   name: t("Prize Draw"),
+  //   image: grid10,
+  // },
 ]);
 const emits = defineEmits(["handleClickGrid"]);
 const handleClickItem = (k) => {
@@ -69,50 +79,21 @@ const handleClickItem = (k) => {
 };
 </script>
 <style lang="less">
-.grid-content {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  padding: 12px 0;
-  gap: 12px;
-  // background: #131a2e;
-
-  .grid-item {
-    flex: 1;
-    // height: 75px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    gap: 6px;
-    font-size: 16px;
-    flex-shrink: 0;
-
-    .grid-img {
-      width: 48px;
-      height: 48px;
-
-
-
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-
-
-
-    .grid-text {
-      color: var(--van-text);
-      word-break: break-word;
-    }
-  }
+.grid-label {
+  color: #161616;
+  font-size: 11px;
+  line-height: 1.25;
+  text-align: center;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
 }
 
 .svg {
-  border-radius: 16px;
+  border-radius: 14px;
   box-shadow: 0px 10px 34px 0px rgba(0, 0, 0, 0.1);
-
 }
 
 .grid-item {}

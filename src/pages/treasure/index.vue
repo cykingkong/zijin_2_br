@@ -13,8 +13,10 @@
           </div>
         </div>
 
-        <div class="rounded-[16px] border border-[#e7d8bb] bg-gradient-to-r from-[#fffaf0] to-[#f7eddc] px-[14px] py-[10px] flex items-center gap-[10px]">
-          <div class="w-[32px] h-[32px] rounded-[10px] bg-gradient-to-r from-[#9a7a2c] to-[#e8cf85] flex items-center justify-center text-white text-[16px]">
+        <div
+          class="rounded-[16px] border border-[#e7d8bb] border-solid bg-gradient-to-r from-[#fffaf0] to-[#f7eddc] px-[14px] py-[10px] flex items-center gap-[10px]">
+          <div
+            class="w-[32px] h-[32px] rounded-[10px] bg-gradient-to-r from-[#9a7a2c] to-[#e8cf85] flex items-center justify-center text-white text-[16px]">
             💰
           </div>
           <div class="flex-1">
@@ -29,7 +31,8 @@
     <div class="px-[16px] pt-[16px]">
       <div class="hero rounded-[24px] px-[18px] py-[20px] relative overflow-hidden">
         <div class="relative z-[1] max-w-[240px]">
-          <div class="inline-flex items-center rounded-[999px] bg-gradient-to-r from-[#9a7a2c] to-[#c9a84c] px-[10px] py-[4px] text-[10px] font-bold text-white mb-[10px]">
+          <div
+            class="inline-flex items-center rounded-[999px] bg-gradient-to-r from-[#9a7a2c] to-[#c9a84c] px-[10px] py-[4px] text-[10px] font-bold text-white mb-[10px]">
             {{ t('Limited Event') }}
           </div>
           <div class="text-[28px] leading-[1.2] font-bold text-[#1e1608]">
@@ -45,7 +48,8 @@
 
     <div class="mt-[12px] overflow-x-auto whitespace-nowrap px-[8px] pb-[4px]">
       <div class="inline-flex gap-[8px] px-[8px]">
-        <div v-for="rule in ruleItems" :key="rule.label" class="rounded-[14px] border border-[#ece0cc] bg-[#fffaf2] px-[12px] py-[8px] text-center min-w-[96px]">
+        <div v-for="rule in ruleItems" :key="rule.label"
+          class="rounded-[14px] border border-[#ece0cc] border-solid bg-[#fffaf2] px-[12px] py-[8px] text-center min-w-[96px]">
           <div class="text-[18px]">{{ rule.icon }}</div>
           <div class="text-[10px] text-[#8a7a5a] mt-[4px]">{{ t(rule.label) }}</div>
         </div>
@@ -54,13 +58,10 @@
 
     <div class="sticky top-[104px] z-[15] bg-[#faf7f2f2] backdrop-blur-[8px] px-[16px] pt-[12px] pb-[8px]">
       <div class="flex rounded-[18px] bg-white p-[6px] shadow-sm">
-        <div
-          v-for="tab in classTabs"
-          :key="tab.classId"
+        <div v-for="tab in classTabs" :key="tab.classId"
           class="flex-1 h-[46px] rounded-[14px] flex flex-col items-center justify-center"
           :class="activeClassId === tab.classId ? 'bg-[#f4ede0] text-[#9a7a2c]' : 'text-[#b0a080]'"
-          @click="switchClass(tab.classId)"
-        >
+          @click="switchClass(tab.classId)">
           <div class="text-[18px] font-bold leading-[1]">{{ tab.priceLabel }}</div>
           <div class="text-[10px] mt-[2px]">{{ tab.name }}</div>
         </div>
@@ -71,17 +72,23 @@
       <div class="flex items-center justify-between mb-[12px]">
         <div>
           <div class="text-[14px] font-bold text-[#1e1608]">{{ currentClassName }}</div>
-          <div class="text-[11px] text-[#b0a080] mt-[2px]">{{ t('Current available issues') }} {{ issueList.length }}</div>
+          <div class="text-[11px] text-[#b0a080] mt-[2px]">{{ t('Current available issues') }} {{ issueList.length }}
+          </div>
         </div>
       </div>
 
       <div v-if="issueList.length" class="flex flex-col gap-[14px]">
-        <div v-for="issue in issueList" :key="issue.issueId" class="rounded-[22px] border border-[#eadfcf] bg-[#fffcf7] overflow-hidden shadow-[0_3px_18px_rgba(201,168,76,0.08)]">
-          <div class="relative h-[190px] bg-gradient-to-br from-[#faf7f0] via-[#f4ecdd] to-[#ecdfc8] flex items-center justify-center">
-            <div class="absolute left-[10px] top-[10px] rounded-[999px] bg-gradient-to-r from-[#9a7a2c] to-[#c9a84c] px-[10px] py-[4px] text-[10px] font-bold text-white">
+        <div v-for="issue in issueList" :key="issue.issueId"
+          class="rounded-[22px] border border-[#eadfcf] border-solid bg-[#fffcf7] overflow-hidden shadow-[0_3px_18px_rgba(201,168,76,0.08)]">
+          <div
+            class="relative h-[190px] bg-gradient-to-br from-[#faf7f0] via-[#f4ecdd] to-[#ecdfc8] flex items-center justify-center">
+            <div
+              class="absolute left-[10px] top-[10px] rounded-[999px] bg-gradient-to-r from-[#9a7a2c] to-[#c9a84c] px-[10px] py-[4px] text-[10px] font-bold text-white">
               {{ t('Issue') }} {{ issue.issueNo }}
             </div>
-            <button class="absolute right-[10px] top-[10px] rounded-[999px] border border-[#d9c7a0] bg-[#fffbf3] px-[10px] py-[4px] text-[10px] font-bold text-[#9a7a2c]" @click.stop="openDrawLogForIssue(issue)">
+            <button
+              class="absolute right-[10px] top-[10px] rounded-[999px] border border-[#d9c7a0] border-solid bg-[#fffbf3] px-[10px] py-[4px] text-[10px] font-bold text-[#9a7a2c]"
+              @click.stop="openDrawLogForIssue(issue)">
               {{ t('Draw History') }}
             </button>
             <img v-if="issue.goodsImage" :src="issue.goodsImage" class="max-h-[140px] max-w-[78%] object-contain" />
@@ -92,9 +99,11 @@
             <div class="flex items-start justify-between gap-[10px]">
               <div class="flex-1">
                 <div class="text-[15px] font-bold text-[#1e1608] leading-[1.5]">{{ issue.goodsName || '--' }}</div>
-                <div class="text-[11px] text-[#8a7a5a] mt-[4px]">{{ issue.goodsSubName || issue.classDesc || '--' }}</div>
+                <div class="text-[11px] text-[#8a7a5a] mt-[4px]">{{ issue.goodsSubName || issue.classDesc || '--' }}
+                </div>
               </div>
-              <div class="rounded-[12px] border border-[#e4d4b2] bg-[#f8f1e5] px-[10px] py-[8px] text-center min-w-[66px]">
+              <div
+                class="rounded-[12px] border border-[#e4d4b2] border-solid bg-[#f8f1e5] px-[10px] py-[8px] text-center min-w-[66px]">
                 <div class="text-[18px] leading-[1] font-bold text-[#9a7a2c]">{{ issue.leftCodes || 0 }}</div>
                 <div class="text-[9px] text-[#b0a080] mt-[2px]">{{ t('Left') }}</div>
               </div>
@@ -103,12 +112,14 @@
             <div class="flex items-end justify-between mt-[8px] gap-[8px]">
               <div>
                 <div class="flex items-end gap-[4px]">
-                  <span class="text-[26px] leading-[1] font-bold text-[#d03535]">{{ issue.unitPrice || issue.classId }}</span>
+                  <span class="text-[26px] leading-[1] font-bold text-[#d03535]">{{ issue.unitPrice || issue.classId
+                  }}</span>
                   <span class="text-[11px] text-[#8a7a5a]">{{ t('Per Code') }}</span>
                 </div>
                 <div class="text-[10px] text-[#c9b79e] line-through mt-[3px]">{{ issue.marketPrice || '--' }}</div>
               </div>
-              <div class="text-[11px] font-semibold" :class="statusClass(issue.status)">{{ getIssueStatusText(issue.status) }}</div>
+              <div class="text-[11px] font-semibold" :class="statusClass(issue.status)">{{
+                getIssueStatusText(issue.status) }}</div>
             </div>
 
             <div class="mt-[14px]">
@@ -117,7 +128,9 @@
                 <div class="text-[#d03535]">{{ t('Left') }} {{ issue.leftCodes || 0 }}</div>
               </div>
               <div class="h-[10px] rounded-[999px] bg-[#ece0cc] overflow-hidden">
-                <div class="h-full rounded-[999px] bg-gradient-to-r from-[#9a7a2c] via-[#c9a84c] to-[#e8cf85] transition-all duration-500" :style="{ width: `${issue.progress || 0}%` }"></div>
+                <div
+                  class="h-full rounded-[999px] bg-gradient-to-r from-[#9a7a2c] via-[#c9a84c] to-[#e8cf85] transition-all duration-500"
+                  :style="{ width: `${issue.progress || 0}%` }"></div>
               </div>
               <div class="flex justify-between text-[9px] text-[#b0a080] mt-[4px]">
                 <span>0%</span>
@@ -126,7 +139,8 @@
               </div>
             </div>
 
-            <div v-if="Number(issue.status) === 1" class="mt-[12px] rounded-[14px] border border-[#e0c880] bg-[#fff9eb] px-[12px] py-[10px] flex items-start gap-[8px]">
+            <div v-if="Number(issue.status) === 1"
+              class="mt-[12px] rounded-[14px] border border-[#e0c880] border-solid bg-[#fff9eb] px-[12px] py-[10px] flex items-start gap-[8px]">
               <div class="text-[18px]">⏳</div>
               <div>
                 <div class="text-[12px] font-bold text-[#9a7a2c]">{{ t('Pending Draw') }}</div>
@@ -137,7 +151,8 @@
             <div class="mt-[12px] rounded-[14px] bg-[#faf6ed] px-[12px] py-[10px]">
               <div class="text-[10px] text-[#b0a080] mb-[6px]">{{ t('Latest Winner Preview') }}</div>
               <div v-if="getIssueWinnerPreview(issue).length" class="flex gap-[6px] overflow-x-auto whitespace-nowrap">
-                <div v-for="log in getIssueWinnerPreview(issue)" :key="log.id" class="inline-flex flex-col rounded-[10px] border border-[#eadfcf] bg-[#fffaf2] px-[8px] py-[6px] min-w-[92px]">
+                <div v-for="log in getIssueWinnerPreview(issue)" :key="log.id"
+                  class="inline-flex flex-col rounded-[10px] border border-[#eadfcf] border-solid bg-[#fffaf2] px-[8px] py-[6px] min-w-[92px]">
                   <span class="text-[9px] text-[#b0a080]">{{ t('Issue') }} {{ log.issueNo }}</span>
                   <span class="text-[10px] font-bold text-[#1e1608] mt-[2px]">{{ log.winnerPhone }}</span>
                   <span class="text-[10px] font-bold text-[#9a7a2c] mt-[2px]">{{ log.winnerCode }}</span>
@@ -148,8 +163,7 @@
 
             <button class="mt-[14px] h-[44px] w-full rounded-[999px] border-none text-[14px] font-bold tracking-[1px]"
               :class="issue.canBuy && Number(issue.status) === 0 ? 'bg-gradient-to-r from-[#9a7a2c] via-[#c9a84c] to-[#e8cf85] text-[#1e1608]' : 'bg-[#d8d0c0] text-white'"
-              :disabled="!issue.canBuy || Number(issue.status) !== 0 || buying"
-              @click="openBuyDialog(issue)">
+              :disabled="!issue.canBuy || Number(issue.status) !== 0 || buying" @click="openBuyDialog(issue)">
               {{ issue.canBuy && Number(issue.status) === 0 ? t('Join Now') : getIssueStatusText(issue.status) }}
             </button>
           </div>
@@ -159,14 +173,14 @@
     </div>
 
     <div class="px-[14px] pt-[8px]">
-      <div class="rounded-[22px] bg-white border border-[#eadfcf] p-[14px]">
+      <div class="rounded-[22px] bg-white border border-[#eadfcf] border-solid p-[14px]">
         <div class="flex gap-[8px] rounded-[16px] bg-[#f7f1e6] p-[6px] mb-[14px]">
-          <div class="flex-1 h-[38px] rounded-[12px] flex items-center justify-center text-[13px] font-semibold"
+          <div class="flex-1 h-[38px] px-8 rounded-[12px] flex items-center justify-center text-[13px] font-semibold"
             :class="recordTab === 'draw' ? 'bg-white text-[#1e1608]' : 'text-[#8a7a5a]'"
             @click="switchRecordTab('draw')">
             {{ t('Latest Draw Records') }}
           </div>
-          <div class="flex-1 h-[38px] rounded-[12px] flex items-center justify-center text-[13px] font-semibold"
+          <div class="flex-1 h-[38px]  rounded-[12px] flex items-center justify-center text-[13px] font-semibold"
             :class="recordTab === 'order' ? 'bg-white text-[#1e1608]' : 'text-[#8a7a5a]'"
             @click="switchRecordTab('order')">
             {{ t('My Orders') }}
@@ -175,12 +189,14 @@
 
         <template v-if="recordTab === 'draw'">
           <div v-if="drawLogs.length" class="flex flex-col gap-[10px]">
-            <div v-for="item in drawLogs" :key="item.id" class="rounded-[16px] bg-[#fffaf2] p-[12px] border border-[#f0e6d6]">
+            <div v-for="item in drawLogs" :key="item.id"
+              class="rounded-[16px] bg-[#fffaf2] p-[12px] border border-[#f0e6d6] border-solid">
               <div class="flex items-center justify-between gap-[8px]">
                 <div class="text-[14px] font-bold text-[#1e1608]">{{ item.goodsName || '--' }}</div>
                 <div class="text-[11px] text-[#9a7a2c]">{{ getDrawSourceText(item.drawSource) }}</div>
               </div>
-              <div class="text-[12px] text-[#8a7a5a] mt-[6px]">{{ t('Issue') }} {{ item.issueNo || '--' }} · {{ item.winnerPhone || '--' }}</div>
+              <div class="text-[12px] text-[#8a7a5a] mt-[6px]">{{ t('Issue') }} {{ item.issueNo || '--' }} · {{
+                item.winnerPhone || '--' }}</div>
               <div class="text-[12px] font-semibold text-[#9a7a2c] mt-[4px]">{{ item.winnerCode || '--' }}</div>
               <div class="text-[11px] text-[#b0a080] mt-[4px]">{{ item.createdAt || '--' }}</div>
             </div>
@@ -191,13 +207,18 @@
 
         <template v-else>
           <div v-if="myOrders.length" class="flex flex-col gap-[10px]">
-            <div v-for="item in myOrders" :key="item.orderId" class="rounded-[16px] bg-[#fffaf2] p-[12px] border border-[#f0e6d6]">
+            <div v-for="item in myOrders" :key="item.orderId"
+              class="rounded-[16px] bg-[#fffaf2] p-[12px] border border-[#f0e6d6] border-solid">
               <div class="flex gap-[10px]">
-                <img v-if="item.goodsImage" :src="item.goodsImage" class="w-[58px] h-[58px] rounded-[12px] object-cover bg-[#f3ead8]" />
-                <div v-else class="w-[58px] h-[58px] rounded-[12px] bg-[#f3ead8] flex items-center justify-center text-[24px]">🎁</div>
+                <img v-if="item.goodsImage" :src="item.goodsImage"
+                  class="w-[58px] h-[58px] rounded-[12px] object-cover bg-[#f3ead8]" />
+                <div v-else
+                  class="w-[58px] h-[58px] rounded-[12px] bg-[#f3ead8] flex items-center justify-center text-[24px]">🎁
+                </div>
                 <div class="flex-1 min-w-0">
                   <div class="text-[14px] font-bold text-[#1e1608] line-clamp-2">{{ item.goodsName || '--' }}</div>
-                  <div class="text-[12px] text-[#8a7a5a] mt-[4px]">{{ t('Issue') }} {{ item.issueNo || '--' }} · {{ t('Buy Count') }} {{ item.buyCount || 0 }}</div>
+                  <div class="text-[12px] text-[#8a7a5a] mt-[4px]">{{ t('Issue') }} {{ item.issueNo || '--' }} · {{
+                    t('Buy Count') }} {{ item.buyCount || 0 }}</div>
                   <div class="text-[12px] text-[#9a7a2c] mt-[4px]">{{ t('Codes') }}: {{ formatCodes(item.codes) }}</div>
                   <div class="text-[11px] text-[#b0a080] mt-[4px]">{{ item.createdAt || '--' }}</div>
                 </div>
