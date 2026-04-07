@@ -2,16 +2,13 @@
 import { useRouter } from "vue-router";
 import { useUserStore } from "@/stores";
 import { useLoadingStore } from "@/stores/modules/loading";
-import br from '@/assets/br.png'
-import usa from '@/assets/usa.png'
 import inputCom from "@/components/inputCom.vue";
-import nationalityList from "@/components/nationality-list/nationalityList.vue";
 import CloseButton from "@/components/CloseButton.vue";
-import { languageColumns, locale } from "@/utils/i18n";
-import { sendCode, register } from "@/api/user";
+import { locale } from "@/utils/i18n";
+import { sendCode } from "@/api/user";
 import local from "@/utils/local";
 
-const lang = ref(local.getlocal('lang') || 'id')
+const lang = ref(local.getlocal('lang') || 'en')
 
 const pageType = ref(0) // 0 login 1 register 2 changePwd
 const { t } = useI18n();
@@ -20,31 +17,8 @@ const router = useRouter();
 const userStore = useUserStore();
 const { proxy } = getCurrentInstance();
 const loadingStore = useLoadingStore();
-let countryList = ref<any>([
-  {
-    code: "br",
-    dialCode: 55,
-    key: "br",
-    name: "Brazil",
-    img: br
-  },
-  // {
-  //   code: "us",
-  //   dialCode: 1,
-  //   key: "us",
-  //   name: "U.S.A",
-  //   img: usa
-  // },
-])
-let active = ref(0)
 const loading = ref(false);
 const remember = ref(false);
-const areaInfo = ref({
-  code: "mx",
-  dialCode: 52,
-  key: "mx",
-  name: "Mexico",
-});
 function onBack() {
   if (pageType.value == 1) {
     pageType.value = 0
@@ -65,7 +39,6 @@ onMounted(async () => {
       query: {
         ...othersQuery,
       },
-      replace: true,
     });
     return
   }
@@ -77,9 +50,8 @@ onMounted(async () => {
       remember.value = true;
       postData.account = parsedInfo.account || "";
       postData.password = parsedInfo.password || "";
-      // postData.type = parsedInfo.type || 'phone';
     } catch (error) {
-      console.error(":", error);
+      console.error("解析保存的登录信息失败:", error);
       localStorage.removeItem("remember");
     }
   }
@@ -102,7 +74,7 @@ const postData = reactive({
   account: "",
   password: "",
   passwordConfirmation: '',
-  type: "phone",
+  type: "email",
   code: "", inviteCode: '',
 
 });
@@ -112,25 +84,21 @@ const timer = ref()
 const getCode = async () => {
   if (countdown.value > 0) return
   if (!postData.account) {
-    showToast(t('PleaseEnterPhoneNumber'))
+    showToast(t('PleaseEnterEmail'))
+    return
+  }
+  if (!validateEmail(postData.account)) {
+    showToast(t('PleaseEnterEmail'))
     return
   }
   try {
-    let params = {
-      type: postData.type,
+    await sendCode({
+      type: 'email',
       phone: '',
-      email: ''
-    }
-    if (params.type == 'phone') {
-      params.phone = `55${postData.account}`
-    } else {
-      params.email = postData.account
-    }
-
-    await sendCode(params)
+      email: postData.account
+    })
     startCountdown()
   } catch (e) {
-    // 处理错误
     console.log(e)
   }
 }
@@ -146,13 +114,6 @@ const startCountdown = () => {
 }
 /* 验证码结束 */
 
-const hanleClickAreaPick = () => {
-  return
-  // controlChildRef.value.open();
-
-  // areaPopRef.value.popShow()
-};
-
 const toForgotPassword = () => {
   try {
     router.push("/forgot-password?noLogin=1");
@@ -163,17 +124,16 @@ const toForgotPassword = () => {
 const changePageType = () => {
   pageType.value = pageType.value == 0 ? 1 : 0;
 };
-const getName = (val: any) => {
-  areaInfo.value = val;
-};
-const handleClickType = (index: any) => {
-  active.value = index
+const validateEmail = (account: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(account)
 
-}
 // 校验帐号密码必填
 const validateAccountPassword = () => {
   if (!postData.account) {
-    showToast(t('Please Enter Account'))
+    showToast(t('PleaseEnterEmail'))
+    return false
+  }
+  if (!validateEmail(postData.account)) {
+    showToast(t('PleaseEnterEmail'))
     return false
   }
   if (!postData.password) {
@@ -188,54 +148,55 @@ async function signUp() {
     showToast(t('Please Enter Code'))
     return
   }
-  // if (!postData.inviteCode) {
-  //   showToast(t('Please Enter Invite Code'))
-  //   return
-  // }
   try {
-    let area = countryList.value[active.value].dialCode;
     let params = {
-      "type": postData.type,
-      "phone": area + postData.account,
+      "type": 'email',
+      "email": postData.account,
       "code": postData.code,
       "inviteCode": postData.inviteCode,
       "password": postData.password
     }
     await userStore.register(params);
-    localStorage.setItem("language", "id");
-    locale.value = "id";
-    const { redirect, ...othersQuery } = router.currentRoute.value.query;
-    router.push('/');
-  } catch (e) {
-    console.log(e)
-  }
-}
-async function login() {
-  if (!postData.account) {
-    showToast(t('PleaseEnterDeviceCode'))
-    return;
-  }
-
-
-
-  try {
-    loading.value = true;
-    let area = countryList.value[active.value]?.dialCode;
-    let params = {
-      uuid: postData.account,
-    };
-    await userStore.login(params);
-    // await userStore.info()
-    localStorage.setItem("language", "id");
-    locale.value = "id";
+    localStorage.setItem("language", "br");
+    locale.value = "br";
     const { redirect, ...othersQuery } = router.currentRoute.value.query;
     router.push({
       name: "home",
       query: {
         ...othersQuery,
       },
-      replace: true,
+    });
+  } catch (e) {
+    console.log(e)
+  }
+}
+async function login() {
+  if (!validateAccountPassword()) {
+    return;
+  }
 
+  if (remember.value) {
+    localStorage.setItem("remember", JSON.stringify(postData));
+  } else {
+    localStorage.removeItem("remember");
+  }
+
+  try {
+    loading.value = true;
+    let params = {
+      account: postData.account,
+      password: postData.password,
+      type: 'email',
+    };
+    await userStore.login(params);
+    localStorage.setItem("language", "br");
+    locale.value = "br";
+    const { redirect, ...othersQuery } = router.currentRoute.value.query;
+    router.push({
+      name: "home",
+      query: {
+        ...othersQuery,
+      },
     });
   } finally {
     loading.value = false;
@@ -244,9 +205,9 @@ async function login() {
 </script>
 
 <template>
-  <div class="login-container">
-    <!-- 原 top-image w-full bg-[] 转换为 .top-section -->
-    <div class="top-section">
+  <div class="m-x-a w-full max-h-[100vh]">
+
+    <div class="top-image w-full bg-[]">
       <CloseButton>
         <template #left>
           <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" @click="onBack"
@@ -259,37 +220,152 @@ async function login() {
           <div class="e" v-else></div>
         </template>
         <template #right>
-          <LangSelectDropdown v-model="lang" />
+          <!-- <LangSelectDropdown v-model="lang" /> -->
         </template>
       </CloseButton>
-      <!-- 原 mid-logo h-[64px] rounded-[12px] overflow-hidden ml-[16px] mt-76 转换为 .logo-wrapper -->
-      <div class="logo-wrapper">
-        <img src="@/assets/Logo.png" alt="" class="logo-img">
+      <div class="mid-logo h-[64px] rounded-[12px] overflow-hidden ml-[16px]">
+        <img src="@/assets/Logo.png" alt="" class="w-auto h-full">
       </div>
-      <!-- 原 text-left m-x-a mt-[16px] color-white px-30 转换为 .welcome-text -->
-      <div class="welcome-text">
-        <!-- 原 t font-size-[24px] font-semibold m-b-[4px] color-[#1B1B1B] 转换为 .welcome-title -->
-        <div class="welcome-title">
+      <div class="text-left m-x-a mt-[16px] color-white px-30">
+        <div class="t font-size-[24px] font-semibold m-b-[4px] color-[#1B1B1B]">
           {{ t("Welcome") }}
         </div>
       </div>
     </div>
-
-    <!-- 原 login-form p-24 (已在style中保留并增强) -->
-    <div class="login-form">
-      <!-- 原 phone-input flex items-center gap-[12px] mb-20 (已在style中合并增强) -->
-      <div class="phone-input">
-        <inputCom :placeholder="t('PleaseEnterDeviceCode')" v-model:value="postData.account" :tips="''"
-          class="input-full">
+    <div class="login-form p-24">
+      <div class="phone-input mb-20">
+        <inputCom :placeholder="t('PleaseEnterEmail')" v-model:value="postData.account" :tips="''" class="flex-1 w-full">
         </inputCom>
       </div>
 
-      <!-- 原 login-btn h-[48px]! (已在style中增强) -->
-      <van-button type="primary" color="#1B1B1B" class="login-btn" block @click=" login()">{{
-        t("Log in")
-      }}</van-button>
+      <div class="phone-input mb-20">
+        <inputCom v-model:value="postData.password" :placeholder="t('Password')" :onlyRead="false"
+          :inputType="inputType">
+          <template #sendCode>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+              @click="changeInputType" v-if="inputType == 'text'">
+              <path d="M3 3L21 21" stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              <path
+                d="M10.584 10.587C10.2087 10.962 9.99775 11.4708 9.99756 12.0013C9.99737 12.5318 10.2079 13.0407 10.583 13.416C10.958 13.7913 11.4667 14.0022 11.9973 14.0024C12.5278 14.0026 13.0367 13.792 13.412 13.417"
+                stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              <path
+                d="M9.363 5.365C10.2204 5.11972 11.1082 4.99684 12 5C16 5 19.333 7.333 22 12C21.222 13.361 20.388 14.524 19.497 15.488M17.357 17.349C15.726 18.449 13.942 19 12 19C8 19 4.667 16.667 2 12C3.369 9.605 4.913 7.825 6.632 6.659"
+                stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+              v-if="inputType == 'password'" @click="changeInputType">
+              <path
+                d="M12 14C13.1046 14 14 13.1046 14 12C14 10.8954 13.1046 10 12 10C10.8954 10 10 10.8954 10 12C10 13.1046 10.8954 14 12 14Z"
+                stroke="#0F172A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              <path
+                d="M22 12C19.333 16.667 16 19 12 19C8 19 4.667 16.667 2 12C4.667 7.333 8 5 12 5C16 5 19.333 7.333 22 12Z"
+                stroke="#0F172A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </template>
+        </inputCom>
+      </div>
+      <!-- Confirm password -->
+      <!-- <div class="label mb-8 mt-12" :class="['flex items-center gap-4']" v-if="pageType == 1">
+        {{ t('Confirm password') }}
+      </div> -->
+      <!-- <div class="phone-input mb-20" v-if="pageType == 1">
+        <inputCom v-model:value="postData.passwordConfirmation" :placeholder="t('Password')" :onlyRead="false"
+          :inputType="inputType">
+          <template #sendCode>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+              @click="changeInputType" v-if="inputType == 'text'">
+              <path d="M3 3L21 21" stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              <path
+                d="M10.584 10.587C10.2087 10.962 9.99775 11.4708 9.99756 12.0013C9.99737 12.5318 10.2079 13.0407 10.583 13.416C10.958 13.7913 11.4667 14.0022 11.9973 14.0024C12.5278 14.0026 13.0367 13.792 13.412 13.417"
+                stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              <path
+                d="M9.363 5.365C10.2204 5.11972 11.1082 4.99684 12 5C16 5 19.333 7.333 22 12C21.222 13.361 20.388 14.524 19.497 15.488M17.357 17.349C15.726 18.449 13.942 19 12 19C8 19 4.667 16.667 2 12C3.369 9.605 4.913 7.825 6.632 6.659"
+                stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+              v-if="inputType == 'password'" @click="changeInputType">
+              <path
+                d="M12 14C13.1046 14 14 13.1046 14 12C14 10.8954 13.1046 10 12 10C10.8954 10 10 10.8954 10 12C10 13.1046 10.8954 14 12 14Z"
+                stroke="#0F172A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              <path
+                d="M22 12C19.333 16.667 16 19 12 19C8 19 4.667 16.667 2 12C4.667 7.333 8 5 12 5C16 5 19.333 7.333 22 12Z"
+                stroke="#0F172A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </template>
+        </inputCom>
+      </div> -->
+      <!-- <div class="label mb-8 mt-12" :class="['flex items-center gap-4']" v-if="pageType == 1">
+        {{ t('Invitation code') }}
+      </div>
+      -->
+      <!-- Invitation code -->
 
+      <div class="phone-input mb-20" v-if="pageType == 1">
+        <inputCom v-model:value="postData.inviteCode" :placeholder="t('Invitation code')" :onlyRead="false"
+          :inputType="'text'">
+        </inputCom>
+      </div>
+      <!-- Code -->
 
+      <div class="phone-input" v-if="pageType == 1">
+        <inputCom v-model:value="postData.code" :placeholder="t('Code')" :onlyRead="false" :inputType="'text'">
+          <template #sendCode>
+            <div class="absolute right-0 font-size-12 h-18 flex justify-center items-center sendCode"
+              :class="countdown > 0 ? 'text-gray-400' : 'text-[#000]'" @click="getCode">
+              {{ countdown > 0 ? `${countdown}s` : t("Get") }}
+            </div>
+          </template>
+        </inputCom>
+      </div>
+
+      <div class="flex justify-between items-center mt-[16px] mb-[24px] gap-16">
+        <div class="left flex font-size-[14px] font-medium flex-shrink-0 gap-[12px] flex-shrink-0">
+          <!-- <div class="radio w-[16px] h-[16px] rounded-[4px] border" :class="remember ? 'radio-active' : ''"
+            @click="remember = !remember"></div>
+          {{ t("Remember me") }} -->
+        </div>
+        <div class="right color-[#1b1b1b] font-size-[14px] font-bold cursor-pointer flex-shrink-0"
+          @click="toForgotPassword()">
+          {{ t("Forgot Password") }}
+        </div>
+      </div>
+      <van-button type="primary" color="#1B1B1B" class="login-btn h-[48px]!" block
+        @click="pageType == 0 ? login() : signUp()">{{
+          pageType == 0 ? t("Login") : t("Sign Up")
+        }}</van-button>
+      <div class="or">{{ '©2026 Signet Jewelers. Este site é utilizado sob autorização, todos os direitos reservados.'
+      }}
+      </div>
+      <div :style="{ color: '#1B1B1B' }"
+        class=" font-regular w-full  items-center flex justify-center text-center  color-[#1b1b1b]! font-bold" block
+        @click="changePageType()">
+        <span class="text-[#0000004D] mr-4"> {{ pageType == 0 ? t("Don’t have an account?") : '' }} </span> {{
+          pageType == 0 ? t("Sign Up") : t("Log in")
+        }}
+      </div>
+      <!--  <div class="tips my-24px">Or sign in with</div>
+       <div class="flex gap-16px ">
+        <div
+          class="plain-btn w-full flex-1 border-1px border-solid h-56px border-#E2E8F0 rounded-12px color-#0F172A flex items-center justify-center gap-8px">
+          <img :src="Apple" alt="" class="w-24px h-24px"> {{
+            t("Apple")
+          }}
+        </div>
+        <div
+          class="plain-btn w-full flex-1 border-1px border-solid h-56px border-#E2E8F0 rounded-12px color-#0F172A flex items-center justify-center gap-8px">
+
+          <img :src="Google" alt="" class="w-24px h-24px">
+          {{
+            t("Google")
+          }}
+        </div>
+      </div> -->
+      <!-- <div class="mt-[36px] justify-center text-center">
+        {{ t("Don't have an account?")
+        }}<span @click="changePageType()" class="ml-[4px] color-[#6b39f4]">
+          {{ $t("Sign Up") }}
+        </span>
+      </div> -->
     </div>
   </div>
 </template>
@@ -302,108 +378,22 @@ async function login() {
   },
 }
 </route>
-
 <style lang="less" scoped>
-/* 新增转换后的 UnoCSS 样式 */
-
-.login-container {
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  max-height: 100vh;
-}
-
-.top-section {
-  width: 100%;
-}
-
-.logo-wrapper {
-  height: 64px;
-  border-radius: 12px;
-  overflow: hidden;
-  margin-left: 16px;
-  margin-top: 76px;
-  display: flex;
-  /* 为了img居中或撑开 */
-
-  .logo-img {
-    width: auto;
-    height: 100%;
-  }
-}
-
-.welcome-text {
-  text-align: left;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 16px;
-  color: #ffffff;
-  /* 保留原 color-white */
-  padding: 0 30px;
-  /* 原 px-30 */
-}
-
-.welcome-title {
-  font-size: 24px;
-  /* 原 font-size-[24px] */
-  font-weight: 600;
-  /* 原 font-semibold */
-  margin-bottom: 4px;
-  /* 原 m-b-[4px] */
-  color: #1B1B1B;
-  /* 原 color-[#1B1B1B] */
-}
-
-.login-form {
-  padding: 24px;
-  /* 原 p-24 */
-}
-
-.phone-input {
-  display: flex;
-  /* 原 flex */
-  align-items: center;
-  /* 原 items-center */
-  gap: 12px;
-  /* 原 gap-[12px] */
-  margin-bottom: 20px;
-  /* 原 mb-20 */
-
-  /* 合并原有的 .phone-input 样式 */
-  border: 1px solid #F0F0F0;
-  border-radius: 12px;
-  padding: 0 10px;
-  /* 补充一点内边距防止输入框贴边 */
-
-  :deep(.input-box) {
-    margin-top: 0px;
-  }
-
-  :deep(.tips) {
-    margin-bottom: 0px;
-  }
-}
-
-.input-full {
-  flex: 1;
-  /* 原 flex-1 */
-  width: 100%;
-  /* 原 w-full */
-}
-
 .login-btn {
-  height: 48px !important;
-  /* 原 h-[48px]! */
   margin-top: 24px;
-  /* 原有样式保留 */
 }
-
-/* --- 以下为原有保留样式 --- */
 
 .signUpBtn {
   :deep(.van-button--primary) {
     color: #1B1B1B;
   }
+}
+</style>
+<style scoped>
+@import "@/components/nationality-list/intl.css";
+
+.radio {
+  border: 1px solid #cbd5e1;
 }
 
 .tips {
@@ -432,10 +422,6 @@ async function login() {
 
 .tips::after {
   right: 0;
-}
-
-.radio {
-  border: 1px solid #cbd5e1;
 }
 
 .radio.radio-active {
@@ -469,6 +455,22 @@ async function login() {
   border-color: #6b39f4;
 }
 
+.phone-input {
+  border: 1px solid #F0F0F0;
+  border-radius: 12px;
+
+  :deep(.input-box) {
+    /* height: 48px; */
+    margin-top: 0px;
+
+
+  }
+
+  :deep(.tips) {
+    margin-bottom: 0px;
+  }
+}
+
 .or {
   margin: 20px 0;
   font-size: 12px;
@@ -492,5 +494,3 @@ async function login() {
   color: #fff
 }
 </style>
-
-<style scoped></style>

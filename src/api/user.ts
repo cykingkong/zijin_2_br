@@ -57,7 +57,7 @@ export function updatePassword(data): Promise<any> {
   return request.post('/user/updatePassword', data)
 }
 export function register(data): Promise<any> {
-  return request.post('/user/register', data)
+  return request.post('auth/register', data)
 }
 export function getCaptchaSlide(): Promise<any> {
   return request.post('/app-api/user/getCaptchaSlide')
