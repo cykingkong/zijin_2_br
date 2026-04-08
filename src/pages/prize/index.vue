@@ -13,20 +13,16 @@
             <div class="text-[18px] font-bold">{{ currentRoundLabel }}</div>
           </div>
         </div>
-        <div class="relative z-[1] mt-[14px] rounded-[16px] bg-[#ffffff1f] px-[12px] py-[10px] text-[12px] leading-[1.6]">
+        <div
+          class="relative z-[1] mt-[14px] rounded-[16px] bg-[#ffffff1f] px-[12px] py-[10px] text-[12px] leading-[1.6]">
           {{ exchangeRuleText }}
         </div>
       </div>
     </div>
 
     <div class="px-[16px] mt-[14px] grid grid-cols-3 gap-[10px]">
-      <div
-        v-for="key in keyCards"
-        :key="key.type"
-        class="key-card rounded-[18px] p-[12px]"
-        :class="key.cardClass"
-        @click="openExchangePopup"
-      >
+      <div v-for="key in keyCards" :key="key.type" class="key-card rounded-[18px] p-[12px]" :class="key.cardClass"
+        @click="openExchangePopup">
         <div class="flex items-center justify-between mb-[8px]">
           <div class="text-[20px]">{{ key.icon }}</div>
           <div class="text-[11px] px-[8px] py-[2px] rounded-[999px] bg-[#ffffff99] text-[#333]">
@@ -40,13 +36,9 @@
 
     <div class="px-[16px] mt-[14px]">
       <div class="flex gap-[8px] rounded-[18px] bg-white p-[6px] shadow-sm">
-        <div
-          v-for="pool in poolTabs"
-          :key="pool.type"
+        <div v-for="pool in poolTabs" :key="pool.type"
           class="flex-1 h-[42px] rounded-[14px] flex items-center justify-center text-[14px] font-semibold transition-all"
-          :class="activePoolType === pool.type ? pool.activeClass : 'text-[#8f86aa]'"
-          @click="switchPool(pool.type)"
-        >
+          :class="activePoolType === pool.type ? pool.activeClass : 'text-[#8f86aa]'" @click="switchPool(pool.type)">
           {{ pool.name }}
         </div>
       </div>
@@ -67,13 +59,9 @@
         </div>
 
         <div class="grid grid-cols-3 gap-[10px]">
-          <div
-            v-for="(card, index) in displayCards"
-            :key="`${activePoolType}-${index}`"
+          <div v-for="(card, index) in displayCards" :key="`${activePoolType}-${index}`"
             class="prize-card h-[112px] rounded-[18px] border-[1px] relative overflow-hidden"
-            :class="getCardClass(card, index)"
-            @click="selectCard(index + 1)"
-          >
+            :class="getCardClass(card, index)" @click="selectCard(index + 1)">
             <template v-if="poolIsEmpty">
               <div class="h-full flex flex-col items-center justify-center px-[8px] text-center">
                 <div class="text-[26px] mb-[8px]">📭</div>
@@ -81,31 +69,63 @@
                 <div class="text-[11px] text-[#8f86aa] mt-[4px]">{{ emptyPoolMessage }}</div>
               </div>
             </template>
+
             <template v-else-if="isCurrentPoolDrawn">
-              <div v-if="card?.isWin === 1" class="absolute right-[6px] top-[6px] z-[2] rounded-[999px] bg-[#059669] px-[6px] py-[2px] text-[10px] text-white">
-                {{ t('Win') }}
+              <div v-if="card?.isWin === 1"
+                class="absolute right-[6px] top-[6px] z-[2] rounded-[999px] bg-[#059669] px-[6px] py-[2px] text-[10px] text-white">
+                {{ t('Valioso') }}
               </div>
+
               <div class="h-full flex flex-col items-center justify-center px-[8px] text-center">
-                <img v-if="card?.prizeImage" :src="card.prizeImage" class="w-[34px] h-[34px] rounded-[10px] object-cover mb-[6px]" />
-                <div v-else class="text-[24px] mb-[6px]">{{ getRewardEmoji(card?.rewardType) }}</div>
-                <div class="text-[12px] font-semibold text-[#251b44] line-clamp-2">{{ card?.prizeName || '--' }}</div>
-                <div class="text-[12px] font-bold mt-[4px]" :class="currentPoolAccentClass">{{ card?.showValue || '--' }}</div>
+                <template v-if="card?.isWin === 1">
+                  <img v-if="card?.prizeImage || card?.image" :src="card?.prizeImage || card?.image"
+                    class="w-[34px] h-[34px] rounded-[10px] object-cover mb-[6px]" />
+                  <div v-else class="text-[24px] mb-[6px]">
+                    {{ getRewardEmoji(card?.rewardType) }}
+                  </div>
+
+                  <div class="text-[12px] font-semibold text-[#251b44] line-clamp-2">
+                    {{ card?.prizeName || card?.name || '--' }}
+                  </div>
+                  <div class="text-[12px] font-bold mt-[4px]" :class="currentPoolAccentClass">
+                    {{ card?.showValue || '--' }}
+                  </div>
+                </template>
+
+                <template v-else>
+                  <img v-if="card?.prizeImage || card?.image" :src="card?.prizeImage || card?.image"
+                    class="w-[34px] h-[34px] rounded-[10px] object-cover mb-[6px] opacity-60" />
+                  <div v-else class="text-[24px] mb-[6px] opacity-60">
+                    {{ getRewardEmoji(card?.rewardType) }}
+                  </div>
+
+                  <div class="text-[12px] font-semibold text-[#8f86aa] line-clamp-2">
+                    {{ t('Prize') }}
+                  </div>
+                  <div class="text-[12px] mt-[4px] text-[#8f86aa]">
+                    --
+                  </div>
+                </template>
               </div>
             </template>
+
             <template v-else>
               <div class="h-full flex flex-col items-center justify-center">
                 <div class="text-[28px] mb-[8px]">🔒</div>
-                <div class="text-[12px] text-[#8f86aa]">{{ selectedCardNo === index + 1 ? t('Selected') : t('Tap to pick') }}</div>
+                <div class="text-[12px] text-[#8f86aa] text-center">{{ selectedCardNo === index + 1 ?
+                  t('Selected') : t('Tap to pick') }}</div>
               </div>
             </template>
           </div>
         </div>
 
-        <div v-if="poolIsEmpty" class="mt-[14px] rounded-[16px] bg-[#f6f2ff] px-[14px] py-[12px] text-[12px] text-[#5a4e7a] leading-[1.6]">
+        <div v-if="poolIsEmpty"
+          class="mt-[14px] rounded-[16px] bg-[#f6f2ff] px-[14px] py-[12px] text-[12px] text-[#5a4e7a] leading-[1.6]">
           {{ emptyPoolMessage }}
         </div>
 
-        <div v-else-if="isCurrentPoolDrawn && currentDeliverText" class="mt-[14px] rounded-[16px] bg-[#f6f2ff] px-[14px] py-[12px] text-[12px] text-[#5a4e7a] leading-[1.6]">
+        <div v-else-if="isCurrentPoolDrawn && currentDeliverText"
+          class="mt-[14px] rounded-[16px] bg-[#f6f2ff] px-[14px] py-[12px] text-[12px] text-[#5a4e7a] leading-[1.6]">
           <div class="font-semibold text-[#251b44] mb-[4px]">{{ currentPrizeName }}</div>
           <div>{{ currentDeliverText }}</div>
         </div>
@@ -113,20 +133,13 @@
     </div>
 
     <div class="px-[16px] mt-[16px]">
-      <button
-        class="h-[52px] w-full rounded-[18px] border-none text-[16px] font-bold text-white"
-        :class="drawButtonClass"
-        :disabled="drawDisabled"
-        @click="handleDraw"
-      >
+      <button class="h-[52px] w-full rounded-[18px] border-none text-[16px] font-bold text-white"
+        :class="drawButtonClass" :disabled="drawDisabled" @click="handleDraw">
         {{ drawButtonText }}
       </button>
-      <button
-        v-if="isCurrentPoolDrawn"
+      <button v-if="isCurrentPoolDrawn"
         class="mt-[10px] h-[48px] w-full rounded-[18px] border-none bg-[#7c3aed] text-[15px] font-bold text-white"
-        :disabled="resetting"
-        @click="handleNextRound"
-      >
+        :disabled="resetting" @click="handleNextRound">
         {{ resetting ? t('Loading') : t('Next Round') }}
       </button>
     </div>
@@ -134,18 +147,14 @@
     <div class="px-[16px] mt-[20px]">
       <div class="rounded-[24px] bg-white p-[16px] shadow-sm">
         <div class="flex gap-[8px] rounded-[16px] bg-[#f5f2ff] p-[6px] mb-[14px]">
-          <div
-            class="flex-1 h-[38px] rounded-[12px] flex items-center justify-center text-[13px] font-semibold"
+          <div class="flex-1 h-[38px] rounded-[12px] flex items-center justify-center text-[13px] font-semibold"
             :class="recordTab === 'draw' ? 'bg-white text-[#251b44]' : 'text-[#8f86aa]'"
-            @click="switchRecordTab('draw')"
-          >
+            @click="switchRecordTab('draw')">
             {{ t('Draw Records') }}
           </div>
-          <div
-            class="flex-1 h-[38px] rounded-[12px] flex items-center justify-center text-[13px] font-semibold"
+          <div class="flex-1 h-[38px] rounded-[12px] flex items-center justify-center text-[13px] font-semibold"
             :class="recordTab === 'point' ? 'bg-white text-[#251b44]' : 'text-[#8f86aa]'"
-            @click="switchRecordTab('point')"
-          >
+            @click="switchRecordTab('point')">
             {{ t('Point Records') }}
           </div>
         </div>
@@ -155,9 +164,11 @@
             <div v-for="item in drawLogs" :key="item.id" class="rounded-[16px] bg-[#faf8ff] p-[12px]">
               <div class="flex items-center justify-between gap-[8px]">
                 <div class="text-[14px] font-semibold text-[#251b44]">{{ item.prizeName || '--' }}</div>
-                <div class="text-[12px]" :class="deliverStatusClass(item.deliverStatus)">{{ getDeliverStatusText(item.deliverStatus) }}</div>
+                <div class="text-[12px]" :class="deliverStatusClass(item.deliverStatus)">{{
+                  getDeliverStatusText(item.deliverStatus) }}</div>
               </div>
-              <div class="text-[12px] text-[#7f7598] mt-[6px]">{{ item.showValue || '--' }} · {{ getPoolName(item.poolType) }} · {{ t('Round') }} {{ item.roundIndex || '--' }}</div>
+              <div class="text-[12px] text-[#7f7598] mt-[6px]">{{ item.showValue || '--' }} · {{
+                getPoolName(item.poolType) }} · {{ t('Round') }} {{ item.roundIndex || '--' }}</div>
               <div class="text-[11px] text-[#9b8fb5] mt-[4px]">{{ item.createdAt || '--' }}</div>
             </div>
             <LoadMore :status="drawLogStatus" @load-more="loadMoreDrawLogs" />
@@ -191,17 +202,16 @@
           {{ t('Available Points') }}: {{ displayPoints }}
         </div>
         <div class="flex flex-col gap-[10px]">
-          <div v-for="key in keyCards" :key="`exchange-${key.type}`" class="rounded-[18px] bg-white p-[14px] flex items-center justify-between gap-[12px]">
+          <div v-for="key in keyCards" :key="`exchange-${key.type}`"
+            class="rounded-[18px] bg-white p-[14px] flex items-center justify-between gap-[12px]">
             <div>
               <div class="text-[14px] font-semibold text-[#251b44]">{{ key.name }}</div>
-              <div class="text-[12px] text-[#8f86aa] mt-[4px]">{{ t('Owned') }}: {{ key.count }} · {{ key.ruleText }}</div>
+              <div class="text-[12px] text-[#8f86aa] mt-[4px]">{{ t('Owned') }}: {{ key.count }} · {{ key.ruleText }}
+              </div>
             </div>
-            <button
-              class="h-[36px] min-w-[92px] rounded-[12px] border-none text-[13px] font-semibold text-white"
-              :class="key.buttonClass"
-              :disabled="exchangingKeyType === key.type"
-              @click="openExchangeCountDialog(key.type)"
-            >
+            <button class="h-[36px] min-w-[92px] rounded-[12px] border-none text-[13px] font-semibold text-white"
+              :class="key.buttonClass" :disabled="exchangingKeyType === key.type"
+              @click="openExchangeCountDialog(key.type)">
               {{ exchangingKeyType === key.type ? t('Loading') : t('Exchange') }}
             </button>
           </div>
@@ -214,13 +224,18 @@
     <van-popup v-model:show="showPrizePopup" position="bottom" round>
       <div class="bg-[#f9f6ff] px-[20px] pt-[24px] pb-[32px] text-center">
         <div class="text-[14px] text-[#8f86aa] mb-[8px]">{{ t('Congratulations') }}</div>
-        <div class="mx-auto mb-[12px] w-[84px] h-[84px] rounded-full flex items-center justify-center text-[42px]" :class="prizeGlowClass">
-          {{ currentPrizeEmoji }}
+        <div class="mx-auto mb-[12px] w-[84px] h-[84px] rounded-full flex items-center justify-center overflow-hidden"
+          :class="prizeGlowClass">
+          <img v-if="currentPrizeImage" :src="currentPrizeImage" class="w-[58px] h-[58px] object-contain" />
+          <div v-else class="text-[42px]">
+            {{ currentPrizeEmoji }}
+          </div>
         </div>
         <div class="text-[22px] font-bold text-[#251b44] mb-[6px]">{{ currentPrizeName }}</div>
         <div class="text-[32px] font-bold mb-[8px]" :class="currentPoolAccentClass">{{ currentPrizeValue }}</div>
         <div class="text-[13px] leading-[1.7] text-[#7f7598] mb-[18px]">{{ currentDeliverText }}</div>
-        <button class="h-[48px] w-full rounded-[16px] border-none bg-[#7c3aed] text-[15px] font-bold text-white" @click="showPrizePopup = false">
+        <button class="h-[48px] w-full rounded-[16px] border-none bg-[#7c3aed] text-[15px] font-bold text-white"
+          @click="showPrizePopup = false">
           {{ t('OK') }}
         </button>
       </div>
@@ -354,6 +369,7 @@ const isCurrentPoolDrawn = computed(() => Number(poolData.value?.isDrawn) === 1)
 const revealStateText = computed(() => isCurrentPoolDrawn.value ? t('Revealed') : t('Not Drawn'))
 const currentPrizeName = computed(() => poolData.value?.prize?.name || poolData.value?.prize?.prizeName || '--')
 const currentPrizeValue = computed(() => poolData.value?.prize?.showValue || '--')
+const currentPrizeImage = computed(() => poolData.value?.prize?.image || poolData.value?.prize?.prizeImage || '')
 const currentPrizeEmoji = computed(() => getRewardEmoji(poolData.value?.prize?.rewardType))
 const currentDeliverText = computed(() => poolData.value?.deliverMsg || getDeliverStatusText(poolData.value?.deliverStatus))
 const poolIsEmpty = computed(() => Number(poolData.value?.code) === 1001)
@@ -398,6 +414,7 @@ const exchangeRuleText = computed(() => {
   if (!rules.length) return t('Use points to exchange keys and start drawing prizes.')
   return rules.map((rule: any) => `${getPoolName(rule.keyType)}: ${rule.pointCost}${t(' Points')}`).join('  ·  ')
 })
+
 const exchangeDialogTitle = computed(() => {
   if (pendingExchangeKeyType.value) return `${t('Exchange Quantity')} · ${t(keyNameMap[pendingExchangeKeyType.value])}`
   return t('Enter amount')
@@ -539,12 +556,12 @@ function buildPoolDataFromCache(cache: any, poolType: number) {
     drawNo: cache.drawNo,
     prize: cache.prize
       ? {
-          id: cache.prize.id,
-          name: cache.prize.name || cache.prize.prizeName,
-          image: cache.prize.image || cache.prize.prizeImage,
-          showValue: cache.prize.showValue,
-          rewardType: cache.prize.rewardType,
-        }
+        id: cache.prize.id,
+        name: cache.prize.name || cache.prize.prizeName,
+        image: cache.prize.image || cache.prize.prizeImage,
+        showValue: cache.prize.showValue,
+        rewardType: cache.prize.rewardType,
+      }
       : null,
     cards: cache.cards || [],
     deliverStatus: cache.deliverStatus,
