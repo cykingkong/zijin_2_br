@@ -328,7 +328,7 @@ function statusClass(status: number) {
 }
 
 function getDrawSourceText(drawSource: number) {
-  return Number(drawSource) === 1 ? t('Assigned Draw') : t('Random Draw')
+  return t('Random Draw')
 }
 
 function getIssueWinnerPreview(issue: any) {

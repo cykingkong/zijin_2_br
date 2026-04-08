@@ -219,7 +219,8 @@
       </div>
     </van-popup>
 
-    <payKeypad ref="payKeypadRef" :title="exchangeDialogTitle" prefix="" @on-click="handleExchangeConfirm" />
+    <payKeypad ref="payKeypadRef" :title="exchangeDialogTitle" :sub-text="exchangeRemainingText" :show-close="true"
+      prefix="" @on-click="handleExchangeConfirm" />
 
     <van-popup v-model:show="showPrizePopup" position="bottom" round>
       <div class="bg-[#f9f6ff] px-[20px] pt-[24px] pb-[32px] text-center">
@@ -418,6 +419,13 @@ const exchangeRuleText = computed(() => {
 const exchangeDialogTitle = computed(() => {
   if (pendingExchangeKeyType.value) return `${t('Exchange Quantity')} · ${t(keyNameMap[pendingExchangeKeyType.value])}`
   return t('Enter amount')
+})
+
+const exchangeRemainingText = computed(() => {
+  if (!pendingExchangeKeyType.value) return ''
+  const currentKey = keyCards.value.find((item) => item.type === pendingExchangeKeyType.value)
+  if (!currentKey) return ''
+  return `${t('Left')} ${currentKey.count} ${t('Codes')}`
 })
 
 const keyCards = computed(() => [

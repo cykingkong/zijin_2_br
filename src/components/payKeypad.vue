@@ -1,15 +1,22 @@
 <template>
     <van-popup v-model:show="showPicker" destroy-on-close round :position="'bottom'" :safe-area-inset-bottom="true"
         z-index="10000">
-        <div class="title text-24px font-bold mt-12px text-center">{{ title }}</div>
-        <div class="min-count text-#0F172A font-size-40px mx-a text-center mt-24px overflow-y-auto">
+        <div class="relative px-12 pt-[12px]">
+
+            <div class="title text-[24px] font-bold text-center">{{ title }}</div>
+            <div v-if="subText" class="mt-[8px] text-center text-[14px] text-[#64748B]">{{ subText }}</div>
+        </div>
+        <div class="min-count text-[#0F172A] font-size-[40px] mx-a text-center mt-[24px] overflow-y-auto">
             {{ displayPrefix }}{{ count }}
         </div>
-        <div class="input-box px-12 mt-40px">
+        <div class="input-box px-12 mt-[40px]">
             <Keypad v-model="displayValue" />
         </div>
-        <div class="p-12">
-            <van-button type="primary" class="h-56px" color="#6B39F4" block @click="handleClick" :loading="loading"
+        <div class="p-12 flex gap-[12px]">
+            <van-button type="default" class="h-[56px]" plain block @click="handleClose" v-if="showClose">
+                {{ t("Cancel") }}
+            </van-button>
+            <van-button type="primary" class="h-[56px]" color="#6B39F4" block @click="handleClick" :loading="loading"
                 :disabled="disabled">
                 {{ t('Confirm') }}
             </van-button>
@@ -35,6 +42,14 @@ const props = defineProps({
     prefix: {
         type: String,
         default: '₹'
+    },
+    showClose: {
+        type: Boolean,
+        default: false
+    },
+    subText: {
+        type: String,
+        default: ''
     }
 });
 
@@ -49,6 +64,9 @@ const show = (val, amount = 0) => {
     displayValue.value = amount == 0 ? '' : amount;
     showPicker.value = val;
 };
+const handleClose = () => {
+    showPicker.value = false;
+}
 const handleClick = () => {
     showPicker.value = false;
     emit('onClick', count.value)
@@ -59,6 +77,7 @@ watch(displayValue, (newValue) => {
 });
 defineExpose({
     show,
+    close: handleClose,
 });
 </script>
 
