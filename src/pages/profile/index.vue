@@ -1,168 +1,41 @@
-<template>
-  <div class="profile-page min-h-screen bg-[#bcdce1] pb-[100px] ">
-
-    <!-- 1. Header Title -->
-    <div class="pt-[10px] pb-[10px] text-center">
-      <h1 class="text-[18px] font-bold text-[#1A1A1A]">{{ t("Wallet") }}</h1>
-    </div>
-
-    <!-- 2. User Info Card -->
-    <div class="px-[16px] mb-[16px]">
-      <div class="flex items-center gap-[12px]">
-        <!-- Avatar Upload Trigger -->
-        <div class="relative" @click="handleClickUploadAvatar">
-          <!-- Hexagon Shape Simulation or Circle as fallback -->
-          <div class="w-[36px] h-[36px] rounded-full overflow-hidden  shadow-sm  flex items-center justify-center">
-            <img :src="userInfo.avatar || (fakeData.user_level > 0 ? imgEnum[fakeData.user_level] : imgEnum[userInfo.vip])"
-              class="w-full h-full object-cover" />
-          </div>
-          <!-- Level Badge -->
-
-        </div>
-
-        <div class="flex flex-col justify-center">
-          <div class="flex items-center gap-2">
-            <div
-              class="-top-[4px] -right-[4px] bg-[#FECF90] text-[#A26D47] text-[10px] px-[4px] py-[1px] rounded-[4px] border border-white">
-              {{ 'LV ' + userInfo.vip || 'LV1' }}
-
-            </div>
-            <div class="ml-[14px] tag relative text-[10px] color-[#fff] rounded-[15px] h-[15px] pl-[13px] pr-[6px]"
-              :class="lvBorderStartColors[userInfo.vip]">
-              <img src="@/assets/lv/shield.png" alt="" class="w-[17px] h-[19px] absolute left-[-4px] top-[-4px]">
-              {{ userInfo.vip_name }}
-            </div>
-          </div>
-          <!-- Missing Field: ID -->
-          <div class="text-[#161616] text-[14px] font-bold">ID: {{ userInfo.uuid }}</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 3. My Product Card -->
-    <div class="px-[16px] mb-[16px] ">
-      <div class="bg-white rounded-[16px] p-[16px]  shadow-sm text-center flex-wrap">
-        <div class="flex w-full">
-          <div class="flex-1 ">
-            <div class="value font-bold mb-4 font-20 color-[#A26D47]">{{ formatRupiah(userInfo.today_income || 0) }}
-            </div>
-            <div class="label font-bold mb-4 font-12 color-[#161616]">{{ t('Today Income') }}</div>
-          </div>
-          <div class="flex-1">
-            <div class="value font-bold mb-4 font-20 color-[#A26D47]">{{ formatRupiah(userInfo.total_income || 0) }}
-            </div>
-            <div class="label font-bold mb-4 font-12 color-[#161616]">{{ t('Total Income') }}</div>
-          </div>
-        </div>
-        <button @click="handleHerf(1)"
-          class="flex-1 mt-16 bg-[#1A1A1A] w-full text-white h-[44px] rounded-[12px] font-bold text-[15px]">{{
-            t("Withdraw")
-          }}</button>
-
-      </div>
-    </div>
-    <!-- 3. Bottom Grid Menu (Replacs old Cell List) -->
-    <div class="px-[16px] mb-16">
-      <div class="bg-white rounded-[16px] p-[16px] shadow-sm grid grid-cols-3 gap-y-[24px]">
-        <div v-for="(item, index) in menuList" :key="index" class="flex flex-col items-center"
-          @click="handleClickMenu(item)">
-          <!-- Icon Box -->
-          <div class="w-[40px] h-[40px] mb-[8px] flex items-center justify-center">
-            <img :src="item.img" alt="" class="w-40 h-40 block">
-          </div>
-          <!-- Text -->
-          <span class="text-[#333] text-[12px] font-medium text-center" :class="{ 'text-red-500': item.isLogout }">{{
-            item.text
-          }}</span>
-        </div>
-      </div>
-    </div>
-    <!-- 4. walletLog -->
-    <div class="px-[16px] mb-[16px]">
-      <walletLogs />
-    </div>
-
-
-
-
-    <!-- Upload Popup (Kept from original) -->
-    <van-popup v-model:show="uploadPopShow" destroy-on-close round :position="'center'" :safe-area-inset-bottom="true">
-      <div class="p-12 w-[80vw]">
-        <div class="upload-label mb-12 flex items-center justify-center font-bold">
-          {{ t('Upload Avatar') }}
-        </div>
-        <van-uploader accept="image/*" :max-count="1" v-model="pictureList"
-          :after-read="(file) => handleAfterRead(file, 1)" class="w-full flex justify-center">
-          <div
-            class="w-[120px] h-[120px] border border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center text-gray-400">
-            <van-icon name="photograph" size="24" />
-            <span class="text-[12px] mt-2">{{ t("Choose a file") }}</span>
-          </div>
-        </van-uploader>
-        <div class="mt-4 flex gap-4">
-          <van-button block plain size="small" @click="uploadPopShow = false">{{ t("Cancel") }}</van-button>
-          <van-button block type="primary" color="#1A1A1A" size="small" :disabled="canUpdateAvatar"
-            @click="updateUserAvatar">{{ t("Confirm") }}</van-button>
-        </div>
-      </div>
-    </van-popup>
-
-  </div>
-</template>
-
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { useI18n } from 'vue-i18n';
-import { useUserStore } from '@/stores';
-import { userUpdate, getUserFakeInfo, } from '@/api/user';
-import { upload } from '@/api/tool';
-import { formatRupiah } from '@/utils/tool';
+import { computed, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { showSuccessToast } from 'vant'
+import { useI18n } from 'vue-i18n'
 
-import { showFailToast, showSuccessToast } from 'vant';
-import walletLogs from '../wallet/walletLogs.vue';
-import { addCommasToNumber } from '@/utils/tool';
-import defaultAvatar from "@/assets/image/avatar.png";
-import inviteFriends from '@/assets/tabbar/inviteFriends.png'
+import { userUpdate } from '@/api/user'
+import { upload } from '@/api/tool'
+import { useUserStore } from '@/stores'
+import { formatRupiah } from '@/utils/tool'
+
+import defaultAvatar from '@/assets/image/avatar.png'
 import logout from '@/assets/tabbar/logout.png'
 import pay from '@/assets/tabbar/pay.jpg'
-// 复用之前的图片资源引入逻辑
-import lv1 from '@/assets/lv/lv1.png';
-import lv2 from '@/assets/lv/lv2.png';
-import lv3 from '@/assets/lv/lv3.png';
-import lv4 from '@/assets/lv/lv4.png';
-import lv5 from '@/assets/lv/lv5.png';
-import lv6 from '@/assets/lv/lv6.png';
-import lv7 from '@/assets/lv/lv7.png';
-import lv8 from '@/assets/lv/lv8.png';
-// Import Icons (Placeholders based on screenshot)
-// 实际开发请替换为对应的 cell1.png 等资源
-import iconExchange from "@/assets/profile/1.svg"; // 兑换奖励
-import iconBank from "@/assets/profile/2.svg";     // 银行卡
-import iconFunds from "@/assets/profile/3.svg";    // 资金明细
-import iconPass from "@/assets/profile/4.svg";     // 密码
-import iconQuit from "@/assets/profile/5.svg";     // 辞职说明
-import iconLogout from "@/assets/profile/6.svg";   // 登出
+import inviteFriends from '@/assets/tabbar/inviteFriends.png'
+import lv1 from '@/assets/lv/lv1.png'
+import lv2 from '@/assets/lv/lv2.png'
+import lv3 from '@/assets/lv/lv3.png'
+import lv4 from '@/assets/lv/lv4.png'
+import lv5 from '@/assets/lv/lv5.png'
+import lv6 from '@/assets/lv/lv6.png'
+import lv7 from '@/assets/lv/lv7.png'
+import lv8 from '@/assets/lv/lv8.png'
 
-const router = useRouter();
-const { t } = useI18n();
-const userStore = useUserStore();
-const userInfo = computed(() => userStore.userInfo);
-const fakeData = ref<any>({
-  team_level1_count: 0,
-  team_level2_count: 0,
-  team_level3_count: 0,
-})
-const lvBorderStartColors = {
-  1: 'bg-#8BADC7',
-  2: 'bg-#9B7CB8',
-  3: 'bg-#4A8B7C',
-  4: 'bg-#D88A8A',
-  5: 'bg-#E67A6A',
-  6: 'bg-#D4A853',
-  7: 'bg-#E8C06F',
-  8: 'bg-#D4A853'
-}
+import walletLogs from '../wallet/walletLogs.vue'
+
+const router = useRouter()
+const { t } = useI18n()
+const userStore = useUserStore()
+
+const uploadPopShow = ref(false)
+const canUpdateAvatar = ref(true)
+const userAvatar = ref('')
+const pictureList = ref<any[]>([])
+
+const userInfo = computed(() => userStore.userInfo || {})
+const userLevel = computed(() => Number(userInfo.value?.vip) || 1)
+
 const imgEnum = {
   1: lv1,
   2: lv2,
@@ -172,134 +45,570 @@ const imgEnum = {
   6: lv6,
   7: lv7,
   8: lv8,
-}
+} as const
 
-// --- 状态变量 ---
-const uploadPopShow = ref(false);
-const canUpdateAvatar = ref(true);
-const userAvatar = ref('');
-const pictureList = ref<any[]>([])
+const levelToneClassMap = {
+  1: 'level-tone-1',
+  2: 'level-tone-2',
+  3: 'level-tone-3',
+  4: 'level-tone-4',
+  5: 'level-tone-5',
+  6: 'level-tone-6',
+  7: 'level-tone-7',
+  8: 'level-tone-8',
+} as const
 
-// --- 数据处理 ---
+const currentAvatar = computed(() =>
+  userInfo.value?.avatar || imgEnum[userLevel.value as keyof typeof imgEnum] || defaultAvatar,
+)
 
+const levelToneClass = computed(() =>
+  levelToneClassMap[userLevel.value as keyof typeof levelToneClassMap] || 'level-tone-1',
+)
 
-const formatName = (str: string) => {
-  if (!str) return '';
-  // 模拟截图: 389****4253
-  if (str.length > 7) {
-    return str.substring(0, 3) + '****' + str.substring(str.length - 4);
-  }
-  return str;
-};
-
-// 模拟获取团队各等级人数 (Missing Field)
-const getLevelCount = (level: number) => {
-  // 实际应从 API 获取
-  return 30;
-};
-
-// --- 菜单配置 (Grid Menu) ---
-const menuList = [
-
-  { text: t('Bank Account'), icon: iconBank, url: '/profile/bankAccount/addBank', type: 'link', img: pay },
-
-  { text: t('inviteFriends'), icon: iconQuit, url: '/inviteFriends', type: 'link', img: inviteFriends }, // 暂定 About Us
-  { text: t('Logout'), icon: iconLogout, type: 'logout', isLogout: false, img: logout }
-];
-const myteamList = ref([
+const walletStats = computed(() => [
   {
-    img: lv1,
-    name: 'LV1',
-    fakeKey: 'team_level1_count',
-    num: userInfo.value?.topData?.find((item: any) => item.generation === 1)?.vaildUserCount || 0
+    label: t('Today Income'),
+    value: formatRupiah(userInfo.value?.today_income || 0),
   },
   {
-    img: lv2,
-    name: 'LV2',
-    fakeKey: 'team_level2_count',
-
-    num: userInfo.value?.topData?.find((item: any) => item.generation === 2)?.vaildUserCount || 0
-
-  },
-  {
-    img: lv3,
-    fakeKey: 'team_level3_count',
-    name: 'LV3',
-    num: userInfo.value?.topData?.find((item: any) => item.generation === 3)?.vaildUserCount || 0
+    label: t('Total Income'),
+    value: formatRupiah(userInfo.value?.total_income || 0),
   },
 ])
-// --- 事件处理 ---
-const handleHerf = (type: number) => {
-  // 1: Withdraw, 2: Deposit
-  if (type === 2) {
-    router.push("/wallet/exchange/cashierCenter");
-  } else {
-    router.push("/wallet/exchange/cashierCenter-withdraw");
-  }
-};
-const toReceive = () => {
-  router.push("/receive");
+
+const menuList = computed(() => [
+  {
+    text: t('Bank Account'),
+    img: pay,
+    type: 'link',
+    url: '/profile/bankAccount/addBank',
+  },
+  {
+    text: t('inviteFriends'),
+    img: inviteFriends,
+    type: 'link',
+    url: '/inviteFriends',
+  },
+  {
+    text: t('Logout'),
+    img: logout,
+    type: 'logout',
+    url: '',
+  },
+])
+
+function handleHerf(type: number) {
+  if (type === 2)
+    router.push('/wallet/exchange/cashierCenter')
+  else
+    router.push('/wallet/exchange/cashierCenter-withdraw')
 }
-const handleClickMenu = (item: any) => {
+
+function handleClickMenu(item: { type: string, url?: string }) {
   if (item.type === 'logout') {
-    handleLogout();
-  } else if (item.url) {
-    router.push(item.url);
+    handleLogout()
+    return
   }
-};
 
-const handleLogout = () => {
-  userStore.logout();
-  router.push({ path: "/login" });
-};
+  if (item.url)
+    router.push(item.url)
+}
 
-// --- 头像上传逻辑 (保持原有逻辑) ---
-const handleClickUploadAvatar = () => {
-  uploadPopShow.value = true;
-  userAvatar.value = '';
-  canUpdateAvatar.value = true;
-};
+function handleLogout() {
+  userStore.logout()
+  router.push({ path: '/login' })
+}
 
-const handleAfterRead = async (file: any, type: any) => {
-  const item = Array.isArray(file) ? file[0] : file;
-  item.status = 'uploading';
-  item.message = t('Uploading');
+function handleClickUploadAvatar() {
+  uploadPopShow.value = true
+  userAvatar.value = ''
+  canUpdateAvatar.value = true
+  pictureList.value = []
+}
+
+async function handleAfterRead(file: any) {
+  const item = Array.isArray(file) ? file[0] : file
+  item.status = 'uploading'
+  item.message = t('Loading')
+
   try {
-    const formData = new FormData();
-    formData.append('image', item.file);
-    const { data, code } = await upload(formData);
-    if (code == 200) {
-      item.status = 'done';
-      userAvatar.value = data.url;
-      canUpdateAvatar.value = false;
-    }
-  } catch (e) {
-    item.status = 'failed';
-    item.message = t('failed');
-  }
-};
+    const formData = new FormData()
+    formData.append('image', item.file)
+    const { data, code } = await upload(formData)
 
-const updateUserAvatar = async () => {
-  if (!userAvatar.value) return;
-  const res = await userUpdate({ image_url: userAvatar.value });
-  if (res.code === 200) {
-    showSuccessToast(t("Update successful"));
-    userStore.info(); // 刷新用户信息
-    uploadPopShow.value = false;
+    if (code === 200) {
+      item.status = 'done'
+      userAvatar.value = data.url
+      canUpdateAvatar.value = false
+    }
   }
-};
+  catch {
+    item.status = 'failed'
+    item.message = t('Upload failed')
+  }
+}
+
+async function updateUserAvatar() {
+  if (!userAvatar.value)
+    return
+
+  const res = await userUpdate({ image_url: userAvatar.value })
+  if (res.code === 200) {
+    showSuccessToast(t('Update successful'))
+    await userStore.info()
+    uploadPopShow.value = false
+  }
+}
 
 onMounted(async () => {
-
-
-
-  await userStore.info();
-  // await userStore.fetchTeamInfoData();
-  console.log(userInfo.value, 'userInfo')
-});
+  await userStore.info()
+})
 </script>
 
-<style scoped></style>
+<template>
+  <div class="profile-page">
+    <div class="profile-shell">
+      <header class="page-header">
+        <div class="header-badge">
+          {{ t('Wallet') }}
+        </div>
+        <h1 class="page-title">
+          {{ t('Wallet') }}
+        </h1>
+      </header>
+
+      <section class="hero-card">
+        <div class="hero-top">
+          <button type="button" class="avatar-button" @click="handleClickUploadAvatar">
+            <img :src="currentAvatar" class="avatar-image" alt="avatar">
+          </button>
+
+          <div class="hero-copy">
+            <div class="hero-meta">
+              <span class="level-chip">
+                {{ `LV ${userInfo.vip || 1}` }}
+              </span>
+              <span class="level-pill" :class="levelToneClass">
+                {{ userInfo.vip_name || `VIP ${userInfo.vip || 1}` }}
+              </span>
+            </div>
+            <div class="hero-id">
+              {{ `ID: ${userInfo.uuid || '--'}` }}
+            </div>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div v-for="item in walletStats" :key="item.label" class="stat-card">
+            <div class="stat-value">
+              {{ item.value }}
+            </div>
+            <div class="stat-label">
+              {{ item.label }}
+            </div>
+          </div>
+        </div>
+
+        <div class="action-grid">
+          <button type="button" class="action-button action-button-dark" @click="handleHerf(2)">
+            {{ t('Deposit') }}
+          </button>
+          <button type="button" class="action-button action-button-light" @click="handleHerf(1)">
+            {{ t('Withdraw') }}
+          </button>
+        </div>
+      </section>
+
+      <section class="menu-card">
+        <button
+          v-for="(item, index) in menuList"
+          :key="index"
+          type="button"
+          class="menu-item"
+          @click="handleClickMenu(item)"
+        >
+          <div class="menu-icon-wrap">
+            <img :src="item.img" alt="" class="menu-icon">
+          </div>
+          <span class="menu-text">{{ item.text }}</span>
+        </button>
+      </section>
+
+      <section class="logs-section">
+        <walletLogs />
+      </section>
+
+      <van-popup
+        v-model:show="uploadPopShow"
+        destroy-on-close
+        round
+        position="center"
+        :safe-area-inset-bottom="true"
+      >
+        <div class="upload-panel">
+          <div class="upload-title">
+            {{ t('Upload Avatar') }}
+          </div>
+          <van-uploader
+            v-model="pictureList"
+            accept="image/*"
+            :max-count="1"
+            :after-read="handleAfterRead"
+            class="upload-uploader"
+          >
+            <div class="upload-dropzone">
+              <van-icon name="photograph" size="24" />
+              <span class="upload-dropzone-text">{{ t('Choose a file') }}</span>
+            </div>
+          </van-uploader>
+          <div class="upload-actions">
+            <van-button plain block @click="uploadPopShow = false">
+              {{ t('Cancel') }}
+            </van-button>
+            <van-button block color="#1b1b1b" :disabled="canUpdateAvatar" @click="updateUserAvatar">
+              {{ t('Confirm') }}
+            </van-button>
+          </div>
+        </div>
+      </van-popup>
+    </div>
+  </div>
+</template>
+
+<style scoped lang="less">
+.profile-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(125, 211, 252, 0.22), transparent 28%),
+    radial-gradient(circle at top right, rgba(167, 243, 208, 0.18), transparent 24%),
+    linear-gradient(180deg, #f8fbff 0%, #edf3f8 100%);
+  padding: 14px 16px 100px;
+}
+
+.profile-shell {
+  display: grid;
+  gap: 16px;
+}
+
+.page-header {
+  padding: 6px 4px 0;
+}
+
+.header-badge {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  padding: 7px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #475569;
+  backdrop-filter: blur(12px);
+}
+
+.page-title {
+  margin: 12px 0 0;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  color: #0f172a;
+}
+
+.hero-card,
+.menu-card {
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.86) 100%);
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+.hero-card {
+  position: relative;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.hero-card::after {
+  position: absolute;
+  top: -48px;
+  right: -32px;
+  width: 144px;
+  height: 144px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(15, 23, 42, 0.08) 0%, rgba(15, 23, 42, 0) 72%);
+  content: '';
+  pointer-events: none;
+}
+
+.hero-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.avatar-button {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-copy {
+  min-width: 0;
+}
+
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.level-chip,
+.level-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 5px 9px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.level-chip {
+  background: #f4f1eb;
+  color: #8a5a32;
+}
+
+.level-pill {
+  color: #fff;
+}
+
+.level-tone-1 {
+  background: #8badc7;
+}
+
+.level-tone-2 {
+  background: #9b7cb8;
+}
+
+.level-tone-3 {
+  background: #4a8b7c;
+}
+
+.level-tone-4 {
+  background: #d88a8a;
+}
+
+.level-tone-5 {
+  background: #e67a6a;
+}
+
+.level-tone-6 {
+  background: #d4a853;
+}
+
+.level-tone-7 {
+  background: #e8c06f;
+  color: #3f2e09;
+}
+
+.level-tone-8 {
+  background: #d4a853;
+}
+
+.hero-id {
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #111827;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.stat-card {
+  border: 1px solid rgba(226, 232, 240, 0.92);
+  border-radius: 22px;
+  background: rgba(248, 250, 252, 0.92);
+  padding: 16px;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.15;
+  color: #0f172a;
+}
+
+.stat-label {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #64748b;
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.action-button {
+  height: 48px;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: 700;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.action-button:active {
+  transform: translateY(1px);
+}
+
+.action-button-dark {
+  border: 1px solid #1b1b1b;
+  background: #1b1b1b;
+  color: #fff;
+  box-shadow: 0 12px 24px rgba(27, 27, 27, 0.18);
+}
+
+.action-button-light {
+  border: 1px solid rgba(27, 27, 27, 0.14);
+  background: #fff;
+  color: #1b1b1b;
+}
+
+.menu-card {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  padding: 18px;
+}
+
+.menu-item {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  border: 1px solid rgba(226, 232, 240, 0.88);
+  border-radius: 20px;
+  background: rgba(248, 250, 252, 0.92);
+  padding: 16px 10px;
+  text-align: center;
+}
+
+.menu-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06);
+}
+
+.menu-icon {
+  width: 40px;
+  height: 40px;
+  display: block;
+}
+
+.menu-text {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #334155;
+}
+
+.logs-section {
+  min-width: 0;
+}
+
+.upload-panel {
+  width: min(80vw, 320px);
+  padding: 18px;
+}
+
+.upload-title {
+  margin-bottom: 14px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.upload-uploader {
+  display: flex;
+  justify-content: center;
+}
+
+.upload-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 120px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 18px;
+  background: #f8fafc;
+  color: #94a3b8;
+}
+
+.upload-dropzone-text {
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.upload-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+@media (max-width: 360px) {
+  .page-title {
+    font-size: 26px;
+  }
+
+  .stats-grid,
+  .action-grid,
+  .menu-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+</style>
 
 <route lang="json5">
 {
