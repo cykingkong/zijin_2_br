@@ -119,11 +119,15 @@ async function getExchangeRate() {
 
 async function handleBuyClickOriginal() {
   const { data, code } = await deposit({
+    method:getMethodName(selectedMethod.value),
     amount: count.value,
   })
   if (code === 200) {
-    localStorage.setItem('depositInfo', JSON.stringify(data))
-    router.push('/wallet/exchange/deposit-bank')
+    router.replace({
+      path: '/profile',
+    })
+    window.location.href = data.url
+
   }
 }
 const onConfirm = proxy!.$throttle(handleBuyClickOriginal, 1000, {

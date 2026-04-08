@@ -13,7 +13,7 @@ export function rechargeConfig(): Promise<any> {
     return request.get<any>('/recharge/rechargeConfig', {})
 }
 export function deposit(data): Promise<any> {
-    return request.post<any>('/recharge/recharge', data)
+    return request.post<any>('billing/recharge', data)
 }
 export function withdraw(data): Promise<any> {
     return request.post<any>('/user/withdraw', data)
