@@ -1,27 +1,26 @@
 <template>
-  <div class="stockOrderList w-full px-24 pt-[24px]">
-    <!-- <div class="order-type-tab flex justify-center items-center mb-12 gap-[4px]">
-      <div
-        class="tab-item flex-1 flex items-center bg-[#0000000D] justify-center text-center border text-14 border-[#E5E5E5] border-solid rounded-[8px] py-4 px-6 h-28 text-[#00000033]"
-        :class="activeTab == index ? 'bg-[#CED0D8] text-[#222222] font-bold' : 'text-[#999999]'"
-        v-for="(item, index) in orderTypeList" :key="index" @click="activeTab = index; getData()">{{ $t(item)
-        }}
-      </div>
-    </div> -->
-    <div class="order-list pb-[16px] flex-col flex gap-[16px]">
-      <div v-for="(item, index) in orderListData" :key="index" @click="handleClickItem(item)"
-        class="order-item flex items-center justify-between px-[16px] h-[46px] py-6 rounded-[12px] bg-[#FFFFFF]">
-        <div class="left h-full flex flex items-center justify-between">
-          <div class="title text-[12px] font-bold">{{ item.title }}</div>
-          <!-- <div class="content text-[10px] text-[#666666]">{{ item.created_at }}</div> -->
+  <div class="help-page">
+    <div class="help-shell">
+      <header class="page-header">
+        <div class="header-badge">{{ $t('Help') }}</div>
+        <h1 class="page-title">{{ $t('Help') }}</h1>
+      </header>
+
+      <div class="order-list pb-[16px] flex-col flex gap-[16px]">
+        <div v-for="(item, index) in orderListData" :key="index" @click="handleClickItem(item)"
+          class="order-item">
+          <div class="left h-full flex flex items-center justify-between">
+            <div class="title text-[13px] font-bold">{{ item.title }}</div>
+          </div>
+          <div class="order-arrow">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5.93994 13.28L10.2866 8.93333C10.7999 8.42 10.7999 7.58 10.2866 7.06667L5.93994 2.72"
+                stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
         </div>
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M5.93994 13.28L10.2866 8.93333C10.7999 8.42 10.7999 7.58 10.2866 7.06667L5.93994 2.72"
-            stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
       </div>
     </div>
-
   </div>
 </template>
 <script setup lang="ts">
@@ -101,8 +100,77 @@ const handleClickStockDetail = (item: any) => {
 };
 </script>
 <style lang="less" scoped>
+.help-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, rgba(124, 255, 178, 0.14), transparent 30%),
+    linear-gradient(180deg, #050505 0%, #000 100%);
+  padding: 24px 20px 120px;
+  color: #f5f5f5;
+}
+
+.help-shell {
+  display: grid;
+  gap: 18px;
+}
+
+.page-header {
+  padding: 4px 2px 0;
+}
+
+.header-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border: 1px solid rgba(124, 255, 178, 0.35);
+  border-radius: 999px;
+  background: rgba(124, 255, 178, 0.08);
+  color: #8bffbe;
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.page-title {
+  margin: 16px 0 0;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
 .order-item {
-  // border: 1px solid #e9eaeb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 58px;
+  padding: 0 18px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(17, 17, 17, 0.96) 0%, rgba(8, 8, 8, 0.96) 100%);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.04),
+    inset 0 -8px 20px rgba(0, 0, 0, 0.45),
+    0 8px 24px rgba(0, 0, 0, 0.32);
+}
+
+.title {
+  color: #f5f5f5;
+}
+
+.order-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  color: #8bffbe;
+  background: rgba(124, 255, 178, 0.08);
+  box-shadow:
+    inset 0 0 0 1px rgba(124, 255, 178, 0.18),
+    0 0 12px rgba(124, 255, 178, 0.16);
 }
 </style>
 <route lang="json5">

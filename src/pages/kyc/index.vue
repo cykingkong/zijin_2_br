@@ -6,10 +6,10 @@ import { isLogin } from "@/utils/auth";
 import { useI18n } from "vue-i18n";
 import { closeToast, showLoadingToast, showSuccessToast, showToast } from "vant";
 import { ref, computed, watch, onMounted } from 'vue';
-import { uploadFile } from '@/api/tool'
+import { upload } from '@/api/tool'
 import { kycSubmit } from '@/api/user'
 import ImageUploader from '@/components/ImageUploader.vue';
-// import { upload, uploadImage, getUserImagesNum } from '@/api/tool'
+// import { upload, upload, getUserImagesNum } from '@/api/tool'
 const { t } = useI18n();
 const navStore = navTitleStore();
 const userStore = useUserStore();
@@ -35,7 +35,7 @@ const handleAfterRead = async (file, type) => {
         try {
             const formData = new FormData();
             formData.append("image", item.file);
-            const { data, code } = await uploadFile(formData)
+            const { data, code } = await upload(formData)
             if (code == 200) {
                 console.log(pictureList.value)
                 item.status = 'done';
@@ -102,68 +102,58 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="Home bg-[#fff] pb-[120px] px-[24px]">
-        <VanNavBar title="" :fixed="true" clickable :left-arrow="true" @click-left="onBack" z-index="999" placeholder>
-            <template #left>
-                <div class="flex items-center gap-14">
-                    <svg class="w-28 h-28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M23.3333 14.3201C23.3333 14.763 23.0041 15.1291 22.577 15.1871L22.4583 15.1951L4.95831 15.1951C4.47506 15.1951 4.08331 14.8033 4.08331 14.3201C4.08331 13.8771 4.41249 13.511 4.83958 13.4531L4.95831 13.4451L22.4583 13.4451C22.9416 13.4451 23.3333 13.8368 23.3333 14.3201Z"
-                            fill="#212121" />
-                        <path
-                            d="M12.6338 20.7284C12.9762 21.0694 12.9774 21.6234 12.6365 21.9658C12.3265 22.2771 11.8404 22.3064 11.4974 22.053L11.399 21.9685L4.3407 14.9405C4.02846 14.6296 4.00005 14.1418 4.2555 13.7987L4.34065 13.7004L11.399 6.67126C11.7414 6.33026 12.2954 6.33141 12.6364 6.67382C12.9464 6.98511 12.9737 7.47128 12.7188 7.8133L12.6339 7.91126L6.19848 14.3208L12.6338 20.7284Z"
-                            fill="#212121" />
-                    </svg>
-                    <div class="flex flex-items-center gap-6 font-size-[18px] font-bold">
-                        {{ t('KYC') }}
-                    </div>
-                </div>
-            </template>
-        </VanNavBar>
+    <div class="kyc-page px-[20px] pt-[12px] pb-[140px] min-h-[100vh] overflow-auto">
+        <div class="kyc-nav">
+            <button type="button" class="kyc-nav__back" @click="onBack">
+                <svg class="w-[18px] h-[18px]" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12.5 4.16675L6.66667 10.0001L12.5 15.8334" stroke="currentColor" stroke-width="1.67"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+            <div class="kyc-nav__copy">
+                <div class="kyc-nav__eyebrow">{{ t("Verification") }}</div>
+                <div class="kyc-nav__title">{{ t("KYC") }}</div>
+            </div>
+        </div>
+
         <block v-if="step == 1">
-
-            <div class="top-title mb-[40px] mt-20">
-                <div class="t1 font-size-[28px] font-bold color-[#0F172A] leading-[36px]">
-                    {{ t("Upload a photo of your national ID card") }} 🪪
+            <div class="hero-panel mb-[24px]">
+                <div class="hero-tag">{{ t("KYC") }}</div>
+                <div class="hero-title">
+                    {{ t("What is your address on the ID Card you just uploaded? ") }}
                 </div>
-                <div class="t2 line-height-[140%] font-light mt-12">
-                    Regulations require you to upload a national identity card. Don't worry, your data will stay safe
-                    and
-                    private.
+                <div class="hero-subtitle">
+                    {{ t("Complete your identity details and upload the front of your ID card for verification.") }}
                 </div>
             </div>
 
-            <!-- 使用图片上传组件 -->
-            <ImageUploader v-model="pictureList" :max-count="limit" :show-camera-button="true"
-                @after-read="handleAfterRead" />
+            <div class="kyc-form-card">
+                <div class="label-text mb-[12px]">
+                    {{ t("Real Name") }}
+                </div>
+                <div class="name-input-wrapper">
+                    <input type="text" v-model="realName" :placeholder="t('Enter your Real Name')" class="kyc-input" />
+                </div>
 
-            <bottom-button @click="step = 2"></bottom-button>
-        </block>
-        <block v-if="step == 2">
-            <div class="top-title mb-[40px] mt-20">
-                <div class="t1 font-size-[28px] font-bold color-[#0F172A] leading-[36px]">
-                    {{ t("What is your address on the ID Card you just uploaded? ") }} 🏠
+                <div class="label-text mb-[12px] mt-[20px]">
+                    {{ t("ID Card Number") }}
+                </div>
+                <div class="name-input-wrapper">
+                    <input type="text" v-model="idCard" :placeholder="t('Enter your ID Card Number')" class="kyc-input" />
+                </div>
+
+                <div class="label-text mb-[12px] mt-[20px]">
+                    {{ t("ID Card Front") }}
+                </div>
+                <div class="upload-panel-wrap">
+                    <ImageUploader v-model="pictureList" :max-count="limit" :show-camera-button="false"
+                        @after-read="handleAfterRead" />
                 </div>
             </div>
-            <div class="label-text font-size-[16px] font-bold color-[#1b1b1b] mb-[12px]">
-                {{ t("Full Name") }}
-            </div>
-            <!-- Full Name 输入框 -->
-            <div class="name-input-wrapper">
-                <input type="text" v-model="realName" :placeholder="t('Enter your Full Name')"
-                    class="w-full h-[56px] bg-transparent border-b-[1px] border-[#E2E8F0] border border-solid font-size-[18px] color-[#0F172A] pb-[8px] focus:border-[#2DC07E] outline-none transition-all" />
-            </div>
-            <div class="label-text font-size-[16px] font-bold color-[#1b1b1b] mb-[12px] mt-20">
-                {{ t("ID Card Number") }}
 
+            <div class="submit-wrap">
+                <bottom-button @click="onSubmit"></bottom-button>
             </div>
-            <!-- Full Name 输入框 -->
-            <div class="name-input-wrapper">
-                <input type="text" v-model="idCard" :placeholder="t('Enter your ID Card Number')"
-                    class="w-full h-[56px] bg-transparent border-b-[1px] border-[#E2E8F0] border border-solid font-size-[18px] color-[#0F172A] pb-[8px] focus:border-[#2DC07E] outline-none transition-all" />
-            </div>
-            <bottom-button @click="onSubmit"></bottom-button>
-
         </block>
     </div>
 </template>
@@ -177,24 +167,156 @@ onMounted(() => {
 }
 </route>
 <style lang="less" scoped>
-// Step 2 全名输入样式
+.kyc-page {
+    background:
+        radial-gradient(circle at top, rgba(124, 255, 178, 0.16), transparent 30%),
+        linear-gradient(180deg, #050505 0%, #000 100%);
+    color: #f5f5f5;
+}
+
+.kyc-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.kyc-nav__back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(124, 255, 178, 0.18);
+    border-radius: 14px;
+    background: rgba(124, 255, 178, 0.08);
+    color: #8bffbe;
+    box-shadow:
+        inset 0 0 0 1px rgba(124, 255, 178, 0.12),
+        0 0 18px rgba(124, 255, 178, 0.14);
+}
+
+.kyc-nav__copy {
+    display: grid;
+    gap: 2px;
+}
+
+.kyc-nav__eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8bffbe;
+}
+
+.kyc-nav__title {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: #f5f5f5;
+}
+
+.hero-panel {
+    position: relative;
+    padding: 28px 22px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 28px;
+    background: linear-gradient(180deg, rgba(17, 17, 17, 0.96) 0%, rgba(8, 8, 8, 0.96) 100%);
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.04),
+        inset 0 -8px 20px rgba(0, 0, 0, 0.45),
+        0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.hero-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border: 1px solid rgba(124, 255, 178, 0.35);
+    border-radius: 999px;
+    background: rgba(124, 255, 178, 0.08);
+    color: #8bffbe;
+    font-size: 12px;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.hero-title {
+    margin-top: 18px;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: #f5f5f5;
+}
+
+.hero-subtitle {
+    margin-top: 10px;
+    color: #a3a3a3;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.kyc-form-card {
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 28px;
+    background: linear-gradient(180deg, rgba(17, 17, 17, 0.96) 0%, rgba(8, 8, 8, 0.96) 100%);
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.04),
+        inset 0 -8px 20px rgba(0, 0, 0, 0.45),
+        0 8px 24px rgba(0, 0, 0, 0.45);
+    padding: 22px 18px;
+}
+
+.label-text {
+    font-size: 14px;
+    font-weight: 700;
+    color: #f5f5f5;
+}
+
 .name-input-wrapper {
     input {
         border-top: none;
         border-left: none;
         border-right: none;
-        border-bottom: 1px solid #2DC07e;
-
-        &::placeholder {
-            color: #94A3B8;
-            font-size: 18px;
-        }
-
-        &:focus {
-            border-bottom: 1px solid #2DC07e;
-
-        }
+        border-bottom: none;
     }
+}
+
+.kyc-input {
+    width: 100%;
+    height: 56px;
+    padding: 0 16px;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    font-size: 16px;
+    color: #f5f5f5;
+    outline: none;
+    transition: all 0.2s ease;
+
+    &::placeholder {
+        color: #6b6b6b;
+        font-size: 16px;
+    }
+
+    &:focus {
+        border-color: rgba(124, 255, 178, 0.35) !important;
+        box-shadow: 0 0 0 3px rgba(124, 255, 178, 0.08);
+    }
+}
+
+.upload-panel-wrap {
+    padding: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.submit-wrap {
+    margin-top: 24px;
 }
 
 .progress-bar {

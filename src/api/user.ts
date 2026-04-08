@@ -130,3 +130,6 @@ export function getTeamInfoData(): Promise<any> {
 export function userUpdate(data): Promise<any> {
   return request.post('/user/updateAvatar', data)
 }
+export function kycSubmit(data): Promise<any> {
+  return request.post('/user/kyc', data)
+}

@@ -52,72 +52,97 @@ const tabList = [
 </template>
 
 <style lang="less" scoped>
-// 自定义悬浮 Tabbar 样式
 .custom-floating-tabbar {
-  // 1. 设置悬浮和胶囊形状
   position: fixed;
   left: 50%;
-  transform: translateX(-50%); // 水平居中
-  bottom: calc(env(safe-area-inset-bottom) + 24px); // 距离底部的悬浮高度
-  width: calc(100% - 48px); // 左右留出间距
-  max-width: 600px; // 在大屏上限制最大宽度
-  height: 72px; // 增加高度以容纳更大的圆形按钮
-  border-radius: 999px; // 胶囊圆角
-  background-color: #ffffff;
-  border-top: none; // 移除默认的边框
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); // 添加阴影增加立体感
-  padding: 0 10px; // 内部左右内边距
+  transform: translateX(-50%);
+  bottom: calc(env(safe-area-inset-bottom) + 20px);
+  width: calc(100% - 32px);
+  max-width: 640px;
+  height: 78px;
+  padding: 0 12px;
+  border-top: none;
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(17, 17, 17, 0.96) 0%, rgba(8, 8, 8, 0.98) 100%);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.04),
+    inset 0 -8px 20px rgba(0, 0, 0, 0.45),
+    0 8px 24px rgba(0, 0, 0, 0.45),
+    0 0 30px rgba(124, 255, 178, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
 
-  // 2. 穿透修改 vant-tabbar-item 样式
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at top center, rgba(124, 255, 178, 0.12), transparent 52%);
+    pointer-events: none;
+  }
+
   :deep(.van-tabbar-item) {
+    position: relative;
+    z-index: 1;
     background: transparent;
+    color: #6b6b6b;
+    transition: all 0.3s ease;
 
-    // 选中态时的图标容器样式 (黑色圆圈)
-    &--active {
-      background: transparent;
-      color:#1B1B1B;
-      font-weight: bold;
-      .van-tabbar-item__icon {
-        background-color: rgba(26, 115, 232, 0.12); // 选中时的黑色背景
-        width: 40px; // 圆圈宽度
-        height: 40px; // 圆圈高度
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 0; // 移除图标下方的默认间距
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.327); // 圆圈的阴影
-        transition: all 0.3s ease; // 添加平滑过渡动画
-        margin-bottom: 6px;
-        img{
-          width: 24px;
-          height: 24px;
-        }
+    .van-tabbar-item__text {
+      margin-top: 2px;
+      font-size: 11px;
+      line-height: 1.2;
+      letter-spacing: 0.04em;
+      color: #6b6b6b;
+      transition: all 0.3s ease;
+    }
+
+    .van-tabbar-item__icon {
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 6px;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+
+      img {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+        opacity: 0.72;
+        transition: all 0.3s ease;
       }
     }
 
-    // 未选中态时的图标容器，保持高度一致以防抖动
-    .van-tabbar-item__icon {
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-        margin-bottom: 6px;
-      justify-content: center;
-      transition: all 0.3s ease;
-         img{
-          width: 24px;
-          height: 24px;
+    &--active {
+      background: transparent;
+      color: #f5f5f5;
+
+      .van-tabbar-item__text {
+        color: #8bffbe;
+        font-weight: 700;
+      }
+
+      .van-tabbar-item__icon {
+        background: rgba(124, 255, 178, 0.08);
+        box-shadow:
+          inset 0 0 0 1px rgba(124, 255, 178, 0.2),
+          0 0 12px rgba(124, 255, 178, 0.24),
+          0 0 36px rgba(124, 255, 178, 0.12);
+
+        img {
+          opacity: 1;
+          filter: drop-shadow(0 0 10px rgba(124, 255, 178, 0.28));
         }
+      }
     }
   }
 }
 
-// 3. 图标颜色控制
 .active-icon {
-  path {
-    // stroke: #ffffff !important; // 选中时图标变为白色
-    // fill: #ffffff !important; // 选中时图标填充白色
-  }
+  opacity: 1;
 }
 </style>

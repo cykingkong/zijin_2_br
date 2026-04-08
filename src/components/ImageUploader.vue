@@ -1,124 +1,80 @@
-<script setup>
-import router from "@/router";
-import { useUserStore } from "@/stores";
-import { navTitleStore } from "@/stores/index";
-import { isLogin } from "@/utils/auth";
-import { useI18n } from "vue-i18n";
-import { closeToast, showLoadingToast, showSuccessToast, showToast } from "vant";
-import { ref, computed, watch, onMounted } from 'vue';
-import { upload, uploadImage, getUserImagesNum } from '@/api/tool'
-const { t } = useI18n();
-const navStore = navTitleStore();
-const userStore = useUserStore();
+<script setup lang="ts">
+import { computed } from 'vue'
 
-// 1. 定义共用的图片列表
-const pictureList = ref([]);
-const limit = ref(1)
+const props = defineProps({
+  modelValue: {
+    type: Array,
+    default: () => [],
+  },
+  maxCount: {
+    type: Number,
+    default: 1,
+  },
+  showCameraButton: {
+    type: Boolean,
+    default: true,
+  },
+  showUploadButton: {
+    type: Boolean,
+    default: true,
+  },
+})
+
+const emit = defineEmits(['update:modelValue', 'after-read'])
+
+const { t } = useI18n()
+
+const pictureList = computed({
+  get: () => props.modelValue,
+  set: (val) => emit('update:modelValue', val),
+})
 
 // 计算剩余可上传数量
 const remainingCount = computed(() => {
-  return limit.value - pictureList.value.length;
-});
+  return props.maxCount - pictureList.value.length
+})
+
+// 是否显示分割线和拍照按钮
+const showDivider = computed(() => {
+  return props.showCameraButton && props.showUploadButton && pictureList.value.length < props.maxCount
+})
 
 // 选择文件前的验证
 const beforeRead = (file) => {
-  const files = Array.isArray(file) ? file : [file];
-  const currentCount = pictureList.value.length;
-  const newCount = files.length;
+  const files = Array.isArray(file) ? file : [file]
+  const currentCount = pictureList.value.length
+  const newCount = files.length
 
   // 检查是否超过限制
-  if (currentCount + newCount > limit.value) {
+  if (currentCount + newCount > props.maxCount) {
     // 如果超过限制，只接受能容纳的数量
-    const allowedCount = limit.value - currentCount;
+    const allowedCount = props.maxCount - currentCount
     if (allowedCount > 0) {
-      return files.slice(0, allowedCount);
+      return files.slice(0, allowedCount)
     }
-    return false;
+    return false
   }
 
-  return true;
-};
-
-const handleAfterRead = async (file, type) => {
-  console.log('File read:', file);
-
-  // 判断是单个文件还是多个文件
-  const files = Array.isArray(file) ? file : [file];
-
-  // 循环上传每个文件
-  for (const item of files) {
-    item.status = 'uploading';
-    item.message = t('Uploading');
-    try {
-      const formData = new FormData();
-      formData.append("image", item.file);
-      const { data, code } = await upload(formData)
-      if (code == 200) {
-        console.log(pictureList.value)
-        item.status = 'done';
-        item.uploadUrl = data.url;
-        item.message = t('Done');
-      }
-    } catch (e) {
-      console.log(e, 'err')
-      item.status = 'failed';
-      item.message = t('failed');
-    }
-  }
-};
-const submit = async () => {
-  try {
-    let formData = pictureList.value.map((e) => {
-      return e.uploadUrl
-    })
-    const { data, code } = await uploadImage({ url_list: formData })
-    if (code == 200) {
-      console.log(data.url, 'data.url')
-      showSuccessToast({})
-      pictureList.value = [];
-      router.push({ path: "/" })
-    }
-  } catch (e) {
-    console.log(e, 'err')
-  }
+  return true
 }
-onMounted(() => {
-  // init(); // 暂时注释，按需开启
-  navStore.setShowNavLeft(true);
-  getUserImagesNum().then((res) => {
-    if (res.code == 200) {
-      limit.value = res.data.num
-    }
-  })
-});
+
+// 文件读取后的处理
+const handleAfterRead = async (file, type) => {
+  emit('after-read', file, type)
+}
 </script>
 
 <template>
-  <div class="news-page pb-[140px] px-[20px] pt-[24px]">
-    <div class="hero-panel">
-      <div class="hero-tag">{{ t("Upload Photo") }}</div>
-      <div class="hero-title">{{ t("Upload Photo") }}</div>
-      <div class="hero-subtitle">
-        {{ t("Select file") }} / {{ t("Open Camera & Take Photo") }}
-      </div>
-
-      <!-- 显示剩余可上传数量 -->
-      <div v-if="pictureList.length > 0" class="upload-progress">
-        <span class="upload-progress__label">{{ t("uploaded") }}</span>
-        <span class="upload-progress__value">{{ pictureList.length }} / {{ limit }}</span>
-      </div>
+  <div class="image-uploader-component w-full">
+    <div v-if="pictureList.length > 0" class="upload-progress">
+      <span class="upload-progress__label">{{ t("uploaded") }}</span>
+      <span class="upload-progress__value">{{ pictureList.length }} / {{ maxCount }}</span>
     </div>
 
-    <!--
-      顶部上传组件：
-      1. 负责展示预览列表 (默认功能)
-      2. 负责普通文件选择
-    -->
-    <div class="w-full mt-[20px]">
-      <van-uploader accept="image/*" multiple preview-image :max-count="limit" v-model="pictureList"
-        :before-read="beforeRead" :after-read="(file) => handleAfterRead(file, 1)"
+    <div v-if="showUploadButton" class="w-full">
+      <van-uploader accept="image/*" multiple preview-image :max-count="maxCount" v-model="pictureList"
+        :before-read="beforeRead" :after-read="(file) => handleAfterRead(file, 'file')"
         class="full-width-uploader custom-preview-uploader">
-        <!-- 自定义上传按钮区域 -->
         <div class="upload-box upload-box--primary">
           <div class="upload-box__glow"></div>
           <div class="upload-box__icon-wrap">
@@ -134,21 +90,15 @@ onMounted(() => {
       </van-uploader>
     </div>
 
-    <div class="or my-[28px]" :class="{ 'hidden': pictureList.length == limit }">
+    <div v-if="showDivider" class="or my-[28px]">
       <span></span>
       <em>{{ t("or") }}</em>
       <span></span>
     </div>
 
-    <!--
-      底部上传组件：
-      1. 绑定相同的 v-model="pictureList"
-      2. :show-upload-list="false" -> 不显示预览列表（由上面那个组件显示）
-      3. capture="camera" -> 优先调起相机
-    -->
-    <div class="w-full">
-      <van-uploader accept="image/*" multiple :max-count="limit" :preview-image="false" capture="camera"
-        v-model="pictureList" :before-read="beforeRead" :after-read="(file) => handleAfterRead(file, 1)"
+    <div v-if="showCameraButton" class="w-full">
+      <van-uploader accept="image/*" multiple :max-count="maxCount" :preview-image="false" capture="camera"
+        v-model="pictureList" :before-read="beforeRead" :after-read="(file) => handleAfterRead(file, 'camera')"
         class="full-width-uploader">
         <div class="upload-box upload-box--secondary">
           <div class="upload-box__icon-wrap upload-box__icon-wrap--small">
@@ -162,76 +112,12 @@ onMounted(() => {
         </div>
       </van-uploader>
     </div>
-
-    <div class="submit-btn mt-[32px]">
-      <van-button type="primary" class="submit-button h-[52px]! rounded-full!" block @click="submit()">
-        {{ t("Submit") }}
-      </van-button>
-    </div>
   </div>
 </template>
 
-<route lang="json5">
-{
-  name: 'home',
-  meta: {
-    i18n: 'home'
-  },
-}
-</route>
 <style lang="less" scoped>
-.news-page {
-  min-height: 100vh;
-  background:
-    radial-gradient(circle at top, rgba(124, 255, 178, 0.16), transparent 32%),
-    linear-gradient(180deg, #050505 0%, #000 100%);
-  color: #f5f5f5;
-}
-
-.hero-panel {
-  position: relative;
-  padding: 28px 22px 24px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 28px;
-  background:
-    linear-gradient(180deg, rgba(17, 17, 17, 0.96) 0%, rgba(8, 8, 8, 0.96) 100%);
-  box-shadow:
-    inset 0 1px 2px rgba(255, 255, 255, 0.04),
-    inset 0 -8px 20px rgba(0, 0, 0, 0.45),
-    0 8px 24px rgba(0, 0, 0, 0.45);
-}
-
-.hero-tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 12px;
-  border: 1px solid rgba(124, 255, 178, 0.35);
-  border-radius: 999px;
-  background: rgba(124, 255, 178, 0.08);
-  color: #8bffbe;
-  font-size: 12px;
-  line-height: 1;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.hero-title {
-  margin-top: 18px;
-  font-size: 32px;
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-}
-
-.hero-subtitle {
-  margin-top: 10px;
-  color: #a3a3a3;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
 .upload-progress {
-  margin-top: 18px;
+  margin-bottom: 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -251,6 +137,59 @@ onMounted(() => {
   color: #f5f5f5;
   font-size: 15px;
   font-weight: 700;
+}
+
+:deep(.van-uploader.full-width-uploader) {
+  width: 100%;
+
+  .van-uploader__wrapper {
+    width: 100%;
+  }
+
+  .van-uploader__input-wrapper {
+    width: 100%;
+  }
+}
+
+:deep(.custom-preview-uploader) {
+  .van-uploader__preview {
+    width: 100%;
+    margin: 0 0 16px 0;
+    padding: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 28px;
+    background: linear-gradient(180deg, #111 0%, #0b0b0b 100%);
+    box-shadow:
+      inset 0 1px 2px rgba(255, 255, 255, 0.04),
+      inset 0 -8px 20px rgba(0, 0, 0, 0.45),
+      0 8px 24px rgba(0, 0, 0, 0.35);
+
+    .van-image {
+      width: 100%;
+      height: 220px;
+      border-radius: 22px;
+      overflow: hidden;
+
+      img {
+        object-fit: cover;
+      }
+    }
+  }
+
+  .van-uploader__preview-delete {
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(8px);
+
+    .van-icon {
+      font-size: 18px;
+      color: #f5f5f5;
+    }
+  }
 }
 
 .upload-box {
@@ -350,74 +289,6 @@ onMounted(() => {
   font-size: 13px;
 }
 
-.submit-button {
-  border: none;
-  color: #050505;
-  font-weight: 700;
-  background: linear-gradient(90deg, #68f7a1 0%, #8bffbe 100%) !important;
-  box-shadow: 0 0 12px rgba(124, 255, 178, 0.45), 0 0 36px rgba(124, 255, 178, 0.22);
-}
-
-/* 1. 基础布局修复：保证 uploader 占满全宽 */
-:deep(.van-uploader.full-width-uploader) {
-  width: 100%;
-
-  .van-uploader__wrapper {
-    width: 100%;
-  }
-
-  .van-uploader__input-wrapper {
-    width: 100%;
-  }
-}
-
-/* 2. 核心修复：自定义已上传图片的样式 (针对 custom-preview-uploader) */
-:deep(.custom-preview-uploader) {
-  .van-uploader__preview {
-    width: 100%;
-    margin: 0 0 16px 0;
-    padding: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 28px;
-    background: linear-gradient(180deg, #111 0%, #0b0b0b 100%);
-    box-shadow:
-      inset 0 1px 2px rgba(255, 255, 255, 0.04),
-      inset 0 -8px 20px rgba(0, 0, 0, 0.45),
-      0 8px 24px rgba(0, 0, 0, 0.35);
-
-    .van-image {
-      width: 100%;
-      height: 220px;
-      border-radius: 22px;
-      overflow: hidden;
-
-      img {
-        object-fit: cover;
-      }
-    }
-  }
-
-  .van-uploader__preview-delete {
-    top: 8px;
-    right: 8px;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.72);
-    backdrop-filter: blur(8px);
-
-    .van-icon {
-      font-size: 18px;
-      color: #f5f5f5;
-    }
-  }
-
-  .van-uploader__preview-mask {
-    border-radius: 22px;
-    background: rgba(0, 0, 0, 0.5);
-  }
-}
-
 .or {
   display: flex;
   align-items: center;
@@ -436,9 +307,5 @@ onMounted(() => {
   em {
     font-style: normal;
   }
-}
-
-:deep(.submit-btn .van-button__text) {
-  font-size: 16px;
 }
 </style>

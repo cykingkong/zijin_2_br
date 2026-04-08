@@ -535,31 +535,121 @@ function onBack() {
 
 <style lang="less" scoped>
 .cashier-center-content {
-  padding-bottom: calc(env(safe-area-inset-bottom) + 80px);
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, rgba(124, 255, 178, 0.14), transparent 30%),
+    linear-gradient(180deg, #050505 0%, #000 100%);
+  padding-bottom: calc(env(safe-area-inset-bottom) + 100px);
+  color: #f5f5f5;
+}
+
+.cashier-center-content :deep(.van-nav-bar) {
+  background: rgba(8, 8, 8, 0.92);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(16px);
+}
+
+.cashier-center-content :deep(.van-nav-bar__title) {
+  color: #f5f5f5;
+}
+
+.info {
+  padding-top: 12px;
 }
 
 .phone-input {
-  border: 1px solid #F0F0F0;
-  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #f5f5f5;
 
   :deep(.input-box) {
-    /* height: 48px; */
     margin-top: 0px;
+    background: transparent;
+  }
 
+  :deep(input),
+  :deep(textarea) {
+    color: #f5f5f5;
+  }
 
+  :deep(input::placeholder),
+  :deep(textarea::placeholder) {
+    color: #6b6b6b;
   }
 
   :deep(.tips) {
     margin-bottom: 0px;
+    color: #a3a3a3;
   }
 }
 
 .card {
-  border: 1px solid #0000001A
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(17, 17, 17, 0.96) 0%, rgba(8, 8, 8, 0.96) 100%);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.04),
+    inset 0 -8px 20px rgba(0, 0, 0, 0.45),
+    0 8px 24px rgba(0, 0, 0, 0.45);
 }
 
 .dot {
   flex-shrink: 0;
   margin-top: 8px;
+}
+
+.tabs-container > div {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 6px;
+}
+
+.v-html {
+  margin-top: 20px;
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #a3a3a3;
+}
+
+.v-html :deep(*) {
+  color: inherit;
+}
+
+.cashier-center-content :deep(.van-button--primary) {
+  border: none;
+  color: #050505;
+  font-weight: 700;
+  background: linear-gradient(90deg, #68f7a1 0%, #8bffbe 100%) !important;
+  box-shadow: 0 0 12px rgba(124, 255, 178, 0.45), 0 0 36px rgba(124, 255, 178, 0.18);
+}
+
+.cashier-center-content :deep(.van-popup) {
+  background: linear-gradient(180deg, #fcfdff 0%, #f3f7fb 100%);
+  color: #0f172a;
+}
+
+.cashier-center-content :deep(.van-picker) {
+  --van-picker-background: transparent;
+  --van-picker-option-text-color: #0f172a;
+  --van-picker-mask-color:
+    linear-gradient(180deg, rgba(244, 247, 251, 0.96), rgba(244, 247, 251, 0.6)),
+    linear-gradient(0deg, rgba(244, 247, 251, 0.96), rgba(244, 247, 251, 0.6));
+}
+
+.cashier-center-content :deep(.van-picker__title) {
+  color: #0f172a;
+}
+
+.cashier-center-content :deep(.van-picker__confirm) {
+  color: #16a34a;
+  font-weight: 700;
+}
+
+.cashier-center-content :deep(.van-picker__cancel) {
+  color: #64748b;
 }
 </style>

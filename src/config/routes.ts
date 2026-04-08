@@ -18,6 +18,7 @@ export const navWhiteList: readonly string[] = [
   'home', // 首页
   'profile', // 个人中心
   'NoticeDetail',
+  'kyc',
   'quotes',
   'activityDetail',
   'aboutUs',

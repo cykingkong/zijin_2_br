@@ -179,22 +179,18 @@ function onBack() {
 
 <template>
   <div class="cashier-center-content w-full px-20 pb-120 pt-[8px]">
-    <VanNavBar
-      class="cashier-nav" :class="{ 'cashier-nav-solid': isNavSolid }" title="" :fixed="true" clickable
-      :left-arrow="true" z-index="999" placeholder @click-left="onBack"
-    >
+    <VanNavBar class="cashier-nav" :class="{ 'cashier-nav-solid': isNavSolid }" title="" :fixed="true" clickable
+      :left-arrow="true" z-index="999" placeholder @click-left="onBack">
       <template #left>
         <div class="nav-left">
           <div class="nav-icon-wrap">
             <svg class="h-28 w-28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M23.3333 14.3201C23.3333 14.763 23.0041 15.1291 22.577 15.1871L22.4583 15.1951L4.95831 15.1951C4.47506 15.1951 4.08331 14.8033 4.08331 14.3201C4.08331 13.8771 4.41249 13.511 4.83958 13.4531L4.95831 13.4451L22.4583 13.4451C22.9416 13.4451 23.3333 13.8368 23.3333 14.3201Z"
-                fill="#0F172A"
-              />
+                fill="#fff" />
               <path
                 d="M12.6338 20.7284C12.9762 21.0694 12.9774 21.6234 12.6365 21.9658C12.3265 22.2771 11.8404 22.3064 11.4974 22.053L11.399 21.9685L4.3407 14.9405C4.02846 14.6296 4.00005 14.1418 4.2555 13.7987L4.34065 13.7004L11.399 6.67126C11.7414 6.33026 12.2954 6.33141 12.6364 6.67382C12.9464 6.98511 12.9737 7.47128 12.7188 7.8133L12.6339 7.91126L6.19848 14.3208L12.6338 20.7284Z"
-                fill="#0F172A"
-              />
+                fill="#fff" />
             </svg>
           </div>
           <div class="nav-copy">
@@ -217,7 +213,9 @@ function onBack() {
         {{ t('Fund your balance with a documented, polished payment workspace') }}
       </h1>
       <p class="hero-copy">
-        {{ t('Choose a payment rail from the API response, apply a preset amount, or enter a custom value with the keypad below.') }}
+        {{ t(
+          `Choose a payment rail from the API response, apply a preset amount, or enter a custom value with the keypad below.`
+          ) }}
       </p>
     </section>
 
@@ -287,10 +285,8 @@ function onBack() {
         <div class="trigger-action">
           <span>{{ t('Change') }}</span>
           <svg class="h-20 w-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M7.5 4.16675L13.3333 10.0001L7.5 15.8334" stroke="currentColor" stroke-width="1.67"
-              stroke-linecap="round" stroke-linejoin="round"
-            />
+            <path d="M7.5 4.16675L13.3333 10.0001L7.5 15.8334" stroke="currentColor" stroke-width="1.67"
+              stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </div>
       </button>
@@ -325,11 +321,8 @@ function onBack() {
         </div>
 
         <div class="scope-grid">
-          <button
-            v-for="(item, index) in amountScopeList" :key="index" type="button" class="scope-chip"
-            :class="{ 'scope-chip-active': isAmountScopeActive(item) }"
-            @click="handleSelectAmountScope(item)"
-          >
+          <button v-for="(item, index) in amountScopeList" :key="index" type="button" class="scope-chip"
+            :class="{ 'scope-chip-active': isAmountScopeActive(item) }" @click="handleSelectAmountScope(item)">
             <span class="scope-chip-label">{{ t('Preset') }}</span>
             <span class="scope-chip-value">{{ getAmountScopeLabel(item) }}</span>
           </button>
@@ -338,37 +331,32 @@ function onBack() {
     </section>
 
     <BottomButton :button-text="t('Deposit Preview')" color="#1b1b1b" @click="onConfirm" />
-    <van-popup
-      v-model:show="showPicker" class="method-popup" destroy-on-close round position="bottom"
-      :safe-area-inset-bottom="true"
-    >
-      <van-picker
-        :title="t('Select payment method')" :columns="methodColumns"
+    <van-popup v-model:show="showPicker" class="method-popup" destroy-on-close round position="bottom"
+      :safe-area-inset-bottom="true">
+      <van-picker :title="t('Select payment method')" :columns="methodColumns"
         :model-value="[getMethodKey(selectedMethod)]" :confirm-button-text="t('Confirm')"
-        :cancel-button-text="t('Cancel')" @confirm="handleMethodConfirm" @cancel="showPicker = false"
-      />
+        :cancel-button-text="t('Cancel')" @confirm="handleMethodConfirm" @cancel="showPicker = false" />
     </van-popup>
   </div>
 </template>
 
 <style lang="less" scoped>
 .cashier-center-content {
-  --cashier-bg: #f4f7fb;
-  --cashier-surface: rgba(255, 255, 255, 0.88);
-  --cashier-border: rgba(148, 163, 184, 0.18);
-  --cashier-title: #0f172a;
-  --cashier-copy: #475569;
-  --cashier-muted: #64748b;
-  --cashier-accent: #0f766e;
-  --cashier-accent-soft: rgba(15, 118, 110, 0.08);
-  --cashier-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+  --cashier-bg: #050505;
+  --cashier-surface: linear-gradient(180deg, rgba(17, 17, 17, 0.96) 0%, rgba(8, 8, 8, 0.96) 100%);
+  --cashier-border: rgba(255, 255, 255, 0.06);
+  --cashier-title: #f5f5f5;
+  --cashier-copy: #a3a3a3;
+  --cashier-muted: #6b6b6b;
+  --cashier-accent: #8bffbe;
+  --cashier-accent-soft: rgba(124, 255, 178, 0.08);
+  --cashier-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.04), inset 0 -8px 20px rgba(0, 0, 0, 0.45), 0 8px 24px rgba(0, 0, 0, 0.45);
   position: relative;
   min-height: 100vh;
   overflow: hidden;
   background:
-    radial-gradient(circle at top left, rgba(45, 212, 191, 0.18), transparent 28%),
-    radial-gradient(circle at top right, rgba(59, 130, 246, 0.12), transparent 24%),
-    linear-gradient(180deg, #f8fbff 0%, var(--cashier-bg) 48%, #edf2f7 100%);
+    radial-gradient(circle at top, rgba(124, 255, 178, 0.16), transparent 30%),
+    linear-gradient(180deg, #050505 0%, var(--cashier-bg) 48%, #000 100%);
   padding-bottom: calc(env(safe-area-inset-bottom) + 80px);
 }
 
@@ -385,7 +373,7 @@ function onBack() {
   right: -72px;
   width: 188px;
   height: 188px;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(124, 255, 178, 0.12);
   filter: blur(6px);
 }
 
@@ -394,7 +382,7 @@ function onBack() {
   left: -92px;
   width: 220px;
   height: 220px;
-  background: rgba(191, 219, 254, 0.28);
+  background: rgba(216, 146, 27, 0.12);
 }
 
 .cashier-nav {
@@ -403,7 +391,7 @@ function onBack() {
 }
 
 .cashier-nav :deep(.van-nav-bar) {
-  background: transparent;
+  background: rgba(8, 8, 8, 0.72);
   transition:
     background-color 0.22s ease,
     box-shadow 0.22s ease,
@@ -421,13 +409,13 @@ function onBack() {
 }
 
 .cashier-nav-solid :deep(.van-nav-bar) {
-  background: rgba(248, 250, 252, 0.9);
-  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+  background: rgba(8, 8, 8, 0.92);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(16px);
 }
 
 .cashier-nav-solid :deep(.van-nav-bar)::after {
-  border-color: rgba(226, 232, 240, 0.9);
+  border-color: rgba(255, 255, 255, 0.06);
 }
 
 .nav-left {
@@ -442,10 +430,10 @@ function onBack() {
   justify-content: center;
   width: 42px;
   height: 42px;
-  border: 1px solid rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(124, 255, 178, 0.18);
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.75);
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+  background: rgba(124, 255, 178, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(124, 255, 178, 0.12), 0 0 18px rgba(124, 255, 178, 0.14);
   backdrop-filter: blur(14px);
 }
 
@@ -492,9 +480,9 @@ function onBack() {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  border: 1px solid rgba(15, 118, 110, 0.12);
+  border: 1px solid rgba(124, 255, 178, 0.35);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.74);
+  background: rgba(124, 255, 178, 0.08);
   padding: 8px 12px;
   font-size: 12px;
   font-weight: 600;
@@ -529,7 +517,7 @@ function onBack() {
   margin-bottom: 18px;
   border: 1px solid var(--cashier-border);
   border-radius: 28px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.82) 100%);
+  background: var(--cashier-surface);
   box-shadow: var(--cashier-shadow);
   padding: 18px;
   backdrop-filter: blur(18px);
@@ -546,7 +534,7 @@ function onBack() {
   width: 132px;
   height: 132px;
   border-radius: 999px;
-  background: radial-gradient(circle, rgba(45, 212, 191, 0.18) 0%, rgba(45, 212, 191, 0) 70%);
+  background: radial-gradient(circle, rgba(124, 255, 178, 0.16) 0%, rgba(124, 255, 178, 0) 70%);
   content: '';
 }
 
@@ -578,9 +566,9 @@ function onBack() {
   display: flex;
   align-items: baseline;
   min-height: 132px;
-  border: 1px solid rgba(226, 232, 240, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 24px;
-  background: linear-gradient(180deg, rgba(248, 250, 252, 0.96) 0%, rgba(255, 255, 255, 0.98) 100%);
+  background: rgba(255, 255, 255, 0.03);
   padding: 30px 22px 24px;
 }
 
@@ -609,9 +597,9 @@ function onBack() {
 .spec-card {
   display: grid;
   gap: 8px;
-  border: 1px solid rgba(226, 232, 240, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 20px;
-  background: rgba(248, 250, 252, 0.85);
+  background: rgba(255, 255, 255, 0.03);
   padding: 16px;
 }
 
@@ -629,9 +617,9 @@ function onBack() {
   justify-content: space-between;
   gap: 12px;
   width: 100%;
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 22px;
-  background: linear-gradient(135deg, rgba(248, 250, 252, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%);
+  background: rgba(255, 255, 255, 0.03);
   padding: 18px;
   text-align: left;
   color: inherit;
@@ -655,7 +643,7 @@ function onBack() {
 
 .scope-section {
   margin-top: 20px;
-  border-top: 1px solid rgba(226, 232, 240, 0.8);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
   padding-top: 18px;
 }
 
@@ -680,9 +668,9 @@ function onBack() {
 .scope-chip {
   display: grid;
   gap: 6px;
-  border: 1px solid rgba(148, 163, 184, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 18px;
-  background: rgba(248, 250, 252, 0.82);
+  background: rgba(255, 255, 255, 0.03);
   padding: 14px;
   text-align: left;
   transition:
@@ -710,14 +698,14 @@ function onBack() {
 
 .scope-chip-active {
   transform: translateY(-1px);
-  border-color: rgba(15, 118, 110, 0.28);
-  background: linear-gradient(135deg, rgba(15, 118, 110, 0.1) 0%, rgba(255, 255, 255, 0.98) 100%);
-  box-shadow: 0 16px 32px rgba(15, 118, 110, 0.14);
+  border-color: rgba(124, 255, 178, 0.35);
+  background: rgba(124, 255, 178, 0.08);
+  box-shadow: 0 0 12px rgba(124, 255, 178, 0.22), 0 0 36px rgba(124, 255, 178, 0.1);
 }
 
 .scope-chip-active .scope-chip-label,
 .scope-chip-active .scope-chip-value {
-  color: #0f766e;
+  color: #8bffbe;
 }
 
 .keypad-copy {
@@ -737,9 +725,9 @@ function onBack() {
 }
 
 .keypad-shell {
-  border: 1px solid rgba(226, 232, 240, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 24px;
-  background: rgba(248, 250, 252, 0.75);
+  background: rgba(255, 255, 255, 0.03);
   padding: 16px;
 }
 
@@ -754,12 +742,13 @@ function onBack() {
 
 .keypad-shell :deep(.keypad-btn) {
   height: 58px;
-  border: 1px solid rgba(203, 213, 225, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 18px;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.04);
+  background: linear-gradient(180deg, #111 0%, #0b0b0b 100%);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.04), 0 8px 16px rgba(0, 0, 0, 0.3);
   font-size: 20px;
   font-weight: 700;
+  color: #f5f5f5;
 }
 
 .method-popup :deep(.van-popup) {
@@ -787,8 +776,12 @@ function onBack() {
 }
 
 .method-popup :deep(.van-picker__confirm) {
-  color: #0f766e;
+  color: #16a34a;
   font-weight: 700;
+}
+
+.method-popup :deep(.van-picker__cancel) {
+  color: #64748b;
 }
 
 @media (max-width: 360px) {

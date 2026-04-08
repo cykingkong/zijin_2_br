@@ -16,6 +16,7 @@ declare module 'vue' {
     FaqItem: typeof import('./../components/faqItem.vue')['default']
     GhostButton: typeof import('./../components/GhostButton.vue')['default']
     Grid: typeof import('./../components/grid.vue')['default']
+    ImageUploader: typeof import('./../components/ImageUploader.vue')['default']
     InputCom: typeof import('./../components/inputCom.vue')['default']
     Item: typeof import('./../components/item.vue')['default']
     Keypad: typeof import('./../components/Keypad.vue')['default']

@@ -98,6 +98,28 @@ const menuList = computed(() => [
   },
 ])
 
+const kycStatus = computed(() => Number(userInfo.value?.kyc_status ?? 0))
+const canEnterKyc = computed(() => kycStatus.value === 0)
+const kycStatusText = computed(() => {
+  if (kycStatus.value === 2)
+    return t('Verified')
+  if (kycStatus.value === 1)
+    return t('Under review')
+  return t('Unverified')
+})
+const kycStatusToneClass = computed(() => {
+  if (kycStatus.value === 2)
+    return 'kyc-status-verified'
+  if (kycStatus.value === 1)
+    return 'kyc-status-reviewing'
+  return 'kyc-status-unverified'
+})
+
+function handleClickKycStatus() {
+  if (canEnterKyc.value)
+    router.push('/kyc')
+}
+
 function handleHerf(type: number) {
   if (type === 2)
     router.push('/wallet/exchange/cashierCenter')
@@ -220,6 +242,29 @@ onMounted(async () => {
         </div>
       </section>
 
+      <button
+        type="button"
+        class="kyc-status-card"
+        :class="[kycStatusToneClass, { 'kyc-status-card--clickable': canEnterKyc }]"
+        @click="handleClickKycStatus"
+      >
+        <div class="kyc-status-copy">
+          <div class="kyc-status-title">
+            {{ t('KYC Status') }}
+          </div>
+          <div class="kyc-status-desc">
+            {{ kycStatusText }}
+          </div>
+        </div>
+        <div class="kyc-status-action">
+          <span class="kyc-status-pill">{{ kycStatusText }}</span>
+          <svg v-if="canEnterKyc" class="kyc-status-arrow" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7.5 4.16675L13.3333 10.0001L7.5 15.8334" stroke="currentColor" stroke-width="1.67"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+      </button>
+
       <section class="menu-card">
         <button
           v-for="(item, index) in menuList"
@@ -280,10 +325,10 @@ onMounted(async () => {
 .profile-page {
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(125, 211, 252, 0.22), transparent 28%),
-    radial-gradient(circle at top right, rgba(167, 243, 208, 0.18), transparent 24%),
-    linear-gradient(180deg, #f8fbff 0%, #edf3f8 100%);
-  padding: 14px 16px 100px;
+    radial-gradient(circle at top, rgba(124, 255, 178, 0.16), transparent 30%),
+    linear-gradient(180deg, #050505 0%, #000 100%);
+  padding: 20px 16px 110px;
+  color: #f5f5f5;
 }
 
 .profile-shell {
@@ -298,17 +343,16 @@ onMounted(async () => {
 .header-badge {
   display: inline-flex;
   align-items: center;
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(124, 255, 178, 0.35);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(124, 255, 178, 0.08);
   padding: 7px 12px;
   font-size: 11px;
   font-weight: 700;
   line-height: 1;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #475569;
-  backdrop-filter: blur(12px);
+  color: #8bffbe;
 }
 
 .page-title {
@@ -317,16 +361,92 @@ onMounted(async () => {
   font-weight: 800;
   line-height: 1.08;
   letter-spacing: -0.04em;
-  color: #0f172a;
+  color: #f5f5f5;
 }
 
 .hero-card,
-.menu-card {
-  border: 1px solid rgba(148, 163, 184, 0.16);
+.menu-card,
+.kyc-status-card {
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 28px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.86) 100%);
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
-  backdrop-filter: blur(18px);
+  background: linear-gradient(180deg, rgba(17, 17, 17, 0.96) 0%, rgba(8, 8, 8, 0.96) 100%);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.04),
+    inset 0 -8px 20px rgba(0, 0, 0, 0.45),
+    0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.kyc-status-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+  padding: 18px;
+  text-align: left;
+}
+
+.kyc-status-card--clickable {
+  cursor: pointer;
+}
+
+.kyc-status-copy {
+  min-width: 0;
+}
+
+.kyc-status-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #f5f5f5;
+}
+
+.kyc-status-desc {
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #a3a3a3;
+}
+
+.kyc-status-action {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.kyc-status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.kyc-status-arrow {
+  width: 18px;
+  height: 18px;
+  color: #8bffbe;
+}
+
+.kyc-status-unverified .kyc-status-pill {
+  background: rgba(216, 146, 27, 0.16);
+  color: #d8921b;
+  box-shadow: inset 0 0 0 1px rgba(216, 146, 27, 0.18);
+}
+
+.kyc-status-reviewing .kyc-status-pill {
+  background: rgba(124, 255, 178, 0.08);
+  color: #8bffbe;
+  box-shadow: inset 0 0 0 1px rgba(124, 255, 178, 0.18);
+}
+
+.kyc-status-verified .kyc-status-pill {
+  background: rgba(124, 255, 178, 0.12);
+  color: #8bffbe;
+  box-shadow: inset 0 0 0 1px rgba(124, 255, 178, 0.22), 0 0 14px rgba(124, 255, 178, 0.12);
 }
 
 .hero-card {
@@ -342,7 +462,7 @@ onMounted(async () => {
   width: 144px;
   height: 144px;
   border-radius: 999px;
-  background: radial-gradient(circle, rgba(15, 23, 42, 0.08) 0%, rgba(15, 23, 42, 0) 72%);
+  background: radial-gradient(circle, rgba(124, 255, 178, 0.18) 0%, rgba(124, 255, 178, 0) 72%);
   content: '';
   pointer-events: none;
 }
@@ -358,13 +478,15 @@ onMounted(async () => {
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  width: 54px;
-  height: 54px;
+  width: 58px;
+  height: 58px;
   overflow: hidden;
-  border: 0;
+  border: 1px solid rgba(124, 255, 178, 0.18);
   border-radius: 18px;
-  background: #ffffff;
-  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+  background: #111;
+  box-shadow:
+    inset 0 0 0 1px rgba(124, 255, 178, 0.12),
+    0 0 18px rgba(124, 255, 178, 0.14);
 }
 
 .avatar-image {
@@ -396,8 +518,9 @@ onMounted(async () => {
 }
 
 .level-chip {
-  background: #f4f1eb;
-  color: #8a5a32;
+  background: rgba(216, 146, 27, 0.16);
+  color: #d8921b;
+  box-shadow: inset 0 0 0 1px rgba(216, 146, 27, 0.18);
 }
 
 .level-pill {
@@ -442,7 +565,7 @@ onMounted(async () => {
   font-size: 16px;
   font-weight: 700;
   line-height: 1.25;
-  color: #111827;
+  color: #f5f5f5;
 }
 
 .stats-grid {
@@ -453,9 +576,9 @@ onMounted(async () => {
 }
 
 .stat-card {
-  border: 1px solid rgba(226, 232, 240, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 22px;
-  background: rgba(248, 250, 252, 0.92);
+  background: rgba(255, 255, 255, 0.03);
   padding: 16px;
 }
 
@@ -463,7 +586,7 @@ onMounted(async () => {
   font-size: 20px;
   font-weight: 800;
   line-height: 1.15;
-  color: #0f172a;
+  color: #8bffbe;
 }
 
 .stat-label {
@@ -471,7 +594,7 @@ onMounted(async () => {
   font-size: 12px;
   font-weight: 600;
   line-height: 1.4;
-  color: #64748b;
+  color: #a3a3a3;
 }
 
 .action-grid {
@@ -496,16 +619,16 @@ onMounted(async () => {
 }
 
 .action-button-dark {
-  border: 1px solid #1b1b1b;
-  background: #1b1b1b;
-  color: #fff;
-  box-shadow: 0 12px 24px rgba(27, 27, 27, 0.18);
+  border: none;
+  background: linear-gradient(90deg, #68f7a1 0%, #8bffbe 100%);
+  color: #050505;
+  box-shadow: 0 0 12px rgba(124, 255, 178, 0.45), 0 0 36px rgba(124, 255, 178, 0.18);
 }
 
 .action-button-light {
-  border: 1px solid rgba(27, 27, 27, 0.14);
-  background: #fff;
-  color: #1b1b1b;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #111;
+  color: #f5f5f5;
 }
 
 .menu-card {
@@ -519,9 +642,9 @@ onMounted(async () => {
   display: grid;
   justify-items: center;
   gap: 10px;
-  border: 1px solid rgba(226, 232, 240, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 20px;
-  background: rgba(248, 250, 252, 0.92);
+  background: rgba(255, 255, 255, 0.03);
   padding: 16px 10px;
   text-align: center;
 }
@@ -533,8 +656,10 @@ onMounted(async () => {
   width: 46px;
   height: 46px;
   border-radius: 16px;
-  background: #fff;
-  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06);
+  background: rgba(124, 255, 178, 0.08);
+  box-shadow:
+    inset 0 0 0 1px rgba(124, 255, 178, 0.18),
+    0 0 14px rgba(124, 255, 178, 0.12);
 }
 
 .menu-icon {
@@ -547,7 +672,7 @@ onMounted(async () => {
   font-size: 12px;
   font-weight: 600;
   line-height: 1.4;
-  color: #334155;
+  color: #f5f5f5;
 }
 
 .logs-section {
@@ -557,6 +682,10 @@ onMounted(async () => {
 .upload-panel {
   width: min(80vw, 320px);
   padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(17, 17, 17, 0.98) 0%, rgba(8, 8, 8, 0.98) 100%);
+  color: #f5f5f5;
 }
 
 .upload-title {
@@ -564,7 +693,7 @@ onMounted(async () => {
   text-align: center;
   font-size: 16px;
   font-weight: 700;
-  color: #111827;
+  color: #f5f5f5;
 }
 
 .upload-uploader {
@@ -579,15 +708,16 @@ onMounted(async () => {
   justify-content: center;
   width: 120px;
   height: 120px;
-  border: 1px dashed #cbd5e1;
+  border: 1px dashed rgba(124, 255, 178, 0.28);
   border-radius: 18px;
-  background: #f8fafc;
-  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.03);
+  color: #8bffbe;
 }
 
 .upload-dropzone-text {
   margin-top: 8px;
   font-size: 12px;
+  color: #a3a3a3;
 }
 
 .upload-actions {
@@ -595,6 +725,21 @@ onMounted(async () => {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
   margin-top: 16px;
+}
+
+:deep(.upload-panel .van-button) {
+  border-radius: 14px;
+  height: 42px;
+}
+
+:deep(.upload-panel .van-button--plain) {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: #111;
+  color: #f5f5f5;
+}
+
+:deep(.upload-panel .van-popup) {
+  background: transparent;
 }
 
 @media (max-width: 360px) {
