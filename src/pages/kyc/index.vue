@@ -117,7 +117,7 @@ onMounted(() => {
         </div>
 
         <block v-if="step == 1">
-            <div class="hero-panel mb-[24px]">
+            <!-- <div class="hero-panel mb-[24px]">
                 <div class="hero-tag">{{ t("KYC") }}</div>
                 <div class="hero-title">
                     {{ t("What is your address on the ID Card you just uploaded? ") }}
@@ -125,7 +125,7 @@ onMounted(() => {
                 <div class="hero-subtitle">
                     {{ t("Complete your identity details and upload the front of your ID card for verification.") }}
                 </div>
-            </div>
+            </div> -->
 
             <div class="kyc-form-card">
                 <div class="label-text mb-[12px]">

@@ -3,7 +3,7 @@
   <div class="cashier-center-content px-12 w-full pb-120">
     <VanNavBar title="" :fixed="true" clickable :left-arrow="true" @click-left="onBack" z-index="999">
       <template #title>
-        <div class="text-[16px] font-bold color-[#0F172A]">
+        <div class="text-[16px] font-bold color-[#fff]">
           {{ t("Withdraw") }}
         </div>
       </template>
@@ -12,7 +12,7 @@
 
 
       <div class="text-[14px] text-center mt-[57px]">{{ t("Withdrawal account") }}</div>
-      <div class="min-count text-[#0F172A] font-size-[24px] mx-a text-center mt-4 font-bold overflow-y-auto">
+      <div class="min-count text-[#fff] font-size-[24px] mx-a text-center mt-4 font-bold overflow-y-auto">
         {{ formatRupiah(userInfo.balance,) || '0' }}
       </div>
       <!-- <div class="min-count-fee text-[#1b1b1b] font-size-[14px] mx-a text-center mt-[4px] font-bold overflow-y-auto">
@@ -26,7 +26,7 @@
         <div class="flex gap-8">
           <div v-for="(type, index) in typeList" :key="index"
             class="flex-1 text-center py-12 rounded-[12px] cursor-pointer transition-all"
-            :class="typeActive === index ? 'bg-[#1B1B1B] text-white font-bold' : 'bg-[#F1F5F9] text-[#64748B]'"
+            :class="typeActive === index ? 'bg-[#F1F5F9] text-[#1B1B1B] font-bold' : 'bg-[#1B1B1B] text-[#64748B]'"
             @click="handleTabChange(index)">
             {{ type === 'bank' ? t('Bank Card') : t('Crypto') }}
           </div>
@@ -66,7 +66,7 @@
             </div>
             <div class="phone-input my-[12px] p-12 flex justify-between items-center cursor-pointer"
               @click="showCryptoTypePicker = true">
-              <span :class="cryptoForm.type ? 'text-[#0F172A]' : 'text-[#94A3B8]'">
+              <span :class="cryptoForm.type ? 'text-[#f f f]' : 'text-[#94A3B8]'">
                 {{ cryptoForm.type || t('Please select cryptocurrency') }}
               </span>
               <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -81,7 +81,7 @@
             <div class="phone-input my-[12px] p-12 flex justify-between items-center cursor-pointer"
               :class="!cryptoForm.type ? 'opacity-50 cursor-not-allowed' : ''"
               @click="cryptoForm.type && (showCryptoNetworkPicker = true)">
-              <span :class="cryptoForm.network ? 'text-[#0F172A]' : 'text-[#94A3B8]'">
+              <span :class="cryptoForm.network ? 'text-[#fff]' : 'text-[#94A3B8]'">
                 {{ cryptoForm.network || t('Please select network') }}
               </span>
               <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">

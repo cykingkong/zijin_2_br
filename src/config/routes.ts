@@ -2,6 +2,7 @@
 export const routeWhiteList: readonly string[] = [
   'home', // 首页
   'profile', // 个人中心
+  'help', // 个人中心
   'quotes',
   'optional',
   'news',
@@ -17,6 +18,7 @@ export const routeWhiteList: readonly string[] = [
 export const navWhiteList: readonly string[] = [
   'home', // 首页
   'profile', // 个人中心
+  'help', // 个人中心
   'NoticeDetail',
   'kyc',
   'quotes',

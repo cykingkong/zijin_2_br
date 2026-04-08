@@ -141,13 +141,21 @@ const handleAfterRead = async (file, type) => {
 
 :deep(.van-uploader.full-width-uploader) {
   width: 100%;
+  display: block;
 
   .van-uploader__wrapper {
     width: 100%;
+    display: block;
   }
 
   .van-uploader__input-wrapper {
     width: 100%;
+    display: block;
+  }
+
+  .van-uploader__input {
+    width: 100%;
+    height: 100%;
   }
 }
 
@@ -201,6 +209,7 @@ const handleAfterRead = async (file, type) => {
   align-items: center;
   justify-content: center;
   text-align: center;
+  pointer-events: none;
 }
 
 .upload-box--primary {

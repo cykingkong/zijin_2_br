@@ -110,13 +110,36 @@ const handleBlur = () => {
 
 </script>
 <style lang="less" scoped>
+.input-com {
+    color: #f5f5f5;
+}
+
+.label {
+    color: #f5f5f5;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.label-tips {
+    color: #6b6b6b;
+}
+
 .input-box {
-    // background: #F8F9FD;
-    border: 1px solid transparent;
-    transition: border-color 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.04),
+        inset 0 -8px 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
 
     &.focused {
-        // border-color: #1B1B1B;
+        border-color: rgba(124, 255, 178, 0.35);
+        box-shadow:
+            inset 0 1px 2px rgba(255, 255, 255, 0.04),
+            inset 0 -8px 20px rgba(0, 0, 0, 0.2),
+            0 0 0 1px rgba(124, 255, 178, 0.08),
+            0 0 18px rgba(124, 255, 178, 0.12);
     }
 }
 
@@ -131,34 +154,35 @@ const handleBlur = () => {
     right: 10px;
     top: 50%;
     transform: translateY(-50%);
+    color: #6b6b6b;
 }
 
 .max-input {
     input {
-        // background: #F8F9FD;
         border: none;
         background: transparent;
+        color: #f5f5f5;
 
         &::placeholder {
-            color: #3C3C434D;
+            color: #6b6b6b;
             font-size: 14px;
             font-weight: 400;
         }
 
         &::-webkit-input-placeholder {
-            color: #3C3C434D;
+            color: #6b6b6b;
             font-size: 14px;
             font-weight: 400;
         }
 
         &::-moz-placeholder {
-            color: #3C3C434D;
+            color: #6b6b6b;
             font-size: 14px;
             font-weight: 400;
         }
 
         &:-ms-input-placeholder {
-            color: #3C3C434D;
+            color: #6b6b6b;
             font-size: 14px;
             font-weight: 400;
         }

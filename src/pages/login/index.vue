@@ -206,16 +206,16 @@ async function login() {
 </script>
 
 <template>
-  <div class="m-x-a w-full max-h-[100vh]">
+  <div class="login-page m-x-a w-full min-h-screen px-[20px] pt-[24px] pb-[40px]">
 
-    <div class="top-image w-full bg-[]">
+    <div class="login-hero">
       <CloseButton>
         <template #left>
           <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" @click="onBack"
             v-if="pageType == 1">
-            <rect x="0.5" y="0.5" width="39" height="39" rx="19.5" fill="white" />
-            <rect x="0.5" y="0.5" width="39" height="39" rx="19.5" stroke="#F0F0F0" />
-            <path d="M21.6667 16.6667L18.3333 20L21.6667 23.3333" stroke="#1B1B1B" stroke-width="1.5"
+            <rect x="0.5" y="0.5" width="39" height="39" rx="19.5" fill="#111111" />
+            <rect x="0.5" y="0.5" width="39" height="39" rx="19.5" stroke="rgba(255,255,255,0.06)" />
+            <path d="M21.6667 16.6667L18.3333 20L21.6667 23.3333" stroke="#F5F5F5" stroke-width="1.5"
               stroke-linecap="round" stroke-linejoin="round" />
           </svg>
           <div class="e" v-else></div>
@@ -224,16 +224,20 @@ async function login() {
           <!-- <LangSelectDropdown v-model="lang" /> -->
         </template>
       </CloseButton>
-      <div class="mid-logo h-[64px] rounded-[12px] overflow-hidden ml-[16px]">
+      <div class="mid-logo h-[64px] rounded-[16px] overflow-hidden ml-[16px] mt-[20px]">
         <img src="@/assets/Logo.png" alt="" class="w-auto h-full">
       </div>
-      <div class="text-left m-x-a mt-[16px] color-white px-30">
-        <div class="t font-size-[24px] font-semibold m-b-[4px] color-[#1B1B1B]">
+      <div class="text-left m-x-a mt-[20px] px-[16px]">
+        <div class="hero-tag">{{ pageType == 0 ? t("Secure Access") : t("Create Account") }}</div>
+        <div class="t text-[32px] font-bold leading-[1.15] mt-[14px] text-[#F5F5F5]">
           {{ t("Welcome") }}
+        </div>
+        <div class="hero-subtitle mt-[10px]">
+          {{ pageType == 0 ? t("Log in to continue securely.") : t("Register to start securely.") }}
         </div>
       </div>
     </div>
-    <div class="login-form p-24">
+    <div class="login-form mt-[24px] p-[20px]">
       <div class="phone-input mb-20">
         <inputCom :placeholder="t('PleaseEnterEmail')" v-model:value="postData.account" :tips="''"
           class="flex-1 w-full">
@@ -258,10 +262,10 @@ async function login() {
               v-if="inputType == 'password'" @click="changeInputType">
               <path
                 d="M12 14C13.1046 14 14 13.1046 14 12C14 10.8954 13.1046 10 12 10C10.8954 10 10 10.8954 10 12C10 13.1046 10.8954 14 12 14Z"
-                stroke="#0F172A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                stroke="#F5F5F5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
               <path
                 d="M22 12C19.333 16.667 16 19 12 19C8 19 4.667 16.667 2 12C4.667 7.333 8 5 12 5C16 5 19.333 7.333 22 12Z"
-                stroke="#0F172A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                stroke="#F5F5F5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </template>
         </inputCom>
@@ -288,10 +292,10 @@ async function login() {
               v-if="inputType == 'password'" @click="changeInputType">
               <path
                 d="M12 14C13.1046 14 14 13.1046 14 12C14 10.8954 13.1046 10 12 10C10.8954 10 10 10.8954 10 12C10 13.1046 10.8954 14 12 14Z"
-                stroke="#0F172A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                stroke="#F5F5F5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
               <path
                 d="M22 12C19.333 16.667 16 19 12 19C8 19 4.667 16.667 2 12C4.667 7.333 8 5 12 5C16 5 19.333 7.333 22 12Z"
-                stroke="#0F172A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                stroke="#F5F5F5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </template>
         </inputCom>
@@ -320,28 +324,24 @@ async function login() {
         </inputCom>
       </div>
 
-      <div class="flex justify-between items-center mt-[16px] mb-[24px] gap-16">
+    <!--   <div class="flex justify-between items-center mt-[16px] mb-[24px] gap-16">
         <div class="left flex font-size-[14px] font-medium flex-shrink-0 gap-[12px] flex-shrink-0">
-          <!-- <div class="radio w-[16px] h-[16px] rounded-[4px] border" :class="remember ? 'radio-active' : ''"
+          <div class="radio w-[16px] h-[16px] rounded-[4px] border" :class="remember ? 'radio-active' : ''"
             @click="remember = !remember"></div>
-          {{ t("Remember me") }} -->
+          {{ t("Remember me") }}
         </div>
         <div class="right color-[#1b1b1b] font-size-[14px] font-bold cursor-pointer flex-shrink-0"
           @click="toForgotPassword()">
           {{ t("Forgot Password") }}
         </div>
-      </div>
-      <van-button type="primary" color="#1B1B1B" class="login-btn h-[48px]!" block
+      </div> -->
+      <van-button type="primary" color="#1B1B1B" class="login-btn h-[52px]! rounded-full!" block
         @click="pageType == 0 ? login() : signUp()">{{
           pageType == 0 ? t("Login") : t("Sign Up")
         }}</van-button>
-      <div class="or">{{ '©2026 Signet Jewelers. Este site é utilizado sob autorização, todos os direitos reservados.'
-        }}
-      </div>
-      <div :style="{ color: '#1B1B1B' }"
-        class=" font-regular w-full  items-center flex justify-center text-center  color-[#1b1b1b]! font-bold" block
+      <div class="switch-entry"
         @click="changePageType()">
-        <span class="text-[#0000004D] mr-4"> {{ pageType == 0 ? t("Don’t have an account?") : '' }} </span> {{
+        <span class="switch-entry__muted"> {{ pageType == 0 ? t("Don’t have an account?") : '' }} </span> {{
           pageType == 0 ? t("Sign Up") : t("Log in")
         }}
       </div>
@@ -381,8 +381,67 @@ async function login() {
 }
 </route>
 <style lang="less" scoped>
+.login-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, rgba(124, 255, 178, 0.16), transparent 32%),
+    linear-gradient(180deg, #050505 0%, #000000 100%);
+  color: #f5f5f5;
+}
+
+.login-hero {
+  position: relative;
+  padding: 8px 0 0;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border: 1px solid rgba(124, 255, 178, 0.35);
+  border-radius: 999px;
+  background: rgba(124, 255, 178, 0.08);
+  color: #8bffbe;
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero-subtitle {
+  color: #a3a3a3;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.login-form {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(17, 17, 17, 0.96) 0%, rgba(8, 8, 8, 0.96) 100%);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.04),
+    inset 0 -8px 20px rgba(0, 0, 0, 0.45),
+    0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
 .login-btn {
   margin-top: 24px;
+}
+
+.switch-entry {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  margin-top: 14px;
+  color: #8bffbe;
+  font-weight: 700;
+  text-align: center;
+}
+
+.switch-entry__muted {
+  color: #6b6b6b;
+  font-weight: 500;
 }
 
 .signUpBtn {
@@ -458,18 +517,28 @@ async function login() {
 }
 
 .phone-input {
-  border: 1px solid #F0F0F0;
-  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
 
   :deep(.input-box) {
-    /* height: 48px; */
     margin-top: 0px;
+    background: transparent;
+  }
 
+  :deep(input),
+  :deep(textarea) {
+    color: #f5f5f5;
+  }
 
+  :deep(input::placeholder),
+  :deep(textarea::placeholder) {
+    color: #6b6b6b;
   }
 
   :deep(.tips) {
     margin-bottom: 0px;
+    color: #a3a3a3;
   }
 }
 
@@ -484,11 +553,11 @@ async function login() {
 }
 
 .sendCode {
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #868c9a;
-  color: #fff;
-  background: #424242;
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(124, 255, 178, 0.2);
+  color: #8bffbe;
+  background: rgba(124, 255, 178, 0.08);
 }
 
 .item-active {

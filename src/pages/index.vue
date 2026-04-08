@@ -1,33 +1,33 @@
 <template>
-    <div class="community px-16  flex flex-col">
-        <div class="label w-full text-right h-44 pt-16 font-bold  relative">
-            <div class="absolute transition-all duration-300 left-1/2 -translate-x-1/2">{{ t('List') }}</div>
+    <div class="community home-dark-page px-[14px] pt-[14px] flex flex-col">
+        <div class="label header-panel w-full text-right h-[52px] px-[14px] pt-[12px] font-bold relative">
+            <div class="absolute transition-all duration-300 left-1/2 -translate-x-1/2 text-[#F5F5F5]">{{ t('List') }}</div>
             <LangSelectDropdown v-model="lang" />
 
         </div>
 
 
-        <div class="flex mt-[20px] w-full text-center pb-20 border-b-solid border-b-[1px] border-b-[#0000000D] mb-20">
+        <div class="stats-panel flex mt-[16px] w-full text-center px-[6px] py-[14px] mb-[16px]">
             <div class="flex-1">
-                <div class="value font-bold mb-4">{{ imageObj.images_today }}</div>
-                <div class="label font-bold mb-4">{{ t('Today Submit') }}</div>
+                <div class="value text-[#F5F5F5] font-bold mb-4">{{ imageObj.images_today }}</div>
+                <div class="label text-[#A3A3A3] font-bold mb-4">{{ t('Today Submit') }}</div>
             </div>
             <div class="flex-1">
-                <div class="value font-bold mb-4">{{ imageObj.images_total }}</div>
-                <div class="label font-bold mb-4">{{ t('Total Pass') }}</div>
+                <div class="value text-[#F5F5F5] font-bold mb-4">{{ imageObj.images_total }}</div>
+                <div class="label text-[#A3A3A3] font-bold mb-4">{{ t('Total Pass') }}</div>
             </div>
         </div>
-        <div class="item w-full p-16 rounded-16" v-for="(item, index) in logList" :key="index"
+        <div class="item record-card w-full p-[14px] rounded-[20px]" v-for="(item, index) in logList" :key="index"
             @click="handleClickItem(item)">
-            <div class="content mb-12">
+            <div class="content mb-[10px]">
                 <!-- 移除了原本堆砌在此处的冗长 SVG，保持 DOM 干净 -->
-                <div class="text-[#888888] text-16 font-bold flex items-center gap-[4px]">
+                    <div class="text-[#8BFFBE] text-16 font-bold flex items-center gap-[4px]">
                     ID:{{ item?.order_id || '' }}
                 </div>
             </div>
             <div class="picture-box">
                 <!-- 单张图片 -->
-                <div class="w-full min-h-[120px] rounded-[16px] overflow-hidden bg-[#f5f5f5] relative"
+                <div class="w-full min-h-[120px] rounded-[20px] overflow-hidden bg-[#111111] relative border border-[rgba(255,255,255,0.06)]"
                     v-if="item.images.length == 1" v-for="(imgItem, imgIndex) in item.images" :key="imgIndex">
                     <van-image :src="imgItem.image" fit="cover" class="w-full h-full object-cover"
                         @click.stop="handleClickPicture(index, imgIndex)"></van-image>
@@ -43,8 +43,8 @@
                 </div>
 
                 <!-- 两张图片、三张图片 -->
-                <div class="w-full grid grid-cols-3 gap-8" v-if="[2, 3].includes(item.images.length)">
-                    <div class="w-full h-120 rounded-[16px] overflow-hidden bg-[#f5f5f5] flex-1 relative"
+                <div class="w-full grid grid-cols-3 gap-[6px]" v-if="[2, 3].includes(item.images.length)">
+                    <div class="w-full h-120 rounded-[20px] overflow-hidden bg-[#111111] flex-1 relative border border-[rgba(255,255,255,0.06)]"
                         v-for="(imgItem, imgIndex) in item.images" :key="imgIndex">
                         <van-image :src="imgItem.image" fit="cover" class="w-full h-full object-cover"
                             @click.stop="handleClickPicture(index, imgIndex)"></van-image>
@@ -62,8 +62,8 @@
                 </div>
 
                 <!-- 四张图片 -->
-                <div class="w-full grid grid-cols-2 gap-8" v-if="item.images.length == 4">
-                    <div class="w-full h-120 rounded-[16px] overflow-hidden bg-[#f5f5f5] flex-1 relative"
+                <div class="w-full grid grid-cols-2 gap-[6px]" v-if="item.images.length == 4">
+                    <div class="w-full h-120 rounded-[20px] overflow-hidden bg-[#111111] flex-1 relative border border-[rgba(255,255,255,0.06)]"
                         v-for="(imgItem, imgIndex) in item.images" :key="imgIndex">
                         <van-image :src="imgItem.image" fit="cover" class="w-full h-full object-cover"
                             @click.stop="handleClickPicture(index, imgIndex)"></van-image>
@@ -81,8 +81,8 @@
                 </div>
 
                 <!-- 多张图片（大于4张） -->
-                <div class="w-full grid grid-cols-3 gap-8" v-if="item.images.length > 4">
-                    <div class="w-full h-120 rounded-[16px] overflow-hidden bg-[#f5f5f5] flex-1 relative"
+                <div class="w-full grid grid-cols-3 gap-[6px]" v-if="item.images.length > 4">
+                    <div class="w-full h-120 rounded-[20px] overflow-hidden bg-[#111111] flex-1 relative border border-[rgba(255,255,255,0.06)]"
                         v-for="(imgItem, imgIndex) in item.images" :key="imgIndex">
                         <van-image :src="imgItem.image" fit="cover" class="w-full h-full object-cover"
                             @click.stop="handleClickPicture(index, imgIndex)"></van-image>
@@ -100,9 +100,9 @@
                 </div>
             </div>
 
-            <div class="info w-full flex gap-8 justify-start mt-12">
+            <div class="info w-full flex gap-8 justify-start mt-[10px]">
                 <div class="detail flex flex justify-between w-full items-center">
-                    <div class="time text-[#888888] text-14">{{ dayjs(item?.createdAt).format('YYYY-MM-DD') || '' }}
+                    <div class="time text-[#6B6B6B] text-14">{{ dayjs(item?.createdAt).format('YYYY-MM-DD') || '' }}
                     </div>
                 </div>
             </div>
@@ -225,15 +225,57 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* 样式保留你的原版即可 */
+.home-dark-page {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top, rgba(124, 255, 178, 0.16), transparent 32%),
+        linear-gradient(180deg, #050505 0%, #000000 100%);
+    color: #f5f5f5;
+}
+
 .community {
     padding-bottom: calc(env(safe-area-inset-bottom) + 82px);
 }
 
+.header-panel {
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(17, 17, 17, 0.96) 0%, rgba(8, 8, 8, 0.96) 100%);
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.04),
+        inset 0 -8px 20px rgba(0, 0, 0, 0.45),
+        0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.stats-panel {
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.04),
+        0 8px 24px rgba(0, 0, 0, 0.24);
+}
+
+.stats-panel .value {
+    font-size: 20px;
+    line-height: 1.1;
+}
+
+.record-card {
+    margin-bottom: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(17, 17, 17, 0.96) 0%, rgba(8, 8, 8, 0.96) 100%);
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.04),
+        inset 0 -8px 20px rgba(0, 0, 0, 0.45),
+        0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
 .phone-input {
-    border: 1px solid #F0F0F0;
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 12px;
-    background: #0000000D;
+    background: rgba(255, 255, 255, 0.03);
 
     :deep(.input-box) {
         height: 39px;
@@ -241,25 +283,37 @@ onMounted(() => {
 
         input {
             background: transparent;
+            color: #f5f5f5;
         }
     }
 
     :deep(.tips) {
         margin-bottom: 0px;
+        color: #a3a3a3;
     }
 }
 
 .sendCode {
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #868c9a;
-    color: #fff;
-    background: #424242;
+    padding: 10px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(124, 255, 178, 0.2);
+    color: #8bffbe;
+    background: rgba(124, 255, 178, 0.08);
 }
 
 .active-tag {
     background: #424242;
     color: #fff;
+}
+
+:deep(.van-image) {
+    background: #111111;
+}
+
+:deep(.langSelectButton) {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    color: #f5f5f5 !important;
 }
 </style>
 
