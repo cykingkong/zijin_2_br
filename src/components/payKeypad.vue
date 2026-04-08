@@ -41,7 +41,7 @@ const props = defineProps({
     },
     prefix: {
         type: String,
-        default: '₹'
+        default: 'COP'
     },
     showClose: {
         type: Boolean,

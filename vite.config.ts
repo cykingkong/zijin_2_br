@@ -23,13 +23,13 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       proxy: {
         '/capi': {
           // target: `https://api.ddbindia.online/app-api`, // 代理接口
-          target: `https://api.signet-jewelers-br.com/app-api`, // 代理接口
+          target: `https://api.brilliantearth.co/app-api`, // 代理接口
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/capi/, ''),
           ws: false,
         },
         '/wss': {
-          target: `wss://zj.crossbordershopping.one/ws`, // 代理接口
+          target: `wss://api.brilliantearth.co/ws`, // 代理接口
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/wss/, ''),
           ws: true,

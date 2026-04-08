@@ -5,19 +5,21 @@ import ptBR from 'vant/es/locale/lang/pt-BR'
 
 import en from '@/locales/en-US.json'
 import br from '@/locales/br.json'
+import es from '@/locales/es.json'
 
 
 
 import { Locale } from 'vant'
 import type { PickerColumn } from 'vant'
 
-const FALLBACK_LOCALE = 'br'
+const FALLBACK_LOCALE = 'es'
 
 
 const vantLocales = {
   'en': { ...en, ...enUS }, // 英语使用 Vant 官方英语包
   // 'zh-TW': { ...zhCN }, // 中文繁体使用 Vant 官方中文包
   'br': { ...br, ...ptBR }, // 巴西葡萄牙语使用自定义巴西语言包
+  'es': { ...es },
 }
 
 
@@ -25,6 +27,7 @@ const vantLocales = {
 
 export const languageColumns: PickerColumn = [
   // { text: 'English', value: 'en' },
+  { text: 'Español', value: 'es' },
   { text: 'Brazil', value: 'br' },
   // { text: '繁體中文', value: 'zh-TW' },
   // { text: 'हिंदी', value: 'hi' },
@@ -74,6 +77,9 @@ async function loadLocaleMsg(locale: string, i18n: I18n) {
       break
     case 'br':
       messages = await import(`../locales/br.json`)
+      break
+    case 'es':
+      messages = await import(`../locales/es.json`)
       break
   }
   i18n.global.setLocaleMessage(locale, messages.default)

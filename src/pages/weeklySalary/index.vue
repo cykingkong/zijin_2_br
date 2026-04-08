@@ -10,14 +10,14 @@
                 <!-- Weekly Salary Row -->
                 <div class="flex justify-between items-center mb-[12px]">
                     <span class="text-[#8E9FAE] text-[15px]">{{t("Weekly salary")}}</span>
-                    <span class="text-[#333] text-[18px] font-bold ">R$ {{
+                    <span class="text-[#333] text-[18px] font-bold ">COP {{
                         addCommasToNumber(config.weekly.pending_income) }}</span>
                 </div>
 
                 <!-- Total Weekly Salary Row -->
                 <div class="flex justify-between items-center mb-[24px]">
                     <span class="text-[#8E9FAE] text-[15px]">{{t("Total weekly salary")}}</span>
-                    <span class="text-[#333] text-[18px] font-bold ">R$ {{
+                    <span class="text-[#333] text-[18px] font-bold ">COP {{
                         addCommasToNumber(config.weekly.received_income) }}</span>
                 </div>
 

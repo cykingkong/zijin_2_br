@@ -39,7 +39,7 @@
                     </div>
                     <!-- 金额 -->
                     <span class="text-[#333] font-medium text-center  text-[15px] flex-1">10</span>
-                    <span class="text-[#333] font-medium  text-[15px] flex-1 text-right">{{ index + 3 }} R$</span>
+                    <span class="text-[#333] font-medium  text-[15px] flex-1 text-right">{{ index + 3 }} COP</span>
                 </div>
             </div>
         </div>

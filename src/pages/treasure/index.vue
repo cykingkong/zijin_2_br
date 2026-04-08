@@ -4,7 +4,7 @@
       <div class="px-[16px] pt-[12px] pb-[10px]">
         <div class="flex items-center justify-between mb-[10px]">
           <div>
-            <div class="text-[12px] font-semibold tracking-[2px] text-[#b08c44]">SIGNET JEWELERS</div>
+            <div class="text-[12px] font-semibold tracking-[2px] text-[#b08c44]">Brilliant Earth Co</div>
             <div class="text-[18px] font-bold text-[#2e2010] mt-[2px]">{{ t('One Yuan Treasure') }}</div>
           </div>
           <div class="flex items-center gap-[6px] text-[11px] text-[#8a7a5a]">

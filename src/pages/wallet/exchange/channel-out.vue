@@ -53,7 +53,7 @@
               {{ listItem.method }}
             </div>
             <!-- <div class="name2 text-[#64748B] text-[12px]">
-              {{ t("Amount range") }}: ₹{{ listItem.min_amount }} ~ ₹{{
+              {{ t("Amount range") }}: COP{{ listItem.min_amount }} ~ COP{{
                 listItem.max_amount
               }}
             </div> -->

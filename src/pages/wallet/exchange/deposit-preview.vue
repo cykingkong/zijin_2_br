@@ -17,7 +17,7 @@
             Deposit ({{ depositData.unit }})
           </div>
           <div class="amount text-[32px] font-bold color-[#0F172A]">
-            + ₹{{ depositData.amount }}
+            + COP{{ depositData.amount }}
           </div>
         </div>
 
@@ -114,7 +114,7 @@ const { t } = useI18n();
 // 充值数据
 const depositData = ref<any>({
   amount: "280.00",
-  unit: "₹",
+  unit: "COP",
   rate: "233.33",
   logo: null,
   address: "TKVHsXQLiPHjtPQsUNCCw7YAA6shu1ym6B",

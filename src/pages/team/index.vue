@@ -15,7 +15,7 @@
                 </div>
 
                 <!-- Total Amount -->
-                <div class="text-[28px] font-bold text-[#1A1A1A]  mb-[4px]">R$ {{  addCommasToNumber(userInfo.rechargeData.allRecharge) ||'0' }}</div>
+                <div class="text-[28px] font-bold text-[#1A1A1A]  mb-[4px]">COP {{  addCommasToNumber(userInfo.rechargeData.allRecharge) ||'0' }}</div>
                 <div class="text-[12px] text-[#666] mb-[24px]">{{t("Total Team Top-up")}}</div>
 
                 <!-- 4-Grid Stats -->
@@ -132,7 +132,7 @@
                         class="flex py-[14px] items-center border-b border-[#F9F9F9] last:border-0">
                         <div class="w-[30%] text-[14px] text-wrap text-[#1A1A1A]">{{ row.account }}</div>
                         <div class="w-[30%] text-[14px] text-[#1A1A1A] text-center">{{ row.chilrenCount }}</div>
-                        <div class="w-[40%] text-[14px] text-[#1A1A1A] text-right">R$ {{ row.productPrice }}</div>
+                        <div class="w-[40%] text-[14px] text-[#1A1A1A] text-right">COP {{ row.productPrice }}</div>
                     </div>
                 </div>
                 <!-- Empty State Placeholder -->

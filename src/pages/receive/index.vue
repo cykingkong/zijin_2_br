@@ -5,21 +5,21 @@
                 <div class="label text-[12px] text-[#8C91A2]">{{t("Today's product revenue")}}</div>
                 <div class="value flex items-center font-bold gap-8">
                     <img src="@/assets/coin.png" class="w-20 h-20 block" alt="">
-                    R$ {{ info.todayIncome || '0' }}
+                    COP {{ info.todayIncome || '0' }}
                 </div>
             </div>
             <div class="li-flex flex justify-between items-center">
                 <div class="label text-[12px] text-[#8C91A2]">{{t("Yesterday's product revenue")}}</div>
                 <div class="value flex items-center font-bold gap-8">
                     <img src="@/assets/coin.png" class="w-20 h-20 block" alt="">
-                    R${{ info.yesterdayIncome || '0' }}
+                    COP{{ info.yesterdayIncome || '0' }}
                 </div>
             </div>
             <div class="li-flex flex justify-between items-center">
                 <div class="label text-[12px] text-[#8C91A2]">{{t('Received product revenue')}}</div>
                 <div class="value flex items-center font-bold gap-8">
                     <img src="@/assets/coin.png" class="w-20 h-20 block" alt="">
-                    R${{ info.allIncome || '0' }}
+                    COP{{ info.allIncome || '0' }}
                 </div>
             </div>
         </div>
@@ -53,15 +53,15 @@
                     </div>
                     <div class="li flex justify-between">
                         <div class="label text-[#666]">{{ $t('Every 1 day') }}</div>
-                        <div class="value text-[#1b1b1b]">R$ {{ item.dailyIncome }}</div>
+                        <div class="value text-[#1b1b1b]">COP {{ item.dailyIncome }}</div>
                     </div>
                     <div class="li flex justify-between">
                         <div class="label text-[#666]">{{ $t('Total Revenue') }}</div>
-                        <div class="value text-[#1b1b1b]">R$ {{ item.totalIncome }}</div>
+                        <div class="value text-[#1b1b1b]">COP {{ item.totalIncome }}</div>
                     </div>
                     <div class="li flex justify-between">
                         <div class="label text-[#666]">{{ $t('Already received') }}</div>
-                        <div class="value text-[#1b1b1b]">R$ {{ item.receivedIncome }}</div>
+                        <div class="value text-[#1b1b1b]">COP {{ item.receivedIncome }}</div>
                     </div>
                 </div>
                 <div class="w-full flex justify-end">

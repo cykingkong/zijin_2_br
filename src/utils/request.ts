@@ -95,7 +95,7 @@ function requestHandler(config: InternalAxiosRequestConfig): InternalAxiosReques
   // 让每个请求携带自定义 token, 请根据实际情况修改
   if (savedToken)
     config.headers[REQUEST_TOKEN_KEY] = `Bearer ${savedToken}`
-  config.headers["language"] = lang || "zh";
+  config.headers["language"] = lang || "es";
   if (config.method?.toLowerCase() === 'put' && config.data instanceof FormData) {
     // 删除 Content-Type 让浏览器自动设置，或者显式设置为 multipart/form-data
     // delete config.headers['Content-Type'];

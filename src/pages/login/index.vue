@@ -23,9 +23,9 @@ const loadingStore = useLoadingStore();
 let countryList = ref<any>([
   {
     code: "br",
-    dialCode: 55,
+    dialCode: 57,
     key: "br",
-    name: "Brazil",
+    name: "Colombia",
     img: br
   },
   // {
@@ -40,10 +40,10 @@ let active = ref(0)
 const loading = ref(false);
 const remember = ref(false);
 const areaInfo = ref({
-  code: "mx",
-  dialCode: 52,
-  key: "mx",
-  name: "Mexico",
+  code: "co",
+  dialCode: 57,
+  key: "co",
+  name: "Colombia",
 });
 function onBack() {
   if (pageType.value == 1) {
@@ -121,7 +121,7 @@ const getCode = async () => {
       email: ''
     }
     if (params.type == 'phone') {
-      params.phone = `55${postData.account}`
+      params.phone = `57${postData.account}`
     } else {
       params.email = postData.account
     }
@@ -305,11 +305,11 @@ async function login() {
       <div class="phone-input flex items-center gap-[12px] mb-20">
         <div class="picker flex-shrink-0 h-[48px] rounded-[12px] flex items-center justify-center px-16"
           @click="hanleClickAreaPick">
-          <img :src="countryList[active]?.img" alt="" class="w-24 h-24 rounded-full mr-4">
+          <svg t="1775682910547" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5270" width="22" height="22"><path d="M0 511.48C0 229.004 228.972 0.015 511.465 0.015c282.463 0 511.464 228.989 511.464 511.465l-511.464 44.484L0 511.48z" fill="#FFDA44" p-id="5271"></path><path d="M68.443 767.212c88.449 152.882 253.717 255.718 443.022 255.718 189.305 0 354.605-102.836 443.053-255.718l-443.053-33.365-443.022 33.365z" fill="#D80027" p-id="5272"></path><path d="M954.488 767.212c43.536-75.223 68.441-162.562 68.441-255.715H0c0 93.154 24.908 180.493 68.443 255.715h886.045z" fill="#0052B4" p-id="5273"></path></svg>
           <div class="num">+{{ countryList[active]?.dialCode }}</div>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M4 6L8 10L12 6" fill="#1B1B1B" />
-          </svg>
+          </svg> -->
         </div>
         <inputCom :placeholder="t('PleaseEnterPhoneNumber')" v-model:value="postData.account" :formatter="accountFormatter" :tips="''"
           class="flex-1 w-full">
@@ -411,7 +411,7 @@ async function login() {
         @click="pageType == 0 ? login() : signUp()">{{
           pageType == 0 ? t("Login") : t("Sign Up")
         }}</van-button>
-      <div class="or">{{ '©2026 Signet Jewelers. Este site é utilizado sob autorização, todos os direitos reservados.'
+      <div class="or">{{ '©2026 Brilliant Earth Co. Este site é utilizado sob autorização, todos os direitos reservados.'
         }}
       </div>
       <div :style="{ color: '#1B1B1B' }"

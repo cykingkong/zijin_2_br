@@ -171,9 +171,9 @@ const onConfirm = ({ selectedValues, selectedOptions }) => {
   showPicker.value = false;
 };
 const areaInfo = ref({
-  code: "br",
-  dialCode: 55,
-  key: "br",
+  code: "co",
+  dialCode: 57,
+  key: "co",
   name: "",
 });
 

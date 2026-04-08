@@ -5,7 +5,7 @@
       <div class="info-box px-[24px] flex flex-col gap-[4px] h-[102px]">
         <div class="t1 text-[#B59CFA] text-[16px]">{{ t("Balance") }}</div>
         <div class="t1 text-[#fff] text-[34px] line-height-[140%]">
-          R${{ addCommasToNumber(userInfo.user_balance) }}
+          COP{{ addCommasToNumber(userInfo.user_balance) }}
         </div>
       </div>
       <div class="btn-box w-full flex gap-[10px] px-[24px] mt-[33px]">
@@ -91,7 +91,7 @@
             </div>
 
             <div class="right h-[46px] text-right flex flex-col justify-between gap-[4px] w-full text-right">
-              <div class="unit">{{ el.type == "income" ? "" : "-" }} ₹</div>
+              <div class="unit">{{ el.type == "income" ? "" : "-" }} COP</div>
               {{ el.amount }}
             </div>
           </div>

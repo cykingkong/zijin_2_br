@@ -167,7 +167,7 @@
                     <div class="payTypeBox w-full flex flex-col gap-12">
                         <div class="li-item flex items-center justify-between w-full"
                             v-for="(item, index) in payTypeList" :key="index">
-                            <div class="label">{{ item.name }} <span class="font-bold">R$ {{ item.num }}</span></div>
+                            <div class="label">{{ item.name }} <span class="font-bold">COP {{ item.num }}</span></div>
                             <!-- <svg class="w-16 h-16 flex-shrink-0" v-if="activePayIndex == index" viewBox="0 0 16 16"
                                 fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -201,7 +201,7 @@ const router = useRouter();
 const { t } = useI18n();
 const userStore = useUserStore();
 const userInfo = computed(() => { return userStore.userInfo })
-const currencySymbol = 'R$'; // 根据截图或项目配置修改货币符号，截图是 $ 但代码原为 ₹
+const currencySymbol = 'COP'; // 根据截图或项目配置修改货币符号，截图是 $ 但代码原为 COP
 const activePayIndex = ref(0)
 const activeConponIndex = ref<any>(-1)
 const payTypeList = ref([{

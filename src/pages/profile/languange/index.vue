@@ -53,7 +53,9 @@ const languageToCountryMap = {
   // hi: "in", // 印地语
   // "zh-CN": "cn", // 中国
   // "zh-TW": "hk", // 中国
+  "es": "es", // 西班牙
   "en-US": "us", // 美国
+  "br": "br", // 巴西
   // ta: 'ta', // 泰米尔语
   // te: 'te' // 泰卢固语
 };

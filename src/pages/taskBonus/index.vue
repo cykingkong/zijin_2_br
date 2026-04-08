@@ -33,7 +33,7 @@
                     <div
                         class="right text-11 font-bold flex-shrink-0 px-4 h-[28px] rounded-[8px] border-solid border-[1px] border-[#0000002a] flex items-center justify-center">
                         <img src="@/assets/coin.png" alt="Arrow Right" class="w-[20px] h-[20px] block object-contain" />
-                        + R$ {{ addCommasToNumber(item.amount) }}
+                        + COP {{ addCommasToNumber(item.amount) }}
                     </div>
                 </div>
             </div>
