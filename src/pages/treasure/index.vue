@@ -116,26 +116,21 @@
                   }}</span>
                   <span class="text-[11px] text-[#8a7a5a]">{{ t('Per Code') }}</span>
                 </div>
-                <div class="text-[10px] text-[#c9b79e] line-through mt-[3px]">{{ issue.marketPrice || '--' }}</div>
               </div>
               <div class="text-[11px] font-semibold" :class="statusClass(issue.status)">{{
                 getIssueStatusText(issue.status) }}</div>
             </div>
 
             <div class="mt-[14px]">
-              <div class="flex items-center justify-between text-[11px] text-[#8a7a5a] mb-[6px]">
-                <div>{{ t('Sold') }} <b class="text-[#9a7a2c]">{{ issue.soldCodes || 0 }}</b></div>
-                <div class="text-[#d03535]">{{ t('Left') }} {{ issue.leftCodes || 0 }}</div>
+              <div class="flex items-center justify-between mb-[6px]">
+                <div class="text-[11px] font-medium" :class="isRemainingMode(issue) ? 'text-[#d03535]' : 'text-[#8a7a5a]'">
+                  {{ getProgressText(issue) }}
+                </div>
               </div>
               <div class="h-[10px] rounded-[999px] bg-[#ece0cc] overflow-hidden">
                 <div
                   class="h-full rounded-[999px] bg-gradient-to-r from-[#9a7a2c] via-[#c9a84c] to-[#e8cf85] transition-all duration-500"
-                  :style="{ width: `${issue.progress || 0}%` }"></div>
-              </div>
-              <div class="flex justify-between text-[9px] text-[#b0a080] mt-[4px]">
-                <span>0%</span>
-                <span>50%</span>
-                <span>100%</span>
+                  :style="{ width: `${getProgressWidth(issue)}%` }"></div>
               </div>
             </div>
 
@@ -297,7 +292,8 @@ const walletBalance = computed(() => homeData.value?.walletBalance ?? 0)
 const currentClassName = computed(() => getClassName(activeClassId.value))
 const currentDrawFilter = computed(() => {
   const firstIssue = issueList.value[0]
-  if (selectedIssue.value?.issueId) return { issueId: selectedIssue.value.issueId }
+  // if (selectedIssue.value?.issueId) return { issueId: selectedIssue.value.issueId }
+  if (selectedIssue.value?.goodsId) return { goodsId: selectedIssue.value.goodsId }
   if (firstIssue?.goodsId) return { goodsId: firstIssue.goodsId }
   return {}
 })
@@ -339,6 +335,23 @@ function getIssueWinnerPreview(issue: any) {
 function formatCodes(codes: any) {
   if (Array.isArray(codes)) return codes.join(', ')
   return codes || '--'
+}
+
+function getProgressWidth(issue: any) {
+  const progress = Number(issue?.progress || 0)
+  return Math.min(Math.max(progress, 0), 100)
+}
+
+function isRemainingMode(issue: any) {
+  return getProgressWidth(issue) >= 80
+}
+
+function getProgressText(issue: any) {
+  if (isRemainingMode(issue)) {
+    return `${t('Left')} ${Number(issue?.leftCodes || 0)}`
+  }
+
+  return `${Math.floor(getProgressWidth(issue))}%`
 }
 
 function syncIssueList() {
