@@ -51,6 +51,8 @@ declare module 'vue-router/auto-routes' {
     'taskBonus': RouteRecordInfo<'taskBonus', '/taskBonus', Record<never, never>, Record<never, never>>,
     'team': RouteRecordInfo<'team', '/team', Record<never, never>, Record<never, never>>,
     'treasure': RouteRecordInfo<'treasure', '/treasure', Record<never, never>, Record<never, never>>,
+    '/treasure/components/TreasureIssueCard': RouteRecordInfo<'/treasure/components/TreasureIssueCard', '/treasure/components/TreasureIssueCard', Record<never, never>, Record<never, never>>,
+    '/treasure/components/TreasureRecordPanel': RouteRecordInfo<'/treasure/components/TreasureRecordPanel', '/treasure/components/TreasureRecordPanel', Record<never, never>, Record<never, never>>,
     'wallet': RouteRecordInfo<'wallet', '/wallet', Record<never, never>, Record<never, never>>,
     '/wallet/exchange/cashierCenter': RouteRecordInfo<'/wallet/exchange/cashierCenter', '/wallet/exchange/cashierCenter', Record<never, never>, Record<never, never>>,
     '/wallet/exchange/cashierCenter-withdraw': RouteRecordInfo<'/wallet/exchange/cashierCenter-withdraw', '/wallet/exchange/cashierCenter-withdraw', Record<never, never>, Record<never, never>>,

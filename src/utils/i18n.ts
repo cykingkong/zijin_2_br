@@ -1,27 +1,23 @@
 import { createI18n } from 'vue-i18n'
 import enUS from 'vant/es/locale/lang/en-US'
 import ptBR from 'vant/es/locale/lang/pt-BR'
-// import zhCN from 'vant/es/locale/lang/zh-CN'
+import zhCN from 'vant/es/locale/lang/zh-CN'
 
 import en from '@/locales/en-US.json'
 import br from '@/locales/br.json'
-
-
+import zh from '@/locales/zh-CN.json'
 
 import { Locale } from 'vant'
 import type { PickerColumn } from 'vant'
 
 const FALLBACK_LOCALE = 'br'
-
+const DEV_LOCALE = 'zh-CN'
 
 const vantLocales = {
   'en': { ...en, ...enUS }, // 英语使用 Vant 官方英语包
-  // 'zh-TW': { ...zhCN }, // 中文繁体使用 Vant 官方中文包
+  'zh-CN': { ...zh, ...zhCN }, // 开发环境使用本地中文语言包
   'br': { ...br, ...ptBR }, // 巴西葡萄牙语使用自定义巴西语言包
 }
-
-
-
 
 export const languageColumns: PickerColumn = [
   // { text: 'English', value: 'en' },
@@ -72,6 +68,9 @@ async function loadLocaleMsg(locale: string, i18n: I18n) {
     case 'en':
       messages = await import(`../locales/en-US.json`)
       break
+    case 'zh-CN':
+      messages = await import(`../locales/zh-CN.json`)
+      break
     case 'br':
       messages = await import(`../locales/br.json`)
       break
@@ -81,6 +80,10 @@ async function loadLocaleMsg(locale: string, i18n: I18n) {
 
 // 获取当前语言对应的语言包名称
 function getI18nLocale() {
+  if (import.meta.env.DEV) {
+    return DEV_LOCALE
+  }
+
   const storedLocale = localStorage.getItem('language') || navigator.language
 
   const langs = languageColumns.map(v => v.value as string)

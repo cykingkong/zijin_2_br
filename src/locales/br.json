@@ -329,5 +329,8 @@
   "Exceed remaining codes": "Excede os códigos restantes",
   "Purchase Success": "Compra realizada com sucesso",
   "Buy Count": "Quantidade comprada",
-  "Enter your Amount": "Digite seu valor"
+  "Enter your Amount": "Digite seu valor",
+  "PleaseSelectPIXType": "Por favor, selecione o tipo de PIX",
+  "PIXTypeLabel": "Etiqueta de Tipo PIX",
+  "The prize has been awarded": "O prêmio foi concedido"
 }

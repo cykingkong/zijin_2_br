@@ -127,7 +127,7 @@
         <div v-else-if="isCurrentPoolDrawn && currentDeliverText"
           class="mt-[14px] rounded-[16px] bg-[#f6f2ff] px-[14px] py-[12px] text-[12px] text-[#5a4e7a] leading-[1.6]">
           <div class="font-semibold text-[#251b44] mb-[4px]">{{ currentPrizeName }}</div>
-          <div>{{ currentDeliverText }}</div>
+          <div>{{ t('The prize has been awarded') }}</div>
         </div>
       </div>
     </div>

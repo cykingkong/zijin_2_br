@@ -311,5 +311,8 @@
   "Exceed remaining codes": "Exceed remaining codes",
   "Purchase Success": "Purchase Success",
   "Buy Count": "Buy Count",
-  "Enter your Amount": "Enter your Amount"
+  "Enter your Amount": "Enter your Amount",
+  "PleaseSelectPIXType": "PleaseSelectPIXType",
+  "PIXTypeLabel": "PIX Type Label",
+  "The prize has been awarded": "The prize has been awarded"
 }

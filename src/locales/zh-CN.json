@@ -233,5 +233,8 @@
   "Not won": "未中奖",
   "Reward hidden": "金额已隐藏",
   "One Yuan Treasure": "一元夺宝",
-  "Enter your Amount": "输入您的金额"
+  "Enter your Amount": "输入您的金额",
+  "PleaseSelectPIXType": "请选择PIX类型",
+  "PIXTypeLabel": "PIX类型",
+  "The prize has been awarded": "奖品已发放"
 }

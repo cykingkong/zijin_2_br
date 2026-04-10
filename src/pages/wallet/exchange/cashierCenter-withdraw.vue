@@ -22,6 +22,23 @@
 
       <div class="mt-[30px] ">
         <div class="px-12 py-[20px] bg-[#fff] rounded-[20px] flex-col flex gap-12 card">
+          <div class="label" :class="['flex items-center gap-4']">
+            {{ t('PIXTypeLabel') }}
+          </div>
+          <item class="">
+            <template #left>
+              <div class="left h-[46px] flex items-center">
+                <div class="name text-[14px]" :class="typeName ? 'text-[#0F172A] font-bold' : 'text-[#94A3B8]'">
+                  {{ typeNameLabel || t('PleaseSelectPIXType') }}
+                </div>
+              </div>
+            </template>
+            <template #right>
+              <div class="color-[#1b1b1b] text-[14px] font-bold text-nowrap" @click="onOpenTypePicker">
+                {{ t("Picker") }}
+              </div>
+            </template>
+          </item>
           <div class="label  " :class="['flex items-center gap-4']">
             {{ t('Bank Card') }}
           </div>
@@ -69,6 +86,7 @@
   </div>
 </template>
 </item>
+
 <div class="label  " :class="['flex items-center gap-4']">
             {{ t('Extract Amount') }}
           </div>
@@ -154,6 +172,25 @@
     </div>
   </div>
 </van-popup>
+<van-popup v-model:show="showTypePicker" destroy-on-close round :position="'bottom'" :safe-area-inset-bottom="true">
+  <div class="p-12">
+    <div
+      class="add-bank-li mb-12 h-52 border border-[#f0f0f0] border-solid rounded-[16px] p-[12px] flex justify-between items-center"
+      v-for="item in withdrawTypeOptions" :key="item.value" @click="handleSelectType(item.value)">
+      <div class="name text-[#0F172A] text-[14px] font-bold">
+        {{ item.label }}
+      </div>
+      <div class="picker border border-[#f0f0f0] border-solid rounded-[4px] w-16 h-16 flex justify-center items-center"
+        :class="typeName == item.value ? 'bg-[#1b1b1b]' : ''">
+        <svg v-if="typeName == item.value" class="w-10 h-10" viewBox="0 0 10 10" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path d="M8.33341 2.70825L3.75008 7.29159L1.66675 5.20825" stroke="white" stroke-width="1.5"
+            stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </div>
+    </div>
+  </div>
+</van-popup>
 </div>
 </template>
 <script setup lang="ts">
@@ -164,6 +201,7 @@ import { useLoadingStore } from "@/stores/modules/loading";
 import { bank_list } from "@/api/payment";
 import { optimizeRichText } from '@/utils/richText';
 import { useUserStore } from "@/stores";
+import { showToast } from 'vant';
 
 import { deposit, withdraw_info, withdraw } from "@/api/billing";
 import item from "../../../components/item.vue";
@@ -171,7 +209,15 @@ import BottomButton from "@/components/bottom-button.vue";
 const info = ref<any>();
 const count = ref<any>(0);
 const showPicker = ref(false)
+const showTypePicker = ref(false)
 const { t } = useI18n();
+const typeName = ref("");
+const withdrawTypeOptions = computed(() => ([
+  { label: 'CPF', value: 'PIX' },
+  { label: t('Email'), value: 'email' },
+  { label: t('Phone'), value: 'phone' },
+]));
+const typeNameLabel = computed(() => withdrawTypeOptions.value.find(item => item.value === typeName.value)?.label || "");
 const displayValue = ref("");
 const fee = computed(() => {
   return addCommasToNumber(count.value * withdrwaInfo.value.withdrawFee * 0.01);
@@ -230,6 +276,13 @@ const onSelect = () => {
   // router.replace("/wallet/exchange/withdraw-bank");
   showPicker.value = true
 };
+const onOpenTypePicker = () => {
+  showTypePicker.value = true
+};
+const handleSelectType = (value: string) => {
+  typeName.value = value;
+  showTypePicker.value = false;
+};
 const bankList = ref([])
 const getBankList = async () => {
   const { data, code } = await bank_list({ ...{ pageIndex: 1, pageSize: 30 }, wallet_type: "auto" });
@@ -247,6 +300,10 @@ const handleBuyClickOriginal = async () => {
   // 处理购买逻辑
   console.log("购买金额:", count.value);
   console.log("购买信息:", info.value);
+  if (!typeName.value) {
+    showToast(t('PleaseSelectPIXType'));
+    return;
+  }
   // 将数据整合到一起，存进localStorage
   const dataInfo = {
     amount: count.value,
@@ -259,6 +316,7 @@ const handleBuyClickOriginal = async () => {
     type: "1",
     cardId: selectBank.value,
     amount: Number(count.value),
+    typeName: typeName.value,
   });
   if (code == 200) {
     setTimeout(() => {
