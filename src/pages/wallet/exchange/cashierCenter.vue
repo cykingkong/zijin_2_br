@@ -4,7 +4,7 @@ import { useLoadingStore } from '@/stores/modules/loading'
 
 import { deposit, rechargeMethods } from '@/api/billing'
 import { formatRupiah } from '@/utils/tool'
-
+import { optimizeRichText} from '@/utils/richText'
 import Keypad from '../../../components/Keypad.vue'
 
 const info = ref<any>()
@@ -17,10 +17,8 @@ const router = useRouter()
 const exchangeRateData = ref<any>()
 const methodsList = ref<any[]>([])
 const selectedMethod = ref<any>(null)
-const amountScopeList = ref<any[]>([])
-const showPicker = ref(false)
 const isNavSolid = ref(false)
-
+const rechargeNote = ref("")
 function getMethodKey(item: any) {
   return item?.id ?? item?.method ?? item?.name ?? item?.channel_name ?? ''
 }
@@ -29,21 +27,8 @@ function getMethodName(item: any) {
   return item?.method || item?.name || item?.channel_name || ''
 }
 
-function getAmountScope(item: any) {
-  return Array.isArray(item?.amount_scope) ? item.amount_scope : []
-}
-
-function getAmountScopeValue(item: any) {
-  return item?.parameter ?? item?.value ?? item?.amount ?? item
-}
-
-function getAmountScopeLabel(item: any) {
-  const value = getAmountScopeValue(item)
-  return item?.label || item?.name || value
-}
-
-function isAmountScopeActive(item: any) {
-  return String(getAmountScopeValue(item) ?? '') === displayValue.value
+function isMethodSelected(item: any) {
+  return getMethodKey(item) === getMethodKey(selectedMethod.value)
 }
 
 function formatDisplayNumber(value: any) {
@@ -53,44 +38,17 @@ function formatDisplayNumber(value: any) {
   return formatRupiah(numericValue)
 }
 
-const methodColumns = computed(() =>
-  methodsList.value.map(item => ({
-    text: getMethodName(item),
-    value: getMethodKey(item),
-  })),
-)
-
 const selectedMethodName = computed(() => getMethodName(selectedMethod.value) || t('BRL Pay'))
 const formattedDepositAmount = computed(() => (count.value === 0 ? formatRupiah(0) : formatDisplayNumber(count.value)))
-const methodEntranceLabel = computed(() => selectedMethod.value?.entrance || '--')
-const methodModeLabel = computed(() => selectedMethod.value?.mode || '--')
 const methodMinAmountLabel = computed(() => formatDisplayNumber(selectedMethod.value?.min_amount))
 const methodMaxAmountLabel = computed(() => formatDisplayNumber(selectedMethod.value?.max_amount))
 
 function syncSelectedMethod(item: any) {
   selectedMethod.value = item || null
-  const nextAmountScopeList = item ? getAmountScope(item) : []
-  amountScopeList.value = nextAmountScopeList
-
-  const hasMatchedAmount = nextAmountScopeList.some(scope => String(getAmountScopeValue(scope) ?? '') === displayValue.value)
-  if (!hasMatchedAmount)
-    displayValue.value = ''
 }
 
 function handleSelectMethod(item: any) {
   syncSelectedMethod(item)
-  showPicker.value = false
-}
-
-function handleMethodConfirm({ selectedValues }: { selectedValues: any[] }) {
-  const selectedValue = selectedValues?.[0]
-  const matchedMethod = methodsList.value.find(item => getMethodKey(item) === selectedValue)
-  handleSelectMethod(matchedMethod || null)
-}
-
-function handleSelectAmountScope(item: any) {
-  const value = getAmountScopeValue(item)
-  displayValue.value = value === undefined || value === null ? '' : String(value)
 }
 
 function syncNavSolidState() {
@@ -106,8 +64,11 @@ watch(displayValue, (newVal) => {
 async function getExchangeRate() {
   const { data, code } = await rechargeMethods({})
   if (code === 200) {
+    rechargeNote.value = data?.recharge_note || ""
     exchangeRateData.value = Array.isArray(data) ? null : data
-    methodsList.value = Array.isArray(data) ? data : (Array.isArray(data?.methods) ? data.methods : [])
+    methodsList.value = Array.isArray(data?.rechargeMethods)
+      ? data.rechargeMethods
+      : (Array.isArray(data?.methods) ? data.methods : (Array.isArray(data) ? data : []))
     if (methodsList.value.length > 0) {
       syncSelectedMethod(methodsList.value[0])
     }
@@ -182,7 +143,7 @@ function onBack() {
 </script>
 
 <template>
-  <div class="cashier-center-content w-full px-20 pb-120 pt-[8px]">
+  <div class="cashier-center-content w-full px-20 pb-130 pt-[8px]">
     <VanNavBar class="cashier-nav" :class="{ 'cashier-nav-solid': isNavSolid }" title="" :fixed="true" clickable
       :left-arrow="true" z-index="999" placeholder @click-left="onBack">
       <template #left>
@@ -218,7 +179,7 @@ function onBack() {
       </h1>
       <p class="hero-copy">
         {{ t(
-          `Choose a payment rail from the API response, apply a preset amount, or enter a custom value with the keypad below.`
+          `Choose a recharge method from the list, then enter a custom value with the keypad below.`
           ) }}
       </p>
     </section>
@@ -277,70 +238,37 @@ function onBack() {
         </div>
       </div>
 
-      <button type="button" class="method-trigger" @click="showPicker = true">
-        <div>
-          <div class="trigger-label">
-            {{ t('Current channel') }}
-          </div>
-          <div class="trigger-value">
-            {{ selectedMethodName }}
-          </div>
-        </div>
-        <div class="trigger-action">
-          <span>{{ t('Change') }}</span>
-          <svg class="h-20 w-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M7.5 4.16675L13.3333 10.0001L7.5 15.8334" stroke="currentColor" stroke-width="1.67"
-              stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </div>
-      </button>
-
-      <div class="spec-grid">
-        <div class="spec-card">
-          <span class="spec-label">{{ t('Gateway') }}</span>
-          <strong class="spec-value">{{ methodEntranceLabel }}</strong>
-        </div>
-        <div class="spec-card">
-          <span class="spec-label">{{ t('Mode') }}</span>
-          <strong class="spec-value">{{ methodModeLabel }}</strong>
-        </div>
-        <div class="spec-card">
-          <span class="spec-label">{{ t('Min') }}</span>
-          <strong class="spec-value">{{ methodMinAmountLabel }}</strong>
-        </div>
-        <div class="spec-card">
-          <span class="spec-label">{{ t('Max') }}</span>
-          <strong class="spec-value">{{ methodMaxAmountLabel }}</strong>
-        </div>
-      </div>
-
-      <div v-if="amountScopeList.length" class="scope-section">
-        <div class="scope-head">
-          <div class="section-kicker">
-            {{ t('Preset Amounts') }}
-          </div>
-          <div class="scope-copy">
-            {{ t('Tap any preset to sync amount instantly.') }}
-          </div>
-        </div>
-
-        <div class="scope-grid">
-          <button v-for="(item, index) in amountScopeList" :key="index" type="button" class="scope-chip"
-            :class="{ 'scope-chip-active': isAmountScopeActive(item) }" @click="handleSelectAmountScope(item)">
-            <span class="scope-chip-label">{{ t('Preset') }}</span>
-            <span class="scope-chip-value">{{ getAmountScopeLabel(item) }}</span>
+        <div class="method-list">
+          <button
+            v-for="item in methodsList"
+            :key="getMethodKey(item)"
+            type="button"
+            class="method-option"
+            :class="{ 'method-option-active': isMethodSelected(item) }"
+            @click="handleSelectMethod(item)"
+          >
+            <span class="method-option-label">{{ getMethodName(item) }}</span>
+            <span class="method-option-radio" :class="{ 'method-option-radio-active': isMethodSelected(item) }">
+              <span class="method-option-radio-dot" />
+            </span>
           </button>
         </div>
-      </div>
-    </section>
 
+        <div class="spec-grid">
+          <div class="spec-card">
+            <span class="spec-label">{{ t('Min') }}</span>
+            <strong class="spec-value">{{ methodMinAmountLabel }}</strong>
+          </div>
+          <div class="spec-card">
+            <span class="spec-label">{{ t('Max') }}</span>
+            <strong class="spec-value">{{ methodMaxAmountLabel }}</strong>
+          </div>
+        </div>
+
+    </section>
+    
+    <div class="html text-[#fff]" v-html="optimizeRichText(rechargeNote||'')"></div>
     <BottomButton :button-text="t('Deposit Preview')" color="#1b1b1b" @click="onConfirm" />
-    <van-popup v-model:show="showPicker" class="method-popup" destroy-on-close round position="bottom"
-      :safe-area-inset-bottom="true">
-      <van-picker :title="t('Select payment method')" :columns="methodColumns"
-        :model-value="[getMethodKey(selectedMethod)]" :confirm-button-text="t('Confirm')"
-        :cancel-button-text="t('Cancel')" @confirm="handleMethodConfirm" @cancel="showPicker = false" />
-    </van-popup>
   </div>
 </template>
 
@@ -504,10 +432,8 @@ function onBack() {
 }
 
 .hero-copy,
-.scope-copy,
 .keypad-copy,
-.spec-label,
-.trigger-label {
+.spec-label {
   color: var(--cashier-copy);
 }
 
@@ -592,7 +518,80 @@ function onBack() {
   color: var(--cashier-muted);
 }
 
+.method-list {
+  display: grid;
+  gap: 12px;
+}
+
+.method-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 18px;
+  text-align: left;
+  color: inherit;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+.method-option-active {
+  transform: translateY(-1px);
+  border-color: rgba(124, 255, 178, 0.35);
+  background: rgba(124, 255, 178, 0.08);
+  box-shadow: 0 0 12px rgba(124, 255, 178, 0.18);
+}
+
+.method-option-label {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--cashier-title);
+}
+
+.method-option-radio {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border: 1.5px solid rgba(255, 255, 255, 0.24);
+  border-radius: 999px;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.method-option-radio-active {
+  border-color: #8bffbe;
+  background: rgba(124, 255, 178, 0.08);
+  box-shadow: 0 0 12px rgba(124, 255, 178, 0.22);
+}
+
+.method-option-radio-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #8bffbe;
+  transform: scale(0);
+  transition: transform 0.18s ease;
+}
+
+.method-option-radio-active .method-option-radio-dot {
+  transform: scale(1);
+}
+
 .spec-grid {
+  margin-top: 16px;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
@@ -607,110 +606,13 @@ function onBack() {
   padding: 16px;
 }
 
-.spec-value,
-.trigger-value {
+.spec-value {
   font-size: 16px;
   font-weight: 700;
   line-height: 1.35;
   color: var(--cashier-title);
 }
 
-.method-trigger {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  width: 100%;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 22px;
-  background: rgba(255, 255, 255, 0.03);
-  padding: 18px;
-  text-align: left;
-  color: inherit;
-}
-
-.trigger-action {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  border-radius: 999px;
-  background: var(--cashier-accent-soft);
-  padding: 10px 12px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--cashier-accent);
-}
-
-.spec-grid {
-  margin-top: 16px;
-}
-
-.scope-section {
-  margin-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  padding-top: 18px;
-}
-
-.scope-head {
-  margin-bottom: 14px;
-}
-
-.scope-copy,
-.keypad-copy,
-.spec-label,
-.trigger-label {
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.scope-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.scope-chip {
-  display: grid;
-  gap: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.03);
-  padding: 14px;
-  text-align: left;
-  transition:
-    transform 0.18s ease,
-    border-color 0.18s ease,
-    box-shadow 0.18s ease,
-    background 0.18s ease;
-}
-
-.scope-chip-label {
-  font-size: 11px;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--cashier-muted);
-}
-
-.scope-chip-value {
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--cashier-title);
-}
-
-.scope-chip-active {
-  transform: translateY(-1px);
-  border-color: rgba(124, 255, 178, 0.35);
-  background: rgba(124, 255, 178, 0.08);
-  box-shadow: 0 0 12px rgba(124, 255, 178, 0.22), 0 0 36px rgba(124, 255, 178, 0.1);
-}
-
-.scope-chip-active .scope-chip-label,
-.scope-chip-active .scope-chip-value {
-  color: #8bffbe;
-}
 
 .keypad-copy {
   margin: 4px 0 0;
@@ -755,39 +657,6 @@ function onBack() {
   color: #f5f5f5;
 }
 
-.method-popup :deep(.van-popup) {
-  border-top-left-radius: 28px;
-  border-top-right-radius: 28px;
-  background: linear-gradient(180deg, #fcfdff 0%, #f3f7fb 100%);
-}
-
-.method-popup :deep(.van-picker) {
-  --van-picker-background: transparent;
-  --van-picker-option-text-color: #0f172a;
-  --van-picker-mask-color:
-    linear-gradient(180deg, rgba(244, 247, 251, 0.96), rgba(244, 247, 251, 0.6)),
-    linear-gradient(0deg, rgba(244, 247, 251, 0.96), rgba(244, 247, 251, 0.6));
-}
-
-.method-popup :deep(.van-picker__toolbar) {
-  padding-inline: 16px;
-}
-
-.method-popup :deep(.van-picker__title) {
-  font-size: 16px;
-  font-weight: 700;
-  color: #0f172a;
-}
-
-.method-popup :deep(.van-picker__confirm) {
-  color: #16a34a;
-  font-weight: 700;
-}
-
-.method-popup :deep(.van-picker__cancel) {
-  color: #64748b;
-}
-
 @media (max-width: 360px) {
   .hero-title {
     font-size: 26px;
@@ -797,8 +666,7 @@ function onBack() {
     font-size: 36px;
   }
 
-  .spec-grid,
-  .scope-grid {
+  .spec-grid {
     grid-template-columns: minmax(0, 1fr);
   }
 }

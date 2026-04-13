@@ -11,8 +11,8 @@ import { formatRupiah } from '@/utils/tool'
 
 import defaultAvatar from '@/assets/image/avatar.png'
 import logout from '@/assets/tabbar/logout.png'
-import pay from '@/assets/tabbar/pay.jpg'
 import inviteFriends from '@/assets/tabbar/inviteFriends.png'
+import bankAccount from '@/assets/profile/bank-account.svg'
 import lv1 from '@/assets/lv/lv1.png'
 import lv2 from '@/assets/lv/lv2.png'
 import lv3 from '@/assets/lv/lv3.png'
@@ -75,12 +75,20 @@ const walletStats = computed(() => [
     label: t('Total Income'),
     value: formatRupiah(userInfo.value?.total_income || 0),
   },
+  {
+    label: t('Recharge Account'),
+    value: formatRupiah(userInfo.value?.team_balance || 0),
+  },
+  {
+    label: t('Withdraw Account'),
+    value: formatRupiah(userInfo.value?.balance || 0),
+  },
 ])
 
 const menuList = computed(() => [
   {
     text: t('Bank Account'),
-    img: pay,
+    img: bankAccount,
     type: 'link',
     url: '/profile/bankAccount/addBank',
   },

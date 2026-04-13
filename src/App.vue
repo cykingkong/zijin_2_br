@@ -15,7 +15,7 @@ const userStore = useUserStore();
 const userInfo = computed(() => userStore.userInfo);
 let ws = null;
 useHead({
-  title: "GMapsCam",
+  title: "Kled",
   meta: [
     {
       name: "description",
