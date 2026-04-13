@@ -236,5 +236,6 @@
   "Enter your Amount": "输入您的金额",
   "PleaseSelectPIXType": "请选择PIX类型",
   "PIXTypeLabel": "PIX类型",
-  "The prize has been awarded": "奖品已发放"
+  "The prize has been awarded": "奖品已发放",
+  "CPF": "CPF"
 }

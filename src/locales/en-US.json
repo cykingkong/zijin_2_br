@@ -314,5 +314,6 @@
   "Enter your Amount": "Enter your Amount",
   "PleaseSelectPIXType": "PleaseSelectPIXType",
   "PIXTypeLabel": "PIX Type Label",
-  "The prize has been awarded": "The prize has been awarded"
+  "The prize has been awarded": "The prize has been awarded",
+  "CPF": "CPF"
 }

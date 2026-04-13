@@ -213,7 +213,7 @@ const showTypePicker = ref(false)
 const { t } = useI18n();
 const typeName = ref("");
 const withdrawTypeOptions = computed(() => ([
-  { label: 'CPF', value: 'PIX' },
+  { label: t('CPF'), value: 'PIX' },
   { label: t('Email'), value: 'email' },
   { label: t('Phone'), value: 'phone' },
 ]));
