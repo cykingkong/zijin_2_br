@@ -34,5 +34,6 @@ declare module 'vue-router/auto-routes' {
     '/wallet/exchange/cashierCenter': RouteRecordInfo<'/wallet/exchange/cashierCenter', '/wallet/exchange/cashierCenter', Record<never, never>, Record<never, never>>,
     '/wallet/exchange/cashierCenter-withdraw': RouteRecordInfo<'/wallet/exchange/cashierCenter-withdraw', '/wallet/exchange/cashierCenter-withdraw', Record<never, never>, Record<never, never>>,
     'walletLogs': RouteRecordInfo<'walletLogs', '/wallet/walletLogs', Record<never, never>, Record<never, never>>,
+    'webview': RouteRecordInfo<'webview', '/webview', Record<never, never>, Record<never, never>>,
   }
 }

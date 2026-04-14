@@ -84,11 +84,16 @@ async function handleBuyClickOriginal() {
     amount: count.value,
   })
   if (code === 200) {
-    router.replace({
-      path: '/profile',
-    })
-    window.location.href = data.url
+    const paymentUrl = data?.url || data?.payUrl
+    if (!paymentUrl)
+      return
 
+    router.push({
+      path: '/webview',
+      query: {
+        url: encodeURIComponent(paymentUrl),
+      },
+    })
   }
 }
 const onConfirm = proxy!.$throttle(handleBuyClickOriginal, 1000, {
@@ -171,17 +176,17 @@ function onBack() {
     </VanNavBar>
 
     <section class="hero-panel">
-      <div class="hero-badge">
+      <!--  <div class="hero-badge">
         {{ t('Clean transfer flow') }}
       </div>
-      <h1 class="hero-title">
+     <h1 class="hero-title">
         {{ t('Fund your balance with a documented, polished payment workspace') }}
       </h1>
       <p class="hero-copy">
         {{ t(
           `Choose a recharge method from the list, then enter a custom value with the keypad below.`
           ) }}
-      </p>
+      </p> -->
     </section>
 
     <section class="surface-card amount-card">
@@ -190,9 +195,9 @@ function onBack() {
           <div class="section-kicker">
             {{ t('Deposit Amount') }}
           </div>
-          <div class="section-title">
+          <!-- <div class="section-title">
             {{ t('Live funding preview') }}
-          </div>
+          </div> -->
         </div>
         <div class="section-pill">
           {{ selectedMethodName }}
@@ -207,14 +212,14 @@ function onBack() {
       </div>
 
       <div class="keypad-inline">
-        <div class="keypad-inline-head">
+        <div class="keypad-inline-head items-center!">
           <div>
             <div class="section-kicker">
               {{ t('Manual Input') }}
             </div>
-            <div class="keypad-copy">
+            <!-- <div class="keypad-copy">
               {{ t('Use the keypad below to adjust the visible amount instantly.') }}
-            </div>
+            </div> -->
           </div>
           <div class="section-pill section-pill-muted">
             {{ t('Keypad') }}
@@ -232,9 +237,9 @@ function onBack() {
           <div class="section-kicker">
             {{ t('Payment Method') }}
           </div>
-          <div class="section-title">
+          <!-- <div class="section-title">
             {{ t('API-backed channel configuration') }}
-          </div>
+          </div> -->
         </div>
       </div>
 
@@ -254,7 +259,7 @@ function onBack() {
           </button>
         </div>
 
-        <div class="spec-grid">
+        <!-- <div class="spec-grid">
           <div class="spec-card">
             <span class="spec-label">{{ t('Min') }}</span>
             <strong class="spec-value">{{ methodMinAmountLabel }}</strong>
@@ -263,7 +268,7 @@ function onBack() {
             <span class="spec-label">{{ t('Max') }}</span>
             <strong class="spec-value">{{ methodMaxAmountLabel }}</strong>
           </div>
-        </div>
+        </div> -->
 
     </section>
     
@@ -470,7 +475,7 @@ function onBack() {
 
 .section-head {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 16px;

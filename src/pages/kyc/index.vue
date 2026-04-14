@@ -16,6 +16,7 @@ const userStore = useUserStore();
 const step = ref(1)
 // 1. 定义共用的图片列表
 const pictureList = ref([]);
+const pictureListReverse = ref([]);
 const limit = ref(1)
 const idCard = ref('')
 const realName = ref('')
@@ -54,13 +55,15 @@ const submit = async () => {
         let params = {
             "real_name": realName.value,
             "id_card": idCard.value,
-            "id_card_front": pictureList.value[0].uploadUrl
+            "id_card_front": pictureList.value[0].uploadUrl,
+            "id_card_reverse": pictureListReverse.value[0].uploadUrl
         }
         const { data, code } = await kycSubmit(params)
         if (code == 200) {
             console.log(data.url, 'data.url')
             showSuccessToast({})
             pictureList.value = [];
+            pictureListReverse.value = [];
             setTimeout(() => {
                 router.push({ path: "/profile" })
             }, 1000);
@@ -83,6 +86,20 @@ function onSubmit() {
         if (idCard.value.length == 0) {
             showToast({
                 message: t("Please enter your ID card number"),
+                duration: 1000,
+            });
+            return;
+        }
+        if (!pictureList.value[0]?.uploadUrl) {
+            showToast({
+                message: t("Please upload ID card front"),
+                duration: 1000,
+            });
+            return;
+        }
+        if (!pictureListReverse.value[0]?.uploadUrl) {
+            showToast({
+                message: t("Please upload ID card reverse"),
                 duration: 1000,
             });
             return;
@@ -147,6 +164,14 @@ onMounted(() => {
                 </div>
                 <div class="upload-panel-wrap">
                     <ImageUploader v-model="pictureList" :max-count="limit" :show-camera-button="false"
+                        @after-read="handleAfterRead" />
+                </div>
+
+                <div class="label-text mb-[12px] mt-[20px]">
+                    {{ t("ID Card Reverse") }}
+                </div>
+                <div class="upload-panel-wrap">
+                    <ImageUploader v-model="pictureListReverse" :max-count="limit" :show-camera-button="false"
                         @after-read="handleAfterRead" />
                 </div>
             </div>

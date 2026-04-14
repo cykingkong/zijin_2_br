@@ -22,6 +22,7 @@ export const navWhiteList: readonly string[] = [
   'NoticeDetail',
   'kyc',
   'quotes',
+  'webview',
   'activityDetail',
   'aboutUs',
   'richTextDetail',

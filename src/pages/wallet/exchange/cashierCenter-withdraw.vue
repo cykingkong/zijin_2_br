@@ -13,7 +13,7 @@
 
       <div class="text-[14px] text-center mt-[57px]">{{ t("Withdrawal account") }}</div>
       <div class="min-count text-[#fff] font-size-[24px] mx-a text-center mt-4 font-bold overflow-y-auto">
-        {{ formatRupiah(userInfo.balance,) || '0' }}
+        {{ formatRupiah(userInfo.team_balance,) || '0' }}
       </div>
       <!-- <div class="min-count-fee text-[#1b1b1b] font-size-[14px] mx-a text-center mt-[4px] font-bold overflow-y-auto">
         {{ t("Tax") }} Rp{{ fee }}

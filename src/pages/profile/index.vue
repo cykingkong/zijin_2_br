@@ -77,11 +77,11 @@ const walletStats = computed(() => [
   },
   {
     label: t('Recharge Account'),
-    value: formatRupiah(userInfo.value?.team_balance || 0),
+    value: formatRupiah(userInfo.value?.balance || 0),
   },
   {
     label: t('Withdraw Account'),
-    value: formatRupiah(userInfo.value?.balance || 0),
+    value: formatRupiah(userInfo.value?.team_balance || 0),
   },
 ])
 

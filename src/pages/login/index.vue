@@ -224,17 +224,17 @@ async function login() {
           <!-- <LangSelectDropdown v-model="lang" /> -->
         </template>
       </CloseButton>
-      <div class="mid-logo h-[64px] rounded-[16px] overflow-hidden ml-[16px] mt-[20px]">
-        <img src="@/assets/Logo.png" alt="" class="w-auto h-full">
+      <div class="mid-logo h-[64px]  overflow-hidden ml-[16px] mt-[20px]">
+        <img src="@/assets/logo.jpg" alt="" class="w-auto h-full block ">
       </div>
       <div class="text-left m-x-a mt-[20px] px-[16px]">
         <div class="hero-tag">{{ pageType == 0 ? t("Secure Access") : t("Create Account") }}</div>
         <div class="t text-[32px] font-bold leading-[1.15] mt-[14px] text-[#F5F5F5]">
           {{ t("Welcome") }}
         </div>
-        <div class="hero-subtitle mt-[10px]">
+        <!-- <div class="hero-subtitle mt-[10px]">
           {{ pageType == 0 ? t("Log in to continue securely.") : t("Register to start securely.") }}
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="login-form mt-[24px] p-[20px]">
