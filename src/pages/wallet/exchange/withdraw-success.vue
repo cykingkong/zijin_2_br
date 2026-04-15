@@ -73,7 +73,7 @@
             </van-button> -->
 
       <!-- 完成按钮 -->
-      <van-button plain class="h-[56px]" color="#1b1b1b" block @click="handleDone">
+      <van-button plain class="h-[56px]" color="var(--btn-primary-bg, var(--brand-primary, #183E40))" block @click="handleDone">
         {{ t("Done") }}
       </van-button>
     </div>

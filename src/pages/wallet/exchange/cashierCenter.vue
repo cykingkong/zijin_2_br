@@ -243,7 +243,7 @@ function onBack() {
 
             </div>
           </div>
-          <van-button type="primary" class="h-[56px]" color="#1b1b1b" block @click="onConfirm">
+          <van-button type="primary" class="h-[56px]" color="var(--btn-primary-bg, var(--brand-primary, #183E40))" block @click="onConfirm">
             {{ t(`Deposit Preview`) }}
           </van-button>
         </div>

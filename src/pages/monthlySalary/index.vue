@@ -4,12 +4,12 @@
         <!-- 内容区域 -->
         <div class="content flex-1 px-[16px] pt-[16px] pb-[30px]">
             <!-- Total Amount -->
-            <div class="text-[28px] font-bold text-[#1A1A1A] mb-[4px] text-center">
+            <div class="text-[28px] font-bold text-[var(--text-brand)] mb-[4px] text-center">
                 COP {{ addCommasToNumber(userInfo.rechargePrice) || '0' }}
             </div>
             <div class="text-[12px] text-[#666] mb-[24px] text-center">{{ t("Valor Total de Recarga") }}</div>
             <button
-                class="w-full bg-[#1A1A1A] text-white h-[48px] rounded-[12px] font-bold text-[16px] active:opacity-90 transition-opacity mb-16"
+                class="w-full bg-[var(--brand-primary)] text-white h-[48px] rounded-[12px] font-bold text-[16px] active:opacity-90 transition-opacity mb-16"
                 @click="handleClaim">
                 {{ t("Claim") }}
             </button>

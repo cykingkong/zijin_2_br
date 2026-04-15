@@ -15,7 +15,7 @@
                 </div>
 
                 <!-- Total Amount -->
-                <div class="text-[28px] font-bold text-[#1A1A1A]  mb-[4px]">COP {{  addCommasToNumber(userInfo.rechargeData.allRecharge) ||'0' }}</div>
+                <div class="text-[28px] font-bold text-[var(--text-brand)]  mb-[4px]">COP {{  addCommasToNumber(userInfo.rechargeData.allRecharge) ||'0' }}</div>
                 <div class="text-[12px] text-[#666] mb-[24px]">{{t("Total Team Top-up")}}</div>
 
                 <!-- 4-Grid Stats -->
@@ -69,7 +69,7 @@
 
             <!-- 3. 我的团队 (My Team) -->
             <div class="team-stats bg-white rounded-[16px] p-[16px] shadow-sm mb-[16px]">
-                <div class="text-[15px] font-bold text-[#1A1A1A] mb-[16px]">{{t("My Team")}}</div>
+                <div class="text-[15px] font-bold text-[var(--text-brand)] mb-[16px]">{{t("My Team")}}</div>
                 <div class="grid grid-cols-2 gap-y-[20px]">
                     <div class="flex flex-col items-center">
                         <span class="text-[#333] text-[18px] font-bold  mb-[2px]">{{
@@ -99,7 +99,7 @@
             <div class="flex bg-[#0000000D] rounded-[8px] p-[4px] mb-[16px] flex h-38">
                 <div class="btn-1 flex-1 flex justify-center items-center text-[13px] font-bold"
                     v-for="(item, index) in typeList" @click="activeIndex = index; fetchTeamData()"
-                    :class="activeIndex == index ? 'bg-[#161616] text-white rounded-[8px]' : ''" :key="index"> {{ item
+                    :class="activeIndex == index ? 'bg-[var(--brand-primary)] text-white rounded-[8px]' : ''" :key="index"> {{ item
                     }}
                 </div>
             </div>
@@ -109,8 +109,8 @@
                 <div v-for="tab in levelTabs" :key="tab.id" @click="currentLevel = tab.key; fetchTeamData()"
                     class="flex-1 py-[8px] text-[12px] font-medium rounded-[8px] border transition-all text-center"
                     :class="currentLevel === tab.key
-                        ? 'bg-white border-[#8B5E3C] border border-solid text-[#8B5E3C]'
-                        : 'bg-[#F2F2F2] border-transparent text-[#999]'">
+                        ? 'bg-[var(--brand-surface)] border-[var(--border-brand)] border border-solid text-[var(--text-brand)]'
+                        : 'bg-[var(--brand-surface)] border-transparent text-[#999]'">
                     {{ tab.label }}{{ teamsData?.rates[tab.key]||'0' }}% ({{ activeIndex ? tab.unNum : tab.num }})
                 </div>
             </div>
@@ -130,9 +130,9 @@
                 <div class="flex flex-col">
                     <div v-for="(row, idx) in teamsData?.userList" :key="idx"
                         class="flex py-[14px] items-center border-b border-[#F9F9F9] last:border-0">
-                        <div class="w-[30%] text-[14px] text-wrap text-[#1A1A1A]">{{ row.account }}</div>
-                        <div class="w-[30%] text-[14px] text-[#1A1A1A] text-center">{{ row.chilrenCount }}</div>
-                        <div class="w-[40%] text-[14px] text-[#1A1A1A] text-right">COP {{ row.productPrice }}</div>
+                        <div class="w-[30%] text-[14px] text-wrap text-[var(--text-brand)]">{{ row.account }}</div>
+                        <div class="w-[30%] text-[14px] text-[var(--text-brand)] text-center">{{ row.chilrenCount }}</div>
+                        <div class="w-[40%] text-[14px] text-[var(--text-brand)] text-right">COP {{ row.productPrice }}</div>
                     </div>
                 </div>
                 <!-- Empty State Placeholder -->

@@ -25,8 +25,8 @@
                     </div> -->
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
             v-show="item.value == locale">
-            <rect x="0.5" y="0.5" width="19" height="19" rx="9.5" stroke="#1b1b1b" />
-            <rect x="3.33337" y="3.33301" width="13.3333" height="13.3333" rx="6.66667" fill="#1b1b1b" />
+            <rect x="0.5" y="0.5" width="19" height="19" rx="9.5" stroke="var(--border-brand, var(--brand-primary, #183E40))" />
+            <rect x="3.33337" y="3.33301" width="13.3333" height="13.3333" rx="6.66667" fill="var(--brand-primary, #183E40)" />
           </svg>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
             v-show="item.value != locale">
@@ -98,15 +98,15 @@ onMounted(() => { });
   left: 50%;
   width: 13.33px;
   height: 13.33px;
-  background-color: #1b1b1b;
+  background-color: var(--brand-primary, #183E40);
   border-radius: 50%;
   transform: translate(-50%, -50%);
 }
 
 .cell-active {
-  border-color: #1b1b1b !important;
-  background-color: #f5f8ff !important;
-  color: #1b1b1b !important;
+  border-color: var(--border-brand, var(--brand-primary, #183E40)) !important;
+  background-color: var(--brand-surface, #DDE8E9) !important;
+  color: var(--text-brand, var(--brand-primary, #183E40)) !important;
 }
 </style>
 

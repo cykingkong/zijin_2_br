@@ -19,7 +19,7 @@
 
         <!-- 签到卡片区域 -->
         <div class="sign-card bg-white  py-[16px] shadow-sm pb-[122px] min-h-[calc(100vh-178px)]">
-            <div class="title text-16 color-[#161616] font-bold mx-16 mb-16">{{ t('Task Bonus') }}</div>
+            <div class="title text-16 text-[var(--text-brand)] font-bold mx-16 mb-16">{{ t('Task Bonus') }}</div>
             <div class="li-list w-full px-16 flex-col flex gap-16">
                 <div class="li-item h-40 flex w-full gap-9" v-for="(item, i) in newsList" :key="i"
                     @click="handleClickDetail(item)">
@@ -91,7 +91,7 @@ function getDayClass(day) {
     switch (day.status) {
         case 'today':
             // 黑色背景，白色文字，金色边框感
-            return 'bg-[#1A1A1A] text-white shadow-lg';
+            return 'bg-[var(--brand-primary)] text-white shadow-lg';
         case 'checked':
             // 浅黄色背景，深色文字
             return 'bg-[#FFF6D6] text-[#DFA948]';

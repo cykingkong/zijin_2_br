@@ -39,7 +39,7 @@
 
                     <!-- 右侧按钮 -->
                     <button
-                        class="bg-[#1A1A1A] text-white text-[13px] font-bold px-[14px] py-[6px] rounded-[8px] active:opacity-80">
+                        class="bg-[var(--brand-primary)] text-white text-[13px] font-bold px-[14px] py-[6px] rounded-[8px] active:opacity-80">
                         Receive
                     </button>
                 </div>

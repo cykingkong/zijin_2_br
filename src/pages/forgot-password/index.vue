@@ -55,7 +55,7 @@
       </div>
     </div>
 
-    <bottom-button color="#1b1b1b" :button-text="t('Confirm')" @click="onSubmit"></bottom-button>
+    <bottom-button color="var(--btn-primary-bg)" :button-text="t('Confirm')" @click="onSubmit"></bottom-button>
 
 
   </div>

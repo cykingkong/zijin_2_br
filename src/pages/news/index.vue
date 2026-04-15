@@ -20,7 +20,7 @@
             <div class=" phone-input  flex-1 items-center w-full">
                 <inputCom :placeholder="t('')" v-model="search" :input-type="'search'" :tips="''" class="flex-1 w-full">
                     <template #sendCode>
-                        <div class="absolute right-10 font-size-12 h-28 flex justify-center items-center sendCode text-[#1b1b1b]"
+                        <div class="absolute right-10 font-size-12 h-28 flex justify-center items-center sendCode text-[var(--text-brand)]"
                             @click="toSearch()">
                             {{ t("Search") }}
                         </div>

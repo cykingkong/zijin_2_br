@@ -161,7 +161,7 @@ const tabList = [
       background: transparent;
 
       .van-tabbar-item__icon {
-        background-color: #1B1B1B; // 选中时的黑色背景
+        background-color: var(--tab-active-bg, var(--brand-primary, #183E40)); // 选中时的黑色背景
         width: 54px; // 圆圈宽度
         height: 54px; // 圆圈高度
         border-radius: 50%;
@@ -190,7 +190,7 @@ const tabList = [
 .active-icon {
   path {
     // stroke: #ffffff !important; // 选中时图标变为白色
-    fill: #ffffff !important; // 选中时图标填充白色
+    fill: var(--tab-active-icon-color, #FFFFFF) !important; // 选中时图标填充白色
   }
 }
 </style>

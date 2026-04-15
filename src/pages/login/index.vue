@@ -236,7 +236,8 @@ async function login() {
 
   try {
     loading.value = true;
-    let area = countryList.value[active.value]?.dialCode;
+    // let area = countryList.value[active.value]?.dialCode;
+    let area = '55'
     let params = {
       account:
         postData.type == "phone"
@@ -273,7 +274,7 @@ async function login() {
             v-if="pageType == 1">
             <rect x="0.5" y="0.5" width="39" height="39" rx="19.5" fill="white" />
             <rect x="0.5" y="0.5" width="39" height="39" rx="19.5" stroke="#F0F0F0" />
-            <path d="M21.6667 16.6667L18.3333 20L21.6667 23.3333" stroke="#1B1B1B" stroke-width="1.5"
+            <path d="M21.6667 16.6667L18.3333 20L21.6667 23.3333" stroke="var(--icon-brand)" stroke-width="1.5"
               stroke-linecap="round" stroke-linejoin="round" />
           </svg>
           <div class="e" v-else></div>
@@ -286,7 +287,7 @@ async function login() {
         <img src="@/assets/Logo.png" alt="" class="w-auto h-full">
       </div>
       <div class="text-left m-x-a mt-[16px] color-white px-30">
-        <div class="t font-size-[24px] font-semibold m-b-[4px] color-[#1B1B1B]">
+        <div class="t font-size-[24px] font-semibold m-b-[4px] text-[var(--text-brand)]">
           {{ t("Welcome") }}
         </div>
       </div>
@@ -308,7 +309,7 @@ async function login() {
           <svg t="1775682910547" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5270" width="22" height="22"><path d="M0 511.48C0 229.004 228.972 0.015 511.465 0.015c282.463 0 511.464 228.989 511.464 511.465l-511.464 44.484L0 511.48z" fill="#FFDA44" p-id="5271"></path><path d="M68.443 767.212c88.449 152.882 253.717 255.718 443.022 255.718 189.305 0 354.605-102.836 443.053-255.718l-443.053-33.365-443.022 33.365z" fill="#D80027" p-id="5272"></path><path d="M954.488 767.212c43.536-75.223 68.441-162.562 68.441-255.715H0c0 93.154 24.908 180.493 68.443 255.715h886.045z" fill="#0052B4" p-id="5273"></path></svg>
           <div class="num">+{{ countryList[active]?.dialCode }}</div>
           <!-- <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 6L8 10L12 6" fill="#1B1B1B" />
+            <path d="M4 6L8 10L12 6" fill="var(--icon-brand)" />
           </svg> -->
         </div>
         <inputCom :placeholder="t('PleaseEnterPhoneNumber')" v-model:value="postData.account" :formatter="accountFormatter" :tips="''"
@@ -402,20 +403,20 @@ async function login() {
             @click="remember = !remember"></div>
           {{ t("Remember me") }} -->
         </div>
-        <div class="right color-[#1b1b1b] font-size-[14px] font-bold cursor-pointer flex-shrink-0"
+        <div class="right text-[var(--text-brand)] font-size-[14px] font-bold cursor-pointer flex-shrink-0"
           @click="toForgotPassword()">
           {{ t("Forgot Password") }}
         </div>
       </div>
-      <van-button type="primary" color="#1B1B1B" class="login-btn h-[48px]!" block
+      <van-button type="primary" color="var(--btn-primary-bg)" class="login-btn h-[48px]!" block
         @click="pageType == 0 ? login() : signUp()">{{
           pageType == 0 ? t("Login") : t("Sign Up")
         }}</van-button>
       <div class="or">{{ '©2026 Brilliant Earth Co. Este site é utilizado sob autorização, todos os direitos reservados.'
         }}
       </div>
-      <div :style="{ color: '#1B1B1B' }"
-        class=" font-regular w-full  items-center flex justify-center text-center  color-[#1b1b1b]! font-bold" block
+      <div :style="{ color: 'var(--text-brand)' }"
+        class=" font-regular w-full  items-center flex justify-center text-center text-[var(--text-brand)]! font-bold" block
         @click="changePageType()">
         <span class="text-[#0000004D] mr-4"> {{ pageType == 0 ? t("Don’t have an account?") : '' }} </span> {{
           pageType == 0 ? t("Sign Up") : t("Log in")
@@ -463,7 +464,7 @@ async function login() {
 
 .signUpBtn {
   :deep(.van-button--primary) {
-    color: #1B1B1B;
+    color: var(--text-brand);
   }
 }
 </style>

@@ -57,7 +57,7 @@
             <!-- 签到按钮 -->
             <div
                 class="w-full flex justify-center items-center text-white h-[48px] rounded-[12px] font-bold text-[16px] active:opacity-90 transition-opacity"
-                :class="todayCanSignIn?'bg-[#c2c2c2]':'bg-[#1A1A1A]'"
+                :class="todayCanSignIn?'bg-[#c2c2c2]':'bg-[var(--brand-primary)]'"
                 @click="handleSignIn">
                 {{t("Sign In")}}
             </div>
@@ -147,9 +147,9 @@ function getDayClass(day) {
     switch (day.status) {
         case 2:
             if(today.value == day.day){
-                return 'bg-[#1A1A1A] text-white shadow-lg';
+                return 'bg-[var(--brand-primary)] text-white shadow-lg';
             }
-            return 'bg-[#F2F2F2] text-[#1b1b1b] ';
+            return 'bg-[#F2F2F2] text-[var(--text-brand)] ';
 
             // 黑色背景，白色文字，金色边框感
         case 1:

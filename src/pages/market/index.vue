@@ -154,7 +154,7 @@ onMounted(async () => {
       <inputCom :placeholder="t('Search')" v-model:value="search" :tips="''" :input-type="'search'"
         class="flex-1 w-full">
         <template #sendCode>
-          <div class="absolute right--20 font-size-12 h-28 flex justify-center items-center sendCode text-[#1b1b1b]"
+          <div class="absolute right--20 font-size-12 h-28 flex justify-center items-center sendCode text-[var(--text-brand)]"
             @click="toSearch()">
             {{ t("Search") }}
           </div>
@@ -198,7 +198,7 @@ onMounted(async () => {
           <img v-if="item.productImage" :src="item.productImage" class="w-full h-full object-cover" />
         </div>
         <div class="info w-full">
-          <div class="title font-bold text-[14px] color-[#161616]">
+          <div class="title font-bold text-[14px] color-[var(--text-brand)]">
             {{ item.productName || 'Product Name' }}
           </div>
           <div class="desc text-[12px] color-[#8C91A2] font-normal">{{ item.levelLimit?'Lv '+ item.levelLimit +' e superior' : 'Lv 1  e superior' }}</div>
@@ -206,7 +206,7 @@ onMounted(async () => {
             <div class="price color-[#FF6464] font-[14px] font-bold">COP {{ addCommasToNumber(item.discountPrice) ||
               '0.00' }}</div>
             <div class="button text-[14px] font-bold text-[#fff]  px-[12px] py-[6px] rounded-[8px]"
-              :class="item.status == 2 ? 'bg-[#CED0D8]' : 'bg-[#161616]'" @click="handleClickStock(item)">
+              :class="item.status == 2 ? 'bg-[var(--brand-surface)] text-[var(--text-brand)]' : 'bg-[var(--brand-primary)]'" @click="handleClickStock(item)">
               {{ t(enumBtnText[item.status]) }}
             </div>
           </div>

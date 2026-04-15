@@ -1,5 +1,13 @@
 html[theme="white"]:root {
     //白色主题
+    --brand-primary: #183E40;
+    --brand-surface: #DDE8E9;
+    --btn-primary-bg: var(--brand-primary);
+    --text-brand: var(--brand-primary);
+    --border-brand: var(--brand-primary);
+    --icon-brand: var(--brand-primary);
+    --tab-active-bg: var(--brand-primary);
+    --tab-active-icon-color: #FFFFFF;
     --mainBgColor: #fff;
     --mainTextColor: #333;
     --mainbgWhiteColor: #fff;
@@ -99,6 +107,14 @@ html[theme="white"]:root {
 
 html[theme="dark"]:root {
     //黑色主题
+    --brand-primary: #183E40;
+    --brand-surface: #DDE8E9;
+    --btn-primary-bg: var(--brand-primary);
+    --text-brand: var(--brand-primary);
+    --border-brand: var(--brand-primary);
+    --icon-brand: var(--brand-primary);
+    --tab-active-bg: var(--brand-primary);
+    --tab-active-icon-color: #FFFFFF;
     --mainBgColor: #131A2E;
     --mainTextColor: #fff;
     --mainbgWhiteColor: #fff;

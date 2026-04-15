@@ -19,7 +19,7 @@
 
 
 
-    <BottomButton :button-text="t('Done')" color="#1B1B1B" @click="handleClickDone"></BottomButton>
+    <BottomButton :button-text="t('Done')" color="var(--btn-primary-bg)" @click="handleClickDone"></BottomButton>
   </div>
 </template>
 

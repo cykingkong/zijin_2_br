@@ -39,10 +39,10 @@
           xmlns="http://www.w3.org/2000/svg">
           <path
             d="M15 10.8333V15.8333C15 16.7542 14.2542 17.5 13.3333 17.5H4.16667C3.24583 17.5 2.5 16.7542 2.5 15.8333V6.66667C2.5 5.74583 3.24583 5 4.16667 5H7.5"
-            stroke="#1b1b1b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            stroke="var(--icon-brand, var(--brand-primary, #183E40))" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
           <path fill-rule="evenodd" clip-rule="evenodd"
             d="M6.66675 12.5L9.29175 12.1759C9.47591 12.1534 9.64758 12.0692 9.77925 11.9384L16.1384 5.5792C16.8426 4.87504 16.8426 3.73337 16.1384 3.02837V3.02837C15.4342 2.3242 14.2926 2.3242 13.5876 3.02837L7.28758 9.32837C7.16008 9.45587 7.07758 9.62087 7.05175 9.80004L6.66675 12.5Z"
-            stroke="#1b1b1b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            stroke="var(--icon-brand, var(--brand-primary, #183E40))" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
 
 
@@ -53,7 +53,7 @@
     </div>
 
 
-    <bottom-button color="#1B1B1B" :button-text="$t('Add Bank Account')" @click="herfUrl()"
+    <bottom-button color="var(--btn-primary-bg, var(--brand-primary, #183E40))" :button-text="$t('Add Bank Account')" @click="herfUrl()"
       v-if="bankListData && bankListData.length == 0"></bottom-button>
 
     <van-popup v-model:show="showPicker" destroy-on-close round :position="'bottom'" :safe-area-inset-bottom="true">

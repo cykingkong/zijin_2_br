@@ -23,7 +23,7 @@
 
                 <!-- Claim 按钮 -->
                 <button
-                    class="w-full bg-[#1A1A1A] text-white h-[48px] rounded-[12px] font-bold text-[16px] active:opacity-90 transition-opacity"
+                    class="w-full bg-[var(--brand-primary)] text-white h-[48px] rounded-[12px] font-bold text-[16px] active:opacity-90 transition-opacity"
                     @click="handleClaim">
                     {{t("Claim")}}
                 </button>

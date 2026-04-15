@@ -11,9 +11,9 @@
         <svg class="w-48 h-48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect x="0.5" y="0.5" width="47" height="47" rx="23.5" fill="white" />
           <rect x="0.5" y="0.5" width="47" height="47" rx="23.5" stroke="#F0F0F0" />
-          <path d="M17.125 24H30.875" stroke="#1B1B1B" stroke-width="1.5" stroke-linecap="round"
+          <path d="M17.125 24H30.875" stroke="var(--icon-brand, var(--brand-primary, #183E40))" stroke-width="1.5" stroke-linecap="round"
             stroke-linejoin="round" />
-          <path d="M24 17.125V30.875" stroke="#1B1B1B" stroke-width="1.5" stroke-linecap="round"
+          <path d="M24 17.125V30.875" stroke="var(--icon-brand, var(--brand-primary, #183E40))" stroke-width="1.5" stroke-linecap="round"
             stroke-linejoin="round" />
         </svg>
       </div>
@@ -29,7 +29,7 @@
     </div> -->
 
 
-    <BottomButton color="#1b1b1b" :button-text="t('Submit')" @click="handleClickSubmit"></BottomButton>
+    <BottomButton color="var(--btn-primary-bg, var(--brand-primary, #183E40))" :button-text="t('Submit')" @click="handleClickSubmit"></BottomButton>
 
   </div>
 </template>

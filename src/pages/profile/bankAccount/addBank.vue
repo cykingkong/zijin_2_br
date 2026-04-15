@@ -102,7 +102,7 @@
   
     </div>
 
-    <BottomButton color="#1B1B1B" :button-text="t('Submit')" @click="handleClickSubmit"></BottomButton>
+    <BottomButton color="var(--btn-primary-bg)" :button-text="t('Submit')" @click="handleClickSubmit"></BottomButton>
 
 
     <van-popup v-model:show="showPicker" destroy-on-close position="bottom">

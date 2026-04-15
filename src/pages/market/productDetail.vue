@@ -131,7 +131,7 @@
         </div>
 
         <!-- 底部按钮 -->
-        <bottom-button color="#1B1B1B" :button-text="t(enumBtnText[productInfo.status] || 'Buy Now')"
+        <bottom-button color="var(--btn-primary-bg)" :button-text="t(enumBtnText[productInfo.status] || 'Buy Now')"
             ref="bottomButtonRef" @click="handlePurchase">
             <template #top>
                 <div class="flex w-full">

@@ -8,7 +8,7 @@
                     <input type="number" :placeholder="t('Enter your Exchange Amount')" v-model="codes">
                 </div>
                 <div class="text-14 text-[#424242] mb-12">{{ t('Redeemable Amount:') }} {{ canExchangeNum }} </div>
-                <div class="button border b-solid border flex-shrink-0 bg-[#1b1b1b] text-white px-12 h-48 rounded-16 flex items-center justify-center"
+                <div class="button border b-solid border flex-shrink-0 bg-[var(--brand-primary)] text-white px-12 h-48 rounded-16 flex items-center justify-center"
                     @click="handleClickExchange">
                     {{ t('Exchange') }}</div>
             </div>

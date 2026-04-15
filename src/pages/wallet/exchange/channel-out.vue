@@ -73,7 +73,7 @@
       </div>
     </div>
 
-    <BottomButton :button-text="t(`Confirm`)" color="#1b1b1b" @click="handleBuyClick" />
+    <BottomButton :button-text="t(`Confirm`)" color="var(--btn-primary-bg, var(--brand-primary, #183E40))" @click="handleBuyClick" />
   </div>
 </template>
 <script setup lang="ts">

@@ -32,7 +32,7 @@
         <div class="flex bg-[#0000000D] rounded-[8px] p-[4px] mb-[16px] flex h-38">
             <div class="btn-1 flex-1 flex text-[13px] font-bold justify-center items-center"
                 v-for="(item, index) in typeList" @click="activeIndex = index; getUserCouponList()"
-                :class="activeIndex == index ? 'bg-[#161616] text-white rounded-[8px]' : ''" :key="index"> {{ item
+                :class="activeIndex == index ? 'bg-[var(--brand-primary)] text-white rounded-[8px]' : ''" :key="index"> {{ item
                 }}
             </div>
         </div>
@@ -47,21 +47,21 @@
                 <div class="bottom text-12 my-6 w-full">
                     <div class="li flex justify-between">
                         <div class="label text-[#666]">{{ $t('Validity period') }}</div>
-                        <div class="value text-[#1b1b1b]">
+                        <div class="value text-[var(--text-brand)]">
                             {{ `${item.received_days} / ${item.total_days} ` || '- ' }}
                         </div>
                     </div>
                     <div class="li flex justify-between">
                         <div class="label text-[#666]">{{ $t('Every 1 day') }}</div>
-                        <div class="value text-[#1b1b1b]">COP {{ item.dailyIncome }}</div>
+                        <div class="value text-[var(--text-brand)]">COP {{ item.dailyIncome }}</div>
                     </div>
                     <div class="li flex justify-between">
                         <div class="label text-[#666]">{{ $t('Total Revenue') }}</div>
-                        <div class="value text-[#1b1b1b]">COP {{ item.totalIncome }}</div>
+                        <div class="value text-[var(--text-brand)]">COP {{ item.totalIncome }}</div>
                     </div>
                     <div class="li flex justify-between">
                         <div class="label text-[#666]">{{ $t('Already received') }}</div>
-                        <div class="value text-[#1b1b1b]">COP {{ item.receivedIncome }}</div>
+                        <div class="value text-[var(--text-brand)]">COP {{ item.receivedIncome }}</div>
                     </div>
                 </div>
                 <div class="w-full flex justify-end">
@@ -76,7 +76,7 @@
                     // 如果倒计时未结束(disabled为true)，使用灰色背景和禁止手势
                     (timerMap[item.id] && timerMap[item.id].disabled)
                         ? 'bg-[#E5E5E5] text-[#999] cursor-not-allowed'
-                        : 'bg-[#1A1A1A] text-white active:opacity-90'
+                        : 'bg-[var(--brand-primary)] text-white active:opacity-90'
                 ]" :disabled="timerMap[item.id]?.disabled" @click="handleClickReceived(item)">
                 <!-- 显示倒计时 或者 'Received' -->
                 {{ timerMap[item.id]?.text || 'Received' }}
@@ -95,7 +95,7 @@
                         </van-button>
                     </div>
                     <div class="btn-box flex-1">
-                        <van-button type="primary" class="btn-h" color="#1b1b1b" block @click="handleClickConfirm">
+                        <van-button type="primary" class="btn-h" color="var(--btn-primary-bg, var(--brand-primary, #183E40))" block @click="handleClickConfirm">
                             {{ $t("Confirm") }}
                         </van-button>
                     </div>

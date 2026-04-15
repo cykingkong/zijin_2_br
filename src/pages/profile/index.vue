@@ -3,7 +3,7 @@
 
     <!-- 1. Header Title -->
     <div class="pt-[10px] pb-[10px] text-center">
-      <h1 class="text-[18px] font-bold text-[#1A1A1A]">{{ t("Profile") }}</h1>
+      <h1 class="text-[18px] font-bold text-[var(--text-brand)]">{{ t("Profile") }}</h1>
     </div>
 
     <!-- 2. User Info Card -->
@@ -26,7 +26,7 @@
 
         <div class="flex flex-col justify-center">
           <div class="flex items-center gap-2">
-            <span class="text-[#1b1b1b] text-[14px] font-bold">ACC:</span>
+            <span class="text-[var(--text-brand)] text-[14px] font-bold">ACC:</span>
             <span class="text-[#333] text-[16px] font-normal">{{ formatName(userInfo.username) }}</span>
           </div>
           <!-- Missing Field: ID -->
@@ -38,9 +38,9 @@
     <!-- 3. My Product Card -->
     <div class="px-[16px] mb-[16px]">
       <div class="bg-white rounded-[16px] p-[16px] flex justify-between items-center shadow-sm">
-        <span class="text-[16px] font-bold text-[#1A1A1A]">{{ t("MyProducts") }}</span>
+        <span class="text-[16px] font-bold text-[var(--text-brand)]">{{ t("MyProducts") }}</span>
         <div
-          class="bg-[#1A1A1A] text-[#fff] px-[12px] py-[6px] rounded-[8px] flex items-center gap-4 text-[12px] active:opacity-80 text-[12px]"
+          class="bg-[var(--brand-primary)] text-[#fff] px-[12px] py-[6px] rounded-[8px] flex items-center gap-4 text-[12px] active:opacity-80 text-[12px]"
           @click="toReceive">
           <img src="@/assets/coin.png" alt="" class="w-16 h-16 block">
           <span>{{ t("ReceiveIncome") }}</span>
@@ -70,10 +70,10 @@
         <!-- Action Buttons -->
         <div class="flex gap-[16px] mb-[24px]">
           <button @click="handleHerf(2)"
-            class="flex-1 bg-[#1A1A1A] text-white h-[44px] rounded-[12px] font-bold text-[15px]">{{ t("Deposit")
+            class="flex-1 bg-[var(--brand-primary)] text-white h-[44px] rounded-[12px] font-bold text-[15px]">{{ t("Deposit")
             }}</button>
           <button @click="handleHerf(1)"
-            class="flex-1 bg-[#1A1A1A] text-white h-[44px] rounded-[12px] font-bold text-[15px]">{{ t("Withdraw")
+            class="flex-1 bg-[var(--brand-primary)] text-white h-[44px] rounded-[12px] font-bold text-[15px]">{{ t("Withdraw")
             }}</button>
         </div>
 
@@ -82,33 +82,33 @@
           <!-- Row 1 -->
           <div class="flex flex-col">
             <span class="text-[#999] text-[12px] mb-[2px]">{{ t("TotalIncome") }}</span>
-            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ fakeData.total_income > 0 ?
+            <span class="text-[var(--text-brand)] text-[16px] font-bold ">{{ fakeData.total_income > 0 ?
               addCommasToNumber(fakeData.total_income) : addCommasToNumber(userInfo.allProfit)
               }}</span>
           </div>
           <div class="flex flex-col items-end">
             <span class="text-[#999] text-[12px] mb-[2px]">{{ t("TotalWithdraw") }}</span>
-            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ fakeData.total_withdraw > 0 ?
+            <span class="text-[var(--text-brand)] text-[16px] font-bold ">{{ fakeData.total_withdraw > 0 ?
               addCommasToNumber(fakeData.total_withdraw) : addCommasToNumber(userInfo.withdrawPrice)
               }}</span>
           </div>
           <!-- Row 2 -->
           <div class="flex flex-col">
             <span class="text-[#999] text-[12px] mb-[2px]">{{ t("ProductIncome") }}</span>
-            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ fakeData.product_income > 0 ?
+            <span class="text-[var(--text-brand)] text-[16px] font-bold ">{{ fakeData.product_income > 0 ?
               addCommasToNumber(fakeData.product_income) : addCommasToNumber(userInfo.productProfit)
               }}</span>
           </div>
           <div class="flex flex-col items-end">
             <span class="text-[#999] text-[12px] mb-[2px]">{{ t("TeamIncome") }}</span>
-            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ fakeData.team_income > 0 ?
+            <span class="text-[var(--text-brand)] text-[16px] font-bold ">{{ fakeData.team_income > 0 ?
               addCommasToNumber(fakeData.team_income) : addCommasToNumber(userInfo.itemProfit)
               }}</span>
           </div>
           <!-- Row 3 (Missing Fields Simulation) -->
           <div class="flex flex-col">
             <span class="text-[#999] text-[12px] mb-[2px]">{{ t("OtherIncome") }}</span>
-            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ fakeData.other_income > 0 ?
+            <span class="text-[var(--text-brand)] text-[16px] font-bold ">{{ fakeData.other_income > 0 ?
               addCommasToNumber(fakeData.other_income) : addCommasToNumber(userInfo.otherIncome ||
                 '0') }}</span>
           </div>
@@ -147,7 +147,7 @@
                 </defs>
               </svg>
             </span>
-            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ fakeData.pearl_amount > 0 ?
+            <span class="text-[var(--text-brand)] text-[16px] font-bold ">{{ fakeData.pearl_amount > 0 ?
               addCommasToNumber(fakeData.pearl_amount) : addCommasToNumber(userInfo.seedBalance ?
                 userInfo.seedBalance :
                 '0')
@@ -161,7 +161,7 @@
     <div class="px-[16px] mb-[16px]">
       <div class="bg-white rounded-[16px] p-[16px] shadow-sm relative">
         <div class="flex justify-between items-center mb-[16px]">
-          <span class="text-[16px] font-bold text-[#1A1A1A]">{{ t('My team') }}</span>
+          <span class="text-[16px] font-bold text-[var(--text-brand)]">{{ t('My team') }}</span>
           <!-- Calculator Icon Placeholder -->
           <svg class="w-24 h-24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
             @click="router.push('/team')">
@@ -193,7 +193,7 @@
             <div class="flex items-center text-[12px] text-[#999] mb-[4px]">
               <img :src="i.img" class="w-17 h-17 object-cover block mr-4"></img> {{ i.name }}
             </div>
-            <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ fakeData[i.fakeKey] > 0 ?
+            <span class="text-[var(--text-brand)] text-[16px] font-bold ">{{ fakeData[i.fakeKey] > 0 ?
               fakeData[i.fakeKey] : i.num }}</span>
           </div>
         </div>
@@ -245,7 +245,7 @@
         </van-uploader>
         <div class="mt-4 flex gap-4">
           <van-button block plain size="small" @click="uploadPopShow = false">{{ t("Cancel") }}</van-button>
-          <van-button block type="primary" color="#1A1A1A" size="small" :disabled="canUpdateAvatar"
+          <van-button block type="primary" color="var(--btn-primary-bg, var(--brand-primary, #183E40))" size="small" :disabled="canUpdateAvatar"
             @click="updateUserAvatar">{{ t("Confirm") }}</van-button>
         </div>
       </div>

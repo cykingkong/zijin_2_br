@@ -10,7 +10,7 @@
                 {{ item.title }}
                 <div class="w-full flex justify-end">
                     <div @click="handleClickActivity(item)"
-                        class="receive-btn border b-solid b-[#1b1b1b] rounded-[16px] text-[#1b1b1b] text-[12px] min-w-[86px] h-37 text-center p-6 line-height-[24px]">
+                        class="receive-btn border b-solid border-[var(--border-brand)] rounded-[16px] text-[var(--text-brand)] text-[12px] min-w-[86px] h-37 text-center p-6 line-height-[24px]">
                         {{
                             t('Receive')
                         }}

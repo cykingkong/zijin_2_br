@@ -13,10 +13,10 @@
       <div class="min-count text-[#0F172A] font-size-[24px] mx-a text-center mt-4 font-bold overflow-y-auto">
         COP {{ count || '0' }}
       </div>
-      <div class="min-count-fee text-[#1b1b1b] font-size-[14px] mx-a text-center mt-[4px] font-bold overflow-y-auto">
+      <div class="min-count-fee text-[var(--text-brand)] font-size-[14px] mx-a text-center mt-[4px] font-bold overflow-y-auto">
         {{ t("Tax") }} COP{{ fee }}
       </div>
-      <div class="min-count-fee text-[#1b1b1b] font-size-[14px] mx-a text-center mt-[4px] font-bold overflow-y-auto">
+      <div class="min-count-fee text-[var(--text-brand)] font-size-[14px] mx-a text-center mt-[4px] font-bold overflow-y-auto">
         {{ t('Withdrawable Amount') }} COP {{ addCommasToNumber(userInfo.teamBalance) }}
       </div>
 
@@ -64,7 +64,7 @@
           </div>
 </template>
 <template #right>
-  <div class="color-[#1b1b1b] text-[14px] font-bold text-nowrap" @click="onSelect">
+  <div class="text-[var(--text-brand)] text-[14px] font-bold text-nowrap" @click="onSelect">
     {{ t("Picker") }}
   </div>
 </template>
@@ -77,7 +77,7 @@
         :formatter="digitFormatter">
   </inputCom>
 </div>
-<van-button type="primary" class="h-[56px]" color="#1b1b1b" block @click="onConfirm">
+<van-button type="primary" class="h-[56px]" color="var(--btn-primary-bg, var(--brand-primary, #183E40))" block @click="onConfirm">
   {{ t(`Withdraw Preview`) }}
 </van-button>
 </div>
@@ -123,10 +123,10 @@
         <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M11.6641 3.33325C11.9648 3.33325 12.2598 3.41457 12.5181 3.56862C12.7763 3.72266 12.988 3.94367 13.1308 4.20825L13.5358 4.95825C13.6786 5.22283 13.8903 5.44385 14.1485 5.59789C14.4067 5.75193 14.7018 5.83326 15.0025 5.83325H16.6666C17.1087 5.83325 17.5326 6.00885 17.8451 6.32141C18.1577 6.63397 18.3333 7.05789 18.3333 7.49992V14.9999C18.3333 15.4419 18.1577 15.8659 17.8451 16.1784C17.5326 16.491 17.1087 16.6666 16.6666 16.6666H3.33329C2.89127 16.6666 2.46734 16.491 2.15478 16.1784C1.84222 15.8659 1.66663 15.4419 1.66663 14.9999V7.49992C1.66663 7.05789 1.84222 6.63397 2.15478 6.32141C2.46734 6.00885 2.89127 5.83325 3.33329 5.83325H4.99746C5.29781 5.83327 5.59258 5.75212 5.85061 5.59839C6.10864 5.44466 6.32033 5.22406 6.46329 4.95992L6.87079 4.20659C7.01376 3.94244 7.22545 3.72184 7.48347 3.56811C7.7415 3.41438 8.03627 3.33324 8.33663 3.33325H11.6641Z"
-            stroke="#1B1B1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            stroke="var(--icon-brand, var(--brand-primary, #183E40))" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
           <path
             d="M9.99996 13.3333C11.3807 13.3333 12.5 12.214 12.5 10.8333C12.5 9.45254 11.3807 8.33325 9.99996 8.33325C8.61925 8.33325 7.49996 9.45254 7.49996 10.8333C7.49996 12.214 8.61925 13.3333 9.99996 13.3333Z"
-            stroke="#1B1B1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            stroke="var(--icon-brand, var(--brand-primary, #183E40))" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
         {{ t("Add Bank Account") }}
       </div>
@@ -143,7 +143,7 @@
         {{ item.address.receiveName }}
       </div>
       <div class="picker border border-[#f0f0f0] border-solid rounded-[4px] w-16 h-16 flex justify-center items-center"
-        :class="selectBank == item.id ? 'bg-[#1b1b1b]' : ''">
+        :class="selectBank == item.id ? 'bg-[var(--brand-primary)]' : ''">
         <svg v-if="selectBank == item.id" class="w-10 h-10" viewBox="0 0 10 10" fill="none"
           xmlns="http://www.w3.org/2000/svg">
           <path d="M8.33341 2.70825L3.75008 7.29159L1.66675 5.20825" stroke="white" stroke-width="1.5"
