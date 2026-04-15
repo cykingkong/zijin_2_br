@@ -236,8 +236,8 @@ async function login() {
 
   try {
     loading.value = true;
-    // let area = countryList.value[active.value]?.dialCode;
-    let area = '55'
+    let area = countryList.value[active.value]?.dialCode;
+    // let area = '55'
     let params = {
       account:
         postData.type == "phone"
