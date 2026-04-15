@@ -205,6 +205,7 @@
   "Already received": "Já recebido",
   "Unexpired products": "Produtos ativos",
   "Expired products": "Produtos expirados",
+  "Unavailable": "Indisponível",
   "My Earnings": "Meus Ganhos",
   "Sign In": "Entrar",
   "Reward Criteria": "Critérios de Recompensa",
@@ -332,5 +333,14 @@
   "Enter your Amount": "Digite seu valor",
   "PleaseSelectPIXType": "Por favor, selecione o tipo de PIX",
   "PIXTypeLabel": "Etiqueta de Tipo PIX",
-  "The prize has been awarded": "O prêmio foi concedido"
+  "The prize has been awarded": "O prêmio foi concedido",
+  "RewardExchangeSuccess": "Código bônus resgatado com sucesso",
+  "RewardExchangeFailed": "Falha ao resgatar o código bônus",
+  "RewardExchangeNetworkError": "Erro de rede, tente novamente",
+  "RewardCodeRequired": "Por favor, insira o código bônus",
+  "Submitting": "Enviando...",
+  "BonusRecords": "Registros de bônus",
+  "NoBonusRecords": "Ainda não há registros de bônus",
+  "RewardCode": "Código de bônus",
+  "RewardAmount": "Valor do bônus"
 }

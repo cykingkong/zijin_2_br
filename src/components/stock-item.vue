@@ -20,7 +20,7 @@
                             fill="#161616" />
                     </svg>
                     <span :class="item.type != '1' ? 'text-[#008000]' : 'text-[#FF0000]'"> {{ item.type == '1' ? '+' :
-                        '-' }}R${{ item?.amount }}</span>
+                        '-' }}{{ amountPrefix }}{{ item?.amount }}</span>
                 </div>
                 <div class="company-name text-[12px] color-[#161616]">{{ item?.createdAt }}
                 </div>
@@ -48,16 +48,9 @@ const props = defineProps({
     }
 })
 const { t } = useI18n()
-const statusEnum = {
-    0: "Under review",
-    1: 'Successful',
-    2: 'Processed',
-    3: "Under review",
-    4: "Under review",
-    5: "Under review",
-    6: "Under review",
-
-}
+const amountPrefix = computed(() => {
+    return props.item?.assetType === 'seed_balance' ? '' : 'R$'
+})
 // 字符串 字母首大写
 function capitalize(str: string) {
     return str.charAt(0).toUpperCase() + str.slice(1)

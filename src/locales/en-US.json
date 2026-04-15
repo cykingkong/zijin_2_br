@@ -205,6 +205,7 @@
   "Already received": "Already received",
   "Unexpired products": "Unexpired products",
   "Expired products": "Expired products",
+  "Unavailable": "Unavailable",
   "My Earnings": "My Earnings",
   "Sign In": "Sign In",
   "Reward Criteria": "Reward Criteria",
@@ -315,5 +316,14 @@
   "PleaseSelectPIXType": "PleaseSelectPIXType",
   "PIXTypeLabel": "PIX Type Label",
   "The prize has been awarded": "The prize has been awarded",
-  "CPF": "CPF"
+  "CPF": "CPF",
+  "RewardExchangeSuccess": "Bonus code redeemed successfully",
+  "RewardExchangeFailed": "Failed to redeem bonus code",
+  "RewardExchangeNetworkError": "Network error, please try again",
+  "RewardCodeRequired": "Please enter bonus code",
+  "Submitting": "Submitting...",
+  "BonusRecords": "Bonus Records",
+  "NoBonusRecords": "No bonus records yet",
+  "RewardCode": "Reward Code",
+  "RewardAmount": "Reward Amount"
 }

@@ -205,6 +205,7 @@
   "Already received": "已领取",
   "Unexpired products": "未过期产品",
   "Expired products": "已过期产品",
+  "Unavailable": "不可用",
   "My Earnings": "我的收益",
   "Sign In": "签到",
   "Reward Criteria": "奖励标准",
@@ -237,5 +238,14 @@
   "PleaseSelectPIXType": "请选择PIX类型",
   "PIXTypeLabel": "PIX类型",
   "The prize has been awarded": "奖品已发放",
-  "CPF": "CPF"
+  "CPF": "CPF",
+  "RewardExchangeSuccess": "奖励码兑换成功",
+  "RewardExchangeFailed": "奖励码兑换失败",
+  "RewardExchangeNetworkError": "网络错误，请重试",
+  "RewardCodeRequired": "请输入奖励码",
+  "Submitting": "提交中...",
+  "BonusRecords": "奖励记录",
+  "NoBonusRecords": "暂无奖励记录",
+  "RewardCode": "奖励码",
+  "RewardAmount": "奖励金额"
 }

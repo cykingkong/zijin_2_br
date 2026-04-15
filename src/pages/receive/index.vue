@@ -73,13 +73,14 @@
             <button
                 class="w-full h-[48px] rounded-[12px] font-bold text-[16px] transition-all flex items-center justify-center"
                 :class="[
-                    // 如果倒计时未结束(disabled为true)，使用灰色背景和禁止手势
-                    (timerMap[item.id] && timerMap[item.id].disabled)
+                    activeIndex === 1
                         ? 'bg-[#E5E5E5] text-[#999] cursor-not-allowed'
-                        : 'bg-[#1A1A1A] text-white active:opacity-90'
-                ]" :disabled="timerMap[item.id]?.disabled" @click="handleClickReceived(item)">
+                        : (timerMap[item.id] && timerMap[item.id].disabled)
+                            ? 'bg-[#E5E5E5] text-[#999] cursor-not-allowed'
+                            : 'bg-[#1A1A1A] text-white active:opacity-90'
+                ]" :disabled="activeIndex === 1 || timerMap[item.id]?.disabled" @click="handleClickReceived(item)">
                 <!-- 显示倒计时 或者 'Received' -->
-                {{ timerMap[item.id]?.text || 'Received' }}
+                {{ activeIndex === 1 ? t('Unavailable') : (timerMap[item.id]?.text || 'Received') }}
             </button>
         </div>
         <empty :no-tips="true" v-if="userProductList.length == 0" />
@@ -189,7 +190,16 @@ const handleClickReceived = async (item) => {
         const { data, code, message } = await claimIncome({ id: item.id })
         if (code == 200) {
             showSuccessToast({})
-            getUserCouponList()
+            const nextClaimTime = data?.nextClaimTime || data?.row?.nextClaimTime || data?.next_claim_time
+            if (nextClaimTime) {
+                const targetItem = userProductList.value.find(product => product.id === item.id)
+                if (targetItem) {
+                    targetItem.nextClaimTime = nextClaimTime
+                }
+                updateTimer()
+            } else {
+                getUserCouponList()
+            }
             // router.push({
             //     path: "/profile"
             // })
