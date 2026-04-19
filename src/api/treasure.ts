@@ -29,7 +29,6 @@ export interface TreasureIssueItem {
   soldCodes: number
   leftCodes: number
   progress: number
-  remainingMode?: boolean
   status: number
   drawSource?: number
   drawAt?: string

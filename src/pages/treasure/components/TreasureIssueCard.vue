@@ -38,18 +38,37 @@ function statusClass(status: number) {
   return 'text-[#9a7a2c]'
 }
 
+function getIssueSaleStats(issue: TreasureIssueItem) {
+  const totalCodes = Math.max(Number(issue?.totalCodes || 0), 0)
+  const soldCodes = Math.max(Number(issue?.soldCodes || 0), 0)
+  const rawLeftCodes = Math.max(Number(issue?.leftCodes || 0), 0)
+  const rawProgress = Number(issue?.progress || 0)
+
+  const leftCodes = totalCodes > 0 ? Math.max(totalCodes - soldCodes, 0) : rawLeftCodes
+  const progress = totalCodes > 0
+    ? Math.min(100, Math.round((soldCodes / Math.max(totalCodes, 1)) * 100))
+    : Math.min(Math.max(rawProgress, 0), 100)
+
+  return {
+    leftCodes,
+    progress,
+  }
+}
+
+function getIssueLeftCodes(issue: TreasureIssueItem) {
+  return getIssueSaleStats(issue).leftCodes
+}
+
 function getProgressWidth(issue: TreasureIssueItem) {
-  return Math.min(Math.max(Number(issue?.progress || 0), 0), 100)
+  return getIssueSaleStats(issue).progress
 }
 
 function isRemainingMode(issue: TreasureIssueItem) {
-  return Boolean(issue?.remainingMode) && getProgressWidth(issue) < 100
+  return getProgressWidth(issue) >= 80
 }
 
 function getProgressText(issue: TreasureIssueItem) {
-  if (isRemainingMode(issue))
-    return `${t('Left')} ${Math.max(Number(issue?.leftCodes || 0), 0)}`
-  return `${getProgressWidth(issue)}%`
+  return `${t('Left')} ${getIssueLeftCodes(issue)}`
 }
 
 function getIssueWinnerPreview(issue: TreasureIssueItem) {
@@ -91,6 +110,7 @@ function getIssueWinnerPreview(issue: TreasureIssueItem) {
             {{ issue.goodsSubName || issue.classDesc || '--' }}
           </div>
         </div>
+        
       </div>
 
       <div class="mt-[8px] flex items-end justify-between gap-[8px]">
@@ -100,15 +120,20 @@ function getIssueWinnerPreview(issue: TreasureIssueItem) {
             <span class="text-[11px] text-[#8a7a5a]">{{ t('Per Code') }}</span>
           </div>
         </div>
-        <div class="text-[11px] font-semibold" :class="statusClass(issue.status)">
-          {{ getIssueStatusText(issue.status) }}
+    <div
+          class="min-w-[66px] border border-[#e4d4b2] rounded-[12px] border-solid bg-[#f8f1e5] px-[10px] py-[8px] text-center"
+        >
+          <div class="text-[18px] text-[#9a7a2c] font-bold leading-[1]">
+            {{ `${getProgressWidth(issue)}%` }}
+          </div>
+      
         </div>
       </div>
 
       <div class="mt-[14px]">
         <div class="mb-[6px] flex items-center justify-between">
           <div class="text-[11px] font-medium" :class="isRemainingMode(issue) ? 'text-[#d03535]' : 'text-[#8a7a5a]'">
-            {{ getProgressText(issue) }}
+            {{ getProgressWidth(issue) }}%
           </div>
         </div>
         <div class="h-[10px] overflow-hidden rounded-[999px] bg-[#ece0cc]">
