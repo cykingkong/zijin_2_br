@@ -114,11 +114,9 @@ function getIssueWinnerPreview(issue: TreasureIssueItem) {
           class="min-w-[66px] border border-[#e4d4b2] rounded-[12px] border-solid bg-[#f8f1e5] px-[10px] py-[8px] text-center"
         >
           <div class="text-[18px] text-[#9a7a2c] font-bold leading-[1]">
-            {{ getIssueLeftCodes(issue) }}
+            {{ `${getProgressWidth(issue)}%` }}
           </div>
-          <div class="mt-[2px] text-[9px] text-[#b0a080]">
-            {{ t('Left') }}
-          </div>
+      
         </div>
       </div>
 
@@ -137,7 +135,7 @@ function getIssueWinnerPreview(issue: TreasureIssueItem) {
       <div class="mt-[14px]">
         <div class="mb-[6px] flex items-center justify-between">
           <div class="text-[11px] font-medium" :class="isRemainingMode(issue) ? 'text-[#d03535]' : 'text-[#8a7a5a]'">
-            {{ getProgressText(issue) }}
+            {{ `${getProgressWidth(issue)}%` }}
           </div>
         </div>
         <div class="h-[10px] overflow-hidden rounded-[999px] bg-[#ece0cc]">

@@ -71,7 +71,7 @@
             </template>
 
             <template v-else-if="isCurrentPoolDrawn">
-              <div v-if="card?.isWin === 1"
+              <div v-if="Number(card?.high_value) === 1"
                 class="absolute right-[6px] top-[6px] z-[2] rounded-[999px] bg-[#059669] px-[6px] py-[2px] text-[10px] text-white">
                 {{ t('Valioso') }}
               </div>
@@ -103,7 +103,8 @@
                     {{ t('Prize') }}
                   </div>
                   <div class="text-[12px] mt-[4px] text-[#8f86aa]">
-                    --
+                    {{ card?.showValue || '--' }}
+
                   </div>
                 </template>
               </div>
@@ -185,7 +186,7 @@
                   {{ item.changeType === 1 ? '+' : '-' }}{{ item.changePoint || 0 }}
                 </div>
               </div>
-              <div class="text-[12px] text-[#7f7598] mt-[6px]">{{ item.remark || '--' }}</div>
+              <!-- <div class="text-[12px] text-[#7f7598] mt-[6px]">{{ item.remark || '--' }}</div> -->
               <div class="text-[11px] text-[#9b8fb5] mt-[4px]">{{ item.createdAt || '--' }}</div>
             </div>
             <LoadMore :status="pointLogStatus" @load-more="loadMorePointLogs" />
@@ -234,7 +235,7 @@
         </div>
         <div class="text-[22px] font-bold text-[#251b44] mb-[6px]">{{ currentPrizeName }}</div>
         <div class="text-[32px] font-bold mb-[8px]" :class="currentPoolAccentClass">{{ currentPrizeValue }}</div>
-        <div class="text-[13px] leading-[1.7] text-[#7f7598] mb-[18px]">{{ currentDeliverText }}</div>
+        <div class="text-[13px] leading-[1.7] text-[#7f7598] mb-[18px]">{{ t('The prize has been awarded') }}</div>
         <button class="h-[48px] w-full rounded-[16px] border-none bg-[#7c3aed] text-[15px] font-bold text-white"
           @click="showPrizePopup = false">
           {{ t('OK') }}
@@ -464,6 +465,24 @@ const displayCards = computed(() => {
   return new Array(9).fill(null).map((_, index) => ({ id: index + 1 }))
 })
 
+const highValueCardId = computed(() => {
+  let targetId: string | number | null = null
+  let maxValue = Number.NEGATIVE_INFINITY
+
+  displayCards.value.forEach((card: any, index: number) => {
+    const raw = card?.showValue
+    if (raw === undefined || raw === null || raw === '') return
+    const numericValue = Number(String(raw).replace(/[^\d.-]/g, ''))
+    if (Number.isNaN(numericValue)) return
+    if (numericValue > maxValue) {
+      maxValue = numericValue
+      targetId = card?.id ?? card?.cardNo ?? index
+    }
+  })
+
+  return targetId
+})
+
 function formatRuleText(keyType: number) {
   const rule = (homeData.value?.exchangeRules || []).find((item: any) => Number(item.keyType) === keyType)
   if (!rule) return '--'
@@ -515,6 +534,12 @@ function getPointSourceText(sourceType: string) {
     refund: t('Refund'),
   }
   return sourceMap[sourceType] || sourceType || '--'
+}
+
+function isHighValueCard(card: any, index?: number) {
+  if (!card) return false
+  const cardId = card?.id ?? card?.cardNo ?? index
+  return cardId !== undefined && cardId === highValueCardId.value
 }
 
 function getCardClass(card: any, index: number) {
