@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import type { TreasureDrawLogItem, TreasureIssueItem } from '@/api/treasure'
 
 const props = defineProps<{
@@ -13,6 +14,8 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const now = ref(Date.now())
+let countdownTimer: ReturnType<typeof setInterval> | null = null
 
 function getIssueStatusText(status: number) {
   if (Number(status) === 1)
@@ -45,13 +48,37 @@ function getIssueSaleStats(issue: TreasureIssueItem) {
   const rawProgress = Number(issue?.progress || 0)
 
   const leftCodes = totalCodes > 0 ? Math.max(totalCodes - soldCodes, 0) : rawLeftCodes
-  const progress = totalCodes > 0
-    ? Math.min(100, Math.round((soldCodes / Math.max(totalCodes, 1)) * 100))
-    : Math.min(Math.max(rawProgress, 0), 100)
+  if (totalCodes <= 0) {
+    const progress = Math.min(Math.max(rawProgress, 0), 100)
+    return {
+      leftCodes,
+      progress,
+      remainingMode: progress >= 80 && progress < 100,
+    }
+  }
+
+  const soldRatio = Math.min(soldCodes, totalCodes)
+  const phaseOneSold = totalCodes * 0.3
+  const phaseTwoSold = totalCodes * 0.8
+  let progress = 0
+
+  if (leftCodes <= 0 || soldRatio >= totalCodes) {
+    progress = 100
+  }
+  else if (soldRatio <= phaseOneSold) {
+    progress = Math.round((soldRatio / Math.max(phaseOneSold, 1)) * 30)
+  }
+  else if (soldRatio <= phaseTwoSold) {
+    progress = Math.round(30 + ((soldRatio - phaseOneSold) / Math.max(phaseTwoSold - phaseOneSold, 1)) * 50)
+  }
+  else {
+    progress = 80
+  }
 
   return {
     leftCodes,
-    progress,
+    progress: Math.min(Math.max(progress, 0), 100),
+    remainingMode: leftCodes > 0 && soldRatio > phaseTwoSold,
   }
 }
 
@@ -64,12 +91,53 @@ function getProgressWidth(issue: TreasureIssueItem) {
 }
 
 function isRemainingMode(issue: TreasureIssueItem) {
-  return getProgressWidth(issue) >= 80
+  return getIssueSaleStats(issue).remainingMode
 }
 
 function getProgressText(issue: TreasureIssueItem) {
-  return `${t('Left')} ${getIssueLeftCodes(issue)}`
+  if (isRemainingMode(issue))
+    return `${t('Left')} ${getIssueLeftCodes(issue)}`
+  return `${getProgressWidth(issue)}%`
 }
+
+function formatCountdown(diffMs: number) {
+  if (diffMs <= 0)
+    return ''
+
+  const totalSeconds = Math.floor(diffMs / 1000)
+  const days = Math.floor(totalSeconds / 86400)
+  const hours = Math.floor((totalSeconds % 86400) / 3600)
+  const minutes = Math.floor((totalSeconds % 3600) / 60)
+  const seconds = totalSeconds % 60
+
+  if (days > 0)
+    return `${days}d ${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m`
+
+  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+}
+
+const drawCountdownText = computed(() => {
+  const drawAt = props.issue?.drawAt
+  if (!drawAt)
+    return '--'
+
+  const targetTime = new Date(drawAt).getTime()
+  if (Number.isNaN(targetTime))
+    return drawAt
+
+  return formatCountdown(targetTime - now.value)
+})
+
+onMounted(() => {
+  countdownTimer = setInterval(() => {
+    now.value = Date.now()
+  }, 1000)
+})
+
+onBeforeUnmount(() => {
+  if (countdownTimer)
+    clearInterval(countdownTimer)
+})
 
 function getIssueWinnerPreview(issue: TreasureIssueItem) {
   return props.latestDrawLogs.filter(item => Number(item.goodsId) === Number(issue.goodsId)).slice(0, 3)
@@ -88,12 +156,12 @@ function getIssueWinnerPreview(issue: TreasureIssueItem) {
       >
         {{ t('Issue') }} {{ issue.issueNo }}
       </div>
-      <button
+      <!-- <button
         class="absolute right-[10px] top-[10px] border border-[#d9c7a0] rounded-[999px] border-solid bg-[#fffbf3] px-[10px] py-[4px] text-[10px] text-[#9a7a2c] font-bold"
         @click.stop="emit('drawHistory', issue)"
       >
         {{ t('Draw History') }}
-      </button>
+      </button> -->
       <img v-if="issue.goodsImage" :src="issue.goodsImage" class="max-h-[140px] max-w-[78%] object-contain">
       <div v-else class="text-[54px]">
         🎁
@@ -120,22 +188,19 @@ function getIssueWinnerPreview(issue: TreasureIssueItem) {
             <span class="text-[11px] text-[#8a7a5a]">{{ t('Per Code') }}</span>
           </div>
         </div>
-    <div
+        <div
           class="min-w-[66px] border border-[#e4d4b2] rounded-[12px] border-solid bg-[#f8f1e5] px-[10px] py-[8px] text-center"
         >
-          <div class="text-[18px] text-[#9a7a2c] font-bold leading-[1]">
-            {{ `${getProgressWidth(issue)}%` }}
+          <div
+            class="text-[18px] font-bold leading-[1]"
+            :class="isRemainingMode(issue) ? 'text-[#d03535]' : 'text-[#9a7a2c]'"
+          >
+            {{ getProgressText(issue) }}
           </div>
-      
         </div>
       </div>
 
       <div class="mt-[14px]">
-        <div class="mb-[6px] flex items-center justify-between">
-          <div class="text-[11px] font-medium" :class="isRemainingMode(issue) ? 'text-[#d03535]' : 'text-[#8a7a5a]'">
-            {{ getProgressWidth(issue) }}%
-          </div>
-        </div>
         <div class="h-[10px] overflow-hidden rounded-[999px] bg-[#ece0cc]">
           <div
             class="h-full rounded-[999px] from-[#9a7a2c] via-[#c9a84c] to-[#e8cf85] bg-gradient-to-r transition-all duration-500"
@@ -156,7 +221,7 @@ function getIssueWinnerPreview(issue: TreasureIssueItem) {
             {{ t('Pending Draw') }}
           </div>
           <div class="mt-[4px] text-[11px] text-[#8a7a5a]">
-            {{ issue.drawAt || '--' }}
+            {{ drawCountdownText }}
           </div>
         </div>
       </div>
