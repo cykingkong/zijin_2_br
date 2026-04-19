@@ -130,15 +130,41 @@ function getIssueSaleStats(issue: any) {
   const rawProgress = Number(issue?.progress || 0)
 
   const leftCodes = totalCodes > 0 ? Math.max(totalCodes - soldCodes, 0) : rawLeftCodes
-  const progress = totalCodes > 0
-    ? Math.min(100, Math.round((soldCodes / Math.max(totalCodes, 1)) * 100))
-    : Math.min(Math.max(rawProgress, 0), 100)
+  if (totalCodes <= 0) {
+    const progress = Math.min(Math.max(Math.round(rawProgress), 0), 100)
+    return {
+      totalCodes,
+      soldCodes,
+      leftCodes,
+      progress,
+      remainingMode: progress >= 80 && progress < 100,
+    }
+  }
+
+  const phaseOneSold = totalCodes * 0.3
+  const phaseTwoSold = totalCodes * 0.605
+  const soldRatio = Math.min(soldCodes, totalCodes)
+  let progress = 0
+
+  if (leftCodes <= 0 || soldRatio >= totalCodes) {
+    progress = 100
+  }
+  else if (soldRatio <= phaseOneSold) {
+    progress = Math.round((soldRatio / phaseOneSold) * 30)
+  }
+  else if (soldRatio <= phaseOneSold + phaseTwoSold) {
+    progress = Math.round(30 + ((soldRatio - phaseOneSold) / phaseTwoSold) * 50)
+  }
+  else {
+    progress = 80
+  }
 
   return {
     totalCodes,
     soldCodes,
     leftCodes,
-    progress,
+    progress: Math.min(Math.max(progress, 0), 100),
+    remainingMode: leftCodes > 0 && soldRatio > phaseOneSold + phaseTwoSold,
   }
 }
 
@@ -147,11 +173,12 @@ function getIssueLeftCodes(issue: any) {
 }
 
 function normalizeIssueSaleStats(issue: any) {
-  const { leftCodes, progress } = getIssueSaleStats(issue)
+  const { leftCodes, progress, remainingMode } = getIssueSaleStats(issue)
   return {
     ...issue,
     leftCodes,
     progress,
+    remainingMode,
   }
 }
 
@@ -327,9 +354,10 @@ async function handleBuyConfirm(count: number) {
 
     issue.soldCodes = data?.soldCodes
     issue.totalCodes = data?.totalCodes
-    const { leftCodes, progress } = getIssueSaleStats(issue)
+    const { leftCodes, progress, remainingMode } = getIssueSaleStats(issue)
     issue.leftCodes = leftCodes
     issue.progress = progress
+    issue.remainingMode = remainingMode
     issue.status = data?.status
     issue.drawAt = data?.drawAt
     issue.canBuy = Number(data?.status) === 0 && getIssueLeftCodes(issue) > 0
