@@ -121,6 +121,9 @@ function responseHandler(response: any) {
     closeToast(true)
     return response.data
 
+  } else if (code == 1001) {
+    closeToast(true)
+    return response.data
   }
   else {
     closeToast(true)

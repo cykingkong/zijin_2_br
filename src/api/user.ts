@@ -127,3 +127,12 @@ export function getTeamInfoData(): Promise<any> {
 export function userUpdate(data): Promise<any> {
   return request.post('/user/userUpdate', data)
 }
+export function getUserAddressInfo(): Promise<any> {
+  return request.get('/user/addressInfo')
+}
+export function addUserAddress(data): Promise<any> {
+  return request.post('/user/addressAdd', data)
+}
+export function updateUserAddress(data): Promise<any> {
+  return request.post('/user/addressUpdate', data)
+}

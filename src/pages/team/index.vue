@@ -164,9 +164,9 @@ const currentLevel = ref('B');
 
 // 模拟数据
 const levelStats = ref([
-    { name: 'LV1', count: userInfo.value?.topData?.find((item) => item.generation === 1)?.allUserCount || 0, img: lv1 },
-    { name: 'LV2', count: userInfo.value?.topData?.find((item) => item.generation === 2)?.allUserCount || 0, img: lv2 },
-    { name: 'LV3', count: userInfo.value?.topData?.find((item) => item.generation === 3)?.allUserCount || 0, img: lv3 },
+    { name: 'LV1', count: userInfo.value?.topData?.find((item) => item.generation === 1)?.vaildUserCount || 0, img: lv1 },
+    { name: 'LV2', count: userInfo.value?.topData?.find((item) => item.generation === 2)?.vaildUserCount || 0, img: lv2 },
+    { name: 'LV3', count: userInfo.value?.topData?.find((item) => item.generation === 3)?.vaildUserCount || 0, img: lv3 },
 ]);
 
 const levelTabs = ref([

@@ -40,6 +40,8 @@ declare module 'vue-router/auto-routes' {
     'Notify': RouteRecordInfo<'Notify', '/notify', Record<never, never>, Record<never, never>>,
     'prize': RouteRecordInfo<'prize', '/prize', Record<never, never>, Record<never, never>>,
     'profile': RouteRecordInfo<'profile', '/profile', Record<never, never>, Record<never, never>>,
+    'Address': RouteRecordInfo<'Address', '/profile/address', Record<never, never>, Record<never, never>>,
+    'AddressEdit': RouteRecordInfo<'AddressEdit', '/profile/address/edit', Record<never, never>, Record<never, never>>,
     'BankAccount': RouteRecordInfo<'BankAccount', '/profile/bankAccount', Record<never, never>, Record<never, never>>,
     'addBank': RouteRecordInfo<'addBank', '/profile/bankAccount/addBank', Record<never, never>, Record<never, never>>,
     '/profile/changePassword/changePassword': RouteRecordInfo<'/profile/changePassword/changePassword', '/profile/changePassword/changePassword', Record<never, never>, Record<never, never>>,

@@ -332,7 +332,9 @@ const menuList = [
   { text: t('Fund Details'), icon: iconFunds, url: '/wallet/walletLogs', type: 'link' },
   { text: t('Password'), icon: iconPass, url: '/forgot-password?noLogin=1', type: 'link' },
   { text: t('Quit Article'), icon: iconQuit, url: '/richTextDetail?type=czwz', type: 'link' }, // 暂定 About Us
-  { text: t('Logout'), icon: iconLogout, type: 'logout', isLogout: false }
+  { text: t('Logout'), icon: iconLogout, type: 'logout', isLogout: false },
+  { text: t('Address'), icon: iconBank, url: '/profile/address', type: 'link' },
+
 ];
 const myteamList = ref([
   {

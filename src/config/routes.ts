@@ -28,6 +28,8 @@ export const navWhiteList: readonly string[] = [
   'login',
   'forgotPassword',
   'lottery',
-  'addBank'
+  'addBank',
+
+  'AddressEdit'
 
 ]
