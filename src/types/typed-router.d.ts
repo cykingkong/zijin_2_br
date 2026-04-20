@@ -21,6 +21,7 @@ declare module 'vue-router/auto-routes' {
     'news': RouteRecordInfo<'news', '/', Record<never, never>, Record<never, never>>,
     '404': RouteRecordInfo<'404', '/:all(.*)', { all: ParamValue<true> }, { all: ParamValue<false> }>,
     'activityDetail': RouteRecordInfo<'activityDetail', '/aboutUs', Record<never, never>, Record<never, never>>,
+    'forgotPassword': RouteRecordInfo<'forgotPassword', '/forgot-password', Record<never, never>, Record<never, never>>,
     'help': RouteRecordInfo<'help', '/help', Record<never, never>, Record<never, never>>,
     'inviteFriends': RouteRecordInfo<'inviteFriends', '/inviteFriends', Record<never, never>, Record<never, never>>,
     'kyc': RouteRecordInfo<'kyc', '/kyc', Record<never, never>, Record<never, never>>,

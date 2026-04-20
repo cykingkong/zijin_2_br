@@ -116,7 +116,7 @@ const startCountdown = () => {
 
 const toForgotPassword = () => {
   try {
-    router.push("/forgot-password?noLogin=1");
+    router.push("/forgot-password");
   } catch (e) {
     console.log(e);
   }
@@ -324,17 +324,17 @@ async function login() {
         </inputCom>
       </div>
 
-    <!--   <div class="flex justify-between items-center mt-[16px] mb-[24px] gap-16">
-        <div class="left flex font-size-[14px] font-medium flex-shrink-0 gap-[12px] flex-shrink-0">
+   <div class="flex justify-end items-center mt-[16px] mb-[24px] gap-16">
+      <!--      <div class="left flex font-size-[14px] font-medium flex-shrink-0 gap-[12px] flex-shrink-0">
           <div class="radio w-[16px] h-[16px] rounded-[4px] border" :class="remember ? 'radio-active' : ''"
             @click="remember = !remember"></div>
           {{ t("Remember me") }}
-        </div>
-        <div class="right color-[#1b1b1b] font-size-[14px] font-bold cursor-pointer flex-shrink-0"
+        </div>-->
+        <div class="right color-[#fff] font-size-[14px] font-bold cursor-pointer flex-shrink-0"
           @click="toForgotPassword()">
           {{ t("Forgot Password") }}
         </div>
-      </div> -->
+      </div> 
       <van-button type="primary" color="#1B1B1B" class="login-btn h-[52px]! rounded-full!" block
         @click="pageType == 0 ? login() : signUp()">{{
           pageType == 0 ? t("Login") : t("Sign Up")

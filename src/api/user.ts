@@ -51,7 +51,7 @@ export function walletInfo(params): Promise<any> {
   return request.get('/user/walletInfo', { params })
 }
 export function forgetPassword(data): Promise<any> {
-  return request.post('/user/forgetPassword', data)
+  return request.post('/auth/forgetPassword', data)
 }
 export function updatePassword(data): Promise<any> {
   return request.post('/user/updatePassword', data)
