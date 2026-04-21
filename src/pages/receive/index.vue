@@ -2,33 +2,27 @@
     <div class="receive-content p-16 flex flex-col gap-16 ">
         <div class="p-[16px] rounded-[12px] bg-[#fff] border-solid flex flex-col gap-[16px] border-[#0000000D] border">
             <div class="li-flex flex justify-between items-center">
-                <div class="label text-[12px] text-[#8C91A2]">{{t("Today's product revenue")}}</div>
+                <div class="label text-[12px] text-[#8C91A2]">{{ t("Today's product revenue") }}</div>
                 <div class="value flex items-center font-bold gap-8">
                     <img src="@/assets/coin.png" class="w-20 h-20 block" alt="">
                     R$ {{ info.todayIncome || '0' }}
                 </div>
             </div>
             <div class="li-flex flex justify-between items-center">
-                <div class="label text-[12px] text-[#8C91A2]">{{t("Yesterday's product revenue")}}</div>
+                <div class="label text-[12px] text-[#8C91A2]">{{ t("Yesterday's product revenue") }}</div>
                 <div class="value flex items-center font-bold gap-8">
                     <img src="@/assets/coin.png" class="w-20 h-20 block" alt="">
                     R${{ info.yesterdayIncome || '0' }}
                 </div>
             </div>
             <div class="li-flex flex justify-between items-center">
-                <div class="label text-[12px] text-[#8C91A2]">{{t('Received product revenue')}}</div>
+                <div class="label text-[12px] text-[#8C91A2]">{{ t('Received product revenue') }}</div>
                 <div class="value flex items-center font-bold gap-8">
                     <img src="@/assets/coin.png" class="w-20 h-20 block" alt="">
                     R${{ info.allIncome || '0' }}
                 </div>
             </div>
         </div>
-        <!-- <div @click="handleClickActivity()"
-            class="receive-btn border b-solid b-[#1b1b1b] rounded-[16px] text-[#1b1b1b] text-[12px] min-w-[86px] h-37 text-center p-6 flex items-center justify-center">
-            {{
-                $t('Receive')
-            }}
-        </div> -->
         <div class="flex bg-[#0000000D] rounded-[8px] p-[4px] mb-[16px] flex h-38">
             <div class="btn-1 flex-1 flex text-[13px] font-bold justify-center items-center"
                 v-for="(item, index) in typeList" @click="activeIndex = index; getUserCouponList()"
@@ -65,10 +59,7 @@
                     </div>
                 </div>
                 <div class="w-full flex justify-end">
-
-
                 </div>
-
             </div>
             <button
                 class="w-full h-[48px] rounded-[12px] font-bold text-[16px] transition-all flex items-center justify-center"
@@ -79,7 +70,6 @@
                             ? 'bg-[#E5E5E5] text-[#999] cursor-not-allowed'
                             : 'bg-[#1A1A1A] text-white active:opacity-90'
                 ]" :disabled="activeIndex === 1 || timerMap[item.id]?.disabled" @click="handleClickReceived(item)">
-                <!-- 显示倒计时 或者 'Received' -->
                 {{ activeIndex === 1 ? t('Unavailable') : (timerMap[item.id]?.text || 'Received') }}
             </button>
         </div>
@@ -102,7 +92,6 @@
                     </div>
                 </div>
             </div>
-
         </van-popup>
     </div>
 </template>
@@ -111,11 +100,20 @@ import { userProductList as userProductListApi, claimIncome, tipsList } from '@/
 import { showNotify, showLoadingToast, closeToast } from 'vant'
 import local from '@/utils/local';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+// 后端返回的时间所属时区：巴西圣保罗
+const BACKEND_TIMEZONE = 'America/Sao_Paulo';
+
 const timerMap = ref({}); // 存储结构: { [id]: { text: '00:00:00', disabled: true } }
 let intervalId = null;
 const userProductList = ref([])
 const listStatus = ref(1); // 1-加载中 2-成功 3-已无更多
-const {t} = useI18n()
+const { t } = useI18n()
 const page = reactive({
     pageIndex: 1,
     pageSize: 10
@@ -135,6 +133,7 @@ const typeList = ref([
 const showPicker = ref(false)
 const receivedInfo = ref({ id: null })
 const watingReceiveIds = ref([])
+
 const formatDuration = (ms) => {
     if (ms <= 0) return '';
     const seconds = Math.floor((ms / 1000) % 60);
@@ -143,33 +142,32 @@ const formatDuration = (ms) => {
     const days = Math.floor(ms / (1000 * 60 * 60 * 24));
     const format = (n) => n.toString().padStart(2, '0');
 
-    // 如果大于1天，显示 "x Days HH:mm:ss"，否则显示 "HH:mm:ss"
     if (days > 0) {
         return `${days}D ${format(hours)}:${format(minutes)}:${format(seconds)}`;
     }
     return `${format(hours)}:${format(minutes)}:${format(seconds)}`;
 };
+
 // 更新倒计时的主函数
 const updateTimer = () => {
     const now = dayjs();
 
-    // 遍历当前列表中的所有商品
     userProductList.value.forEach(item => {
         if (!item.nextClaimTime) {
-            // 如果没有时间字段，默认可领取
             timerMap.value[item.id] = { text: 'Received', disabled: false };
             return;
         }
-        const targetTime = dayjs(item.nextClaimTime);
-        const diff = targetTime.diff(now); // 获取毫秒差值
+
+        // 关键修改：使用 dayjs.tz 将后端返回的巴西时间正确解析为对应的绝对时刻
+        const targetTime = dayjs.tz(item.nextClaimTime, BACKEND_TIMEZONE);
+        const diff = targetTime.diff(now);
+
         if (diff > 0) {
-            // 倒计时进行中：显示时间，禁用按钮
             timerMap.value[item.id] = {
                 text: formatDuration(diff),
                 disabled: true
             };
         } else {
-            // 时间已到：显示 Received，启用按钮
             timerMap.value[item.id] = {
                 text: 'Received',
                 disabled: false
@@ -177,14 +175,14 @@ const updateTimer = () => {
         }
     });
 };
+
 // 开启定时器
 const startTimer = () => {
-    // 先执行一次，避免 1秒 延迟
     updateTimer();
-    // 清除旧的定时器防止重复
     if (intervalId) clearInterval(intervalId);
     intervalId = setInterval(updateTimer, 1000);
 };
+
 const handleClickReceived = async (item) => {
     try {
         const { data, code, message } = await claimIncome({ id: item.id })
@@ -200,11 +198,7 @@ const handleClickReceived = async (item) => {
             } else {
                 getUserCouponList()
             }
-            // router.push({
-            //     path: "/profile"
-            // })
         } else if (code == 1001) {
-
             showNotify({
                 type: 'danger',
                 message: message
@@ -212,14 +206,13 @@ const handleClickReceived = async (item) => {
         } else {
             errorHtml.value = message
             showPicker.value = true
-
         }
     } catch (e) {
         console.log(e, 'error')
     }
 }
-const handleClickActivity = async () => {
 
+const handleClickActivity = async () => {
     watingReceiveIds.value = watingReceiveIds.value = userProductList.value
         .filter(item => item.can_claim === true)
         .map(item => item.id)
@@ -232,9 +225,6 @@ const handleClickActivity = async () => {
             console.log(data, message, 'asdasd')
             if (code == 200) {
                 showSuccessToast({})
-                // router.push({
-                //     path: "/profile"
-                // })
             } else if (code == 1001) {
                 showNotify({
                     type: 'danger',
@@ -246,10 +236,7 @@ const handleClickActivity = async () => {
                 break
             }
         }
-
-
     } catch (e) {
-        // showPicker.value = true
         console.log(e, 'error')
     }
 }
@@ -264,6 +251,7 @@ const handleClickConfirm = () => {
         }
     })
 }
+
 const getUserCouponList = async () => {
     try {
         const { data, code } = await userProductListApi({
@@ -297,15 +285,22 @@ const getUserCouponList = async () => {
         console.log(e)
     }
 }
+
 const loadMore = () => {
     page.pageIndex++
     getUserCouponList()
 }
+
 onMounted(() => {
     getUserCouponList();
-    // tipsList({}).then(({ data }) => {
+})
 
-    // })
+onUnmounted(() => {
+    // 组件卸载时清除定时器，防止内存泄漏
+    if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+    }
 })
 </script>
 <style scoped>
