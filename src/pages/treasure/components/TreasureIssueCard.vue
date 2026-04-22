@@ -11,6 +11,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   buy: [issue: TreasureIssueItem]
   drawHistory: [issue: TreasureIssueItem]
+  refresh: void
 }>()
 
 const { t } = useI18n()
@@ -101,8 +102,7 @@ function getProgressText(issue: TreasureIssueItem) {
 }
 
 function formatCountdown(diffMs: number) {
-  if (diffMs <= 0)
-    return ''
+  if (diffMs <= 0) return ''
 
   const totalSeconds = Math.floor(diffMs / 1000)
   const days = Math.floor(totalSeconds / 86400)
@@ -110,22 +110,26 @@ function formatCountdown(diffMs: number) {
   const minutes = Math.floor((totalSeconds % 3600) / 60)
   const seconds = totalSeconds % 60
 
-  if (days > 0)
-    return `${days}d ${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m`
+  if (days > 0) return `${days}d ${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m`
 
   return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
 }
-
+function parseBrazilTime(dateStr: string): number {
+  if (!dateStr) return NaN
+  const normalized = String(dateStr).trim().replace(' ', 'T')
+  if (/[Zz]|[+-]\d{2}:\d{2}$/.test(normalized)) {
+    return new Date(normalized).getTime()
+  }
+  return new Date(`${normalized}-03:00`).getTime()  // ✅ 转成 UTC 时间戳
+}
 const drawCountdownText = computed(() => {
   const drawAt = props.issue?.drawAt
-  if (!drawAt)
-    return '--'
-
-  const targetTime = new Date(drawAt).getTime()
-  if (Number.isNaN(targetTime))
-    return drawAt
-
-  return formatCountdown(targetTime - now.value)
+  if (!drawAt) return '--'
+  const targetTime = parseBrazilTime(drawAt)
+  if (Number.isNaN(targetTime)) return drawAt
+  const diff = targetTime - now.value  // ✅ UTC - UTC = 正确差值
+  if (diff <= 0) return ''
+  return formatCountdown(diff)
 })
 
 onMounted(() => {

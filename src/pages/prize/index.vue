@@ -24,7 +24,9 @@
       <div v-for="key in keyCards" :key="key.type" class="key-card rounded-[18px] p-[12px]" :class="key.cardClass"
         @click="openExchangePopup">
         <div class="flex items-center justify-between mb-[8px]">
-          <div class="text-[20px]">{{ key.icon }}</div>
+          <div class="text-[20px]">
+            <svg t="1776831013365" class="icon w20 h20" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1680" ><path d="M905.898667 89.6a284.444444 284.444444 0 0 0-438.442667 358.001778L41.016889 874.040889a28.444444 28.444444 0 0 0 0 40.220444l40.220444 40.277334a28.558222 28.558222 0 0 0 40.277334 0l60.359111-60.359111 80.440889 80.497777a56.888889 56.888889 0 0 0 80.440889 0l120.718222-120.718222a56.832 56.832 0 0 0 0-80.440889l-80.440889-80.440889 164.920889-164.977777a284.444444 284.444444 0 0 0 357.944889-438.499556zM825.457778 411.420444a170.723556 170.723556 0 0 1-241.379556-241.379555 170.723556 170.723556 0 0 1 241.379556 241.379555z" :fill="key.iconColor" p-id="1681"></path></svg>
+          </div>
           <div class="text-[11px] px-[8px] py-[2px] rounded-[999px] bg-[#ffffff99] text-[#333]">
             {{ key.ruleText }}
           </div>
@@ -434,6 +436,8 @@ const keyCards = computed(() => [
     type: 1,
     name: t(keyNameMap[1]),
     icon: '🗝️',
+    iconColor:"#C87533",
+
     count: homeData.value?.keys?.iron ?? 0,
     ruleText: formatRuleText(1),
     cardClass: 'bg-[#e8edf4] text-[#51606f]',
@@ -443,6 +447,8 @@ const keyCards = computed(() => [
     type: 2,
     name: t(keyNameMap[2]),
     icon: '🔑',
+    iconColor:"#A8B2BD",
+
     count: homeData.value?.keys?.silver ?? 0,
     ruleText: formatRuleText(2),
     cardClass: 'bg-[#f2eafb] text-[#8f6eb0]',
@@ -452,6 +458,7 @@ const keyCards = computed(() => [
     type: 3,
     name: t(keyNameMap[3]),
     icon: '🪙',
+    iconColor:"	#F5B433",
     count: homeData.value?.keys?.gold ?? 0,
     ruleText: formatRuleText(3),
     cardClass: 'bg-[#fff3cf] text-[#c08a08]',

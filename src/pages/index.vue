@@ -14,7 +14,8 @@ import { getKfUrl } from '@/api/user'
 import { ref, computed, watch, onMounted } from 'vue'; // 确保引入了 ref 等
 import { showToast, showSuccessToast, showFailToast } from 'vant';
 import { optimizeRichText } from '@/utils/richText';
-
+import gif1 from '@/assets/grid/1.gif'
+import gif2 from '@/assets/grid/2.gif'
 import appleStore from "@/assets/appleStore.png";
 import googlePlay from "@/assets/googlePlay.png";
 const { t } = useI18n();
@@ -288,6 +289,15 @@ onMounted(() => {
 
 
     <Grid @handleClickGrid="handleClickGrid" />
+    <!-- 抽奖 -->
+    <div class="w-full flex gap-12px px-20 mb-20 mt-10">
+      <div class="gif1 flex-1 rounded-16px overflow-hidden" @click="handleClickGrid(9)">
+        <img :src="gif1" alt="" class="w-full">
+      </div>
+      <div class="gif2 flex-1 rounded-16px overflow-hidden" @click="handleClickGrid(8)">
+        <img :src="gif2" alt="" class="w-full">
+      </div>
+     </div>
     <!-- Second Swipe Area -->
     <div class="detail-image w-full px-[24px]"
       v-if="indexInfoData.discountBanners && indexInfoData.discountBanners.length > 0">
