@@ -73,13 +73,13 @@
                 <div class="grid grid-cols-2 gap-y-[20px]">
                     <div class="flex flex-col items-center">
                         <span class="text-[#333] text-[18px] font-bold  mb-[2px]">{{
-                            userInfo.teamData.todayNewMembers }}</span>
-                        <span class="text-[#999] text-[12px]">{{t("Total Team Members")}}</span>
+                            userInfo.teamData.vaildTeamCount }}</span>
+                        <span class="text-[#999] text-[12px] text-center">{{t("Membros ativos")}}</span>
                     </div>
                     <div class="flex flex-col items-center">
                         <span class="text-[#333] text-[18px] font-bold  mb-[2px]">{{
-                            userInfo.teamData.vaildTeamCount }}</span>
-                        <span class="text-[#999] text-[12px]">{{t("Valid Team Members")}}</span>
+                             userInfo.teamData.totalTeamCount - userInfo.teamData.vaildTeamCount }}</span>
+                        <span class="text-[#999] text-[12px]">{{t("Membros não adicionados")}}</span>
                     </div>
                     <div class="flex flex-col items-center">
                         <span class="text-[#333] text-[18px] font-bold  mb-[2px]">{{
