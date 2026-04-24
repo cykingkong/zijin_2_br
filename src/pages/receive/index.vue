@@ -115,7 +115,7 @@ const userProductList = ref([])
 const listStatus = ref(1); // 1-加载中 2-成功 3-已无更多
 const { t } = useI18n()
 const page = reactive({
-    pageIndex: 1,
+    page: 1,
     pageSize: 10
 })
 const info = ref({
@@ -272,10 +272,10 @@ const getUserCouponList = async () => {
             }
             startTimer()
 
-            if (data.length >= data.total) {
+            if (data.rows.length >= data.total) {
                 listStatus.value = 3
             }
-            if (!data.row || data.rows.length == 0) {
+            if (!data.rows || data.rows.length == 0) {
                 listStatus.value = 3
                 return
             }
@@ -287,7 +287,7 @@ const getUserCouponList = async () => {
 }
 
 const loadMore = () => {
-    page.pageIndex++
+    page.page++
     getUserCouponList()
 }
 
