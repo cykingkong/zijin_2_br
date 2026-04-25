@@ -274,6 +274,7 @@ const getUserCouponList = async () => {
 
             if (data.rows.length >= data.total) {
                 listStatus.value = 3
+                return 
             }
             if (!data.rows || data.rows.length == 0) {
                 listStatus.value = 3
