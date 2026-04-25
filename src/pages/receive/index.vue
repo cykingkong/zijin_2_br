@@ -259,7 +259,9 @@ const getUserCouponList = async () => {
             status: activeIndex.value + 1
         })
         if (code == 200) {
-            if (page.pageIndex == 1) {
+                console.log(data,'data123123')
+
+            if (page.page == 1) {
                 userProductList.value = data.rows || []
                 info.value = data.info || {
                     todayIncome: "0",
