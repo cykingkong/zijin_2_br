@@ -40,6 +40,45 @@ const tabList = ref([]);
 const search = ref("")
 const userProductArr = ref([])
 const categoryId = ref();
+const countdownNow = ref(Date.now());
+let countdownTimer: ReturnType<typeof setInterval> | null = null;
+const getBrazilNowTime = () => {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Sao_Paulo',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  }).formatToParts(new Date(countdownNow.value));
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return Date.UTC(Number(values.year), Number(values.month) - 1, Number(values.day), Number(values.hour), Number(values.minute), Number(values.second));
+}
+const getSoldOutTime = (soldOutAt: string) => {
+  if (!soldOutAt) return 0;
+  const match = soldOutAt.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})(?:[ T](\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?/);
+  if (!match) return 0;
+  const [, year, month, day, hour = '0', minute = '0', second = '0'] = match;
+  return Date.UTC(Number(year), Number(month) - 1, Number(day), Number(hour), Number(minute), Number(second));
+}
+const getCountdownTime = (item: any) => {
+  const leftTime = getSoldOutTime(item.soldOutAt) - getBrazilNowTime();
+  return Math.max(0, leftTime);
+}
+const isCountdownSoldOut = (item: any) => Boolean(item.soldOutAt) && getCountdownTime(item) <= 0;
+const getProductStatus = (item: any) => isCountdownSoldOut(item) ? 2 : item.status;
+const formatCountdown = (item: any) => {
+  const leftTime = getCountdownTime(item);
+  const totalSeconds = Math.floor(leftTime / 1000);
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  const time = [hours, minutes, seconds].map((value) => String(value).padStart(2, '0')).join(':');
+  return days > 0 ? `${days}d ${time}` : time;
+}
 const getUserProArr = async () => {
   try {
     const res = await userProductList({
@@ -130,9 +169,18 @@ const loadMore = () => {
 };
 
 onMounted(async () => {
+  countdownTimer = setInterval(() => {
+    countdownNow.value = Date.now();
+  }, 1000);
   await getTabList()
   await getProductList();
   // getUserProArr()
+});
+
+onUnmounted(() => {
+  if (countdownTimer) {
+    clearInterval(countdownTimer);
+  }
 });
 </script>
 
@@ -198,16 +246,21 @@ onMounted(async () => {
           <img v-if="item.productImage" :src="item.productImage" class="w-full h-full object-cover" />
         </div>
         <div class="info w-full">
-          <div class="title font-bold text-[14px] color-[#161616]">
-            {{ item.productName || 'Product Name' }}
+          <div class="flex items-start justify-between gap-[8px]">
+            <div class="title font-bold text-[14px] color-[#161616] flex-1">
+              {{ item.productName || 'Product Name' }}
+            </div>
+            <div v-if="item.soldOutAt" class="countdown text-[14px] color-[#FF6464] font-bold flex-shrink-0">
+              {{ formatCountdown(item) }}
+            </div>
           </div>
           <div class="desc text-[12px] color-[#8C91A2] font-normal">{{ item.levelLimit?'Lv '+ item.levelLimit +' e superior' : 'Lv 1  e superior' }}</div>
           <div class="flex justify-between items-end">
             <div class="price color-[#FF6464] font-[14px] font-bold">R$ {{ addCommasToNumber(item.discountPrice) ||
               '0.00' }}</div>
             <div class="button text-[14px] font-bold text-[#fff]  px-[12px] py-[6px] rounded-[8px]"
-              :class="item.status == 2 ? 'bg-[#CED0D8]' : 'bg-[#161616]'" @click="handleClickStock(item)">
-              {{ t(enumBtnText[item.status]) }}
+              :class="getProductStatus(item) == 2 ? 'bg-[#CED0D8]' : 'bg-[#161616]'" @click="handleClickStock(item)">
+              {{ t(enumBtnText[getProductStatus(item)]) }}
             </div>
           </div>
         </div>
