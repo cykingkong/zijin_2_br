@@ -189,7 +189,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { productInfo as infoApi, purchase } from '@/api/product';
 import { useUserStore } from '@/stores';
-import { addCommasToNumber } from '@/utils/tool';
+import { addCommasToNumber, throttleAfterCompletion } from '@/utils/tool';
 import { optimizeRichText } from '@/utils/richText';
 import { showToast } from 'vant';
 
@@ -313,7 +313,7 @@ const handleClickSelectCounpon = (index) => {
     }
     activeConponIndex.value = index;
 }
-const handlePurchase = async () => {
+const handlePurchaseOriginal = async () => {
     // 简化购买逻辑，截图未显示优惠券选择，这里直接调用购买
     // 如果需要弹窗选择优惠券，可以在这里加弹窗逻辑
     try {
@@ -333,6 +333,7 @@ const handlePurchase = async () => {
         console.log(e);
     }
 };
+const handlePurchase = throttleAfterCompletion(handlePurchaseOriginal);
 
 onMounted(() => {
     if (route.query.productId) {
