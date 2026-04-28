@@ -115,7 +115,7 @@ function init() {
       indexInfoData.value.noticeContent = getContent(indexInfoData.value.notice)
       indexInfoData.value.pop_content = optimizeRichText(indexInfoData.value.pop_content)
       indexInfoData.value.banners = [{
-        url: 'https://api.signet-jewelers-br.com/video.mp4'
+        url: 'https://image.oam007.icu/col/IMG_1447.MP4'
       }]
       // // 3. JS 实现自动播放逻辑
       // nextTick(() => {
