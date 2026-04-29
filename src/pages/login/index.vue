@@ -10,6 +10,7 @@ import CloseButton from "@/components/CloseButton.vue";
 import { languageColumns, locale } from "@/utils/i18n";
 import { sendCode, register } from "@/api/user";
 import local from "@/utils/local";
+import { throttleAfterCompletion } from "@/utils/tool";
 
 const lang = ref(local.getlocal('lang') || 'en')
 
@@ -188,7 +189,7 @@ const validateAccountPassword = () => {
   }
   return true
 }
-async function signUp() {
+async function signUpOriginal() {
   if (!validateAccountPassword()) return
   if (!postData.code) {
     showToast(t('Please Enter Code'))
@@ -221,7 +222,8 @@ async function signUp() {
     console.log(e)
   }
 }
-async function login() {
+const signUp = throttleAfterCompletion(signUpOriginal)
+async function loginOriginal() {
   if (!postData.password) {
     showToast(t("PleaseEnter"));
     return;
@@ -260,6 +262,7 @@ async function login() {
     loading.value = false;
   }
 }
+const login = throttleAfterCompletion(loginOriginal)
 </script>
 
 <template>
