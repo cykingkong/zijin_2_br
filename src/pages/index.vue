@@ -72,7 +72,7 @@ const handleClickDownloadAppUrl = (type) => {
 }
 function handleClickGrid(val) {
   if (val == 3) {
-    downloadPopShow.value = true
+    // downloadPopShow.value = true
 
     return
   }
