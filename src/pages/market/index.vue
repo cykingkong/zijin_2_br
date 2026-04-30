@@ -256,7 +256,13 @@ onUnmounted(() => {
           </div>
           <div class="desc text-[12px] color-[#8C91A2] font-normal">{{ item.levelLimit?'Lv '+ item.levelLimit +' e superior' : 'Lv 1  e superior' }}</div>
           <div class="flex justify-between items-end">
-            <div class="price color-[#FF6464] font-[14px] font-bold">R$ {{ addCommasToNumber(item.discountPrice) ||
+           
+            <div class="price color-[#FF6464] font-[14px] font-bold flex flex-col">
+               <div class="originalPrice text-[12px] line-through color-[#8C91A2]" v-if="item.originalPrice && item.originalPrice != item.discountPrice">
+              R$  {{ addCommasToNumber(item.originalPrice) || '0.00' }}
+            </div>
+              
+              R$ {{ addCommasToNumber(item.discountPrice) ||
               '0.00' }}</div>
             <div class="button text-[14px] font-bold text-[#fff]  px-[12px] py-[6px] rounded-[8px]"
               :class="getProductStatus(item) == 2 ? 'bg-[#CED0D8]' : 'bg-[#161616]'" @click="handleClickStock(item)">

@@ -116,7 +116,7 @@ function init() {
       indexInfoData.value.noticeContent = getContent(indexInfoData.value.notice)
       indexInfoData.value.pop_content = optimizeRichText(indexInfoData.value.pop_content)
       indexInfoData.value.banners = [{
-        url: 'https://api.signet-jewelers-br.com/video.mp4'
+        url: 'https://api.wthbit.top/video.mp4'
       }]
       // // 3. JS 实现自动播放逻辑
       // nextTick(() => {
@@ -290,20 +290,20 @@ onMounted(() => {
 
     <Grid @handleClickGrid="handleClickGrid" />
     <!-- 抽奖 -->
-    <div class="w-full flex gap-12px px-20 mb-20 mt-10">
-      <div class="gif1 flex-1 rounded-16px overflow-hidden" @click="handleClickGrid(9)">
+    <div class="w-full flex gap-[12px] px-20 mb-20 mt-10">
+      <div class="gif1 flex-1 rounded-[16px] overflow-hidden" @click="handleClickGrid(9)">
         <img :src="gif1" alt="" class="w-full block">
         <div class="title text-[14px] font-bold text-[#161616] text-center mt-10">
           Pontos da Sorte
         </div>
       </div>
-      <div class="gif2 flex-1 rounded-16px overflow-hidden" @click="handleClickGrid(8)">
+      <div class="gif2 flex-1 rounded-[16px] overflow-hidden" @click="handleClickGrid(8)">
         <img :src="gif2" alt="" class="w-full block">
         <div class="title text-[14px] font-bold text-[#161616] text-center mt-10">
           Compra R$ 1
         </div>
       </div>
-     </div>
+    </div>
     <!-- Second Swipe Area -->
     <div class="detail-image w-full px-[24px]"
       v-if="indexInfoData.discountBanners && indexInfoData.discountBanners.length > 0">
