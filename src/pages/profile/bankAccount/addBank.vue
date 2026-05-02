@@ -24,12 +24,12 @@
       <!-- 文本内容区域：清晰的层级结构 -->
       <div class="flex-1">
         <div class="text-[14px] font-bold text-[#991B1B] mb-[4px] leading-tight">
-          Apenas recebimento via chave PIX
+          Apenas recebimento via NEQUI
         </div>
         <div class="text-[12px] text-[#7F1D1D] leading-[18px] font-normal">
           <p class="">As transferências serão feitas </p>
-          <p class="mb-[4px] font-semibold text-[#991B1B] text-[14px]">exclusivamente por chave PIX</p>
-          <p>(CPF, e-mail ou telefone). Você deve consultar no app do seu banco se a chave está vinculada à conta que deseja usar. O valor será depositado na conta associada à chave.</p>
+          <p class="mb-[4px] font-semibold text-[#991B1B] text-[14px]">exclusivamente por NEQUI</p>
+          <p>Confirme se o nome e telefone estão corretos antes de enviar.</p>
         </div>
       </div>
     </div>
@@ -41,7 +41,7 @@
       </div>
       <div class="phone-input my-[12px]">
 
-        <inputCom :placeholder="t('')" v-model:value="form.receivePhone" :tips="''">
+        <inputCom :placeholder="t('')" v-model:value="form.phone" :tips="''">
         </inputCom>
       </div>
 
@@ -49,192 +49,90 @@
         {{ t("Realname") }}
       </div>
       <div class="phone-input my-[12px]">
-        <inputCom v-model:value="form.receiveName" :placeholder="t('')" :onlyRead="false" :inputType="'text'">
+        <inputCom v-model:value="form.name" :placeholder="t('')" :onlyRead="false" :inputType="'text'">
         </inputCom>
       </div>
-
-      <!-- <div class="label font-bold text-[16px] color-[#64748B]">
-        {{ t("Bank") }}
-      </div>
-      <div class="phone-input my-[12px]">
-
-        <inputCom :placeholder="''" v-model:value="bankCardType" :type="'picker'">
-          <div class="w-full flex justify-between">
-            <div class="l flex-1 font-size-14" :class="form.bankName ? '' : 'color-[#9CA3AF]'"
-              @click="showPicker = true">
-              {{ form.bankName ? form.bankName : t("PleaseSelectBank") }}
-            </div>
-            <div class="r flex-shrink-0">
-              <svg class="w-16 h-16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 6L8 10L12 6" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round" />
-              </svg>
-
-            </div>
-          </div>
-        </inputCom>
-      </div> -->
-
-
-<!-- 
-      <div class="label font-bold text-[16px] color-[#64748B]">
-        {{ t("Account") }}
-      </div>
-      <div class="phone-input my-[12px]">
-        <inputCom v-model:value="form.receiveAccount" :placeholder="t('')" :onlyRead="false" :inputType="'text'">
-        </inputCom>
-      </div> -->
 
       <div class="label font-bold text-[16px] color-[#64748B]">
-        {{ t("CPF") }}
+        {{ t("NEQUI") }}
       </div>
       <div class="phone-input my-[12px]">
-        <inputCom :placeholder="t('PleaseEnterOnlyDigits')" v-model:value="form.CPF" :tips="t('Only11DigitsAllowed')"
-          inputType="number" :formatter="cpfFormatter" />
-      </div>
-      <div class="label font-bold text-[16px] color-[#64748B]">
-        {{ t("Email") }}
-      </div>
-      <div class="phone-input my-[12px]">
-        <inputCom :placeholder="t('')" v-model:value="form.receiveEmail" :tips="''">
+        <inputCom v-model:value="form.nequi" :placeholder="t('')" :onlyRead="false" :inputType="'text'">
         </inputCom>
       </div>
-  
+
     </div>
 
     <BottomButton color="var(--btn-primary-bg)" :button-text="t('Submit')" @click="handleClickSubmit"></BottomButton>
-
-
-    <van-popup v-model:show="showPicker" destroy-on-close position="bottom">
-      <van-picker :columns="columns" :model-value="[form.bankCode]" @confirm="onConfirm" @cancel="showPicker = false" />
-    </van-popup>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive } from "vue";
-import setPageTitle from "@/utils/set-page-title";
 import inputCom from "@/components/inputCom.vue";
 import {
   create_bank,
   userCardUpdate,
-  userCardDel,
-  bank_info,
 } from "@/api/payment";
-import { useStore } from "@/stores/modules/index";
-import { showToast, showSuccessToast, allowMultipleToast } from "vant";
+import { showToast, showSuccessToast } from "vant";
 
-import { bankList } from "@/api/user";
 import local from "@/utils/local";
-import nationalityList from "@/components/nationality-list/nationalityList.vue";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
-const showPicker = ref(false);
-const result = ref("");
 const isEdit = ref(false);
-const pickerValue = ref([]);
-const columns = ref([]);
-const getBankList = async () => {
-  const { data, code } = await bankList({});
-  if (code == 200) {
-    columns.value =
-      data && data.length
-        ? data.map((item: any) => {
-          return {
-            text: item.bank_name,
-            value: item.bank_code,
-          };
-        })
-        : [];
-  }
-};
-const bankCardType = ref("");
 const form = reactive({
-  type: "bank_card",
-  receiveName: "",
+  nequi: "",
+  name: "",
+  phone: "",
+  id: "", 
+   receiveName: "",
   receiveAccount: "",
   bankCode: "",
   bankName: "",
-  id: "",
-  CPF: "",
+  CPF: "CCPPFF",
   receivePhone: "",
-  receiveEmail: "",
+  receiveEmail: "123@gamil.com",
 });
 const route = useRoute();
 const router = useRouter();
-const onConfirm = ({ selectedValues, selectedOptions }) => {
-  result.value = selectedOptions[0]?.text;
-  pickerValue.value = selectedValues;
-  form.bankName = selectedOptions[0]?.text;
-  form.bankCode = selectedOptions[0]?.value;
-  showPicker.value = false;
-};
-const areaInfo = ref({
-  code: "co",
-  dialCode: 57,
-  key: "co",
-  name: "",
-});
-
 const getCardInfo = () => {
   let res = local.getlocal('bankAccountInfo')
 
-  form.receiveName = res.address.receiveName;
-
-  form.receiveAccount = res.address.receiveAccount;
-  form.receivePhone = res.address.receivePhone;
-  form.receiveEmail = res.address.receiveEmail;
-  form.CPF = res.address.CPF;
-  form.bankName = res.address.bankName;
-  form.bankCode = res.address.bankCode;
+  form.name = res.address.receiveName;
+  form.nequi = res.address.receiveAccount;
+  form.phone = res.address.receivePhone;
   form.id = res.id;
 
 };
 
-const cpfFormatter = (val: string) => {
-  // 1. 过滤非数字字符
-  let cleaned = val.replace(/[^0-9]/g, '');
-
-  // 2. 限制11位（可视化展示，但允许临时超过）
-  if (cleaned.length > 11) {
-    cleaned = cleaned.substring(0, 11);
-  }
-
-  return cleaned;
-};
 const handleClickSubmit = () => {
-  if (!/^[0-9]{11}$/.test(form.CPF)) {
-    showToast(t('CPFRequires11Digits'));
-    return;
-  }
   // 校验必填
-  if (!form.receiveName) {
+  if (!form.name) {
     showToast(t('PleaseEnterName'))
     return;
   }
-  if (!form.receivePhone) {
+  if (!form.phone) {
     showToast(t('PleaseEnterPhone'))
     return;
   }
-  if (!form.receiveEmail) {
-    showToast(t('PleaseEnterEmail'))
+  if (!form.nequi) {
+    showToast(t('PleaseEnterNEQUI'))
     return;
   }
 
-
-  // if (!form.bankName) {
-  //   showToast(t('PleaseSelectBank'))
-  //   return;
-  // }
-
   let params = {
     ...form,
-    receiveAccount:form.CPF
+    type: "bank_card",
+    receiveAccount: form.nequi,
+    receiveName: form.name,
+    receivePhone: form.phone,
   };
-  // params.bankCode = params.bankCode + "";
   if (route.query.edit == "1") {
-    userCardUpdate(params).then((res) => {
+    userCardUpdate({
+      ...params,
+      id: form.id,
+    }).then((res) => {
       if (res.code == 200) {
         showSuccessToast("");
         setTimeout(() => {
@@ -268,7 +166,6 @@ onUnmounted(() => {
   local.removelocal('bankAccountInfo')
 })
 onMounted(() => {
-  getBankList();
   if (!local.getlocal('bankAccountInfo') && route.query.edit == "1") router.back()
   if (route.query.edit == "1") {
     isEdit.value = true;

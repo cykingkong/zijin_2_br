@@ -15,7 +15,7 @@ const userStore = useUserStore();
 const userInfo = computed(() => userStore.userInfo);
 let ws = null;
 useHead({
-  title: "Billiantearth",
+  title: "Brilliant Earth",
   meta: [
     {
       name: "description",
