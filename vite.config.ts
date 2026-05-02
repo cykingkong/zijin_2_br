@@ -24,7 +24,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
         '/capi': {
           // target: `https://api.ddbindia.online/app-api`, // 代理接口
           // target: `https://api.brilliantearth.co/app-api`, // 代理接口
-          target: `https://api.signet-jewelers-br.com/app-api`, // 代理接口
+          target: `https://api.brilliantearth.co/app-api`, // 代理接口
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/capi/, ''),
           ws: false,

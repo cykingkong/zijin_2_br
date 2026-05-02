@@ -37,7 +37,7 @@ const lang = ref(local.getlocal('lang') || 'br')
 const isVideo = (url) => {
   if (!url) return false;
   // 如果后台 url 没有后缀，或者通过 type 字段判断，请修改此处逻辑
-  const videoExtensions = ['.mp4', '.mov', '.webm', '.ogg'];
+  const videoExtensions = ['.mp4', '.mov', '.webm', '.ogg','.MP4'];
   return videoExtensions.some(ext => url.toLowerCase().includes(ext));
 };
 // -------------------------
@@ -111,12 +111,13 @@ function init() {
   }
   indexInfo().then((res) => {
     indexInfoData.value = res.data
+     indexInfoData.value.banners = [{
+        url: 'https://image.oam007.icu/col/IMG_1447.MP4'
+      }]
     if (res.data.notice) {
       indexInfoData.value.noticeContent = getContent(indexInfoData.value.notice)
       indexInfoData.value.pop_content = optimizeRichText(indexInfoData.value.pop_content)
-      indexInfoData.value.banners = [{
-        url: 'https://image.oam007.icu/col/IMG_1447.MP4'
-      }]
+     
       // // 3. JS 实现自动播放逻辑
       // nextTick(() => {
       //   // v-for 中的 ref 会自动变成数组，取第一个
