@@ -12,9 +12,9 @@
             </svg>
         </div>
         <div class="detail-image w-full px-[24px]">
-            <div class="image bg-[#f5f5f5] rounded-[16px]  w-full mb-16">
+            <!-- <div class="image bg-[#f5f5f5] rounded-[16px]  w-full mb-16">
                 <img :src="info?.article_image" alt="" class="w-full block h-full object-cover rounded-[16px]">
-            </div>
+            </div> -->
             <div class="title text-[16px] font-bold text-[#333] mb-31">{{ info?.title }}</div>
             <div class="w-full">
                 <div class="w-full" v-html="info?.content"></div>
