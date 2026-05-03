@@ -4,6 +4,8 @@ import router from "@/router";
 import { productList, userProductList } from "@/api/product";
 import { addCommasToNumber } from "@/utils/tool";
 
+const formatDiscountPrice = (price: any) => addCommasToNumber(price).replace(/,00$/, '')
+
 const activeName = ref(0);
 const searchMarkShow = ref(false);
 const enumBtnText = {
@@ -203,8 +205,8 @@ onMounted(async () => {
           </div>
           <div class="desc text-[12px] color-[#8C91A2] font-normal">{{ item.levelLimit?'Lv '+ item.levelLimit +' e superior' : 'Lv 1  e superior' }}</div>
           <div class="flex justify-between items-end">
-            <div class="price color-[#FF6464] font-[14px] font-bold">COP {{ addCommasToNumber(item.discountPrice) ||
-              '0.00' }}</div>
+            <div class="price color-[#FF6464] font-[14px] font-bold">COP {{ formatDiscountPrice(item.discountPrice) ||
+              '0' }}</div>
             <div class="button text-[14px] font-bold text-[#fff]  px-[12px] py-[6px] rounded-[8px]"
               :class="item.status == 2 ? 'bg-[var(--brand-surface)] text-[var(--text-brand)]' : 'bg-[var(--brand-primary)]'" @click="handleClickStock(item)">
               {{ t(enumBtnText[item.status]) }}
