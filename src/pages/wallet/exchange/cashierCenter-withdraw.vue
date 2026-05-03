@@ -11,17 +11,34 @@
     <div class="info mt-32" v-if="info">
       <div class="text-[14px] mt-[57px] text-center">{{ t("Withdrawal account") }}</div>
       <div class="min-count text-[#0F172A] font-size-[24px] mx-a text-center mt-4 font-bold overflow-y-auto">
-        COP {{ count || '0' }}
+        COP  {{ count || '0' }}
       </div>
-      <div class="min-count-fee text-[var(--text-brand)] font-size-[14px] mx-a text-center mt-[4px] font-bold overflow-y-auto">
-        {{ t("Tax") }} COP{{ fee }}
+      <div class="min-count-fee text-[#1b1b1b] font-size-[14px] mx-a text-center mt-[4px] font-bold overflow-y-auto">
+        {{ t("Tax") }} COP {{ fee }}
       </div>
-      <div class="min-count-fee text-[var(--text-brand)] font-size-[14px] mx-a text-center mt-[4px] font-bold overflow-y-auto">
-        {{ t('Withdrawable Amount') }} COP {{ addCommasToNumber(userInfo.teamBalance) }}
+      <div class="min-count-fee text-[#1b1b1b] font-size-[14px] mx-a text-center mt-[4px] font-bold overflow-y-auto">
+        {{ t('Withdrawable Amount') }}  COP  {{ addCommasToNumber(userInfo.teamBalance) }}
       </div>
 
       <div class="mt-[30px] ">
         <div class="px-12 py-[20px] bg-[#fff] rounded-[20px] flex-col flex gap-12 card">
+          <div class="label" :class="['flex items-center gap-4']">
+            {{ t('PIXTypeLabel') }}
+          </div>
+          <item class="">
+            <template #left>
+              <div class="left h-[46px] flex items-center">
+                <div class="name text-[14px]" :class="typeName ? 'text-[#0F172A] font-bold' : 'text-[#94A3B8]'">
+                  {{ typeNameLabel || t('PleaseSelectPIXType') }}
+                </div>
+              </div>
+            </template>
+            <template #right>
+              <div class="color-[#1b1b1b] text-[14px] font-bold text-nowrap" @click="onOpenTypePicker">
+                {{ t("Picker") }}
+              </div>
+            </template>
+          </item>
           <div class="label  " :class="['flex items-center gap-4']">
             {{ t('Bank Card') }}
           </div>
@@ -64,11 +81,12 @@
           </div>
 </template>
 <template #right>
-  <div class="text-[var(--text-brand)] text-[14px] font-bold text-nowrap" @click="onSelect">
+  <div class="color-[#1b1b1b] text-[14px] font-bold text-nowrap" @click="onSelect">
     {{ t("Picker") }}
   </div>
 </template>
 </item>
+
 <div class="label  " :class="['flex items-center gap-4']">
             {{ t('Extract Amount') }}
           </div>
@@ -123,10 +141,10 @@
         <svg class="w-20 h-20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M11.6641 3.33325C11.9648 3.33325 12.2598 3.41457 12.5181 3.56862C12.7763 3.72266 12.988 3.94367 13.1308 4.20825L13.5358 4.95825C13.6786 5.22283 13.8903 5.44385 14.1485 5.59789C14.4067 5.75193 14.7018 5.83326 15.0025 5.83325H16.6666C17.1087 5.83325 17.5326 6.00885 17.8451 6.32141C18.1577 6.63397 18.3333 7.05789 18.3333 7.49992V14.9999C18.3333 15.4419 18.1577 15.8659 17.8451 16.1784C17.5326 16.491 17.1087 16.6666 16.6666 16.6666H3.33329C2.89127 16.6666 2.46734 16.491 2.15478 16.1784C1.84222 15.8659 1.66663 15.4419 1.66663 14.9999V7.49992C1.66663 7.05789 1.84222 6.63397 2.15478 6.32141C2.46734 6.00885 2.89127 5.83325 3.33329 5.83325H4.99746C5.29781 5.83327 5.59258 5.75212 5.85061 5.59839C6.10864 5.44466 6.32033 5.22406 6.46329 4.95992L6.87079 4.20659C7.01376 3.94244 7.22545 3.72184 7.48347 3.56811C7.7415 3.41438 8.03627 3.33324 8.33663 3.33325H11.6641Z"
-            stroke="var(--icon-brand, var(--brand-primary, #183E40))" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            stroke="#1B1B1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
           <path
             d="M9.99996 13.3333C11.3807 13.3333 12.5 12.214 12.5 10.8333C12.5 9.45254 11.3807 8.33325 9.99996 8.33325C8.61925 8.33325 7.49996 9.45254 7.49996 10.8333C7.49996 12.214 8.61925 13.3333 9.99996 13.3333Z"
-            stroke="var(--icon-brand, var(--brand-primary, #183E40))" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            stroke="#1B1B1B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
         {{ t("Add Bank Account") }}
       </div>
@@ -143,13 +161,32 @@
         {{ item.address.receiveName }}
       </div>
       <div class="picker border border-[#f0f0f0] border-solid rounded-[4px] w-16 h-16 flex justify-center items-center"
-        :class="selectBank == item.id ? 'bg-[var(--brand-primary)]' : ''">
+        :class="selectBank == item.id ? 'bg-[#1b1b1b]' : ''">
         <svg v-if="selectBank == item.id" class="w-10 h-10" viewBox="0 0 10 10" fill="none"
           xmlns="http://www.w3.org/2000/svg">
           <path d="M8.33341 2.70825L3.75008 7.29159L1.66675 5.20825" stroke="white" stroke-width="1.5"
             stroke-linecap="round" stroke-linejoin="round" />
         </svg>
 
+      </div>
+    </div>
+  </div>
+</van-popup>
+<van-popup v-model:show="showTypePicker" destroy-on-close round :position="'bottom'" :safe-area-inset-bottom="true">
+  <div class="p-12">
+    <div
+      class="add-bank-li mb-12 h-52 border border-[#f0f0f0] border-solid rounded-[16px] p-[12px] flex justify-between items-center"
+      v-for="item in withdrawTypeOptions" :key="item.value" @click="handleSelectType(item.value)">
+      <div class="name text-[#0F172A] text-[14px] font-bold">
+        {{ item.label }}
+      </div>
+      <div class="picker border border-[#f0f0f0] border-solid rounded-[4px] w-16 h-16 flex justify-center items-center"
+        :class="typeName == item.value ? 'bg-[#1b1b1b]' : ''">
+        <svg v-if="typeName == item.value" class="w-10 h-10" viewBox="0 0 10 10" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path d="M8.33341 2.70825L3.75008 7.29159L1.66675 5.20825" stroke="white" stroke-width="1.5"
+            stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
       </div>
     </div>
   </div>
@@ -164,6 +201,7 @@ import { useLoadingStore } from "@/stores/modules/loading";
 import { bank_list } from "@/api/payment";
 import { optimizeRichText } from '@/utils/richText';
 import { useUserStore } from "@/stores";
+import { showToast } from 'vant';
 
 import { deposit, withdraw_info, withdraw } from "@/api/billing";
 import item from "../../../components/item.vue";
@@ -171,7 +209,15 @@ import BottomButton from "@/components/bottom-button.vue";
 const info = ref<any>();
 const count = ref<any>(0);
 const showPicker = ref(false)
+const showTypePicker = ref(false)
 const { t } = useI18n();
+const typeName = ref("");
+const withdrawTypeOptions = computed(() => ([
+  { label: t('CPF'), value: 'PIX' },
+  { label: t('Email'), value: 'email' },
+  { label: t('Phone'), value: 'phone' },
+]));
+const typeNameLabel = computed(() => withdrawTypeOptions.value.find(item => item.value === typeName.value)?.label || "");
 const displayValue = ref("");
 const fee = computed(() => {
   return addCommasToNumber(count.value * withdrwaInfo.value.withdrawFee * 0.01);
@@ -230,6 +276,13 @@ const onSelect = () => {
   // router.replace("/wallet/exchange/withdraw-bank");
   showPicker.value = true
 };
+const onOpenTypePicker = () => {
+  showTypePicker.value = true
+};
+const handleSelectType = (value: string) => {
+  typeName.value = value;
+  showTypePicker.value = false;
+};
 const bankList = ref([])
 const getBankList = async () => {
   const { data, code } = await bank_list({ ...{ pageIndex: 1, pageSize: 30 }, wallet_type: "auto" });
@@ -247,6 +300,10 @@ const handleBuyClickOriginal = async () => {
   // 处理购买逻辑
   console.log("购买金额:", count.value);
   console.log("购买信息:", info.value);
+  if (!typeName.value) {
+    showToast(t('PleaseSelectPIXType'));
+    return;
+  }
   // 将数据整合到一起，存进localStorage
   const dataInfo = {
     amount: count.value,
@@ -259,6 +316,7 @@ const handleBuyClickOriginal = async () => {
     type: "1",
     cardId: selectBank.value,
     amount: Number(count.value),
+    typeName: typeName.value,
   });
   if (code == 200) {
     setTimeout(() => {

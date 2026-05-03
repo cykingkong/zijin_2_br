@@ -330,5 +330,6 @@
   "Exceed remaining codes": "Excede os códigos restantes",
   "Purchase Success": "Compra realizada com sucesso",
   "Buy Count": "Quantidade comprada",
-  "Enter your Amount": "Digite seu valor"
+  "Enter your Amount": "Digite seu valor",
+  "PIXTypeLabel": "Rótulo do Tipo PIX"
 }
