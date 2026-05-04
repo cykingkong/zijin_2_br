@@ -189,7 +189,7 @@ const hanleClickAreaPick = () => {
 const onSubmit = async () => {
   if (!form.account) {
     showFailToast({
-      message: 'Por favor, insira a conta'
+      message: t('PleaseInputAccount')
     })
     return
   }
@@ -204,7 +204,7 @@ const onSubmit = async () => {
   // params.password_confirmation = params.password.trim()
   if (params.password_confirmation.trim() != params.password.trim()) {
     showFailToast({
-      message: 'As senhas não correspondem, por favor, digite novamente'
+      // message: 'As senhas não correspondem, por favor, digite novamente'
     })
     return
   }

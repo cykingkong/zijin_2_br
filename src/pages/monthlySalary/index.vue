@@ -20,9 +20,9 @@
                 <!-- 表头 -->
                 <div
                     class="flex items-center text-[#333] font-bold text-[13px] mb-[16px] pb-[12px] border-b border-[#0000000D]">
-                    <span class="w-[20%] text-left">Nível</span>
-                    <span class="w-[40%] text-center">Salário Mensal</span>
-                    <span class="w-[40%] text-right">Auxílio-Conferêncial</span>
+                    <span class="w-[20%] text-left">Nivel</span>
+                    <span class="w-[40%] text-center">Salario Mensual</span>
+                    <span class="w-[40%] text-right">Auxilio de Conferencia</span>
                 </div>
 
                 <!-- 列表内容 -->

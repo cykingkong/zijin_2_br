@@ -367,7 +367,7 @@ onMounted(() => {
   name: 'home',
   meta: {
     title: 'home',
-    i18n: 'Página inicial'
+    i18n: 'home'
   },
 }
 </route>

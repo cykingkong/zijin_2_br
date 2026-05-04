@@ -19,7 +19,7 @@ getData();
 {
   name: 'aboutUs',
   meta: {
-    i18n: 'Sobre Nós',
+    i18n: 'aboutUs',
   },
 }
 </route>

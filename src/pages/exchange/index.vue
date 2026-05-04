@@ -23,8 +23,8 @@
             <div
                 class="flex justify-between text-[#333]   font-bold text-[14px] mb-[16px] pb-[12px] border-b-solid border-b-[1px] border-b-[#0000000D] border">
                 <span class=" flex-1">{{ t('Level') }}</span>
-                <span class=" flex-1 text-center">{{ 'Pérolas' }}</span>
-                <span class=" flex-1 text-right">{{ 'Resgatável' }}</span>
+                <span class=" flex-1 text-center">{{ t('Pearls') }}</span>
+                <span class=" flex-1 text-right">{{ t('Exchangeable') }}</span>
             </div>
 
             <!-- 列表内容 -->

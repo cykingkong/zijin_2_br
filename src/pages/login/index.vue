@@ -57,8 +57,8 @@ onMounted(async () => {
   if (route.query.token) {
     let t = route.query.token
     await userStore.loginByToken({ token: t })
-    localStorage.setItem("language", "br");
-    locale.value = "br";
+    localStorage.setItem("language", "es");
+    locale.value = "es";
     const { redirect, ...othersQuery } = router.currentRoute.value.query;
     router.push({
       name: "home",
@@ -208,8 +208,8 @@ async function signUp() {
       "password": postData.password
     }
     await userStore.register(params);
-    localStorage.setItem("language", "br");
-    locale.value = "br";
+    localStorage.setItem("language", "es");
+    locale.value = "es";
     const { redirect, ...othersQuery } = router.currentRoute.value.query;
     router.push({
       name: "home",
@@ -248,8 +248,8 @@ async function login() {
     };
     await userStore.login(params);
     // await userStore.info()
-    localStorage.setItem("language", "br");
-    locale.value = "br";
+    localStorage.setItem("language", "es");
+    locale.value = "es";
     const { redirect, ...othersQuery } = router.currentRoute.value.query;
     router.push({
       name: "home",
@@ -412,7 +412,7 @@ async function login() {
         @click="pageType == 0 ? login() : signUp()">{{
           pageType == 0 ? t("Login") : t("Sign Up")
         }}</van-button>
-      <div class="or">{{ '©2026 Brilliant Earth Co. Este site é utilizado sob autorização, todos os direitos reservados.'
+      <div class="or">{{ '©2026 Brilliant Earth Co. Este sitio web se utiliza bajo autorización, todos los derechos reservados.'
         }}
       </div>
       <div :style="{ color: 'var(--text-brand)' }"

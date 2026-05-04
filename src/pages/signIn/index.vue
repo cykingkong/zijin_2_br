@@ -176,7 +176,7 @@ async function handleSignIn() {
     const todayItem = checkInDays.value.find((item)=>today.value == item.day)
     if(todayItem.status == 1){
         showToast({
-            message:"Check-in concluído hoje"
+            // message:"El check-in ha finalizado hoy."
         })
         return
     }

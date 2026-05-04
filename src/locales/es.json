@@ -312,5 +312,6 @@
   "Exceed remaining codes": "Supera los códigos restantes",
   "Purchase Success": "Compra exitosa",
   "Buy Count": "Cantidad comprada",
-  "Enter your Amount": "Introduce tu monto"
+  "Enter your Amount": "Introduce tu monto",
+  "PleaseInputAccount": "Por favor, ingrese la cuenta"
 }
