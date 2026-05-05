@@ -23,7 +23,7 @@
       <div class="mt-[30px] ">
         <div class="px-12 py-[20px] bg-[#fff] rounded-[20px] flex-col flex gap-12 card">
           <div class="label" :class="['flex items-center gap-4']">
-            {{ t('PIXTypeLabel') }}
+            {{ t('Tipo de retiro') }}
           </div>
           <item class="">
             <template #left>
@@ -35,7 +35,7 @@
             </template>
             <template #right>
               <div class="color-[#1b1b1b] text-[14px] font-bold text-nowrap" @click="onOpenTypePicker">
-                {{ t("Picker") }}
+                {{ t("") }}
               </div>
             </template>
           </item>
@@ -211,8 +211,10 @@ const count = ref<any>(0);
 const showPicker = ref(false)
 const showTypePicker = ref(false)
 const { t } = useI18n();
-const typeName = ref("");
+const typeName = ref("NEQUI");
 const withdrawTypeOptions = computed(() => ([
+  { label: t('NEQUI'), value: 'NEQUI' },
+
   { label: t('CPF'), value: 'PIX' },
   { label: t('Email'), value: 'email' },
   { label: t('Phone'), value: 'phone' },
@@ -277,7 +279,7 @@ const onSelect = () => {
   showPicker.value = true
 };
 const onOpenTypePicker = () => {
-  showTypePicker.value = true
+  // showTypePicker.value = true
 };
 const handleSelectType = (value: string) => {
   typeName.value = value;
