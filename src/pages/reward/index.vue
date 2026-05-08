@@ -81,7 +81,7 @@ const getUserList = async () => {
         } else {
             userList.value = [...userList.value, ...data.rows || []]
         }
-        if (data.length >= data.total) {
+        if (data.rows.length >= data.total) {
             listStatus.value = 3
             return
         }

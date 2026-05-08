@@ -75,7 +75,7 @@
                 :class="[
                     // 如果倒计时未结束(disabled为true)，使用灰色背景和禁止手势
                     (timerMap[item.id] && timerMap[item.id].disabled)
-                        ? 'bg-[#E5E5E5] text-[#999] cursor-not-allowed'
+                    ? 'bg-[#E5E5E5] text-[#999] cursor-not-allowed'    
                         : 'bg-[var(--brand-primary)] text-white active:opacity-90'
                 ]" :disabled="timerMap[item.id]?.disabled" @click="handleClickReceived(item)">
                 <!-- 显示倒计时 或者 'Received' -->
@@ -116,7 +116,7 @@ const userProductList = ref([])
 const listStatus = ref(1); // 1-加载中 2-成功 3-已无更多
 const {t} = useI18n()
 const page = reactive({
-    pageIndex: 1,
+    page: 1,
     pageSize: 10
 })
 const info = ref({
@@ -261,7 +261,7 @@ const getUserCouponList = async () => {
             status: activeIndex.value + 1
         })
         if (code == 200) {
-            if (page.pageIndex == 1) {
+            if (page.page == 1) {
                 userProductList.value = data.rows || []
                 info.value = data.info || {
                     todayIncome: "0",
@@ -274,10 +274,11 @@ const getUserCouponList = async () => {
             }
             startTimer()
 
-            if (data.length >= data.total) {
+            if (data.rows.length >= data.total) {
                 listStatus.value = 3
+                return 
             }
-            if (!data.row || data.rows.length == 0) {
+            if (!data.rows || data.rows.length == 0) {
                 listStatus.value = 3
                 return
             }
@@ -288,7 +289,7 @@ const getUserCouponList = async () => {
     }
 }
 const loadMore = () => {
-    page.pageIndex++
+    page.page++
     getUserCouponList()
 }
 onMounted(() => {

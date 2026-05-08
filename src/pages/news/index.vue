@@ -154,10 +154,11 @@ const getList = async () => {
             }
             console.log(logList.value, 'logList')
 
-            if (data.length >= data.total) {
+            if (data.rows.length >= data.total) {
                 listStatus.value = 3
+                return
             }
-            if (!data.row || data.rows.length == 0) {
+            if (!data.rows || data.rows.length == 0) {
                 listStatus.value = 3
                 return
             }
