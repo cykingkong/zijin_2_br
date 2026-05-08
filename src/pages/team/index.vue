@@ -227,8 +227,8 @@ const fetchTeamData = async () => {
 
 const activeIndex = ref(0);
 const typeList = ref([
-    'Membros ativos',
-    'Membro inativo',
+    'Miembros activos',
+    'Miembros inactivos',
 ])
 onMounted(async () => {
     await fetchTeamData()

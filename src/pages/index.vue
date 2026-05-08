@@ -65,15 +65,14 @@ function handleClickSeeAll() {
   })
 }
 const handleClickDownloadAppUrl = (type) => {
-  let appStoreUrl = type == 0 ? `https://api.signet-jewelers-br.com/ios.mobileconfig` : `https://api.signet-jewelers-br.com/signetjewelers.apk`
+  let appStoreUrl = type == 0 ? `https://colapi.wthbit.top/ios.mobileconfig` : `https://colapi.wthbit.top/brilliantearth.apk`
   window.open(appStoreUrl)
   downloadPopShow.value = false;
 
 }
 function handleClickGrid(val) {
   if (val == 3) {
-    // downloadPopShow.value = true
-
+    downloadPopShow.value = true
     return
   }
   router.push({

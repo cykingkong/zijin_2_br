@@ -200,7 +200,7 @@
 
         <!-- Rules Text -->
         <div class="text-[#666] text-[11px] leading-[1.5] mb-[12px]">
-          Regras: Membros Nível 1 - comissão de 10%; Membros Nível 2 - comissão de 5%; Membros Nível 3 - comissão de 2%.
+          {{ t("Reglas: Miembros de nivel 1: 10% de comisión; Miembros de nivel 2: 5% de comisión; Miembros de nivel 3: 2% de comisión.") }}
         </div>
 
         <!-- Details Link -->
