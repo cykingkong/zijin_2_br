@@ -40,6 +40,7 @@ const loadMore = () => {
 const handleChangeTab = (index: number) => {
   activeTab.value = index
   page.pageIndex = 1
+  orderListData.value = []
   getData()
 }
 const getData = () => {
@@ -75,8 +76,15 @@ const getWithdrawalOrderList = async () => {
       // 后续页面，追加数据
       orderListData.value = orderListData.value.concat(data.rows || []);
     }
-
-    updateListStatus(data.total || 0)
+     if (data.rows.length >= data.total) {
+                listStatus.value = 3
+                return 
+            }
+            if (!data.rows || data.rows.length == 0) {
+                listStatus.value = 3
+                return
+            }
+    // updateListStatus(data.total || 0)
 
   } catch (error) {
     console.error("获取订单列表失败:", error);
@@ -109,7 +117,14 @@ const getWalletLogsList = async () => {
     }
 
     updateListStatus(data.total || 0)
-
+     if (data.rows.length >= data.total) {
+                listStatus.value = 3
+                return 
+            }
+            if (!data.rows || data.rows.length == 0) {
+                listStatus.value = 3
+                return
+            }
   } catch (error) {
     console.error("获取订单列表失败:", error);
     listStatus.value = 3; // 出错时设置为没有更多

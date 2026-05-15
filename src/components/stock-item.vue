@@ -6,8 +6,9 @@
             <!-- 股票信息 -->
 
             <div
-                class="symbol text-[16px] font-normal color-[#374151] pb-[16px] border-b-solid border-b-[#E2E8F0] border-b-[1px]">
-                {{ props.showType == 2 ? t('Withdrawal')
+                class="symbol text-[16px] font-normal pb-[16px] border-b-solid border-b-[#E2E8F0] border-b-[1px]"
+                :class="props.showType == 2 ? (item.status == 1 ? 'text-[#008000]' : 'text-[#FF0000]') : 'color-[#374151]'">
+                {{ props.showType == 2 ? t(withdrawalStatusEnum[item.status])
                     : item.logTypeDesc }}
             </div>
             <div class="buttom-flex w-full flex items-center justify-between pt-[16px]">
@@ -51,6 +52,16 @@ const { t } = useI18n()
 const amountPrefix = computed(() => {
     return props.item?.assetType === 'seed_balance' ? '' : 'R$'
 })
+// '状态 0审核中 1已通过 2已拒绝 3已提交通道 4已被通道驳回 5业务员已通过 6代理已通过',
+const withdrawalStatusEnum = {
+    0: 'Not processed',
+    1: 'Success',
+    2: 'Not processed',
+    3: 'Not processed',
+    4: 'Not processed',
+    5: 'Not processed',
+    6: 'Not processed',
+}
 // 字符串 字母首大写
 function capitalize(str: string) {
     return str.charAt(0).toUpperCase() + str.slice(1)
