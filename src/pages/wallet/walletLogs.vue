@@ -4,7 +4,7 @@
       <div
         class="tab-item flex-1 flex items-center bg-[#0000000D] justify-center text-center border text-14 border-[#E5E5E5] border-solid rounded-[8px] py-4 px-6 h-28 text-[#00000033]"
         :class="activeTab == index ? 'bg-[#CED0D8] text-[#222222] font-bold' : 'text-[#999999]'"
-        v-for="(item, index) in orderTypeList" :key="index" @click="activeTab = index; getData()">{{ $t(item)
+        v-for="(item, index) in orderTypeList" :key="index" @click="handleChangeTab(index)">{{ $t(item)
         }}
       </div>
     </div>
@@ -37,14 +37,21 @@ const loadMore = () => {
   page.pageIndex++;
   getData();
 };
+const handleChangeTab = (index: number) => {
+  activeTab.value = index
+  page.pageIndex = 1
+  orderListData.value = []
+  getData()
+}
 const getData = () => {
-  orderListData.value = [];
-
   if (activeTab.value == 2) {
     getWithdrawalOrderList()
   } else {
     getWalletLogsList()
   }
+}
+const updateListStatus = (total: number) => {
+  listStatus.value = orderListData.value.length >= total ? 3 : 2
 }
 const getWithdrawalOrderList = async () => {
   try {
@@ -55,6 +62,9 @@ const getWithdrawalOrderList = async () => {
     });
 
     if (!data.rows || data.rows.length === 0) {
+      if (page.pageIndex === 1) {
+        orderListData.value = []
+      }
       listStatus.value = 3; // 没有数据
       return;
     }
@@ -66,14 +76,15 @@ const getWithdrawalOrderList = async () => {
       // 后续页面，追加数据
       orderListData.value = orderListData.value.concat(data.rows || []);
     }
-
-    // 判断是否还有更多数据
-    if (data.rows.length <= data.total) {
-      listStatus.value = 3; // 没有更多数据
-      return;
-    }
-
-    listStatus.value = 2; // 可以加载更多
+     if (data.rows.length >= data.total) {
+                listStatus.value = 3
+                return 
+            }
+            if (!data.rows || data.rows.length == 0) {
+                listStatus.value = 3
+                return
+            }
+    // updateListStatus(data.total || 0)
 
   } catch (error) {
     console.error("获取订单列表失败:", error);
@@ -90,6 +101,9 @@ const getWalletLogsList = async () => {
     });
 
     if (!data.rows || data.rows.length === 0) {
+      if (page.pageIndex === 1) {
+        orderListData.value = []
+      }
       listStatus.value = 3; // 没有数据
       return;
     }
@@ -102,27 +116,23 @@ const getWalletLogsList = async () => {
       orderListData.value = orderListData.value.concat(data.rows || []);
     }
 
-    // 判断是否还有更多数据
-    if (data.rows.length <= data.total) {
-      listStatus.value = 3; // 没有更多数据
-      return;
-    }
 
-    listStatus.value = 2; // 可以加载更多
-
+     if (data.rows.length >= data.total) {
+                listStatus.value = 3
+                return 
+            }
+            if (!data.rows || data.rows.length == 0) {
+                listStatus.value = 3
+                return
+            }
   } catch (error) {
     console.error("获取订单列表失败:", error);
     listStatus.value = 3; // 出错时设置为没有更多
   }
 };
 onMounted(async () => {
-
   // 初始化加载
-  await getWalletLogsList();
-  setTimeout(() => {
-    console.log(orderListData.value)
-
-  }, 999)
+  await getData();
 })
 const handleClickStockDetail = (item: any) => {
   // router.push("/buy/orderDetail?transaction_id=" + item.transaction_id);
