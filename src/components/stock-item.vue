@@ -21,7 +21,7 @@
                             fill="#161616" />
                     </svg>
                     <span :class="item.type != '1' ? 'text-[#008000]' : 'text-[#FF0000]'"> {{ item.type == '1' ? '+' :
-                        '-' }}{{ amountPrefix }}{{ item?.amount }}</span>
+                        '-' }}{{ amountPrefix }}{{ addCommasToNumber(item?.amount) }}</span>
                 </div>
                 <div class="company-name text-[12px] color-[#161616]">{{ item?.createdAt }}
                 </div>
@@ -36,6 +36,7 @@
 </template>
 
 <script setup lang="ts">
+import { addCommasToNumber } from "@/utils/tool"
 import { ref, reactive } from "vue"
 const { proxy } = getCurrentInstance()!
 

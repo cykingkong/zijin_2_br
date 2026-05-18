@@ -108,9 +108,9 @@
           <!-- Row 3 (Missing Fields Simulation) -->
           <div class="flex flex-col">
             <span class="text-[#999] text-[12px] mb-[2px]">{{ t("OtherIncome") }}</span>
-            <span class="text-[var(--text-brand)] text-[16px] font-bold ">{{ fakeData.other_income > 0 ?
-              addCommasToNumber(fakeData.other_income) : addCommasToNumber(userInfo.otherIncome ||
-                '0') }}</span>
+        <span class="text-[#1A1A1A] text-[16px] font-bold ">{{ fakeData.other_income > 0 ?
+              addCommasToNumber(fakeData.other_income) : addCommasToNumber(Number(userInfo.allProfit || 0) -
+                Number(userInfo.productProfit || 0) - Number(userInfo.itemProfit || 0)) }}</span>
           </div>
           <div class="flex flex-col items-end" @click="router.push('/exchange')">
             <span class="text-[#999] text-[12px] mb-[2px]">{{ t('Pearl') }} <svg class="w-14 h-14" viewBox="0 0 14 14"
