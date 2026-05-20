@@ -115,8 +115,10 @@ function init() {
     if (res.data.notice) {
       indexInfoData.value.noticeContent = getContent(indexInfoData.value.notice)
       indexInfoData.value.pop_content = optimizeRichText(indexInfoData.value.pop_content)
+      //   url: 'https://api.wthbit.top/video.mp4'
+      
       indexInfoData.value.banners = [{
-        url: 'https://api.wthbit.top/video.mp4'
+        url: 'https://images.cenvncnngn.com/video_imges/video.mp4'
       }]
       // // 3. JS 实现自动播放逻辑
       // nextTick(() => {
