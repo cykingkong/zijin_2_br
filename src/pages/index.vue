@@ -41,6 +41,9 @@ const isVideo = (url) => {
   const videoExtensions = ['.mp4', '.mov', '.webm', '.ogg'];
   return videoExtensions.some(ext => url.toLowerCase().includes(ext));
 };
+const setBannerVideoVolume = (event) => {
+  event.target.volume = 0.4;
+};
 // -------------------------
 
 let pathEnum = {
@@ -255,7 +258,7 @@ onMounted(() => {
           <div class="image bg-[#f5f5f5] rounded-[16px] w-full h-full overflow-hidden relative">
             <video v-if="isVideo(item.url)" ref="bannerVideoRef" :src="item.url"
               class="w-full h-full object-cover rounded-[16px] block" autoplay loop playsinline
-              webkit-playsinline></video>
+              webkit-playsinline @loadedmetadata="setBannerVideoVolume"></video>
             <img v-else :src="item.url" alt="" class="w-full h-full object-cover rounded-[16px] block">
           </div>
         </van-swipe-item>
