@@ -82,7 +82,7 @@
                         <div class="flex items-center">
                             <!-- 不同等级不同颜色的图标占位 -->
                             <img :src="level.img" class="w-[20px] h-[20px] mr-[8px] rounded-full" />
-                            <span class="text-[#00000080]">LV{{ level.level }}</span>
+                            <span class="text-[#00000080]">VIP{{ level.level }}</span>
                         </div>
                         <span class="text-[#333] font-medium ">{{ level.dayAmount }}</span>
                     </div>
