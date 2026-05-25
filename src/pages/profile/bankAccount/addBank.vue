@@ -41,7 +41,7 @@
       </div>
       <div class="phone-input my-[12px]">
 
-        <inputCom :placeholder="t('')" v-model:value="form.receivePhone" :tips="''">
+        <inputCom :placeholder="t('')" v-model:value="form.receivePhone" :tips="''" inputType="number" :formatter="phoneFormatter">
         </inputCom>
       </div>
 
@@ -192,11 +192,13 @@ const getCardInfo = () => {
 
 };
 
+const phoneFormatter = (val: string) => {
+  return val.replace(/[^0-9]/g, '');
+};
+
 const cpfFormatter = (val: string) => {
-  // 1. 过滤非数字字符
   let cleaned = val.replace(/[^0-9]/g, '');
 
-  // 2. 限制11位（可视化展示，但允许临时超过）
   if (cleaned.length > 11) {
     cleaned = cleaned.substring(0, 11);
   }
