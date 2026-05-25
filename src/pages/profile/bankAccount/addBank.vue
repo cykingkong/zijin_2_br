@@ -40,8 +40,8 @@
         {{ t("Phone Number") }}
       </div>
       <div class="phone-input my-[12px]">
-        <inputCom :placeholder="t('')" v-model:value="form.receivePhone" :tips="''" inputType="number" :formatter="phoneFormatter">
 
+        <inputCom :placeholder="t('')" v-model:value="form.phone" :tips="''">
         </inputCom>
       </div>
 
@@ -162,9 +162,6 @@ function onBack() {
   else
     router.replace('/')
 }
-const phoneFormatter = (val: string) => {
-  return val.replace(/[^0-9]/g, '');
-};
 onUnmounted(() => {
   local.removelocal('bankAccountInfo')
 })
