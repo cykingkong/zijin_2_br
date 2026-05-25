@@ -17,7 +17,7 @@
     "typecheck": "vue-tsc --noEmit",
     "commitlint": "commitlint --edit",
     "prepare": "simple-git-hooks",
-    "deploy:pages": "pnpm build && wrangler pages deploy dist --project-name=brilliantearth"
+    "deploy:pages": "yarn build:pro && wrangler pages deploy dist --project-name=brilliantearth --branch=main --commit-dirty=true"
   },
   "dependencies": {
     "@lucky-canvas/vue": "^0.1.11",
