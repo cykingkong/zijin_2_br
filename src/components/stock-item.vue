@@ -51,7 +51,7 @@ const props = defineProps({
 })
 const { t } = useI18n()
 const amountPrefix = computed(() => {
-    return props.item?.assetType === 'seed_balance' ? '' : 'R$'
+    return props.item?.assetType === 'seed_balance' ? '' : 'COP'
 })
 // '状态 0审核中 1已通过 2已拒绝 3已提交通道 4已被通道驳回 5业务员已通过 6代理已通过',
 const withdrawalStatusEnum = {

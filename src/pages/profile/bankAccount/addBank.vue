@@ -153,6 +153,8 @@ const handleClickSubmit = () => {
       setTimeout(() => {
         router.replace("/profile/bankAccount");
       }, 500);
+    }else{
+      showToast(res.msg || res.message)
     }
   });
 };
