@@ -32,7 +32,7 @@ const indexInfoData = ref({
 });
 // 2. 定义 video 的 ref 引用
 const bannerVideoRef = ref(null);
-const lang = ref(local.getlocal('lang') || 'br')
+const lang = ref(local.getlocal('lang') || 'pt-BR')
 
 // --- 新增：判断是否为视频 ---
 const isVideo = (url) => {

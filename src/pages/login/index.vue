@@ -58,8 +58,8 @@ onMounted(async () => {
   if (route.query.token) {
     let t = route.query.token
     await userStore.loginByToken({ token: t })
-    localStorage.setItem("language", "br");
-    locale.value = "br";
+    localStorage.setItem("language", "pt-BR");
+    locale.value = "pt-BR";
     const { redirect, ...othersQuery } = router.currentRoute.value.query;
     router.push({
       name: "home",
@@ -209,8 +209,8 @@ async function signUpOriginal() {
       "password": postData.password
     }
     await userStore.register(params);
-    localStorage.setItem("language", "br");
-    locale.value = "br";
+    localStorage.setItem("language", "pt-BR");
+    locale.value = "pt-BR";
     const { redirect, ...othersQuery } = router.currentRoute.value.query;
     router.push({
       name: "home",
@@ -249,8 +249,8 @@ async function loginOriginal() {
     };
     await userStore.login(params);
     // await userStore.info()
-    localStorage.setItem("language", "br");
-    locale.value = "br";
+    localStorage.setItem("language", "pt-BR");
+    locale.value = "pt-BR";
     const { redirect, ...othersQuery } = router.currentRoute.value.query;
     router.push({
       name: "home",

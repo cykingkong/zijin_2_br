@@ -73,7 +73,7 @@ import loginTab from "@/components/tab.vue";
 
 import { showToast, showSuccessToast, showFailToast } from 'vant';
 const { t } = useI18n();
-const lang = ref(local.getlocal('lang') || 'br')
+const lang = ref(local.getlocal('lang') || 'pt-BR')
 
 const hasLogin = ref(false);
 interface formDataInter {

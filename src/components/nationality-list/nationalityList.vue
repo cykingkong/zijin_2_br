@@ -930,8 +930,13 @@ let countryEnList = ref([
   "Zambia",
   "Zimbabwe",
 ]);
+function getCountryLocale(localeKey) {
+  return localeKey === "pt-BR" ? "br" : localeKey;
+}
+
 onMounted(() => {
-  const originalCountries = countries.value[locale.value];
+  const localeKey = getCountryLocale(locale.value);
+  const originalCountries = countries.value[localeKey];
   console.log(originalCountries, "originalCountries");
   // 添加安全检查
   if (!originalCountries || typeof originalCountries !== "object") {
@@ -962,8 +967,9 @@ const open = () => {
 const getData = () => {
   console.log(countries.value, 'getData');
 
-  let us = countries.value[locale.value]
-    ? countries.value[locale.value]["in"]
+  const localeKey = getCountryLocale(locale.value)
+  let us = countries.value[localeKey]
+    ? countries.value[localeKey]["in"]
     : countries.value["en-US"]["in"];
 
   $emit("getName", us);
@@ -985,15 +991,16 @@ const selectItem = (item, key) => {
 const onSearch = (val) => {
   console.log(val);
   console.log(countries.value);
+  const localeKey = getCountryLocale(locale.value)
   if (!val) {
-    countriesFind.value = countries.value[locale.value];
+    countriesFind.value = countries.value[localeKey];
     return;
   }
   countriesFind.value = {};
 
   const filtered = {};
   // 如果countries.value[locale.value]为 undefined ，则 locale.value 取'en-US'
-  let countriesData = countries.value[locale.value] || countries.value["en-US"];
+  let countriesData = countries.value[localeKey] || countries.value["en-US"];
   Object.keys(countriesData).forEach((key) => {
     if (
       countriesData[key].name.toLowerCase().includes(val.toLowerCase()) ||

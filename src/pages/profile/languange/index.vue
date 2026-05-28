@@ -54,12 +54,13 @@ const languageToCountryMap = {
   // "zh-CN": "cn", // 中国
   // "zh-TW": "hk", // 中国
   "en-US": "us", // 美国
+  "pt-BR": "br", // 巴西
   // ta: 'ta', // 泰米尔语
   // te: 'te' // 泰卢固语
 };
 
-function getCountryCode(languageCode) {
-  return languageToCountryMap[languageCode] || "us";
+function getCountryCode(languageCode: string | number) {
+  return languageToCountryMap[String(languageCode)] || "us";
 }
 function onSearch() { }
 function langChange(item: any) {
