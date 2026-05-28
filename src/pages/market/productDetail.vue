@@ -317,7 +317,7 @@ const handlePurchase = async () => {
     // 简化购买逻辑，截图未显示优惠券选择，这里直接调用购买
     // 如果需要弹窗选择优惠券，可以在这里加弹窗逻辑
     try {
-        const { code } = await purchase({
+        const { code,message } = await purchase({
             productId: productInfo.value.productId,
             couponId: activeConponIndex.value == -1 ? '' : couponList.value[activeConponIndex.value].couponId, // 假设不传或传-1代表不使用优惠券
             // payType:payTypeList.value[activePayIndex.value].key
@@ -328,6 +328,8 @@ const handlePurchase = async () => {
             setTimeout(() => {
                 router.push({ path: "/buy/success" });
             }, 500);
+        }else{
+            showToast({message:message || ''})
         }
     } catch (e) {
         console.log(e);
