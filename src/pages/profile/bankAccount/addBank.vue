@@ -61,6 +61,20 @@
         </inputCom>
       </div>
 
+      <div v-if="isEdit" class="label font-bold text-[16px] color-[#64748B]">
+        {{ t('VerificationCode') }}
+      </div>
+      <div v-if="isEdit" class="phone-input my-[12px]">
+        <inputCom v-model:value="form.code" :placeholder="t('Code')" :onlyRead="false" :inputType="'text'">
+          <template #sendCode>
+            <div class="absolute right-0 font-size-12 h-18 flex justify-center items-center sendCode"
+              :class="countdown > 0 ? 'text-gray-400' : 'text-[#000]'" @click="getCode">
+              {{ countdown > 0 ? `${countdown}s` : t("Get") }}
+            </div>
+          </template>
+        </inputCom>
+      </div>
+
     </div>
 
     <BottomButton color="var(--btn-primary-bg)" :button-text="t('Submit')" @click="handleClickSubmit"></BottomButton>
@@ -68,7 +82,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { ref, reactive, computed } from "vue";
 import inputCom from "@/components/inputCom.vue";
 import {
   create_bank,
@@ -76,9 +90,13 @@ import {
 } from "@/api/payment";
 import { showToast, showSuccessToast } from "vant";
 
+import { sendCode } from "@/api/user";
+import { useUserStore } from "@/stores";
 import local from "@/utils/local";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
+const userStore = useUserStore();
+const userInfo = computed(() => userStore.userInfo);
 
 const isEdit = ref(false);
 const form = reactive({
@@ -93,7 +111,34 @@ const form = reactive({
   CPF: "CCPPFF",
   receivePhone: "",
   receiveEmail: "123@gamil.com",
+  code: "",
 });
+const countdown = ref(0)
+const timer = ref()
+const getCode = async () => {
+  if (countdown.value > 0) return
+  try {
+    let params = {
+      type: 'phone',
+      phone: userInfo.value.phone,
+      email: ''
+    }
+    await sendCode(params)
+    startCountdown()
+  } catch (e) {
+    console.log(e)
+  }
+}
+const startCountdown = () => {
+  countdown.value = 60
+  timer.value = setInterval(() => {
+    countdown.value--
+    if (countdown.value <= 0) {
+      clearInterval(timer.value)
+      timer.value = undefined
+    }
+  }, 1000)
+}
 const route = useRoute();
 const router = useRouter();
 const getCardInfo = () => {
@@ -120,6 +165,10 @@ const handleClickSubmit = () => {
     showToast(t('PleaseEnterNEQUI'))
     return;
   }
+  if (isEdit.value && !form.code) {
+    showToast(t('Please Enter Code'))
+    return
+  }
 
   let params = {
     ...form,
@@ -132,6 +181,7 @@ const handleClickSubmit = () => {
     userCardUpdate({
       ...params,
       id: form.id,
+      code_type: 'phone',
     }).then((res) => {
       if (res.code == 200) {
         showSuccessToast("");
@@ -166,10 +216,15 @@ function onBack() {
 }
 onUnmounted(() => {
   local.removelocal('bankAccountInfo')
+  if (timer.value) {
+    clearInterval(timer.value)
+    timer.value = undefined
+  }
 })
-onMounted(() => {
+onMounted(async () => {
   if (!local.getlocal('bankAccountInfo') && route.query.edit == "1") router.back()
   if (route.query.edit == "1") {
+    await userStore.getInfo()
     isEdit.value = true;
     getCardInfo();
     form.id = String(route.query.id);
@@ -214,6 +269,14 @@ onMounted(() => {
 
 .card {
   border: 1px solid #0000001A
+}
+
+.sendCode {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #868c9a;
+  color: #fff;
+  background: #424242;
 }
 </style>
 <route lang="json5">
