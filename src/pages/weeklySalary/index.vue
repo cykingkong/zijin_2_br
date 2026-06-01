@@ -9,11 +9,10 @@
             <div class="salary-card bg-white rounded-[16px] p-[20px] shadow-sm mb-[24px]">
                 <!-- Weekly Salary Row -->
                 <div class="flex justify-between items-center mb-[12px]">
-                    <span class="text-[#8E9FAE] text-[15px]">{{t("Weekly salary")}}</span>
+                    <span class="text-[#8E9FAE] text-[15px]">{{t("Your weekly salary")}}</span>
                     <span class="text-[#333] text-[18px] font-bold ">R$ {{
-                        addCommasToNumber(config.weekly.pending_income) }}</span>
+                        addCommasToNumber(config.userlevel.week_salary) }}</span>
                 </div>
-
                 <!-- Total Weekly Salary Row -->
                 <div class="flex justify-between items-center mb-[24px]">
                     <span class="text-[#8E9FAE] text-[15px]">{{t("Total weekly salary")}}</span>
@@ -67,7 +66,10 @@ import lv7 from '@/assets/lv/lv7.png';
 import lv8 from '@/assets/lv/lv8.png';
 import { addCommasToNumber } from '@/utils/tool';
 import { optimizeRichText } from '@/utils/richText';
+import { useUserStore } from "@/stores";
 
+const userStore = useUserStore();
+const userInfo = computed(() => userStore.userInfo);
 const { t } = useI18n();
 const router = useRouter();
 const config = ref({
@@ -75,6 +77,9 @@ const config = ref({
     weekly: {
         pending_income: 0,
         received_income: 0,
+    },
+    userlevel:{
+        week_salary:"0"
     }
 })
 // 模拟列表数据 (根据截图构建)
