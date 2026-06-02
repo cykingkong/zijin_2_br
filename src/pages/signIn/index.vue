@@ -20,7 +20,7 @@
             <!-- 等级显示 -->
             <div class="level-info flex items-center mb-[16px]">
                 <img src="@/assets/sign-level.png" class="w-[16px] h-[16px] mr-[6px] rounded-full" />
-                <span class="font-bold text-[16px] text-[#333] level">LV{{ userInfo.level || '' }}</span>
+                <span class="font-bold text-[16px] text-[#333] level">VIP{{ userInfo.level || '' }}</span>
             </div>
 
             <!-- 7天签到 Grid -->
