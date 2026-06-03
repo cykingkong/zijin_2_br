@@ -1,6 +1,8 @@
+import CryptoJS from 'crypto-js'
 import { defineStore } from 'pinia'
 import type { LoginData, UserState } from '@/api/user'
 import { clearToken, setToken } from '@/utils/auth'
+import { locale } from '@/utils/i18n'
 
 import {
   getEmailCode,
@@ -51,6 +53,22 @@ const loadSalesmartlyJS = (src?: string) => {
   return salesmartlyScriptPromise
 }
 
+const setSalesmartlyLoginInfo = (params: { phone?: string, userId?: string | number, userName?: string }) => {
+  if ((!params.phone && !params.userId && !params.userName) || typeof window === 'undefined')
+    return
+
+  const salesmartlyQueue = (window as any).ssq
+  if (!salesmartlyQueue?.push)
+    return
+
+  salesmartlyQueue.push('setLoginInfo', {
+    phone: params.phone,
+    user_id: params.userId ? CryptoJS.MD5(String(params.userId)).toString() : undefined,
+    user_name: params.userName,
+    language: locale.value,
+  })
+}
+
 export const useUserStore = defineStore('user', () => {
   const userInfo = ref<any>({ ...InitUserInfo })
 
@@ -63,7 +81,13 @@ export const useUserStore = defineStore('user', () => {
   }
   const applyUserInfo = (data: any) => {
     setInfo(data)
-    void loadSalesmartlyJS(data?.salesmartlyJS).catch(() => { })
+    void loadSalesmartlyJS(data?.salesmartlyJS)
+      .then(() => setSalesmartlyLoginInfo({
+        phone: data?.phone,
+        userId: data?.userId,
+        userName: data?.username,
+      }))
+      .catch(() => { })
   }
 
   const login = async (loginForm: LoginData) => {
