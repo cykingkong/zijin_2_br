@@ -20,6 +20,37 @@ const InitUserInfo = {
   couponsList: [],
 }
 
+let salesmartlyScriptPromise: Promise<void> | null = null
+
+const loadSalesmartlyJS = (src?: string) => {
+  if (!src || typeof window === 'undefined')
+    return Promise.resolve()
+
+  const scriptId = 'salesmartly-js'
+  const existingScript = document.getElementById(scriptId) as HTMLScriptElement | null
+
+  if (existingScript)
+    return salesmartlyScriptPromise || Promise.resolve()
+
+  salesmartlyScriptPromise = new Promise((resolve, reject) => {
+    const script = document.createElement('script')
+    script.id = scriptId
+    script.src = src
+    script.async = true
+
+    script.onload = () => resolve()
+    script.onerror = () => {
+      salesmartlyScriptPromise = null
+      script.remove()
+      reject(new Error(`Failed to load Salesmartly script: ${src}`))
+    }
+
+    document.body.appendChild(script)
+  })
+
+  return salesmartlyScriptPromise
+}
+
 export const useUserStore = defineStore('user', () => {
   const userInfo = ref<any>({ ...InitUserInfo })
 
@@ -30,12 +61,17 @@ export const useUserStore = defineStore('user', () => {
   const setCouponsList = (partial: any) => {
     userInfo.value.couponsList = [...partial]
   }
+  const applyUserInfo = (data: any) => {
+    setInfo(data)
+    void loadSalesmartlyJS(data?.salesmartlyJS).catch(() => { })
+  }
+
   const login = async (loginForm: LoginData) => {
     try {
       const { data } = await userLogin(loginForm)
       setToken(data.access_token)
       const { data: userInfo } = await getUserInfo()
-      setInfo(userInfo)
+      applyUserInfo(userInfo)
 
     }
     catch (error) {
@@ -48,7 +84,7 @@ export const useUserStore = defineStore('user', () => {
       const { data } = await seologin(params)
       setToken(data.access_token)
       const { data: userInfo } = await getUserInfo()
-      setInfo(userInfo)
+      applyUserInfo(userInfo)
     }
     catch (error) {
       clearToken()
@@ -109,7 +145,7 @@ export const useUserStore = defineStore('user', () => {
       const { data } = await getUserInfo()
       // const { data: ff2 } = await getBalance()
       // const { data: ff3 } = await totalAsset()
-      setInfo(data)
+      applyUserInfo(data)
       // setInfo(ff2)
       // setInfo(ff3)
     }
@@ -121,7 +157,7 @@ export const useUserStore = defineStore('user', () => {
   const getInfo = async () => {
     try {
       const { data } = await getUserInfo()
-      setInfo(data)
+      applyUserInfo(data)
     }
     catch (error) {
       // clearToken()
