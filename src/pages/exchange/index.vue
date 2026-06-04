@@ -35,7 +35,7 @@
                         <!-- 图标 -->
                         <img :src="imgEnum[index + 1]" class="w-[20px] h-[20px] mr-[8px] object-contain" />
                         <!-- 等级文字 -->
-                        <span class="text-[#00000080]">{{ t('Lv') }}{{ index + 1 }}</span>
+                        <span class="text-[#00000080]">{{ t('VIP') }}{{ index + 1 }}</span>
                     </div>
                     <!-- 金额 -->
                     <span class="text-[#333] font-medium text-center  text-[15px] flex-1">10</span>

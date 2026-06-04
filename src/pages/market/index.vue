@@ -203,7 +203,7 @@ onMounted(async () => {
           <div class="title font-bold text-[14px] color-[var(--text-brand)]">
             {{ item.productName || 'Product Name' }}
           </div>
-          <div class="desc text-[12px] color-[#8C91A2] font-normal">{{ item.levelLimit?'Lv '+ item.levelLimit +' e superior' : 'Lv 1  e superior' }}</div>
+          <div class="desc text-[12px] color-[#8C91A2] font-normal">{{ item.levelLimit?'VIP '+ item.levelLimit +' e superior' : 'VIP 1  e superior' }}</div>
           <div class="flex justify-between items-end">
             <div class="price color-[#FF6464] font-[14px] font-bold">COP {{ formatDiscountPrice(item.discountPrice) ||
               '0' }}</div>

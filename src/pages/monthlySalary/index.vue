@@ -31,7 +31,7 @@
                         <!-- Level 列 -->
                         <div class="w-[20%] flex items-center text-left">
                             <img :src="imgEnum[item.level]" class="w-[20px] h-[20px] mr-[4px] object-contain" />
-                            <span class="text-[#999]">{{ t('Lv') }}{{ item.level }}</span>
+                            <span class="text-[#999]">{{ t('VIP') }}{{ item.level }}</span>
                         </div>
 
                         <!-- Salário Mensal 列（一半） -->
