@@ -39,6 +39,7 @@ let countryList = ref<any>([
 let active = ref(0)
 const loading = ref(false);
 const remember = ref(false);
+const hasQueryInviteCode = computed(() => !!route.query.inviteCode)
 const areaInfo = ref({
   code: "co",
   dialCode: 57,
@@ -380,7 +381,7 @@ async function login() {
       <!-- Invitation code -->
 
       <div class="phone-input mb-20" v-if="pageType == 1">
-        <inputCom v-model:value="postData.inviteCode" :placeholder="t('Invitation code')" :onlyRead="false"
+        <inputCom v-model:value="postData.inviteCode" :placeholder="t('Invitation code')" :onlyRead="hasQueryInviteCode"
           :inputType="'text'">
         </inputCom>
       </div>

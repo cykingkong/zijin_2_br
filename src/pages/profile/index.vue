@@ -337,13 +337,13 @@ const menuList = [
 const myteamList = ref([
   {
     img: lv1,
-    name: 'VIP1',
+    name: 'LV1',
     fakeKey: 'team_level1_count',
     num: userInfo.value?.topData?.find((item: any) => item.generation === 1)?.vaildUserCount || 0
   },
   {
     img: lv2,
-    name: 'VIP2',
+    name: 'LV2',
     fakeKey: 'team_level2_count',
 
     num: userInfo.value?.topData?.find((item: any) => item.generation === 2)?.vaildUserCount || 0
@@ -352,7 +352,7 @@ const myteamList = ref([
   {
     img: lv3,
     fakeKey: 'team_level3_count',
-    name: 'VIP3',
+    name: 'LV3',
     num: userInfo.value?.topData?.find((item: any) => item.generation === 3)?.vaildUserCount || 0
   },
 ])
