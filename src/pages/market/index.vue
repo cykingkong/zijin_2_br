@@ -4,8 +4,6 @@ import router from "@/router";
 import { productList, userProductList } from "@/api/product";
 import { addCommasToNumber } from "@/utils/tool";
 
-const formatDiscountPrice = (price: any) => addCommasToNumber(price).replace(/,00$/, '')
-
 const activeName = ref(0);
 const searchMarkShow = ref(false);
 const enumBtnText = {
@@ -13,12 +11,12 @@ const enumBtnText = {
   1: 'Buy Now',
   2: 'Sold out',
   3: 'Pre-sale',
-  4: 'Presente gratuito'
+  4: 'Presente grátis'
 }
 const productTypeEnum = {
-  1: "Dias alternados", // 隔天
-  2: "Cada Dias", // 每天
-  3: "Cada Horas" // 每小时
+  1: "Dias alternados",
+  2: "Cada Dias",
+  3: "Cada Horas"
 }
 const renderLabel = (productType: number, incomeReleaseCycle: any) => {
   if (productType == 1) {
@@ -28,20 +26,69 @@ const renderLabel = (productType: number, incomeReleaseCycle: any) => {
   } else if (productType == 3) {
     return `Cada ${incomeReleaseCycle} Horas`
   }
-
 }
+
 const page = reactive({
   pageIndex: 1,
   pageSize: 10,
 });
 const { t } = useI18n();
-const listStatus = ref(1); // 1-加载中 2-成功 3-已无更多
+const listStatus = ref(1);
 const stockSkeleton = ref(false);
 const stockList = ref<any>([]);
 const tabList = ref([]);
 const search = ref("")
 const userProductArr = ref([])
 const categoryId = ref();
+
+// ========== 倒计时相关 ==========
+let countdownTimer: ReturnType<typeof setInterval> | null = null;
+
+/**
+ * 每秒对列表中所有有倒计时的产品进行减1操作
+ */
+const startCountdown = () => {
+  countdownTimer = setInterval(() => {
+    stockList.value.forEach((item: any) => {
+      if (item.soldOutCountdown != null && item.soldOutCountdown > 0) {
+        item.soldOutCountdown--;
+      }
+    });
+  }, 1000);
+}
+
+const hasCountdown = (item: any) => {
+  return item.soldOutCountdown != null && item.soldOutCountdown > 0;
+}
+
+const isCountdownSoldOut = (item: any) => {
+  // soldOutCountdown 存在且已经倒计时到0
+  return item.soldOutCountdown != null && item.soldOutCountdown <= 0 && item._hasCountdown;
+}
+
+const getProductStatus = (item: any) => isCountdownSoldOut(item) ? 2 : item.status;
+
+const formatCountdown = (item: any) => {
+  const totalSeconds = Math.max(0, item.soldOutCountdown || 0);
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  const time = [hours, minutes, seconds].map((value) => String(value).padStart(2, '0')).join(':');
+  return days > 0 ? `${days}d ${time}` : time;
+}
+
+/**
+ * 标记产品是否有倒计时（用于区分"从未有倒计时"和"倒计时结束"）
+ */
+const markCountdownFlag = (rows: any[]) => {
+  rows.forEach((item) => {
+    item._hasCountdown = item.soldOutCountdown != null && item.soldOutCountdown > 0;
+  });
+  return rows;
+}
+
+// ========== 接口请求 ==========
 const getUserProArr = async () => {
   try {
     const res = await userProductList({
@@ -50,9 +97,9 @@ const getUserProArr = async () => {
     })
   } catch (error) {
     console.log(error);
-
   }
 }
+
 const getTabList = async () => {
   const { data, code } = await productList({
     pageIndex: 1,
@@ -67,6 +114,7 @@ const getTabList = async () => {
     }) || []
   }
 }
+
 const getProductList = async () => {
   if (page.pageIndex == 1) {
     stockSkeleton.value = true;
@@ -91,40 +139,38 @@ const getProductList = async () => {
       return;
     }
     if (page.pageIndex == 1) {
-      stockList.value = data.rows || [];
+      stockList.value = markCountdownFlag(data.rows || []);
     } else {
-      let result = data.rows || [];
+      let result = markCountdownFlag(data.rows || []);
       stockList.value = stockList.value.concat(result);
     }
     stockSkeleton.value = false;
 
-    // 根据新的分页格式判断是否还有更多数据
     if (stockList.value.length >= data.total) {
       listStatus.value = 3;
       return;
     }
     listStatus.value = 2;
     stockSkeleton.value = false;
-
   }
 };
+
 const tabChange = (item: any) => {
   console.log(item, activeName.value)
-
-  // 重置分页和状态
   page.pageIndex = 1;
   stockList.value = [];
   listStatus.value = 1;
   getProductList();
 };
+
 const handleClickStock = (item: any) => {
   router.push(`/market/productDetail?productId=${item.productId}`);
 };
+
 function toSearch() {
   page.pageIndex = 1;
   getProductList();
 }
-
 
 const loadMore = () => {
   page.pageIndex++;
@@ -132,37 +178,20 @@ const loadMore = () => {
 };
 
 onMounted(async () => {
-  await getTabList()
+  startCountdown();
+  await getTabList();
   await getProductList();
-  // getUserProArr()
+});
+
+onUnmounted(() => {
+  if (countdownTimer) {
+    clearInterval(countdownTimer);
+  }
 });
 </script>
 
 <template>
   <div class="market relative overflow-hidden pb-[120px] bg-[#f7f7f7] min-h-screen pt-[20px]">
-    <!-- <div class=" phone-input my-16 mx-16 flex items-center px-20">
-      <svg class="w-20 h-20 flex-shrink-0" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g clip-path="url(#clip0_6869_628)">
-          <path
-            d="M13.5817 13.5817C11.0814 16.0821 7.02753 16.0821 4.5272 13.5817C2.02687 11.0814 2.02687 7.02757 4.5272 4.52724C7.02753 2.02692 11.0814 2.02692 13.5817 4.52724C16.082 7.02757 16.082 11.0814 13.5817 13.5817ZM13.5817 13.5817L16.4112 16.4113"
-            stroke="#8C91A2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        </g>
-        <defs>
-          <clipPath id="clip0_6869_628">
-            <rect width="20" height="20" fill="white" />
-          </clipPath>
-        </defs>
-      </svg>
-      <inputCom :placeholder="t('Search')" v-model:value="search" :tips="''" :input-type="'search'"
-        class="flex-1 w-full">
-        <template #sendCode>
-          <div class="absolute right--20 font-size-12 h-28 flex justify-center items-center sendCode text-[var(--text-brand)]"
-            @click="toSearch()">
-            {{ t("Search") }}
-          </div>
-        </template>
-</inputCom>
-</div> -->
     <!-- Top Tabs -->
     <div class="sticky top-0 z-50 flex  items-center px-16 gap-8 overflow-x-auto flex-wrap">
       <div
@@ -175,16 +204,11 @@ onMounted(async () => {
 
     <!-- Product Grid -->
     <div v-if="stockSkeleton" class="product-list grid grid-cols-1 gap-x-[15px] gap-y-[16px] px-[16px] mt-[20px]">
-      <!-- 骨架屏占位符 -->
       <div v-for="n in 6" :key="n" class="product-item skeleton-animation">
-        <!-- Image Box -->
         <div
           class="img-box relative w-full aspect-square bg-[#F5F5F5] rounded-[20px] mb-[12px] flex items-center justify-center overflow-hidden h-[160px]">
-          <!-- 图片骨架 -->
           <div class="w-full h-full bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200"></div>
         </div>
-
-
       </div>
     </div>
 
@@ -192,7 +216,6 @@ onMounted(async () => {
       class="mx-[16px] my-16 product-item product-item  bg-[#fff] px-[8px] py-[14px] rounded-[20px] relative"
       @click="handleClickStock(item)">
       <div class="tag px-4 h-13 bg-[#FF64641A] text-[9px] color-[#FF6464] absolute right-0 top-0" v-if="item.promote">
-        <!-- {{ item.tagText || 'Sold out' }} -->
         {{ item.promote }}
       </div>
       <div class="top flex gap-[8px] pb-[13px] border-b-solid border-b-[1px] border-b-[#F5F5F5]">
@@ -200,16 +223,25 @@ onMounted(async () => {
           <img v-if="item.productImage" :src="item.productImage" class="w-full h-full object-cover" />
         </div>
         <div class="info w-full">
-          <div class="title font-bold text-[14px] color-[var(--text-brand)]">
-            {{ item.productName || 'Product Name' }}
+          <div class="flex items-start justify-between gap-[8px]">
+            <div class="title font-bold text-[14px] color-[#161616] flex-1">
+              {{ item.productName || 'Product Name' }}
+            </div>
+            <div v-if="hasCountdown(item)" class="countdown text-[14px] color-[#FF6464] font-bold flex-shrink-0">
+              {{ formatCountdown(item) }}
+            </div>
           </div>
-          <div class="desc text-[12px] color-[#8C91A2] font-normal">{{ item.levelLimit?'VIP '+ item.levelLimit +' e superior' : 'VIP 1  e superior' }}</div>
+          <div class="desc text-[12px] color-[#8C91A2] font-normal">{{ item.levelLimit?'Lv '+ item.levelLimit +' e superior' : 'Lv 1  e superior' }}</div>
           <div class="flex justify-between items-end">
-            <div class="price color-[#FF6464] font-[14px] font-bold">COP {{ formatDiscountPrice(item.discountPrice) ||
-              '0' }}</div>
+            <div class="price color-[#FF6464] font-[14px] font-bold flex flex-col">
+               <div class="originalPrice text-[12px] line-through color-[#8C91A2]" v-if="item.originalPrice && item.originalPrice != item.discountPrice">
+              COP  {{ addCommasToNumber(item.originalPrice) || '0.00' }}
+            </div>
+              COP {{ addCommasToNumber(item.discountPrice) ||
+              '0.00' }}</div>
             <div class="button text-[14px] font-bold text-[#fff]  px-[12px] py-[6px] rounded-[8px]"
-              :class="item.status == 2 ? 'bg-[var(--brand-surface)] text-[var(--text-brand)]' : 'bg-[var(--brand-primary)]'" @click="handleClickStock(item)">
-              {{ t(enumBtnText[item.status]) }}
+              :class="getProductStatus(item) == 2 ? 'bg-[#CED0D8]' : 'bg-[#161616]'" @click="handleClickStock(item)">
+              {{ t(enumBtnText[getProductStatus(item)]) }}
             </div>
           </div>
         </div>
@@ -264,9 +296,7 @@ onMounted(async () => {
 
 :deep(.van-tabs__line) {
   background: #333;
-  // bottom: 6px;
   height: 1px;
-
 }
 
 .skeleton-animation {
@@ -296,7 +326,6 @@ onMounted(async () => {
   line-height: 100%;
   letter-spacing: 0px;
   vertical-align: middle;
-
 }
 
 .value {
@@ -308,14 +337,12 @@ onMounted(async () => {
   line-height: 100%;
   letter-spacing: 0px;
   vertical-align: middle;
-
 }
 
 .phone-input {
   border: 1px solid #F0F0F0;
   border-radius: 12px;
   background: #0000000D;
-
 
   :deep(.input-box) {
     height: 39px;
@@ -324,7 +351,6 @@ onMounted(async () => {
     input {
       background: transparent;
     }
-
   }
 
   :deep(.tips) {
