@@ -59,7 +59,7 @@ const handleClickExchange = async () => {
             showSuccessToast({
                 message:t("Success")
             })
-            getUserList()
+            // getUserList()
             codes.value = ''
         }
     } catch (err) {
