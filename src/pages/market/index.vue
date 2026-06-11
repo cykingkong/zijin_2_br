@@ -231,7 +231,7 @@ onUnmounted(() => {
               {{ formatCountdown(item) }}
             </div>
           </div>
-          <div class="desc text-[12px] color-[#8C91A2] font-normal">{{ item.levelLimit?'Lv '+ item.levelLimit +' e superior' : 'Lv 1  e superior' }}</div>
+          <div class="desc text-[12px] color-[#8C91A2] font-normal">{{ item.levelLimit?'VIP '+ item.levelLimit +' e superior' : 'VIP 1  e superior' }}</div>
           <div class="flex justify-between items-end">
             <div class="price color-[#FF6464] font-[14px] font-bold flex flex-col">
                <div class="originalPrice text-[12px] line-through color-[#8C91A2]" v-if="item.originalPrice && item.originalPrice != item.discountPrice">
