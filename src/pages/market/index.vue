@@ -53,12 +53,11 @@ const startCountdown = () => {
       if (item.soldOutCountdown != null && item.soldOutCountdown > 0) {
         item.soldOutCountdown--;
       }
+      if (item.reservationCountdown != null && item.reservationCountdown > 0) {
+        item.reservationCountdown--;
+      }
     });
   }, 1000);
-}
-
-const hasCountdown = (item: any) => {
-  return item.soldOutCountdown != null && item.soldOutCountdown > 0;
 }
 
 const isCountdownSoldOut = (item: any) => {
@@ -66,10 +65,30 @@ const isCountdownSoldOut = (item: any) => {
   return item.soldOutCountdown != null && item.soldOutCountdown <= 0 && item._hasCountdown;
 }
 
-const getProductStatus = (item: any) => isCountdownSoldOut(item) ? 2 : item.status;
+// 预约倒计时结束即开放购买
+const isReservationEnded = (item: any) => {
+  // reservationCountdown 存在且已经倒计时到0
+  return item.reservationCountdown != null && item.reservationCountdown <= 0 && item._hasReservation;
+}
+
+// 当前要展示的倒计时秒数：售罄倒计时优先，其次预约倒计时
+const activeCountdown = (item: any) => {
+  if (item.soldOutCountdown != null && item.soldOutCountdown > 0) return item.soldOutCountdown;
+  if (item.reservationCountdown != null && item.reservationCountdown > 0) return item.reservationCountdown;
+  return 0;
+}
+
+const hasAnyCountdown = (item: any) => activeCountdown(item) > 0;
+
+const getProductStatus = (item: any) => {
+  if (isCountdownSoldOut(item)) return 2;
+  // 预约倒计时结束 → 开放购买
+  if (isReservationEnded(item)) return 1;
+  return item.status;
+};
 
 const formatCountdown = (item: any) => {
-  const totalSeconds = Math.max(0, item.soldOutCountdown || 0);
+  const totalSeconds = Math.max(0, activeCountdown(item));
   const days = Math.floor(totalSeconds / 86400);
   const hours = Math.floor((totalSeconds % 86400) / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -84,6 +103,7 @@ const formatCountdown = (item: any) => {
 const markCountdownFlag = (rows: any[]) => {
   rows.forEach((item) => {
     item._hasCountdown = item.soldOutCountdown != null && item.soldOutCountdown > 0;
+    item._hasReservation = item.reservationCountdown != null && item.reservationCountdown > 0;
   });
   return rows;
 }
@@ -227,7 +247,7 @@ onUnmounted(() => {
             <div class="title font-bold text-[14px] color-[#161616] flex-1">
               {{ item.productName || 'Product Name' }}
             </div>
-            <div v-if="hasCountdown(item)" class="countdown text-[14px] color-[#FF6464] font-bold flex-shrink-0">
+            <div v-if="hasAnyCountdown(item)" class="countdown text-[14px] color-[#FF6464] font-bold flex-shrink-0">
               {{ formatCountdown(item) }}
             </div>
           </div>
