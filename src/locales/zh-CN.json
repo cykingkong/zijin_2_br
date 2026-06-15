@@ -270,5 +270,7 @@
   "NoBonusRecords": "暂无奖励记录",
   "RewardCode": "奖励码",
   "RewardAmount": "奖励金额",
-  "Your weekly salary": "你的每周薪资"
+  "Your weekly salary": "你的每周薪资",
+  "OK": "确定",
+  "Exchange Success": "兑换成功"
 }
