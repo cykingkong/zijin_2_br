@@ -21,6 +21,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue'
+import { showDialog } from 'vant'
 import { create, list } from '@/api/gift'
 // 复用之前的图片资源引入逻辑
 import lv2 from '@/assets/lv/lv2.png';
@@ -56,11 +57,13 @@ const handleClickExchange = async () => {
         })
 
         if (code == 200) {
-            showSuccessToast({
-                message:t("Success")
+            codes.value = ''
+            await showDialog({
+                title: t('Success'),
+                message: t('Claim successful'),
+                confirmButtonText: t('Confirm'),
             })
             // getUserList()
-            codes.value = ''
         }
     } catch (err) {
         console.log(err, '')
