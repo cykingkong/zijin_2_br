@@ -334,5 +334,15 @@
   "TotalIncome": "Ingresos totales",
   "TotalWithdraw": "Retiros totales",
   "Year salary": "Salario anual",
-  "Claim successful": "Reclamado con éxito"
+  "Claim successful": "Reclamado con éxito",
+  "Earnings Calculator": "Calculadora de Ganancias",
+  "Please enter your team size": "Ingrese el tamaño de su equipo",
+  "Select Class": "Seleccionar categoría",
+  "Select Product": "Seleccionar producto",
+  "Please select a class": "Seleccione una categoría",
+  "Please select a product": "Seleccione un producto",
+  "Your daily team earnings will be": "Tus ganancias diarias del equipo serán",
+  "Your team's monthly income will be": "El ingreso mensual de tu equipo será",
+  "Your team's total income will be": "El ingreso total de tu equipo será",
+  "Calculate Now": "Calcular ahora"
 }

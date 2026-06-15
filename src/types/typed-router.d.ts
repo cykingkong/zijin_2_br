@@ -50,6 +50,7 @@ declare module 'vue-router/auto-routes' {
     'Sign in': RouteRecordInfo<'Sign in', '/signIn', Record<never, never>, Record<never, never>>,
     'taskBonus': RouteRecordInfo<'taskBonus', '/taskBonus', Record<never, never>, Record<never, never>>,
     'team': RouteRecordInfo<'team', '/team', Record<never, never>, Record<never, never>>,
+    'team-calculator': RouteRecordInfo<'team-calculator', '/team/calculator', Record<never, never>, Record<never, never>>,
     'treasure': RouteRecordInfo<'treasure', '/treasure', Record<never, never>, Record<never, never>>,
     'wallet': RouteRecordInfo<'wallet', '/wallet', Record<never, never>, Record<never, never>>,
     '/wallet/exchange/cashierCenter': RouteRecordInfo<'/wallet/exchange/cashierCenter', '/wallet/exchange/cashierCenter', Record<never, never>, Record<never, never>>,

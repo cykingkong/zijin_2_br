@@ -236,5 +236,15 @@
   "Reward hidden": "金额已隐藏",
   "One Yuan Treasure": "一元夺宝",
   "Enter your Amount": "输入您的金额",
-  "Claim successful": "领取成功"
+  "Claim successful": "领取成功",
+  "Earnings Calculator": "收益计算器",
+  "Please enter your team size": "请输入您的团队人数",
+  "Select Class": "选择分类",
+  "Select Product": "选择产品",
+  "Please select a class": "请选择分类",
+  "Please select a product": "请选择产品",
+  "Your daily team earnings will be": "您的团队每日收益为",
+  "Your team's monthly income will be": "您的团队每月收益为",
+  "Your team's total income will be": "您的团队总收益为",
+  "Calculate Now": "立即计算"
 }

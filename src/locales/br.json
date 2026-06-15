@@ -332,5 +332,15 @@
   "Buy Count": "Quantidade comprada",
   "Enter your Amount": "Digite seu valor",
   "PIXTypeLabel": "Rótulo do Tipo PIX",
-  "Claim successful": "Resgatado com sucesso"
+  "Claim successful": "Resgatado com sucesso",
+  "Earnings Calculator": "Calculadora de Ganhos",
+  "Please enter your team size": "Insira o tamanho da sua equipe",
+  "Select Class": "Selecionar categoria",
+  "Select Product": "Selecionar produto",
+  "Please select a class": "Selecione uma categoria",
+  "Please select a product": "Selecione um produto",
+  "Your daily team earnings will be": "Seus ganhos diários da equipe serão",
+  "Your team's monthly income will be": "A renda mensal da sua equipe será",
+  "Your team's total income will be": "A renda total da sua equipe será",
+  "Calculate Now": "Calcular agora"
 }

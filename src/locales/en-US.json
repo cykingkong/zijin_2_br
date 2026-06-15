@@ -313,5 +313,15 @@
   "Purchase Success": "Purchase Success",
   "Buy Count": "Buy Count",
   "Enter your Amount": "Enter your Amount",
-  "Claim successful": "Claim successful"
+  "Claim successful": "Claim successful",
+  "Earnings Calculator": "Earnings Calculator",
+  "Please enter your team size": "Please enter your team size",
+  "Select Class": "Select Class",
+  "Select Product": "Select Product",
+  "Please select a class": "Please select a class",
+  "Please select a product": "Please select a product",
+  "Your daily team earnings will be": "Your daily team earnings will be",
+  "Your team's monthly income will be": "Your team's monthly income will be",
+  "Your team's total income will be": "Your team's total income will be",
+  "Calculate Now": "Calculate Now"
 }

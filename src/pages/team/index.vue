@@ -94,6 +94,29 @@
                 </div>
             </div>
 
+            <!-- 收益计算器入口 -->
+            <div class="calculator-entry bg-white rounded-[16px] p-[16px] shadow-sm mb-[16px] flex items-center justify-between active:opacity-80"
+                @click="router.push('/team/calculator')">
+                <div class="flex items-center">
+                    <div class="w-[36px] h-[36px] rounded-full bg-orange-100 flex items-center justify-center mr-[12px]">
+                        <!-- 计算器图标 -->
+                        <svg viewBox="0 0 24 24" fill="none" class="w-[20px] h-[20px]"
+                            style="color: var(--text-brand)">
+                            <rect x="5" y="3" width="14" height="18" rx="2.5" stroke="currentColor" stroke-width="1.6" />
+                            <rect x="8" y="6" width="8" height="3" rx="0.8" fill="currentColor" />
+                            <circle cx="9" cy="13" r="1" fill="currentColor" />
+                            <circle cx="12" cy="13" r="1" fill="currentColor" />
+                            <circle cx="15" cy="13" r="1" fill="currentColor" />
+                            <circle cx="9" cy="17" r="1" fill="currentColor" />
+                            <circle cx="12" cy="17" r="1" fill="currentColor" />
+                            <circle cx="15" cy="17" r="1" fill="currentColor" />
+                        </svg>
+                    </div>
+                    <span class="text-[14px] font-bold text-[var(--text-brand)]">{{ t('Earnings Calculator') }}</span>
+                </div>
+                <van-icon name="arrow" class="text-[#999]" />
+            </div>
+
             <!-- 4. 筛选操作区 -->
             <!-- 顶部 Toggle Buttons -->
             <div class="flex bg-[#0000000D] rounded-[8px] p-[4px] mb-[16px] flex h-38">
