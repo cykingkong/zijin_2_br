@@ -432,7 +432,7 @@ const getVipInfo = async () => {
     if (Number(salary.year)) salaryParts.push(`salário anual: R$ ${red(addCommasToNumber(salary.year))}`)
     const vipContent = `
    Seu nível é ${red("VIP"+res.data?.currentLevel)}, e o próximo nível VIP é ${red("VIP"+res.data?.nextLevel)}<br/>
-    Você precisa que sua equipe alcance ${red(addCommasToNumber(needTeamNumber))} pessoas e ainda precisa recarregar R$ ${red(addCommasToNumber(needRecharge))}<br/>
+    Você precisa que sua equipe alcance ${red(needTeamNumber)} pessoas e ainda precisa recarregar R$ ${red(addCommasToNumber(needRecharge))}<br/>
     Você pode desfrutar do salário: ${salaryParts.join(', ')}`
     if(res.data?.isMaxLevel){
       return
