@@ -410,6 +410,9 @@ const getVipInfo = async () => {
     Tu nivel es VIP${res.data?.currentLevel}, y el siguiente nivel VIP es VIP${res.data?.nextLevel}
     Necesitas que tu equipo alcance ${needTeamNumber} personas y aún necesitas recargar COP ${needRecharge}
     Puedes disfrutar del salario: salario diario: COP ${salary.day}, salario semanal: COP ${salary.week || 0}`
+     if(res.data?.isMaxLevel){
+      return
+    }
     showConfirmDialog({
       title: t('Vip Level'),
       message: vipContent || '',
