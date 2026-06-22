@@ -132,7 +132,12 @@
                         class="flex py-[14px] items-center border-b border-[#F9F9F9] last:border-0">
                         <div class="w-[30%] text-[14px] text-wrap text-[#1A1A1A]">{{ row.account }}</div>
                         <div class="w-[30%] text-[14px] text-[#1A1A1A] text-center">{{ row.chilrenCount }}</div>
-                        <div class="w-[40%] text-[14px] text-[#1A1A1A] text-right">R$ {{ row.productPrice }}</div>
+                        <div class="w-[40%] text-[14px] text-[#1A1A1A] text-right flex flex-col items-end">
+                            <div class="price">R$ {{ row.productPrice }}</div>
+                            <div class="product">
+                            {{ row.maxProductName?`(${row.maxProductName})`:'' }}   
+                            </div>
+                         </div>
                     </div>
                 </div>
                 <!-- Empty State Placeholder -->
