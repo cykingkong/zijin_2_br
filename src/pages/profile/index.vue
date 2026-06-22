@@ -423,16 +423,18 @@ const getVipInfo = async () => {
   if (res.code === 200) {
     console.log(res.data, 'vipInfo')
     const {salary,needTeamNumber,needRecharge} = res.data || {}
+    const red = (v: any) => `<span style="color:#FF3B30">${v}</span>`
     const vipContent = `
-   Seu nível é VIP${res.data?.currentLevel}, e o próximo nível VIP é VIP${res.data?.nextLevel}
-    Você precisa que sua equipe alcance ${needTeamNumber} pessoas e ainda precisa recarregar R$ ${needRecharge}
-    Você pode desfrutar do salário: salário diário: R$ ${salary.day}, salário semanal: R$ ${salary.week || 0}`
+   Seu nível é ${red("VIP"+res.data?.currentLevel)}, e o próximo nível VIP é ${red("VIP"+res.data?.nextLevel)}<br/>
+    Você precisa que sua equipe alcance ${red(needTeamNumber)} pessoas e ainda precisa recarregar R$ ${red(needRecharge)}<br/>
+    Você pode desfrutar do salário: salário diário: R$ ${red(salary.day)}, salário semanal: R$ ${red(salary.week || 0)}`
     if(res.data?.isMaxLevel){
       return
     }
     showConfirmDialog({
       title: t('Vip Level'),
       message: vipContent || '',
+      allowHtml: true,
       confirmButtonText: t('Confirm'),
       cancelButtonText: t('Cancel'),
     })
