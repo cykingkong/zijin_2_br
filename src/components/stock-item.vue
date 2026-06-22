@@ -57,7 +57,7 @@ const amountPrefix = computed(() => {
 const withdrawalStatusEnum = {
     0: 'Not processed',
     1: 'Success',
-    2: 'Not processed',
+    2: 'Rejected',
     3: 'Not processed',
     4: 'Not processed',
     5: 'Not processed',

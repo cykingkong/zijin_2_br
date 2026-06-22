@@ -366,5 +366,6 @@
   "RewardCode": "Código de bônus",
   "RewardAmount": "Valor do bônus",
   "Your weekly salary": "Seu salário semanal",
-  "Vip Level": "Requisitos de Upgrade dos Níveis VIP"
+  "Vip Level": "Requisitos de Upgrade dos Níveis VIP",
+  "Rejected": "Falha, devolvido à conta"
 }

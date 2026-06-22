@@ -76,15 +76,15 @@ const getWithdrawalOrderList = async () => {
       // 后续页面，追加数据
       orderListData.value = orderListData.value.concat(data.rows || []);
     }
+    updateListStatus(data.total || 0)
      if (data.rows.length >= data.total) {
                 listStatus.value = 3
-                return 
+                return
             }
             if (!data.rows || data.rows.length == 0) {
                 listStatus.value = 3
                 return
             }
-    // updateListStatus(data.total || 0)
 
   } catch (error) {
     console.error("获取订单列表失败:", error);
