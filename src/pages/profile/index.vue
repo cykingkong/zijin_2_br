@@ -244,9 +244,9 @@ import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useUserStore } from '@/stores';
-import { userUpdate, getUserFakeInfo, } from '@/api/user';
+import { userUpdate, getUserFakeInfo, getVip } from '@/api/user';
 import { uploadFile } from '@/api/tool';
-import { showFailToast, showSuccessToast } from 'vant';
+import { showConfirmDialog, showFailToast, showSuccessToast } from 'vant';
 import { addCommasToNumber } from '@/utils/tool';
 import defaultAvatar from "@/assets/image/avatar.png";
 // 复用之前的图片资源引入逻辑
@@ -399,7 +399,25 @@ const updateUserAvatar = async () => {
     uploadPopShow.value = false;
   }
 };
-
+const getVipInfo = async () => {
+  const res = await getVip({
+    userId: userInfo.value?.userId || ''
+  })
+  if (res.code === 200) {
+    console.log(res.data, 'vipInfo')
+    const {salary,needTeamNumber,needRecharge} = res.data || {}
+    const vipContent = `
+    Tu nivel es VIP${res.data?.currentLevel}, y el siguiente nivel VIP es VIP${res.data?.nextLevel}
+    Necesitas que tu equipo alcance ${needTeamNumber} personas y aún necesitas recargar COP ${needRecharge}
+    Puedes disfrutar del salario: salario diario: COP ${salary.day}, salario semanal: COP ${salary.week || 0}`
+    showConfirmDialog({
+      title: t('Vip Level'),
+      message: vipContent || '',
+      confirmButtonText: t('Confirm'),
+      cancelButtonText: t('Cancel'),
+    })
+  }
+}
 onMounted(async () => {
   await userStore.setInfo({
     balance: 0,
@@ -418,6 +436,7 @@ onMounted(async () => {
   })
   await userStore.getWalletInfo();
   await userStore.fetchTeamInfoData();
+  await getVipInfo();
   console.log(userInfo.value, 'userInfo')
 });
 </script>

@@ -313,7 +313,7 @@
   "Exceed remaining codes": "Supera los códigos restantes",
   "Purchase Success": "Compra exitosa",
   "Buy Count": "Cantidad comprada",
-  "Enter your Amount": "Introduce tu monto",
+  "Enter your Amount": "Por favor, ingrese el código de bono",
   "PleaseInputAccount": "Por favor, ingrese la cuenta",
   "Sign in": "Iniciar sesión",
   "Invite Friends": "Invitar amigos",
@@ -344,5 +344,6 @@
   "Your daily team earnings will be": "Tus ganancias diarias del equipo serán",
   "Your team's monthly income will be": "El ingreso mensual de tu equipo será",
   "Your team's total income will be": "El ingreso total de tu equipo será",
-  "Calculate Now": "Calcular ahora"
+  "Calculate Now": "Calcular ahora",
+  "Vip Level": "Requisitos para subir de nivel VIP"
 }

@@ -127,3 +127,6 @@ export function getTeamInfoData(): Promise<any> {
 export function userUpdate(data): Promise<any> {
   return request.post('/user/userUpdate', data)
 }
+export function getVip(params): Promise<any> {
+  return request.get('/user/getVip', { params })
+}
