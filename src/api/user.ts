@@ -136,6 +136,6 @@ export function addUserAddress(data): Promise<any> {
 export function updateUserAddress(data): Promise<any> {
   return request.post('/user/addressUpdate', data)
 }
-export function getVip(): Promise<any> {
-  return request.get('/user/getVip')
+export function getVip(params): Promise<any> {
+  return request.get('/user/getVip', { params })
 }

@@ -417,16 +417,26 @@ const updateUserAvatar = async () => {
   }
 };
 const getVipInfo = async () => {
-  const res = await getVip();
+  const res = await getVip({
+    userId: userInfo.value?.userId || ''
+  })
   if (res.code === 200) {
     console.log(res.data, 'vipInfo')
-    const { needTeamNumber, needRecharge, salary,currentLevel,nextLevel } = res.data || {}
-    let vipContent =`
-    Seu nível é VIP${currentLevel}, e o próximo nível VIP é VIP${nextLevel}
-    Você precisa que sua equipe alcance ${needTeamNumber} pessoas e ainda precisa recarregar COP ${needRecharge}
-    Você pode desfrutar do salário: salário diário: COP ${salary.day}, salário semanal: COP ${salary.week || 0}`
+    const {salary,needTeamNumber,needRecharge} = res.data || {}
+    const vipContent = `
+   Seu nível é VIP${res.data?.currentLevel}, e o próximo nível VIP é VIP${res.data?.nextLevel}
+    Você precisa que sua equipe alcance ${needTeamNumber} pessoas e ainda precisa recarregar R$ ${needRecharge}
+    Você pode desfrutar do salário: salário diário: R$ ${salary.day}, salário semanal: R$ ${salary.week || 0}`
+    if(res.data?.isMaxLevel){
+      return
+    }
+    showConfirmDialog({
+      title: t('Vip Level'),
+      message: vipContent || '',
+      confirmButtonText: t('Confirm'),
+      cancelButtonText: t('Cancel'),
+    })
   }
- 
 }
 onMounted(async () => {
   await userStore.setInfo({
@@ -446,6 +456,7 @@ onMounted(async () => {
   })
   await userStore.getWalletInfo();
   await userStore.fetchTeamInfoData();
+  await getVipInfo()
   console.log(userInfo.value, 'userInfo')
 });
 </script>
