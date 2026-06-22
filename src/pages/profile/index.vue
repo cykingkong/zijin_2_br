@@ -425,14 +425,14 @@ const getVipInfo = async () => {
     const {salary,needTeamNumber,needRecharge} = res.data || {}
     const red = (v: any) => `<span style="color:#FF3B30">${v}</span>`
     const salaryParts = [
-      `salário diário: R$ ${red(salary.day || 0)}`,
-      `salário semanal: R$ ${red(salary.week || 0)}`,
+      `salário diário: R$ ${red(addCommasToNumber(salary.day) || 0)}`,
+      `salário semanal: R$ ${red(addCommasToNumber(salary.week) || 0)}`,
     ]
-    if (salary.month) salaryParts.push(`salário mensal: R$ ${red(salary.month)}`)
-    if (salary.year) salaryParts.push(`salário anual: R$ ${red(salary.year)}`)
+    if (salary.month) salaryParts.push(`salário mensal: R$ ${red(addCommasToNumber(salary.month))}`)
+    if (salary.year) salaryParts.push(`salário anual: R$ ${red(addCommasToNumber(salary.year))}`)
     const vipContent = `
    Seu nível é ${red("VIP"+res.data?.currentLevel)}, e o próximo nível VIP é ${red("VIP"+res.data?.nextLevel)}<br/>
-    Você precisa que sua equipe alcance ${red(needTeamNumber)} pessoas e ainda precisa recarregar R$ ${red(needRecharge)}<br/>
+    Você precisa que sua equipe alcance ${red(addCommasToNumber(needTeamNumber))} pessoas e ainda precisa recarregar R$ ${red(addCommasToNumber(needRecharge))}<br/>
     Você pode desfrutar do salário: ${salaryParts.join(', ')}`
     if(res.data?.isMaxLevel){
       return
