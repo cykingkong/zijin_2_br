@@ -259,9 +259,9 @@ import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useUserStore } from '@/stores';
-import { userUpdate, getUserFakeInfo, } from '@/api/user';
+import { userUpdate, getUserFakeInfo,getVip } from '@/api/user';
 import { uploadFile } from '@/api/tool';
-import { showFailToast, showSuccessToast } from 'vant';
+import { showConfirmDialog, showFailToast, showSuccessToast } from 'vant';
 import { addCommasToNumber } from '@/utils/tool';
 import defaultAvatar from "@/assets/image/avatar.png";
 // 复用之前的图片资源引入逻辑
@@ -416,7 +416,18 @@ const updateUserAvatar = async () => {
     uploadPopShow.value = false;
   }
 };
-
+const getVipInfo = async () => {
+  const res = await getVip();
+  if (res.code === 200) {
+    console.log(res.data, 'vipInfo')
+    const { needTeamNumber, needRecharge, salary,currentLevel,nextLevel } = res.data || {}
+    let vipContent =`
+    Seu nível é VIP${currentLevel}, e o próximo nível VIP é VIP${nextLevel}
+    Você precisa que sua equipe alcance ${needTeamNumber} pessoas e ainda precisa recarregar COP ${needRecharge}
+    Você pode desfrutar do salário: salário diário: COP ${salary.day}, salário semanal: COP ${salary.week || 0}`
+  }
+ 
+}
 onMounted(async () => {
   await userStore.setInfo({
     balance: 0,
