@@ -155,7 +155,12 @@
                         class="flex py-[14px] items-center border-b border-[#F9F9F9] last:border-0">
                         <div class="w-[30%] text-[14px] text-wrap text-[var(--text-brand)]">{{ row.account }}</div>
                         <div class="w-[30%] text-[14px] text-[var(--text-brand)] text-center">{{ row.chilrenCount }}</div>
-                        <div class="w-[40%] text-[14px] text-[var(--text-brand)] text-right">COP {{ row.productPrice }}</div>
+                      <div class="w-[40%] text-[14px] text-[#1A1A1A] text-right flex flex-col items-end">
+                            <div class="price">COP {{ row.productPrice }}</div>
+                            <div class="product">
+                            {{ row.maxProductName?`(${row.maxProductName})`:'' }}   
+                            </div>
+                         </div>
                     </div>
                 </div>
                 <!-- Empty State Placeholder -->
