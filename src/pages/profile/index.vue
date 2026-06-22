@@ -428,8 +428,8 @@ const getVipInfo = async () => {
       `salário diário: R$ ${red(addCommasToNumber(salary.day) || 0)}`,
       `salário semanal: R$ ${red(addCommasToNumber(salary.week) || 0)}`,
     ]
-    if (salary.month) salaryParts.push(`salário mensal: R$ ${red(addCommasToNumber(salary.month))}`)
-    if (salary.year) salaryParts.push(`salário anual: R$ ${red(addCommasToNumber(salary.year))}`)
+    if (Number(salary.month)) salaryParts.push(`salário mensal: R$ ${red(addCommasToNumber(salary.month))}`)
+    if (Number(salary.year)) salaryParts.push(`salário anual: R$ ${red(addCommasToNumber(salary.year))}`)
     const vipContent = `
    Seu nível é ${red("VIP"+res.data?.currentLevel)}, e o próximo nível VIP é ${red("VIP"+res.data?.nextLevel)}<br/>
     Você precisa que sua equipe alcance ${red(addCommasToNumber(needTeamNumber))} pessoas e ainda precisa recarregar R$ ${red(addCommasToNumber(needRecharge))}<br/>
