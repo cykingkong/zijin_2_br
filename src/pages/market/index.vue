@@ -280,6 +280,12 @@ onUnmounted(() => {
           <div class="value text-right">R$ {{ addCommasToNumber(item.totalIncome) || '0.00' }}</div>
         </div>
       </div>
+      <div class="stock text-[12px]  color-[#FFD700] font-normal font-bold" :class="item.inStock?'mt-12':''" v-if="Number(item.inStock) > 0">{{ item.inStock ? 'Estoque restante:' : '' }}
+
+<span class="text-[#00c566] font-bold">{{ item.inStock || '0' }}</span>
+
+      </div>
+
     </div>
     <div class="list px-[20px] flex flex-col gap-[20px]">
     </div>
